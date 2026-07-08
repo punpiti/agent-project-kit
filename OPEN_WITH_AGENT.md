@@ -10,7 +10,7 @@ From the project root:
 
 ```bash
 mkdir -p .ai
-git clone https://github.com/<owner>/agent-project-kit.git .ai/agent-project-kit
+git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit
 bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
 ```
 
@@ -40,7 +40,7 @@ From the project root:
 
 ```powershell
 New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
-git clone https://github.com/<owner>/agent-project-kit.git ".ai\agent-project-kit"
+git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit"
 powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
 code .
 ```

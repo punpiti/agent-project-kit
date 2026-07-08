@@ -11,7 +11,7 @@ if [ -z "$REPO_URL" ]; then
   echo "  bash install-from-git.sh /path/to/project <repo-url> [ref] [clone-dir]" >&2
   echo >&2
   echo "Example:" >&2
-  echo "  bash install-from-git.sh . https://github.com/<owner>/agent-project-kit.git v6.5.0" >&2
+  echo "  bash install-from-git.sh . https://github.com/punpiti/agent-project-kit.git v6.16.0" >&2
   exit 2
 fi
 

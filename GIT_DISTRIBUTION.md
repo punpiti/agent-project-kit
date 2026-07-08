@@ -24,7 +24,7 @@ Agent-first flow from the target project:
 
 ```bash
 mkdir -p .ai
-git clone https://github.com/<owner>/agent-project-kit.git .ai/agent-project-kit
+git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit
 bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
 code .
 ```
@@ -35,7 +35,7 @@ agent. The root adapter files tell the agent to read `.ai/`.
 From the target project:
 
 ```bash
-bash /path/to/agent-project-kit/scripts/install-from-git.sh . https://github.com/<owner>/agent-project-kit.git v6.8.0
+bash /path/to/agent-project-kit/scripts/install-from-git.sh . https://github.com/punpiti/agent-project-kit.git v6.16.0
 ```
 
 If the project already has `.ai/agent-project-kit`, the script fetches and checks
@@ -46,13 +46,13 @@ out the requested ref. If not, it clones first.
 Pinned release update:
 
 ```bash
-bash .ai/agent-project-kit/scripts/install-from-git.sh . https://github.com/<owner>/agent-project-kit.git v6.8.0
+bash .ai/agent-project-kit/scripts/install-from-git.sh . https://github.com/punpiti/agent-project-kit.git v6.16.0
 ```
 
 Latest `main` update:
 
 ```bash
-bash .ai/agent-project-kit/scripts/install-from-git.sh . https://github.com/<owner>/agent-project-kit.git main
+bash .ai/agent-project-kit/scripts/install-from-git.sh . https://github.com/punpiti/agent-project-kit.git main
 ```
 
 Pinned tags are better for reproducible work. `main` is convenient for trusted
@@ -62,7 +62,7 @@ friends who want the latest behavior.
 
 ```powershell
 New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
-git clone https://github.com/<owner>/agent-project-kit.git ".ai\agent-project-kit"
+git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit"
 powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
 ```
 

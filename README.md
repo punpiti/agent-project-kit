@@ -59,14 +59,14 @@ Run the commands from the project folder you want the agent to work on.
 Replace this placeholder with the real repository URL after publishing:
 
 ```text
-https://github.com/<owner>/agent-project-kit.git
+https://github.com/punpiti/agent-project-kit.git
 ```
 
 ### macOS / Linux
 
 ```bash
 mkdir -p .ai
-git clone https://github.com/<owner>/agent-project-kit.git .ai/agent-project-kit
+git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit
 bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
 code .
 ```
@@ -78,7 +78,7 @@ Antigravity, or another coding agent.
 
 ```powershell
 New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
-git clone https://github.com/<owner>/agent-project-kit.git ".ai\agent-project-kit"
+git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit"
 powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
 code .
 ```
@@ -95,7 +95,7 @@ From the WSL shell, run inside the project folder:
 
 ```bash
 mkdir -p .ai
-git clone https://github.com/<owner>/agent-project-kit.git .ai/agent-project-kit
+git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit
 bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
 code .
 ```
