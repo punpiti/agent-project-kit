@@ -1,0 +1,19 @@
+# Agent Project Kit development state
+.ai/
+
+# Python/cache/editor noise
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environments and package caches
+.venv/
+venv/
+env/
+node_modules/
+
+# OS/editor files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,17 @@
+from: markdown+raw_tex
+pdf-engine: xelatex
+variables:
+  documentclass: article
+  classoption:
+    - 11pt
+    - a4paper
+  mainfont: TH Sarabun New
+  sansfont: TH Sarabun New
+  monofont: TH Sarabun New
+  geometry: margin=2cm
+  fontsize: 11pt
+  colorlinks: false
+  linkcolor: blue
+  urlcolor: blue
+include-in-header:
+  - thai-a4-header.tex

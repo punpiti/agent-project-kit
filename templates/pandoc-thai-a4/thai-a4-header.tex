@@ -1,0 +1,26 @@
+% Thai A4 defaults for Pandoc + XeLaTeX.
+% Based on the KU council submission format.
+\usepackage{newunicodechar}
+\newfontfamily\eurofallbackfont{DejaVu Sans}
+\newunicodechar{€}{{\eurofallbackfont €}}
+\XeTeXlinebreaklocale "th"
+\XeTeXlinebreakpenalty=0
+\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+\linespread{1.05}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+\tolerance=2000
+\emergencystretch=3em
+\AtBeginDocument{\urlstyle{same}}
+
+
+% Table and heading quality helpers.
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{ragged2e}
+\usepackage{needspace}
+\widowpenalty=10000
+\clubpenalty=10000
+\displaywidowpenalty=10000
+
