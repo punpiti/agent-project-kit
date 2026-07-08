@@ -4,9 +4,33 @@ Goal: clone Agent Project Kit into a project, open the folder in VS Code,
 Claude Code, Antigravity, or another coding agent, and let the agent continue
 from project-local `.ai/` state.
 
-## Existing Or New Project
+## New Project
 
-From the project root:
+Create and enter the project folder first:
+
+```bash
+mkdir my-project
+cd my-project
+mkdir -p .ai
+git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit
+bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
+code .
+```
+
+Windows PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force -Path "my-project" | Out-Null
+Set-Location "my-project"
+New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
+git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit"
+powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
+code .
+```
+
+## Existing Project
+
+From the existing project root:
 
 ```bash
 mkdir -p .ai
@@ -34,7 +58,7 @@ ANTIGRAVITY.md
 VS Code/Codex, Claude Code, Antigravity, and similar agents should start from
 the root adapter files, then read `.ai/` state.
 
-## Windows PowerShell
+## Existing Project On Windows PowerShell
 
 From the project root:
 

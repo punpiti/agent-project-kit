@@ -1,13 +1,22 @@
 # INSTALL_IN_PROJECT
 
-This file explains how to attach Agent Project Kit to an existing project.
+This file explains how to attach Agent Project Kit to a new or existing project.
 
 For most users, the README quick start is enough. Use this file when you need
 more detail about update behavior and project-local state.
 
 ## Recommended Git Install
 
-Run from the target project root:
+For a new project:
+
+```bash
+mkdir my-project
+cd my-project
+```
+
+For an existing project, `cd` into that project folder first.
+
+Then run:
 
 ```bash
 mkdir -p .ai
@@ -18,6 +27,8 @@ bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
 Windows PowerShell:
 
 ```powershell
+New-Item -ItemType Directory -Force -Path "my-project" | Out-Null
+Set-Location "my-project"
 New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
 git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit"
 powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"

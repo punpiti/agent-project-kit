@@ -54,7 +54,14 @@ with or endorsed by Andrew Ng or DeepLearning.AI.
 
 ## Quick Start
 
-Run the commands from the project folder you want the agent to work on.
+For a new project folder:
+
+```bash
+mkdir my-project
+cd my-project
+```
+
+For an existing project, `cd` into that project folder first.
 
 Replace this placeholder with the real repository URL after publishing:
 
@@ -77,6 +84,8 @@ Antigravity, or another coding agent.
 ### Windows PowerShell
 
 ```powershell
+New-Item -ItemType Directory -Force -Path "my-project" | Out-Null
+Set-Location "my-project"
 New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
 git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit"
 powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
@@ -91,9 +100,11 @@ pwsh -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-pro
 
 ### WSL2
 
-From the WSL shell, run inside the project folder:
+From the WSL shell:
 
 ```bash
+mkdir my-project
+cd my-project
 mkdir -p .ai
 git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit
 bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
