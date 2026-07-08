@@ -14,7 +14,6 @@ Use it when you want a project to keep simple notes about:
 - how an AI agent should start work
 - whether the current machine is suitable for the task
 - where project-local AI notes should live
-- how to avoid putting large temporary files into shared or synced folders
 
 The old package name was `computing-environment`. Installed projects still use
 `.ai/computing-environment/` as the compatibility snapshot path.
@@ -124,15 +123,6 @@ Windows PowerShell:
 git -C ".ai\agent-project-kit" pull --ff-only
 powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
 ```
-
-## Shared Storage
-
-Keep source code, documents, prompts, and small project notes in the project
-folder. Keep large caches, virtual environments, `node_modules`, generated
-files, and temporary outputs outside shared or synced folders when possible.
-
-If a project needs local data or cache folders outside the project, record them
-in `.ai/LOCAL_RESOURCES.md`.
 
 ## Repository Notes
 
