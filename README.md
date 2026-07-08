@@ -1,6 +1,18 @@
 # Agent Project Kit
 
-Portable project instructions and `.ai/` state templates for AI coding agents.
+[ภาษาไทย](README.th.md)
+
+Agent Project Kit makes AI coding agents easier to use on real projects.
+
+Without it, each AI session tends to start from scratch: the agent scans too
+much, forgets project decisions, guesses machine-specific paths, spends tokens
+rediscovering the same context, and may mix up parent projects, subprojects, and
+scratch files.
+
+With it, every project gets a small `.ai/` working layer and root instruction
+files so agents can resume from known state, check the current machine, find
+local resources, respect token/cost preferences, and follow the same workflow
+across Codex, Claude Code, Antigravity, and similar tools.
 
 Use it when you want a project folder to remember:
 
@@ -12,6 +24,27 @@ Use it when you want a project folder to remember:
 
 The old package name was `computing-environment`. That name is still used for
 the installed compatibility snapshot: `.ai/computing-environment/`.
+
+## Why Use This Instead Of Nothing?
+
+Agent Project Kit is useful when a project will be touched more than once, by
+more than one AI client, or on more than one machine.
+
+It gives you:
+
+- **Less repeated context:** future sessions read `.ai/PROJECT_STATE.md` instead
+  of rescanning the whole repository.
+- **Safer machine behavior:** agents check `.ai/MACHINE_PROFILE.md` and
+  `.ai/LOCAL_RESOURCES.md` before assuming data, cache, or GPU resources exist.
+- **Lower long-term token cost:** first setup may cost more, but later sessions
+  should be cheaper because the agent resumes from compact project state.
+- **Cleaner project boundaries:** parent/child projects and plain subfolders are
+  declared explicitly.
+- **Shared rules across agents:** Codex, Claude Code, Antigravity, and generic
+  agents all point back to one canonical policy.
+- **Better repo hygiene:** large caches, virtual environments, generated
+  intermediates, and machine-local resources stay out of shared folders unless
+  intentionally recorded.
 
 ## What This Project Does
 

@@ -65,6 +65,7 @@ items=(
   manifest.json
   PACKAGE_CONTENTS.md
   README.md
+  README.th.md
   INSTALL_IN_PROJECT.md
   GIT_DISTRIBUTION.md
   OPEN_WITH_AGENT.md
