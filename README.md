@@ -13,6 +13,22 @@ Use it when you want a project folder to remember:
 The old package name was `computing-environment`. That name is still used for
 the installed compatibility snapshot: `.ai/computing-environment/`.
 
+## What This Project Does
+
+Agent Project Kit installs a small AI working layer into any project folder.
+That layer gives coding agents a consistent way to:
+
+- resume work from project-local notes instead of rereading everything
+- detect the current machine and avoid assuming local data/cache paths exist
+- keep project, subproject, and parent/child boundaries explicit
+- decide whether to work in quick, standard, deep, or agentic-run mode
+- ask before spending high token cost when the user is in economy mode
+- share one policy across Codex, Claude Code, Antigravity, and similar tools
+
+It is not an app framework and does not change your source code. It adds
+instructions, templates, and installer scripts so AI agents can operate more
+consistently across machines and projects.
+
 ## Quick Start
 
 Run the commands from the project folder you want the agent to work on.
