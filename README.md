@@ -304,6 +304,3 @@ templates/pandoc-thai-a4/
 This repository intentionally ignores `.ai/` because that directory contains
 local project state and installed snapshots. Do not commit project-specific
 state into the Agent Project Kit repo.
-
-The old `.p12` file found in the previous package was intentionally excluded.
-See `SECURITY_EXCLUSIONS.md`.
