@@ -8,11 +8,11 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "6.20-thai-project-hierarchy-readme",
+  "version": "6.21-public-lite-readme",
   "updated": "2026-07-08T00:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
-  "purpose": "Agent Project Kit: a portable AI project operating kit with Spec–Eval–Loop, machine/profile-aware local-resource tracking, versioned package updates, token discipline, document production, and conservative Markdown classification that protects serious .md sources and supports archive review/restore. The legacy package/path name is computing-environment.",
+  "purpose": "Agent Project Kit: a portable starter kit that installs AI-agent instruction files and project-local .ai templates. The legacy package/path name is computing-environment.",
   "entry_points": [
     "START_HERE.md",
     "AGENTS.md",
@@ -62,138 +62,21 @@
     "L4": "Local environment / portability layer"
   },
   "added": [
-    "DOCUMENT_PRODUCTION_POLICY.md",
-    "MARKDOWN_ORGANIZATION_POLICY.md",
-    "ENVIRONMENT_POLICY.md",
-    "prompts/10_DOCUMENT_PRODUCTION.md",
-    "prompts/11_DOCUMENT_STYLE_BOOTSTRAP.md",
-    "prompts/12_MARKDOWN_CLEANUP.md (renamed conceptually to Markdown Classification and Pipeline Migration)",
-    "templates/DOCUMENT_PIPELINE.md",
-    "templates/DOCUMENT_STYLE.md",
-    "templates/DOCUMENT_QA.md",
-    "templates/MARKDOWN_INVENTORY.md",
-    "scripts/organize-project-markdown.py",
-    "scripts/install-from-git.sh",
-    "scripts/install-from-git.ps1",
-    "OPEN_WITH_AGENT.md",
-    "AI_CLIENTS.md",
-    "CLAUDE.md",
-    "ANTIGRAVITY.md",
-    "README.th.md"
+    "public README files",
+    "installer scripts",
+    "AI client adapter files",
+    "project-local .ai templates",
+    "supporting policy and checklist documents"
   ],
   "added_from_old_package": [
-    "scripts/register_project_run.sh",
-    "scripts/scan_machine_resources.sh",
-    "templates/pandoc-thai-a4/"
+    "selected utility scripts and document templates"
   ],
   "excluded_from_old_package": [
     "private certificate/key material; see SECURITY_EXCLUSIONS.md"
   ],
-  "v6_changes": [
-    "Markdown is not disposable by default; serious .md files may be canonical source documents.",
-    "organize-project-markdown.py now inventories conservatively and archives only high-confidence AI scratch candidates with --apply.",
-    "Added --include-archive to inspect previous archive contents and identify restore candidates.",
-    "Added --restore-archived to restore over-archived document sources when destination is absent.",
-    "Policy renamed conceptually from cleanup to classification/migration."
-  ],
-  "v6_1_changes": [
-    "Added .ai/MACHINE_PROFILE.md for first-use machine discovery and minimal resume checks.",
-    "Added versioned install/update metadata so package updates do not require rerunning machine discovery.",
-    "Installer updates .ai/computing-environment/ and version metadata, but preserves project-local state/profile/resource files."
-  ],
-  "v6_2_changes": [
-    "Renamed package identity to Agent Project Kit / agent-project-kit.",
-    "Kept computing-environment and .ai/computing-environment as legacy-compatible source and installed snapshot paths.",
-    "Added legacy name/path metadata so existing projects can update without migration."
-  ],
-  "v6_3_changes": [
-    "Added explicit project hierarchy markers so subdirectories are not treated as projects unless declared.",
-    "Added parent-child context flow rules: parent may read child summaries; child reads parent summary only for broad framing.",
-    "Added PROJECT_HIERARCHY.md template with examples for nowcast, ting67, and ting67/amt."
-  ],
-  "v6_4_changes": [
-    "Added Parent Encapsulation Policy: child projects may read parent summaries/files as a read-only interface.",
-    "Child projects must not edit parent files, parent .ai state, parent logs, parent resource manifests, or sibling projects unless explicitly asked.",
-    "If child work finds stale parent context, it should propose a parent update instead of silently patching parent state."
-  ],
-  "v6_5_changes": [
-    "Added Git clone distribution workflow.",
-    "Added install-from-git.sh and install-from-git.ps1 to clone/update .ai/agent-project-kit and install a local snapshot.",
-    "Added GIT_DISTRIBUTION.md and .gitignore for packaging the kit as a GitHub repository.",
-    "Installed projects record git repository/ref/commit in .ai/COMPUTING_ENVIRONMENT_VERSION.md."
-  ],
-  "v6_6_changes": [
-    "Added AI client adapter files for Claude Code and Antigravity/generic agent IDEs.",
-    "Added AI_CLIENTS.md to document adapter strategy and avoid policy drift.",
-    "Installers create or append CLAUDE.md and ANTIGRAVITY.md without overwriting existing user files."
-  ],
-  "v6_7_changes": [
-    "Added cost profiles C0 Economy, C1 Normal, and C2 Premium alongside token depth modes T0-T3.",
-    "Added heavy-work consent rule: ask before high-cost scans, research, rewrites, or test loops when the user appears cost-sensitive.",
-    "Updated TOKEN_BUDGET template so new projects can record project-specific token cost defaults."
-  ],
-  "v6_8_changes": [
-    "Added OPEN_WITH_AGENT.md for the clone-install-open workflow.",
-    "Documented direct clone into .ai/agent-project-kit followed by install-to-project and opening VS Code/Claude Code/Antigravity.",
-    "Clarified that agents can read root adapter files after install and continue from project-local .ai state."
-  ],
-  "v6_9_changes": [
-    "Reworked README as an install-first public repo entry point.",
-    "Separated macOS/Linux, Windows PowerShell, and WSL2 quick-start commands.",
-    "Clarified first agent prompt, update flow, token/cost modes, and repository-state policy for public distribution."
-  ],
-  "v6_10_changes": [
-    "Added a What This Project Does section to README.",
-    "Clarified that Agent Project Kit installs an AI working layer, not an app framework.",
-    "Summarized resume, machine-awareness, project hierarchy, token cost, and multi-agent policy benefits for first-time readers."
-  ],
-  "v6_11_changes": [
-    "Added README conceptual background crediting Andrew Ng's agentic AI workflow framing as inspiration.",
-    "Mapped reflection, tool use, planning, multi-agent collaboration, and eval discipline to Agent Project Kit concepts.",
-    "Clarified that the project is independent and not affiliated with or endorsed by Andrew Ng or DeepLearning.AI."
-  ],
-  "v6_12_changes": [
-    "Reframed README conceptual background to emphasize Agent Project Kit as an original practical workflow design.",
-    "Described Andrew Ng's agentic AI framing as an influence on language, not the source design.",
-    "Clarified that the kit was designed for real project-folder, multi-machine, document, and research workflows."
-  ],
-  "v6_13_changes": [
-    "Made README and manifest more portable-first for public distribution.",
-    "Reduced OneDrive-specific wording from README quick-start text.",
-    "Kept WSL2_ONEDRIVE_WORKFLOW.md as optional personal workflow documentation rather than the public default."
-  ],
-  "v6_14_changes": [
-    "Split personal WSL2/OneDrive workflow notes into ignored local-profiles/.",
-    "Removed WSL2_ONEDRIVE_WORKFLOW.md and PROJECT_RUNS.md from the public package.",
-    "Made MACHINE_PROFILES.md, INSTALL_IN_PROJECT.md, AGENTS.md, and manifest machine roles generic for public distribution."
-  ],
-  "v6_15_changes": [
-    "Clarified shared storage policy as a general programming workflow, not a OneDrive-specific rule.",
-    "Added README guidance to keep source/state in project or shared/synced storage while keeping caches, intermediates, dependencies, and heavy outputs machine-local.",
-    "Reworked local-resource templates to use project/shared source tree wording."
-  ],
-  "v6_16_changes": [
-    "Published the package repository at https://github.com/punpiti/agent-project-kit.",
-    "Replaced placeholder GitHub URLs in public install docs with the real repository URL.",
-    "Updated install-from-git examples to use the current public tag."
-  ],
-  "v6_17_changes": [
-    "Clarified quick-start commands for brand-new project folders.",
-    "Added mkdir/cd examples before installing Agent Project Kit.",
-    "Updated README, OPEN_WITH_AGENT.md, and INSTALL_IN_PROJECT.md for new vs existing project flows."
-  ],
-  "v6_18_changes": [
-    "Removed the historical certificate exclusion note from README.",
-    "Kept detailed security exclusion information in SECURITY_EXCLUSIONS.md instead of the public landing page."
-  ],
-  "v6_19_changes": [
-    "Reworked README introduction to explain the concrete benefits of installing Agent Project Kit.",
-    "Added a Why Use This Instead Of Nothing section.",
-    "Added README.th.md as a separate Thai landing page."
-  ],
-  "v6_20_changes": [
-    "Expanded README.th.md with a project/subproject hierarchy explanation.",
-    "Clarified that plain subfolders are not subprojects unless explicitly marked.",
-    "Explained that lower-level projects should carry sharper task-specific context while parent projects keep broader framing."
+  "release_notes": [
+    "Simplified public README files into a lighter install-and-test introduction.",
+    "Removed deeper workflow explanations from the README landing pages.",
+    "Reduced manifest purpose wording to a public starter-kit description."
   ]
 }

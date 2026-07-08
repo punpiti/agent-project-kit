@@ -2,88 +2,35 @@
 
 [ภาษาไทย](README.th.md)
 
-Agent Project Kit makes AI coding agents easier to use on real projects.
+Agent Project Kit is a small starter kit for using AI coding agents inside a
+project folder.
 
-Without it, each AI session tends to start from scratch: the agent scans too
-much, forgets project decisions, guesses machine-specific paths, spends tokens
-rediscovering the same context, and may mix up parent projects, subprojects, and
-scratch files.
+It installs a few instruction files and `.ai/` templates so tools such as
+Codex, Claude Code, Antigravity, or similar agents have a clear place to start.
 
-With it, every project gets a small `.ai/` working layer and root instruction
-files so agents can resume from known state, check the current machine, find
-local resources, respect token/cost preferences, and follow the same workflow
-across Codex, Claude Code, Antigravity, and similar tools.
-
-Use it when you want a project folder to remember:
+Use it when you want a project to keep simple notes about:
 
 - what the project is
-- which machine it is running on
-- where local data/cache/resources live
-- how much token/cost the agent should spend
-- how Codex, Claude Code, Antigravity, or another agent should start work
+- how an AI agent should start work
+- whether the current machine is suitable for the task
+- where project-local AI notes should live
+- how to avoid putting large temporary files into shared or synced folders
 
-The old package name was `computing-environment`. That name is still used for
-the installed compatibility snapshot: `.ai/computing-environment/`.
+The old package name was `computing-environment`. Installed projects still use
+`.ai/computing-environment/` as the compatibility snapshot path.
 
-## Why Use This Instead Of Nothing?
+## Why Install It?
 
-Agent Project Kit is useful when a project will be touched more than once, by
-more than one AI client, or on more than one machine.
+Without a small project setup, every AI session often starts with the same basic
+questions: what is this project, which files matter, and how should the agent
+begin?
 
-It gives you:
+Agent Project Kit gives the agent a consistent starting point. It does not
+change your application code. It only adds project instructions, starter notes,
+and installer scripts.
 
-- **Less repeated context:** future sessions read `.ai/PROJECT_STATE.md` instead
-  of rescanning the whole repository.
-- **Safer machine behavior:** agents check `.ai/MACHINE_PROFILE.md` and
-  `.ai/LOCAL_RESOURCES.md` before assuming data, cache, or GPU resources exist.
-- **Lower long-term token cost:** first setup may cost more, but later sessions
-  should be cheaper because the agent resumes from compact project state.
-- **Cleaner project boundaries:** parent/child projects and plain subfolders are
-  declared explicitly.
-- **Shared rules across agents:** Codex, Claude Code, Antigravity, and generic
-  agents all point back to one canonical policy.
-- **Better repo hygiene:** large caches, virtual environments, generated
-  intermediates, and machine-local resources stay out of shared folders unless
-  intentionally recorded.
-
-## What This Project Does
-
-Agent Project Kit installs a small AI working layer into any project folder.
-That layer gives coding agents a consistent way to:
-
-- resume work from project-local notes instead of rereading everything
-- detect the current machine and avoid assuming local data/cache paths exist
-- keep project, subproject, and parent/child boundaries explicit
-- decide whether to work in quick, standard, deep, or agentic-run mode
-- ask before spending high token cost when the user is in economy mode
-- share one policy across Codex, Claude Code, Antigravity, and similar tools
-
-It is not an app framework and does not change your source code. It adds
-instructions, templates, and installer scripts so AI agents can operate more
-consistently across machines and projects.
-
-## Conceptual Background
-
-Agent Project Kit is an original, practical workflow design built from repeated
-use of AI coding agents across real project folders, machines, documents, and
-research work. It is meant to solve operational problems: losing project
-context, rerunning machine discovery, mixing parent/child project scope, and
-spending token budget without a clear review gate.
-
-Andrew Ng's discussion of agentic AI workflows helped frame some of the
-language around reflection, tool use, planning, multi-agent collaboration, and
-eval/error analysis. Those ideas are an influence, not the source design.
-
-Agent Project Kit turns that general direction into project-folder mechanics:
-
-- `Spec` and project state make planning explicit.
-- `Eval` and review gates make reflection concrete.
-- Installer scripts, runbooks, and local-resource manifests support tool use.
-- Codex, Claude Code, Antigravity, and future agents share one project policy
-  instead of each carrying separate instructions.
-
-This project is independently designed and maintained. It is not affiliated
-with or endorsed by Andrew Ng or DeepLearning.AI.
+For a one-time small task, you may not need it. For a project you will open
+again with an AI assistant, it can make the next session easier.
 
 ## Quick Start
 
@@ -96,13 +43,7 @@ cd my-project
 
 For an existing project, `cd` into that project folder first.
 
-Replace this placeholder with the real repository URL after publishing:
-
-```text
-https://github.com/punpiti/agent-project-kit.git
-```
-
-### macOS / Linux
+### macOS / Linux / WSL2
 
 ```bash
 mkdir -p .ai
@@ -131,34 +72,9 @@ PowerShell 7 also works:
 pwsh -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
 ```
 
-### WSL2
-
-From the WSL shell:
-
-```bash
-mkdir my-project
-cd my-project
-mkdir -p .ai
-git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit
-bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
-code .
-```
-
-If the project is on a Windows drive, WSL paths often look like:
-
-```text
-/mnt/c/Users/<windows-user>/<path-to-project>
-```
-
-WSL can also call Windows PowerShell directly:
-
-```bash
-powershell.exe -ExecutionPolicy Bypass -File ".ai\\agent-project-kit\\scripts\\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\\agent-project-kit"
-```
-
 ## What Gets Installed
 
-After install, the project root has:
+After install, the project root has files like:
 
 ```text
 AGENTS.md
@@ -166,28 +82,19 @@ CLAUDE.md
 ANTIGRAVITY.md
 .ai/computing-environment/
 .ai/PROJECT_STATE.md
-.ai/PROJECT_HIERARCHY.md
-.ai/COMPUTING_ENVIRONMENT_VERSION.md
 .ai/MACHINE_PROFILE.md
 .ai/LOCAL_RESOURCES.md
-.ai/MACHINE_COMPATIBILITY.md
 .ai/RUNBOOK.md
 .ai/TOKEN_BUDGET.md
 .ai/SESSION_LOG.md
 ```
 
-The root adapter files tell AI clients where to start:
-
-- `AGENTS.md` for Codex and generic agents
-- `CLAUDE.md` for Claude Code
-- `ANTIGRAVITY.md` for Antigravity-style agent IDEs
-
-The full installed kit lives under `.ai/computing-environment/`.
-Project-specific state stays directly under `.ai/`.
+The root files tell AI clients where to start. Project-specific notes stay under
+`.ai/`.
 
 The installer refreshes the package snapshot but does not overwrite existing
-project state files such as `.ai/PROJECT_STATE.md`, `.ai/MACHINE_PROFILE.md`,
-or `.ai/LOCAL_RESOURCES.md`.
+project notes such as `.ai/PROJECT_STATE.md`, `.ai/MACHINE_PROFILE.md`, or
+`.ai/LOCAL_RESOURCES.md`.
 
 ## First Prompt For An Agent
 
@@ -195,24 +102,9 @@ After installing and opening the folder, tell the agent:
 
 ```text
 Read AGENTS.md and .ai/computing-environment first.
-Then read .ai/PROJECT_STATE.md, .ai/PROJECT_HIERARCHY.md,
-.ai/COMPUTING_ENVIRONMENT_VERSION.md, .ai/MACHINE_PROFILE.md,
-.ai/LOCAL_RESOURCES.md, .ai/MACHINE_COMPATIBILITY.md, .ai/RUNBOOK.md,
-and .ai/TOKEN_BUDGET.md.
-Summarize where this project is, what machine this is, what local resources are
-missing, and what token/cost mode should be used before starting the task.
-```
-
-For Thai-speaking users:
-
-```text
-อ่าน AGENTS.md และ .ai/computing-environment ก่อน
-จากนั้นอ่าน .ai/PROJECT_STATE.md, .ai/PROJECT_HIERARCHY.md,
-.ai/COMPUTING_ENVIRONMENT_VERSION.md, .ai/MACHINE_PROFILE.md,
-.ai/LOCAL_RESOURCES.md, .ai/MACHINE_COMPATIBILITY.md, .ai/RUNBOOK.md,
-และ .ai/TOKEN_BUDGET.md
-สรุปว่า project ค้างตรงไหน เครื่องนี้คือเครื่องอะไร มี local resource อะไรขาด
-และควรใช้ token/cost mode แบบไหน ก่อนเริ่มทำงาน
+Then read the project notes under .ai/.
+Summarize what this project appears to be, what machine this is, and what you
+need before starting the task.
 ```
 
 ## Update
@@ -233,107 +125,16 @@ git -C ".ai\agent-project-kit" pull --ff-only
 powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
 ```
 
-For reproducible installs, use release tags instead of `main` after tags are
-published.
+## Shared Storage
 
-## Token / Cost Modes
+Keep source code, documents, prompts, and small project notes in the project
+folder. Keep large caches, virtual environments, `node_modules`, generated
+files, and temporary outputs outside shared or synced folders when possible.
 
-Agent Project Kit separates task depth from token-cost sensitivity:
-
-```text
-T0 Quick       small answer or one-file check
-T1 Standard    normal focused work
-T2 Deep        architecture, review, research, hard bugs
-T3 Agentic Run code/test/debug loops
-
-C0 Economy     ask before high-cost scans/research/test loops
-C1 Normal      default balance
-C2 Premium     prioritize completeness while keeping scope disciplined
-```
-
-Project defaults live in `.ai/TOKEN_BUDGET.md`.
-
-## Machine And Local Resources
-
-The kit is machine-aware. On first use, the agent should identify whether it is
-on macOS, Windows, Linux, WSL2, or an unknown machine.
-
-## Shared Storage Policy
-
-This is a general programming workflow rule, not a OneDrive-specific rule:
-
-- keep source code, small fixtures, docs, specs, prompts, and AI project state
-  in the project folder or another intentional shared/synced location
-- keep large caches, generated intermediates, virtual environments,
-  `node_modules`, model checkpoints, build folders, and temporary exports in
-  machine-local storage
-- record any machine-local resources needed to reproduce work
-
-This keeps shared drives, sync folders, and Git repositories smaller, faster,
-and less fragile across machines and operating systems.
-
-If a project uses local resources outside the repo or shared/synced folder,
-record them in:
-
-```text
-.ai/LOCAL_RESOURCES.md
-.ai/MACHINE_COMPATIBILITY.md
-.ai/RUNBOOK.md
-```
-
-Do not hardcode machine-specific paths into source code. Use environment
-variables such as:
-
-```bash
-PROJECT_DATA_ROOT=/path/to/data
-PROJECT_CACHE_ROOT=/path/to/cache
-PROJECT_OUTPUT_ROOT=/path/to/output
-```
-
-## Project And Subproject Rules
-
-Use `.ai/PROJECT_HIERARCHY.md` to say whether a folder is:
-
-- a project
-- a subproject
-- a document package
-- a data area
-- a plain subdirectory
-
-A subdirectory is not a subproject unless it is explicitly marked.
-
-Child projects may read parent summaries as a read-only interface, but should
-not edit parent files, parent `.ai/` state, parent logs, or sibling projects
-unless explicitly asked.
-
-## Documentation And Paper Work
-
-For documents, papers, policy notes, and teaching material:
-
-- draft Markdown first
-- critique logic/evidence/audience before polishing language
-- build PDF/DOCX/slides only after content is stable
-- keep AI scratch Markdown under `.ai/`
-
-Formal Thai A4 PDFs can use:
-
-```text
-templates/pandoc-thai-a4/
-```
-
-## More Docs
-
-- `OPEN_WITH_AGENT.md` — short clone/install/open workflow
-- `GIT_DISTRIBUTION.md` — clone/update details
-- `INSTALL_IN_PROJECT.md` — fuller installation notes
-- `AI_CLIENTS.md` — Codex / Claude / Antigravity adapter strategy
-- `TOKEN_DISCIPLINE.md` — token and cost rules
-- `MACHINE_PROFILES.md` — machine-aware workflow
-- `DOCUMENT_PRODUCTION_POLICY.md` — document production rules
-- `MARKDOWN_ORGANIZATION_POLICY.md` — safe Markdown classification
+If a project needs local data or cache folders outside the project, record them
+in `.ai/LOCAL_RESOURCES.md`.
 
 ## Repository Notes
 
 This repository intentionally ignores `.ai/` because that directory contains
-local project state and installed snapshots. Do not commit project-specific
-state into the Agent Project Kit repo.
+local project state and installed snapshots.

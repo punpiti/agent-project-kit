@@ -2,73 +2,24 @@
 
 [English](README.md)
 
-Agent Project Kit ช่วยให้ใช้ AI coding agents กับโปรเจคจริงได้เป็นระบบขึ้น
+Agent Project Kit เป็นชุดไฟล์เริ่มต้นสำหรับใช้ AI coding agents กับ project
+folder ให้เป็นระเบียบขึ้น
 
-ถ้าไม่ติดตั้งอะไรเลย แต่ละครั้งที่เปิด AI มักต้องเริ่มใหม่: AI ต้อง scan
-โปรเจคซ้ำ ลืม decision เดิม เดา path เฉพาะเครื่อง ใช้ token ซ้ำกับบริบทเดิม
-และอาจสับสนว่า folder ไหนคือ project, subproject, หรือแค่ subdirectory ธรรมดา
+เมื่อติดตั้งแล้ว โปรเจคจะมีไฟล์คำสั่งและ template ใต้ `.ai/` เพื่อให้ Codex,
+Claude Code, Antigravity หรือ agent อื่นรู้ว่าควรเริ่มอ่านจากตรงไหน
 
-ถ้าติดตั้งชุดนี้ โปรเจคจะมี `.ai/` working layer และ root instruction files
-เพื่อให้ AI resume จาก state เดิม ตรวจเครื่องปัจจุบัน รู้ว่า resource อยู่ไหน
-คุม token/cost และใช้ workflow เดียวกันได้กับ Codex, Claude Code, Antigravity
-หรือ agent อื่นที่อ่านไฟล์คำสั่งใน repo
+เหมาะกับโปรเจคที่คุณจะเปิดใช้กับ AI มากกว่าหนึ่งครั้ง หรืออยากให้คนในบ้านลอง
+clone แล้วเริ่มใช้ได้โดยไม่ต้องตั้งโครงสร้างเองทุกครั้ง
 
 ## ได้อะไรจากการติดตั้ง
 
-- AI ไม่ต้องเริ่มจากศูนย์ทุกครั้ง
-- ลดการ scan repo ซ้ำโดยไม่จำเป็น
-- จดว่าโปรเจคค้างตรงไหนใน `.ai/PROJECT_STATE.md`
-- จดว่าเครื่องนี้คืออะไรและรันอะไรเหมาะใน `.ai/MACHINE_PROFILE.md`
-- จด path ของ data/cache/resource ที่อยู่นอกโปรเจคใน `.ai/LOCAL_RESOURCES.md`
-- แยก project / subproject / plain folder ให้ชัด
-- ตั้ง token/cost mode ได้ เช่น economy mode ให้ถามก่อนใช้ token หนัก
-- ใช้ policy เดียวกันได้กับ Codex, Claude Code, Antigravity และ agent อื่น
-
-## เหมาะกับใคร
-
-เหมาะกับโปรเจคที่:
-
-- จะใช้ AI มากกว่าหนึ่งครั้ง
-- มีหลายเครื่อง หรือย้ายงานระหว่างเครื่อง
-- มี data/cache/intermediate files ที่ไม่ควรอยู่ใน repo หรือ shared drive
-- มี subproject หลายระดับ
-- ใช้ AI หลายตัว เช่น Codex, Claude Code, Antigravity
-- อยากลด token ระยะยาวโดยให้ AI อ่าน state สั้น ๆ แทนการ scan ใหม่
+- มีไฟล์ `AGENTS.md`, `CLAUDE.md`, `ANTIGRAVITY.md` ให้ AI แต่ละตัวรู้จุดเริ่ม
+- มี `.ai/` สำหรับจด state และ note ของโปรเจค
+- มีที่จดว่าเครื่องนี้เหมาะกับงานแบบไหน
+- มีที่จดว่า data/cache/resource ที่อยู่นอก project อยู่ตรงไหน
+- มีคำสั่ง install/update สำหรับ macOS, Linux, WSL2 และ Windows PowerShell
 
 ถ้าเป็นงานเล็กครั้งเดียว ไม่ต้องติดตั้งก็ได้
-
-## แนวคิด project / subproject
-
-Agent Project Kit มองว่า project คือ folder ที่มีขอบเขตงานชัด และอาจมี
-subproject อยู่ข้างในได้ แต่ subfolder ธรรมดาไม่ใช่ subproject โดยอัตโนมัติ
-ต้องประกาศไว้ด้วยไฟล์เช่น `.ai/PROJECT_HIERARCHY.md`, `.ai/PROJECT_STATE.md`,
-หรือ `AGENTS.md`
-
-หลักคิดคือ project ด้านบนควรเก็บภาพกว้าง ส่วน project ที่อยู่ลึกลงไปควรเก็บ
-บริบทที่เฉียบคมและ task-specific มากขึ้น
-
-ตัวอย่าง:
-
-```text
-nowcast/
-  ภาพรวมของหัวข้องานวิจัย nowcasting ระยะยาว
-
-nowcast/ting67/
-  subproject ของทุนวิจัยปี 67 ภายใต้ nowcast
-
-nowcast/ting67/amt/
-  subproject หรือ document package สำหรับ paper ที่ส่ง AMT journal
-```
-
-ในตัวอย่างนี้ `nowcast/ting67/amt` ควรจำเรื่อง manuscript, reviewer, journal,
-figure, evidence และ response strategy ให้คม ส่วน `nowcast/ting67` ควรจำภาพของ
-ทุนวิจัย deliverables และ timeline ส่วน `nowcast` ควรจำแผนที่ของ research
-program ทั้งชุด
-
-parent project อ่าน child summary ได้เพื่อรู้ว่าลูกทำอะไรอยู่ แต่ไม่ควร load
-บริบททั้งหมดของ child เว้นแต่งานนั้นแตะ child โดยตรง ส่วน child project ควรอ่าน
-parent เฉพาะ framing, constraint, naming, shared resource, หรือ policy และไม่ควร
-แก้ไฟล์ของ parent โดยอัตโนมัติ
 
 ## เริ่มใช้กับโปรเจคใหม่
 
@@ -112,47 +63,30 @@ CLAUDE.md
 ANTIGRAVITY.md
 .ai/computing-environment/
 .ai/PROJECT_STATE.md
-.ai/PROJECT_HIERARCHY.md
-.ai/COMPUTING_ENVIRONMENT_VERSION.md
 .ai/MACHINE_PROFILE.md
 .ai/LOCAL_RESOURCES.md
-.ai/MACHINE_COMPATIBILITY.md
 .ai/RUNBOOK.md
 .ai/TOKEN_BUDGET.md
 .ai/SESSION_LOG.md
 ```
 
-ไฟล์ root เช่น `AGENTS.md`, `CLAUDE.md`, `ANTIGRAVITY.md` จะบอก AI แต่ละตัวให้กลับไปอ่าน policy และ state ใน `.ai/`
+ไฟล์ root เช่น `AGENTS.md`, `CLAUDE.md`, `ANTIGRAVITY.md` จะบอก AI แต่ละตัวให้ไปอ่านกติกาและ note ใน `.ai/`
 
 ## Prompt แรกที่ควรบอก AI
 
 ```text
 อ่าน AGENTS.md และ .ai/computing-environment ก่อน
-จากนั้นอ่าน .ai/PROJECT_STATE.md, .ai/PROJECT_HIERARCHY.md,
-.ai/COMPUTING_ENVIRONMENT_VERSION.md, .ai/MACHINE_PROFILE.md,
-.ai/LOCAL_RESOURCES.md, .ai/MACHINE_COMPATIBILITY.md, .ai/RUNBOOK.md,
-และ .ai/TOKEN_BUDGET.md
-สรุปว่า project ค้างตรงไหน เครื่องนี้คือเครื่องอะไร มี local resource อะไรขาด
-และควรใช้ token/cost mode แบบไหน ก่อนเริ่มทำงาน
+จากนั้นอ่าน note ที่เกี่ยวข้องใน .ai/
+สรุปว่าโปรเจคนี้คืออะไร เครื่องนี้คือเครื่องอะไร และต้องรู้อะไรก่อนเริ่มงาน
 ```
 
-## Token จะเปลืองขึ้นไหม
+## การเก็บไฟล์ชั่วคราว
 
-รอบแรกอาจใช้ token มากขึ้น เพราะต้อง onboard โปรเจค ตรวจเครื่อง และสร้าง state
-แต่ระยะยาวควรประหยัดลง เพราะ AI ไม่ต้อง scan หรือถามบริบทเดิมซ้ำทุกครั้ง
+เก็บ source code, เอกสาร, prompt และ note เล็ก ๆ ไว้ใน project folder ได้
+แต่ไฟล์ใหญ่หรือไฟล์ที่สร้างใหม่บ่อย เช่น cache, virtualenv, `node_modules`,
+generated files และ temporary outputs ควรอยู่นอก shared/synced folder ถ้าเป็นไปได้
 
-หลักคือจ่ายครั้งแรกเพื่อสร้าง project memory ที่ดี แล้วใช้ `.ai/PROJECT_STATE.md`
-เป็น compression layer ในรอบต่อไป
-
-## Shared Storage Policy
-
-นี่ไม่ใช่กติกาเฉพาะ OneDrive แต่เป็นแนวทาง programming ทั่วไป:
-
-- source code, docs, specs, small fixtures, prompts, และ AI state อยู่ใน project folder หรือ shared/synced folder ได้
-- cache, intermediate files, virtualenv, `node_modules`, model checkpoints, build folders, temporary exports ควรอยู่ machine-local
-- ถ้าต้องใช้ resource นอก project/shared folder ให้จดไว้ใน `.ai/LOCAL_RESOURCES.md`
-
-วิธีนี้ช่วยให้ repo/shared drive เล็กลง sync เร็วขึ้น และย้ายเครื่องแล้วไม่เดา path ผิด
+ถ้าต้องใช้ data หรือ cache นอก project ให้จดไว้ใน `.ai/LOCAL_RESOURCES.md`
 
 ## อัปเดต
 
