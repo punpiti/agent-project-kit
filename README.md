@@ -29,6 +29,24 @@ It is not an app framework and does not change your source code. It adds
 instructions, templates, and installer scripts so AI agents can operate more
 consistently across machines and projects.
 
+## Conceptual Background
+
+This kit is partly inspired by Andrew Ng's framing of agentic AI workflows:
+reflection, tool use, planning, and multi-agent collaboration. It also follows
+the practical lesson that agentic systems need disciplined evals and error
+analysis, not just longer prompts.
+
+Agent Project Kit adapts those ideas to everyday project folders:
+
+- `Spec` and project state make planning explicit.
+- `Eval` and review gates make reflection concrete.
+- Installer scripts, runbooks, and local-resource manifests support tool use.
+- Codex, Claude Code, Antigravity, and future agents share one project policy
+  instead of each carrying separate instructions.
+
+This project is an independent workflow kit. It is not affiliated with or
+endorsed by Andrew Ng or DeepLearning.AI.
+
 ## Quick Start
 
 Run the commands from the project folder you want the agent to work on.
