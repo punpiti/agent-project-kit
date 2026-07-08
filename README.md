@@ -100,10 +100,10 @@ bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
 code .
 ```
 
-If the project is on Windows OneDrive, WSL paths usually look like:
+If the project is on a Windows drive, WSL paths often look like:
 
 ```text
-/mnt/c/Users/<windows-user>/OneDrive/<project>
+/mnt/c/Users/<windows-user>/<path-to-project>
 ```
 
 WSL can also call Windows PowerShell directly:
@@ -270,6 +270,7 @@ templates/pandoc-thai-a4/
 - `AI_CLIENTS.md` — Codex / Claude / Antigravity adapter strategy
 - `TOKEN_DISCIPLINE.md` — token and cost rules
 - `MACHINE_PROFILES.md` — machine-aware workflow
+- `WSL2_ONEDRIVE_WORKFLOW.md` — optional personal workflow for WSL2 + Windows OneDrive users
 - `DOCUMENT_PRODUCTION_POLICY.md` — document production rules
 - `MARKDOWN_ORGANIZATION_POLICY.md` — safe Markdown classification
 

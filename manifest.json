@@ -8,11 +8,11 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "6.12-original-design-framing",
+  "version": "6.13-portable-public-readme",
   "updated": "2026-07-08T00:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
-  "purpose": "Agent Project Kit: a portable AI project operating kit with Spec–Eval–Loop, WSL2/OneDrive multi-machine workflow, local-resource tracking, machine-profile caching, versioned package updates, token discipline, document production, and conservative Markdown classification that protects serious .md sources and supports archive review/restore. The legacy package/path name is computing-environment.",
+  "purpose": "Agent Project Kit: a portable AI project operating kit with Spec–Eval–Loop, machine/profile-aware local-resource tracking, versioned package updates, token discipline, document production, and conservative Markdown classification that protects serious .md sources and supports archive review/restore. The legacy package/path name is computing-environment.",
   "entry_points": [
     "START_HERE.md",
     "AGENTS.md",
@@ -160,5 +160,10 @@
     "Reframed README conceptual background to emphasize Agent Project Kit as an original practical workflow design.",
     "Described Andrew Ng's agentic AI framing as an influence on language, not the source design.",
     "Clarified that the kit was designed for real project-folder, multi-machine, document, and research workflows."
+  ],
+  "v6_13_changes": [
+    "Made README and manifest more portable-first for public distribution.",
+    "Reduced OneDrive-specific wording from README quick-start text.",
+    "Kept WSL2_ONEDRIVE_WORKFLOW.md as optional personal workflow documentation rather than the public default."
   ]
 }
