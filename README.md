@@ -31,12 +31,17 @@ consistently across machines and projects.
 
 ## Conceptual Background
 
-This kit is partly inspired by Andrew Ng's framing of agentic AI workflows:
-reflection, tool use, planning, and multi-agent collaboration. It also follows
-the practical lesson that agentic systems need disciplined evals and error
-analysis, not just longer prompts.
+Agent Project Kit is an original, practical workflow design built from repeated
+use of AI coding agents across real project folders, machines, documents, and
+research work. It is meant to solve operational problems: losing project
+context, rerunning machine discovery, mixing parent/child project scope, and
+spending token budget without a clear review gate.
 
-Agent Project Kit adapts those ideas to everyday project folders:
+Andrew Ng's discussion of agentic AI workflows helped frame some of the
+language around reflection, tool use, planning, multi-agent collaboration, and
+eval/error analysis. Those ideas are an influence, not the source design.
+
+Agent Project Kit turns that general direction into project-folder mechanics:
 
 - `Spec` and project state make planning explicit.
 - `Eval` and review gates make reflection concrete.
@@ -44,8 +49,8 @@ Agent Project Kit adapts those ideas to everyday project folders:
 - Codex, Claude Code, Antigravity, and future agents share one project policy
   instead of each carrying separate instructions.
 
-This project is an independent workflow kit. It is not affiliated with or
-endorsed by Andrew Ng or DeepLearning.AI.
+This project is independently designed and maintained. It is not affiliated
+with or endorsed by Andrew Ng or DeepLearning.AI.
 
 ## Quick Start
 
