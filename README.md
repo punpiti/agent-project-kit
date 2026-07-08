@@ -214,7 +214,22 @@ Project defaults live in `.ai/TOKEN_BUDGET.md`.
 The kit is machine-aware. On first use, the agent should identify whether it is
 on macOS, Windows, Linux, WSL2, or an unknown machine.
 
-If a project uses local resources outside the repo, record them in:
+## Shared Storage Policy
+
+This is a general programming workflow rule, not a OneDrive-specific rule:
+
+- keep source code, small fixtures, docs, specs, prompts, and AI project state
+  in the project folder or another intentional shared/synced location
+- keep large caches, generated intermediates, virtual environments,
+  `node_modules`, model checkpoints, build folders, and temporary exports in
+  machine-local storage
+- record any machine-local resources needed to reproduce work
+
+This keeps shared drives, sync folders, and Git repositories smaller, faster,
+and less fragile across machines and operating systems.
+
+If a project uses local resources outside the repo or shared/synced folder,
+record them in:
 
 ```text
 .ai/LOCAL_RESOURCES.md

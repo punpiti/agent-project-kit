@@ -18,9 +18,9 @@
 
 ## Local Resource / Portability Check
 
-- [ ] Project source/docs/spec อยู่ใน shared/synced project storage หรือ path portable ที่ตั้งใจไว้
-- [ ] Cache/intermediate/data ใหญ่ไม่ได้ถูกใส่ shared/synced project storage โดยไม่ตั้งใจ
-- [ ] Non-shared/synced project storage resources ถูกจดใน `.ai/LOCAL_RESOURCES.md`
+- [ ] Project source/docs/spec อยู่ใน project folder, repo, หรือ shared/synced source tree ที่ตั้งใจไว้
+- [ ] Cache/intermediate/data ใหญ่ไม่ได้ถูกใส่ repo/shared/synced folder โดยไม่ตั้งใจ
+- [ ] Non-portable resources ถูกจดใน `.ai/LOCAL_RESOURCES.md`
 - [ ] Path เฉพาะเครื่องถูกอ่านผ่าน env/config ไม่ใช่ hardcode
 - [ ] มี smoke test ที่ไม่ต้องใช้ full cache/data ถ้าเป็นไปได้
 - [ ] ถ้าจะรันหนัก ตรวจว่าเครื่องนี้เหมาะ หรือควรย้ายไปรันบน `primary-heavy`
@@ -50,5 +50,5 @@
 - [ ] บอก decision ที่ต้องให้มนุษย์ตัดสินใจ
 - [ ] เสนอ next loop
 - [ ] อัปเดตหรือเสนอ patch สำหรับ `.ai/PROJECT_STATE.md` และ `.ai/SESSION_LOG.md`
-- [ ] ถ้าเจอ path/cache/data นอก shared/synced project storage ใหม่ ให้ update `.ai/LOCAL_RESOURCES.md`
+- [ ] ถ้าเจอ path/cache/data นอก project/shared source tree ใหม่ ให้ update `.ai/LOCAL_RESOURCES.md`
 - [ ] ใส่ token note ว่ารอบหน้าควรอ่าน/ส่ง context อะไรเพื่อประหยัด token

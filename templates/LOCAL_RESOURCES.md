@@ -1,10 +1,10 @@
 # LOCAL_RESOURCES
 
-ไฟล์นี้บันทึกไฟล์/โฟลเดอร์ที่อยู่นอก shared/synced project storage หรือไม่ portable ข้ามเครื่อง
+ไฟล์นี้บันทึกไฟล์/โฟลเดอร์ที่อยู่นอก project folder หรือ shared/synced source tree และไม่ portable ข้ามเครื่อง
 
 ## Rule
 
-ถ้า project ใช้ data, cache, intermediate, checkpoint, build artifact, export, virtualenv, หรือไฟล์ใหญ่อื่น ๆ ที่ไม่ได้ sync ผ่าน shared/synced project storage ต้องจดไว้ที่นี่
+ถ้า project ใช้ data, cache, intermediate, checkpoint, build artifact, export, virtualenv, หรือไฟล์ใหญ่อื่น ๆ ที่อยู่นอก project/shared source tree ต้องจดไว้ที่นี่
 
 ## Resource Table
 
@@ -22,7 +22,7 @@
 
 | Variable | Meaning | Example |
 |---|---|---|
-| `PROJECT_DATA_ROOT` | Root of large input data outside shared/synced project storage | `/mnt/d/datasets/<project>` |
+| `PROJECT_DATA_ROOT` | Root of large input data outside the project/shared source tree | `/mnt/d/datasets/<project>` |
 | `PROJECT_CACHE_ROOT` | Root of generated cache/intermediate files | `/home/<user>/.cache/<project>` |
 | `PROJECT_OUTPUT_ROOT` | Non-portable heavy output path | `/mnt/d/outputs/<project>` |
 
@@ -39,4 +39,4 @@
 
 - Do not store secrets here.
 - Do not assume a path exists on another machine.
-- Prefer small portable sample data under shared/synced project storage for smoke tests.
+- Prefer small portable sample data in the project/shared source tree for smoke tests.

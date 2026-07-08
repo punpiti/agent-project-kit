@@ -1,40 +1,48 @@
 # Cross-Project Environment Policy
 
-Use machine-local shared environments for shared/synced project storage projects. Do not keep Python
-virtual environments, conda environments, Node dependencies, or large build
-caches inside shared/synced project storage project folders.
+Use machine-local environments and caches for projects that live in Git
+repositories, shared drives, or synced folders.
+
+Do not keep Python virtual environments, conda environments, Node dependencies,
+large build caches, or generated intermediates inside shared/synced project
+folders unless there is a specific reason to do so.
 
 ## Why
 
-shared/synced project storage should sync source files, documents, manifests, and small reproducible
-assets. It should not sync installed binary packages. Project-local `.venv`
-folders and `node_modules` trees make sync slow, machine-specific, and fragile
-across Windows, WSL, and other machines.
+Shared/synced storage and Git repositories should carry source files,
+documents, manifests, small fixtures, and intentionally shared project state.
+They should not carry installed binary packages or high-churn generated files.
 
-## Python Environment Groups
+Project-local `.venv` folders, conda environments, `node_modules` trees, build
+caches, and exported intermediates make sync slow, machine-specific, and fragile
+across Windows, WSL, macOS, Linux, and remote machines.
 
-Prefer a small number of shared local environments by work type.
+## Environment Strategy
 
-| Group | Use For | Typical Env |
-| --- | --- | --- |
-| Teaching CV/ML | OpenCV, image processing, classroom demos | `opencv-demo` |
-| Research Rain | rainfall data, feature analysis, notebooks, visualization | `rain` |
-| Admin/Documents | pandas, openpyxl, plotly, document/report scripts | `admin-docs` or project-specific |
-| Web/Viz | web dashboards and visualization tooling | project-specific Node/Python env |
-| Heavy DL | PyTorch, TensorFlow, face recognition, GPU-heavy demos | separate heavy env |
+Each project should keep enough metadata to rebuild dependencies:
 
-Keep these environments under machine-local conda/micromamba locations such as
-`~/.local/share/mamba/envs`, not under shared/synced project storage.
+- Python: `requirements.txt`, `environment.yml`, `pyproject.toml`, or similar
+- Node: `package.json` plus a lockfile such as `package-lock.json` or `pnpm-lock.yaml`
+- System tools: a short runbook or setup note
+- Agent guidance: `AGENTS.md` and `.ai/RUNBOOK.md` when relevant
 
-## Repository Rules
+Use machine-local locations for installed dependencies and caches:
 
-Each active project should keep enough metadata to rebuild dependencies:
+```text
+~/.local/share/mamba/envs/<env>
+~/.cache/<project>
+/var/tmp/<project>
+/mnt/data/<project>
+C:\Users\<user>\AppData\Local\<project>
+```
 
-- Python: `requirements.txt`, `environment.yml`, or `pyproject.toml`.
-- Node: `package.json` plus a lockfile such as `package-lock.json`.
-- Agent guidance: `AGENTS.md` when the project has local rules.
+The exact paths are project and machine specific. Record them in
+`.ai/LOCAL_RESOURCES.md` and use environment variables instead of hardcoding
+absolute paths in source code.
 
-Each active project should ignore local dependency folders:
+## Ignore Local Dependency Folders
+
+Most projects should ignore local dependency folders:
 
 ```gitignore
 .venv/
@@ -45,10 +53,13 @@ node_modules/
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 ```
 
-For LaTeX projects, ignore ordinary build intermediates when they are not
-deliberate evidence artifacts:
+For LaTeX, Pandoc, Quarto, or report projects, ignore ordinary build
+intermediates unless they are deliberate evidence artifacts:
 
 ```gitignore
 *.aux
@@ -61,45 +72,35 @@ deliberate evidence artifacts:
 *.out
 *.synctex.gz
 *.toc
+_freeze/
+_site/
 ```
 
-## Current Cleanup Decisions
+## Cleanup Guidance
 
-- `Class/Image Processing/.venv` was removed from shared/synced project storage. Use `opencv-demo`.
-- `KU/president/.venv` was removed from shared/synced project storage. Recreate from
-  `requirements.txt` in a machine-local environment.
-- `imh/node_modules` was removed from shared/synced project storage. Recreate with `npm ci`.
-- `nowcast/ting67` is excluded from broad cleanup for now. It has provenance,
-  revision, archive, and paper-build material that needs project-specific review.
+If a project already has large local dependency folders or generated caches in
+the project tree, do not delete them blindly. First check whether they are
+reproducible and whether the project has enough metadata to rebuild them.
 
-## Restore Commands
+Typical move/delete candidates:
 
-OpenCV/image-processing teaching demos:
+- `.venv/`, `venv/`, `.conda/`
+- `node_modules/`
+- `__pycache__/`, `.pytest_cache/`, `.mypy_cache/`, `.ruff_cache/`
+- LaTeX/Pandoc/Quarto build intermediates
+- generated figure caches and temporary export folders
 
-```bash
-micromamba activate opencv-demo
-```
+Keep final deliverables and small reproducible fixtures in the project when
+they are meant to be shared.
 
-KU president/admin document tools:
+## Document Build And Cache Rules
 
-```bash
-cd ~/shared/synced project storage/KU/president
-python -m pip install -r requirements.txt
-```
+For document projects, keep Markdown source, style sheets, templates,
+bibliography, and small source figures in the project folder or shared/synced
+source tree.
 
-Node/Vite apps:
-
-```bash
-cd ~/shared/synced project storage/imh
-npm ci
-```
-
-
-## Document Build and Cache Rules
-
-For document projects, keep Markdown source, style sheets, templates, bibliography, and small source figures in shared/synced project storage.
-
-Do not put large generated/intermediate files in shared/synced project storage when they are reproducible or machine-specific, such as:
+Do not put large generated/intermediate files in shared/synced storage when
+they are reproducible or machine-specific, such as:
 
 - huge exported figure caches
 - OCR scratch images
@@ -107,10 +108,12 @@ Do not put large generated/intermediate files in shared/synced project storage w
 - LaTeX/Pandoc/Quarto build intermediates
 - downloaded raw data used only to regenerate figures
 
-If a document build requires files outside shared/synced project storage, record them in:
+If a document build requires files outside the project/shared source tree,
+record them in:
 
 - `.ai/LOCAL_RESOURCES.md`
 - `.ai/DOCUMENT_PIPELINE.md`
 - `.ai/SESSION_LOG.md` or a project-specific private run log if the project has an active run/service/machine role
 
-A final PDF may be synced in shared/synced project storage when it is a deliverable, but temporary build caches should remain local.
+A final PDF may be committed or synced when it is a deliverable, but temporary
+build caches should remain local.

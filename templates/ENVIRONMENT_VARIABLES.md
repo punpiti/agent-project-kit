@@ -6,9 +6,9 @@
 
 | Variable | Required? | Purpose | Example | Machine-specific? |
 |---|---:|---|---|---:|
-| `PROJECT_DATA_ROOT` | no/yes | Large data outside shared/synced project storage | `/mnt/d/datasets/<project>` | yes |
-| `PROJECT_CACHE_ROOT` | no/yes | Cache/intermediate outside shared/synced project storage | `/home/<user>/.cache/<project>` | yes |
-| `PROJECT_OUTPUT_ROOT` | no/yes | Heavy outputs outside shared/synced project storage | `/mnt/d/outputs/<project>` | yes |
+| `PROJECT_DATA_ROOT` | no/yes | Large data outside the project/shared source tree | `/mnt/d/datasets/<project>` | yes |
+| `PROJECT_CACHE_ROOT` | no/yes | Cache/intermediate outside the project/shared source tree | `/home/<user>/.cache/<project>` | yes |
+| `PROJECT_OUTPUT_ROOT` | no/yes | Heavy outputs outside the project/shared source tree | `/mnt/d/outputs/<project>` | yes |
 
 ## Secret Variables
 
