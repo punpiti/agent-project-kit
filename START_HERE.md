@@ -40,16 +40,21 @@ governance files first, then the root `.ai/` project-state files.
 
 ---
 
-## Machine-Aware Rule for This User
+## Machine-Aware Rule
 
-ผู้ใช้ทำงานผ่าน **Codex ใน WSL2** โดย source/project ส่วนใหญ่ sync ผ่าน **OneDrive ฝั่ง Windows** และทำงานหลายเครื่อง:
+Projects may be opened on different machines, operating systems, shells, sync
+folders, local disks, containers, or remote servers. Do not assume that data,
+cache, model files, build artifacts, or runtime environments exist everywhere.
 
-- `think` = Xeon PC, เครื่องรันหนักหลัก, ถือว่ารันได้ทุก project เว้นแต่ระบุเป็นอย่างอื่น
-- `madlab-i9` = Core i9 PC ที่ office, รันงานจริงได้หลายอย่าง แต่ต้องเช็ก cache/data path
-- `black5` = Core i7 notebook ที่พกติดตัว, เหมาะกับ edit/review/light run มากกว่างานหนัก
-- เครื่องอื่น = treat as unknown, inspect first
+Use project-defined machine roles such as:
 
-หาก project ใช้ไฟล์นอก OneDrive เช่น intermediate/cache/model/data ขนาดใหญ่ ต้องจดใน:
+- `primary-heavy` = full builds, expensive tests, GPU/data-heavy runs
+- `office-desktop` = regular development with possible local-resource differences
+- `portable-laptop` = editing, review, smoke tests, meetings, and light runs
+- `remote-server` = deployment, services, or batch runs
+- unknown = inspect first
+
+หาก project ใช้ไฟล์นอก project folder หรือ shared/synced source tree เช่น intermediate/cache/model/data ขนาดใหญ่ ต้องจดใน:
 
 - `.ai/LOCAL_RESOURCES.md`
 - `.ai/MACHINE_COMPATIBILITY.md`
@@ -180,7 +185,7 @@ parent
 - conclusion แรงกว่า evidence
 - spec คลุมเครือจน AI เดาเยอะเกินไป
 - AI กำลังทำ L1 แล้ว claim ว่า L2/L3 จบแล้ว
-- local path/cache/intermediate ใหญ่อยู่นอก OneDrive แต่ไม่ได้จดไว้
+- local path/cache/intermediate ใหญ่อยู่นอก project folder หรือ shared/synced source tree แต่ไม่ได้จดไว้
 - กำลังใช้ token เยอะเพราะเล่า context ซ้ำ แทนที่จะอัปเดต `.ai/PROJECT_STATE.md`
 
 ---

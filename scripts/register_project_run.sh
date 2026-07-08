@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-LOG_FILE="$ROOT_DIR/PROJECT_RUNS.md"
+LOG_FILE="${PROJECT_RUNS_LOG:-$(pwd)/.ai/PROJECT_RUNS.md}"
 
 PROJECT=""
 STATUS="running"
@@ -29,11 +28,11 @@ Options:
   --port PORT        Local or public port.
   --url URL          Local or public URL.
   --notes NOTES      Short context note. Do not include secrets.
-  --dry-run          Print the row without editing PROJECT_RUNS.md.
+  --dry-run          Print the row without editing the project run log.
   -h, --help         Show this help.
 
 Example:
-  /home/punpiti/OneDrive/computing-environment/tools/register_project_run.sh \
+  /path/to/agent-project-kit/scripts/register_project_run.sh \
     --project "Urban AI" \
     --command "ollama run qwen3:8b" \
     --port "11434" \
@@ -99,8 +98,17 @@ if [ -z "$PROJECT" ]; then
 fi
 
 if [ ! -f "$LOG_FILE" ]; then
-  echo "Log file not found: $LOG_FILE" >&2
-  exit 1
+  mkdir -p "$(dirname "$LOG_FILE")"
+  cat > "$LOG_FILE" <<'EOF'
+# Project Runs
+
+Project-local run/service/machine-role log.
+
+## Runs
+
+| Timestamp | Machine | Project | Status | Path | Command | Port | URL | Git Remote | Notes |
+|---|---|---|---|---|---|---|---|---|---|
+EOF
 fi
 
 escape_cell() {
@@ -119,7 +127,7 @@ timestamp="$(date -Iseconds)"
 row="| $(escape_cell "$timestamp") | $(escape_cell "$MACHINE") | $(escape_cell "$PROJECT") | $(escape_cell "$STATUS") | $(escape_cell "$RUN_PATH") | $(escape_cell "$COMMAND") | $(escape_cell "$PORT") | $(escape_cell "$URL") | $(escape_cell "$git_remote") | $(escape_cell "$NOTES") |"
 
 if [ "$DRY_RUN" -eq 1 ]; then
-  echo "Dry run; PROJECT_RUNS.md was not modified:"
+  echo "Dry run; project run log was not modified:"
   echo "$row"
   exit 0
 fi

@@ -14,15 +14,15 @@
 จากโฟลเดอร์ที่มีไฟล์ Markdown:
 
 ```bash
-/mnt/c/Users/<windows-user>/OneDrive/computing-environment/templates/pandoc-thai-a4/build-thai-a4-pdf.sh input.md output.pdf
+/mnt/c/Users/<windows-user>/shared/synced project storage/computing-environment/templates/pandoc-thai-a4/build-thai-a4-pdf.sh input.md output.pdf
 ```
 
 หรือเรียก `pandoc` โดยตรง:
 
 ```bash
 pandoc input.md \
-  --defaults="/mnt/c/Users/<windows-user>/OneDrive/computing-environment/templates/pandoc-thai-a4/thai-a4-defaults.yaml" \
-  --resource-path=".:/mnt/c/Users/<windows-user>/OneDrive/computing-environment/templates/pandoc-thai-a4" \
+  --defaults="/mnt/c/Users/<windows-user>/shared/synced project storage/computing-environment/templates/pandoc-thai-a4/thai-a4-defaults.yaml" \
+  --resource-path=".:/mnt/c/Users/<windows-user>/shared/synced project storage/computing-environment/templates/pandoc-thai-a4" \
   -o output.pdf
 ```
 

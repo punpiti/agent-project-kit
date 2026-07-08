@@ -3,15 +3,15 @@
 ใช้กับ project ที่มีอยู่แล้ว และต้องการให้ AI เข้าใจระบบก่อนลงมือแก้
 
 ```text
-อ่านกติกาจาก OneDrive/computing-environment หรือจาก .ai/computing-environment ใน project นี้ก่อน
-แล้ว onboard ตัวเองกับ project นี้ด้วย Spec–Eval–Loop Workflow + WSL2/OneDrive multi-machine protocol
+อ่านกติกาจาก shared/synced project storage/computing-environment หรือจาก .ai/computing-environment ใน project นี้ก่อน
+แล้ว onboard ตัวเองกับ project นี้ด้วย Spec–Eval–Loop Workflow + machine-aware multi-machine protocol
 
 ให้คุณทำดังนี้:
 
 1. Environment Inspect
-   - ตรวจ current machine: think / madlab-i9 / black5 / unknown
+   - ตรวจ current machine: known compatible machine / unknown
    - ตรวจว่าอยู่ใน WSL2 หรือไม่ ถ้าทำได้
-   - ตรวจ path ของ project ว่าอยู่ใต้ OneDrive หรือไม่
+   - ตรวจ path ของ project ว่าอยู่ใต้ shared/synced project storage หรือไม่
    - อ่าน .ai/LOCAL_RESOURCES.md และ .ai/MACHINE_COMPATIBILITY.md ถ้ามี
    - สรุปว่าเครื่องนี้เหมาะกับ full run / smoke test / edit-only หรือไม่
 
@@ -55,8 +55,8 @@
    เสนอ 3 ทางเลือก:
    A. safe small improvement / token-light
    B. useful medium change
-   C. deeper run/refactor/reanalysis อาจต้องใช้ think หรือ local resources
+   C. deeper run/refactor/reanalysis อาจต้องใช้ primary-heavy หรือ local resources
 
 อย่าแก้ไฟล์ก่อนสรุป onboarding ยกเว้นผมสั่งให้ลงมือทันที
-ถ้าพบ cache/intermediate/data นอก OneDrive ที่ไม่ได้จด ให้เสนอ patch สำหรับ .ai/LOCAL_RESOURCES.md
+ถ้าพบ cache/intermediate/data นอก shared/synced project storage ที่ไม่ได้จด ให้เสนอ patch สำหรับ .ai/LOCAL_RESOURCES.md
 ```

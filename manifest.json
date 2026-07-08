@@ -8,7 +8,7 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "6.13-portable-public-readme",
+  "version": "6.14-local-profile-split",
   "updated": "2026-07-08T00:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
@@ -21,7 +21,6 @@
     "AI_CLIENTS.md",
     "SPEC_EVAL_LOOP_INSTRUCTION.md",
     "MACHINE_PROFILES.md",
-    "WSL2_ONEDRIVE_WORKFLOW.md",
     "TOKEN_DISCIPLINE.md",
     "DOCUMENT_PRODUCTION_POLICY.md",
     "MARKDOWN_ORGANIZATION_POLICY.md",
@@ -33,10 +32,10 @@
     "MARKDOWN_OVER_ARCHIVE_RECOVERY.md"
   ],
   "machines": {
-    "think": "Xeon PC; main heavy-run machine; assumed able to run all projects unless noted",
-    "madlab-i9": "Core i9 office PC; strong but local resources may differ",
-    "black5": "Core i7 notebook; portable; prefer light/edit/review/smoke tasks",
-    "other": "inspect first"
+    "primary-heavy": "Optional project-defined role for full builds, expensive tests, GPU/data-heavy runs",
+    "portable-laptop": "Optional project-defined role for edit/review/smoke tasks",
+    "remote-server": "Optional project-defined role for deployment, services, or batch jobs",
+    "unknown": "Inspect first"
   },
   "project_state_files": [
     ".ai/PROJECT_STATE.md",
@@ -64,7 +63,6 @@
   "added": [
     "DOCUMENT_PRODUCTION_POLICY.md",
     "MARKDOWN_ORGANIZATION_POLICY.md",
-    "PROJECT_RUNS.md",
     "ENVIRONMENT_POLICY.md",
     "prompts/10_DOCUMENT_PRODUCTION.md",
     "prompts/11_DOCUMENT_STYLE_BOOTSTRAP.md",
@@ -84,11 +82,7 @@
   "added_from_old_package": [
     "scripts/register_project_run.sh",
     "scripts/scan_machine_resources.sh",
-    "templates/pandoc-thai-a4/",
-    "legacy/EDGE_PDF_VIEWER_ANNOTATION.md",
-    "legacy/README_OLD_COMPUTING_ENVIRONMENT.md",
-    "legacy/three_loop_prompts_legacy.md",
-    "legacy/cleanup-logs/"
+    "templates/pandoc-thai-a4/"
   ],
   "excluded_from_old_package": [
     "pp-DB53F145C3880598ECCEA719DA5B1EF3.p12"
@@ -165,5 +159,10 @@
     "Made README and manifest more portable-first for public distribution.",
     "Reduced OneDrive-specific wording from README quick-start text.",
     "Kept WSL2_ONEDRIVE_WORKFLOW.md as optional personal workflow documentation rather than the public default."
+  ],
+  "v6_14_changes": [
+    "Split personal WSL2/OneDrive workflow notes into ignored local-profiles/.",
+    "Removed WSL2_ONEDRIVE_WORKFLOW.md and PROJECT_RUNS.md from the public package.",
+    "Made MACHINE_PROFILES.md, INSTALL_IN_PROJECT.md, AGENTS.md, and manifest machine roles generic for public distribution."
   ]
 }

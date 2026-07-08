@@ -15,9 +15,9 @@
 ให้ทำ Project Resume ตามนี้:
 
 1. Current Machine / Environment
-   - ตรวจว่าอยู่บนเครื่อง think / madlab-i9 / black5 / unknown
+   - ตรวจว่าอยู่บนเครื่อง known compatible machine / unknown
    - ตรวจว่าอยู่ใน WSL2 หรือไม่ ถ้าทำได้
-   - ตรวจว่า project อยู่บน OneDrive หรือ path อื่น
+   - ตรวจว่า project อยู่บน shared/synced project storage หรือ path อื่น
    - ตรวจว่ามี local resource สำคัญที่หายไปหรือไม่
 
 2. Where We Left Off
@@ -29,7 +29,7 @@
    - ระบุว่าควรใช้ T0/T1/T2/T3 mode
 
 4. Risk Check
-   - มีอะไรที่รันบนเครื่องนี้ไม่ได้หรือควรย้ายไป think หรือไม่
+   - มีอะไรที่รันบนเครื่องนี้ไม่ได้หรือควรย้ายไป primary-heavy หรือไม่
    - มีอะไรที่ต้องถามผมก่อนจริง ๆ หรือไม่ ถ้ามีถามไม่เกิน 1–2 ข้อ
 
 5. Proceed

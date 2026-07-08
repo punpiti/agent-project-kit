@@ -10,11 +10,11 @@ L1 = AI ทำเองได้ เช่น เขียนโค้ด ร่
 L2 = ต้องใช้ judgment/context ของผม เช่น เป้าหมาย ผู้ใช้ tone strategy UX ความเสี่ยง
 L3 = ต้องใช้ feedback หรือข้อมูลจริง เช่น reviewer ผู้ใช้ นักเรียน stakeholder usage data
 
-ถ้าเป็น project/repo ให้คำนึงถึง WSL2 + OneDrive + หลายเครื่องด้วย:
-- think = เครื่องรันหนักหลัก
-- madlab-i9 = เครื่อง office
-- black5 = notebook เหมาะกับงานเบา/review/smoke test
-- ไฟล์นอก OneDrive เช่น cache/intermediate/data ใหญ่ ต้องจดใน .ai/LOCAL_RESOURCES.md
+ถ้าเป็น project/repo ให้คำนึงถึง machine-aware portable setup + หลายเครื่องด้วย:
+- primary-heavy = เครื่องรันหนักหลัก
+- office-desktop = เครื่อง office
+- portable-laptop = notebook เหมาะกับงานเบา/review/smoke test
+- ไฟล์นอก shared/synced project storage เช่น cache/intermediate/data ใหญ่ ต้องจดใน .ai/LOCAL_RESOURCES.md
 
 ให้ทำเป็น:
 1. Loop Diagnosis

@@ -3,8 +3,8 @@
 ใช้เมื่อต้องเริ่ม project ใหม่
 
 ```text
-อ่านกติกาจาก OneDrive/computing-environment หรือจาก .ai/computing-environment ใน project นี้ก่อน
-แล้วเริ่ม project นี้ด้วย Spec–Eval–Loop Workflow + WSL2/OneDrive multi-machine protocol
+อ่านกติกาจาก shared/synced project storage/computing-environment หรือจาก .ai/computing-environment ใน project นี้ก่อน
+แล้วเริ่ม project นี้ด้วย Spec–Eval–Loop Workflow + machine-aware multi-machine protocol
 
 โจทย์โปรเจกต์:
 [ใส่โจทย์ตรงนี้]
@@ -12,9 +12,9 @@
 ให้คุณทำดังนี้:
 
 1. Environment / Machine Setup
-   - ตรวจว่าอยู่บนเครื่อง think / madlab-i9 / black5 / unknown
+   - ตรวจว่าอยู่บนเครื่อง known compatible machine / unknown
    - ตรวจว่าอยู่ใน WSL2 หรือไม่ ถ้าทำได้
-   - ตรวจว่า project อยู่ใน OneDrive หรือ path อื่น
+   - ตรวจว่า project อยู่ใน shared/synced project storage หรือ path อื่น
    - เสนอว่าจะเก็บ source, final docs, sample data, cache/intermediate, output ใหญ่ไว้ที่ไหน
 
 2. Loop Diagnosis
@@ -49,7 +49,7 @@
    แตกงานเป็นรอบเล็ก ๆ ที่ AI ทำได้ทันที
 
 8. Review Gate
-   บอกชัดว่าอะไรต้องให้ผมตัดสินใจ อะไรต้องรอ feedback จริง และอะไรควรรันบน think เท่านั้น
+   บอกชัดว่าอะไรต้องให้ผมตัดสินใจ อะไรต้องรอ feedback จริง และอะไรควรรันบน primary-heavy เท่านั้น
 
 อย่าลงมือ implement ใหญ่ทันทีถ้า spec/eval/local resource ยังไม่ชัด
 แต่ถ้าโจทย์ชัดพอ ให้เริ่มทำ draft/prototype รอบแรกได้เลย

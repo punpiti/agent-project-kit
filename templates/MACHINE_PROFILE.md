@@ -26,9 +26,9 @@ pwd
 
 | Machine label | Hostname | OS / platform | Context | Project path style | Sync/storage assumption | Recommended task level | Last verified | Notes |
 |---|---|---|---|---|---|---|---|---|
-| `think` |  |  | WSL2 / Windows-native / macOS / Linux / container / unknown |  |  | edit/smoke/medium/full/heavy/unknown |  |  |
-| `madlab-i9` |  |  | WSL2 / Windows-native / macOS / Linux / container / unknown |  |  | edit/smoke/medium/full/heavy/unknown |  |  |
-| `black5` |  |  | WSL2 / Windows-native / macOS / Linux / container / unknown |  |  | edit/smoke/medium/full/heavy/unknown |  |  |
+| `primary-heavy` |  |  | WSL2 / Windows-native / macOS / Linux / container / unknown |  |  | edit/smoke/medium/full/heavy/unknown |  |  |
+| `office-desktop` |  |  | WSL2 / Windows-native / macOS / Linux / container / unknown |  |  | edit/smoke/medium/full/heavy/unknown |  |  |
+| `portable-laptop` |  |  | WSL2 / Windows-native / macOS / Linux / container / unknown |  |  | edit/smoke/medium/full/heavy/unknown |  |  |
 | other |  |  | unknown |  |  | unknown |  |  |
 
 ## Current Machine Snapshot
@@ -91,6 +91,6 @@ pwd
 df -h .
 ```
 
-Check whether the project is under iCloud, OneDrive, Dropbox, a local folder, or
-a network mount. Do not apply WSL2/Windows OneDrive assumptions until recorded
+Check whether the project is under iCloud, shared/synced project storage, Dropbox, a local folder, or
+a network mount. Do not apply WSL2/Windows shared/synced project storage assumptions until recorded
 here.

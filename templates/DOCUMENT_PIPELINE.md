@@ -30,13 +30,13 @@ make pdf
 - Node environment:
 - Fonts required:
 
-## Local / Non-OneDrive Build Resources
+## Local / Non-shared/synced project storage Build Resources
 
 Record large temporary files, caches, OCR images, exported figures, or external datasets used to build documents.
 
 | Resource | Machine | Path | Required for full build? | Portable alternative | Notes |
 |---|---|---|---|---|---|
-|  | think/madlab-i9/black5 |  | yes/no |  |  |
+|  | known machine roles |  | yes/no |  |  |
 
 ## Final QA Status
 

@@ -7,19 +7,19 @@ This version is intended to replace the old `computing-environment` folder compl
 1. Back up or rename the old folder first:
 
 ```bash
-mv ~/OneDrive/computing-environment ~/OneDrive/computing-environment-old-backup-$(date +%F)
+mv /path/to/old/computing-environment /path/to/computing-environment-old-backup-$(date +%F)
 ```
 
 2. Extract this package as:
 
 ```text
-OneDrive/computing-environment
+/path/to/agent-project-kit
 ```
 
 3. For each active project, reinstall project-local AI files from WSL2:
 
 ```bash
-bash "/mnt/c/Users/<windows-user>/OneDrive/computing-environment/scripts/install-to-project.sh" .
+bash "/path/to/agent-project-kit/scripts/install-to-project.sh" .
 ```
 
 4. For old projects with scattered Markdown files, run inventory first:
@@ -39,7 +39,7 @@ The cleanup script does **not** delete files.
 ## What was merged from the old folder
 
 - `ENVIRONMENT_POLICY.md` — kept as the cross-project environment policy.
-- `PROJECT_RUNS.md` — kept as cross-machine project run log.
+- project run logs should be kept in project-local `.ai/SESSION_LOG.md` or another private run log.
 - `tools/register_project_run.sh` — moved to `scripts/register_project_run.sh`.
 - `tools/scan_machine_resources.sh` — moved to `scripts/scan_machine_resources.sh`.
 - `templates/pandoc-thai-a4/` — kept and updated as a document production template.
@@ -56,7 +56,7 @@ The `.p12` certificate file from the old package was intentionally excluded. See
 - AI working Markdown belongs under `.ai/`.
 - Real document sources belong under `documents/<document-id>/content.md` and must be registered in `.ai/DOCUMENT_PIPELINE.md`.
 - Loose `plan.md`, `notes.md`, `draft.md`, `review.md`, etc. in project root should be inventoried and usually archived under `.ai/archive/legacy-md/<date>/`.
-- Large local cache/intermediate/data outside OneDrive must be recorded in `.ai/LOCAL_RESOURCES.md` and `.ai/MACHINE_COMPATIBILITY.md`.
+- Large local cache/intermediate/data outside the project/shared source tree must be recorded in `.ai/LOCAL_RESOURCES.md` and `.ai/MACHINE_COMPATIBILITY.md`.
 
 ## v6 Markdown safety note
 

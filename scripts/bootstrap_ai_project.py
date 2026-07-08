@@ -29,15 +29,12 @@ ITEMS = [
     "ANTIGRAVITY.md",
     "AI_CLIENTS.md",
     "MACHINE_PROFILES.md",
-    "WSL2_ONEDRIVE_WORKFLOW.md",
     "TOKEN_DISCIPLINE.md",
     "DOCUMENT_PRODUCTION_POLICY.md",
     "MARKDOWN_ORGANIZATION_POLICY.md",
-    "legacy",
     "SECURITY_EXCLUSIONS.md",
     "MIGRATION_FROM_OLD.md",
     "ENVIRONMENT_POLICY.md",
-    "PROJECT_RUNS.md",
     "GLOBAL_START_PROMPT.md",
     "bootstrap_ai_project.py",
     "prompts",
@@ -194,7 +191,6 @@ layer unless explicitly requested.
 - `.ai/computing-environment/SPEC_EVAL_LOOP_INSTRUCTION.md`
 - `.ai/computing-environment/AGENTS.md`
 - `.ai/computing-environment/MACHINE_PROFILES.md`
-- `.ai/computing-environment/WSL2_ONEDRIVE_WORKFLOW.md`
 - `.ai/computing-environment/TOKEN_DISCIPLINE.md`
 - `.ai/computing-environment/DOCUMENT_PRODUCTION_POLICY.md`
 - `.ai/computing-environment/MARKDOWN_ORGANIZATION_POLICY.md`
@@ -219,7 +215,7 @@ Then read project state:
 Use Spec–Eval–Loop Workflow.
 Record machine identity/storage assumptions in `.ai/MACHINE_PROFILE.md`.
 Do not pretend L2 or L3 has been resolved by L1 alone.
-Do not pretend files outside OneDrive exist on every machine.
+Do not pretend files outside the project/shared source tree exist on every machine.
 For document work, start with Markdown, use project style sheets, and run final PDF QA before calling a document final.
 Do not create loose Markdown scratch files; put AI working notes in `.ai/` and register document sources in `.ai/DOCUMENT_PIPELINE.md`.
 <!-- END COMPUTING-ENVIRONMENT -->
@@ -286,7 +282,7 @@ def append_session_log(ai_dir: Path, source: Path, project: Path) -> None:
 - Result: Installed from {source}
 - Local resources used: none
 - Decisions made: none
-- Open questions: Fill PROJECT_HIERARCHY.md to declare whether this directory is a project/subproject/plain subdir; fill MACHINE_PROFILE.md for new machines; if package version changed but machine profile schema did not, reuse the existing profile; fill LOCAL_RESOURCES.md and DOCUMENT_PIPELINE.md if project uses non-OneDrive cache/data/build files; run organize-project-markdown.py if the project has scattered Markdown files
+- Open questions: Fill PROJECT_HIERARCHY.md to declare whether this directory is a project/subproject/plain subdir; fill MACHINE_PROFILE.md for new machines; if package version changed but machine profile schema did not, reuse the existing profile; fill LOCAL_RESOURCES.md and DOCUMENT_PIPELINE.md if project uses non-portable cache/data/build files; run organize-project-markdown.py if the project has scattered Markdown files
 - Next action: Resume project via PROJECT_STATE.md
 - Token note: Future sessions should read PROJECT_STATE.md before scanning broadly.
 """

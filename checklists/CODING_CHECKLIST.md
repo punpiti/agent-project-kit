@@ -5,7 +5,7 @@
 - [ ] อ่าน `AGENTS.md` และ `.ai/computing-environment/`
 - [ ] อ่าน `.ai/PROJECT_STATE.md` เพื่อรู้ว่าค้างตรงไหน
 - [ ] อ่าน `.ai/LOCAL_RESOURCES.md` และ `.ai/MACHINE_COMPATIBILITY.md` ถ้า project มี data/cache/intermediate ใหญ่
-- [ ] ตรวจ current machine: `think` / `madlab-i9` / `black5` / unknown
+- [ ] ตรวจ current machine: `primary-heavy` / `office-desktop` / `portable-laptop` / unknown
 - [ ] ตรวจว่าอยู่ใน WSL2 หรือไม่ ถ้าทำได้
 - [ ] อ่าน repo structure แบบ targeted ไม่ใช่ scan ทั้งหมดโดยไม่จำเป็น
 - [ ] ระบุไฟล์ที่เกี่ยวข้อง
@@ -18,12 +18,12 @@
 
 ## Local Resource / Portability Check
 
-- [ ] Project source/docs/spec อยู่ใน OneDrive หรือ path portable ที่ตั้งใจไว้
-- [ ] Cache/intermediate/data ใหญ่ไม่ได้ถูกใส่ OneDrive โดยไม่ตั้งใจ
-- [ ] Non-OneDrive resources ถูกจดใน `.ai/LOCAL_RESOURCES.md`
+- [ ] Project source/docs/spec อยู่ใน shared/synced project storage หรือ path portable ที่ตั้งใจไว้
+- [ ] Cache/intermediate/data ใหญ่ไม่ได้ถูกใส่ shared/synced project storage โดยไม่ตั้งใจ
+- [ ] Non-shared/synced project storage resources ถูกจดใน `.ai/LOCAL_RESOURCES.md`
 - [ ] Path เฉพาะเครื่องถูกอ่านผ่าน env/config ไม่ใช่ hardcode
 - [ ] มี smoke test ที่ไม่ต้องใช้ full cache/data ถ้าเป็นไปได้
-- [ ] ถ้าจะรันหนัก ตรวจว่าเครื่องนี้เหมาะ หรือควรย้ายไปรันบน `think`
+- [ ] ถ้าจะรันหนัก ตรวจว่าเครื่องนี้เหมาะ หรือควรย้ายไปรันบน `primary-heavy`
 
 ## During Editing
 
@@ -34,7 +34,7 @@
 - [ ] ไม่ใส่ magic number โดยไม่อธิบาย
 - [ ] ไม่ลบหรือทำให้ test อ่อนลง
 - [ ] run test/check เท่าที่ทำได้
-- [ ] ถ้าอยู่บน `black5` หรือ resource ไม่ชัด ให้เริ่มจาก smoke test
+- [ ] ถ้าอยู่บน `portable-laptop` หรือ resource ไม่ชัด ให้เริ่มจาก smoke test
 - [ ] ถ้า local resource หาย อย่าสรุปว่า project พัง ให้สรุปว่า resource ไหน missing
 
 ## After Editing
@@ -50,5 +50,5 @@
 - [ ] บอก decision ที่ต้องให้มนุษย์ตัดสินใจ
 - [ ] เสนอ next loop
 - [ ] อัปเดตหรือเสนอ patch สำหรับ `.ai/PROJECT_STATE.md` และ `.ai/SESSION_LOG.md`
-- [ ] ถ้าเจอ path/cache/data นอก OneDrive ใหม่ ให้ update `.ai/LOCAL_RESOURCES.md`
+- [ ] ถ้าเจอ path/cache/data นอก shared/synced project storage ใหม่ ให้ update `.ai/LOCAL_RESOURCES.md`
 - [ ] ใส่ token note ว่ารอบหน้าควรอ่าน/ส่ง context อะไรเพื่อประหยัด token

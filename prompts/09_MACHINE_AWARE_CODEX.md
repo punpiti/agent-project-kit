@@ -3,7 +3,7 @@
 ใช้กับ Codex ใน WSL2 เมื่อ project มีข้อมูล/cache/intermediate ใหญ่หรือทำงานข้ามหลายเครื่อง
 
 ```text
-Use the Spec–Eval–Loop Workflow and the WSL2/OneDrive machine-aware protocol.
+Use the Spec–Eval–Loop Workflow and the machine-aware machine-aware protocol.
 
 Before editing or running heavy commands:
 1. Read AGENTS.md and .ai/computing-environment if present.
@@ -23,7 +23,7 @@ Before editing or running heavy commands:
    do only a minimal resume check: hostname, platform, current path style, and
    required task-local paths.
 6. If this is a new/stale machine or the project is on Windows-native, macOS,
-   Linux server, container, or a non-OneDrive sync folder, do first-use discovery
+   Linux server, container, or a non-shared/synced project storage sync folder, do first-use discovery
    and update .ai/MACHINE_PROFILE.md before heavy work.
 7. Check whether required local resources exist.
 8. State whether this machine is suitable for the requested task.
@@ -35,8 +35,8 @@ Nested project rule:
   cross-project change.
 
 Storage rules:
-- OneDrive-synced files are portable.
-- Files outside OneDrive are non-portable and must be recorded in .ai/LOCAL_RESOURCES.md.
+- shared/synced project storage-synced files are portable.
+- Files outside shared/synced project storage are non-portable and must be recorded in .ai/LOCAL_RESOURCES.md.
 - Machine identity and storage assumptions must be recorded in .ai/MACHINE_PROFILE.md.
 - Installed package and schema versions are recorded in .ai/COMPUTING_ENVIRONMENT_VERSION.md.
 - Do not hardcode machine-specific absolute paths into source code.
@@ -46,7 +46,7 @@ Storage rules:
 Execution rules:
 - Use the smallest test that proves the change first.
 - Do not run full heavy pipelines unless the current machine is suitable.
-- If local resources are missing, explain what is missing and suggest: smoke test, regenerate cache, set env var, mount HDD, or run on think.
+- If local resources are missing, explain what is missing and suggest: smoke test, regenerate cache, set env var, mount HDD, or run on primary-heavy.
 
 After work:
 - Report files changed.

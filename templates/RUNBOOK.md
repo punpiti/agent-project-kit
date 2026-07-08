@@ -28,7 +28,7 @@ export PROJECT_OUTPUT_ROOT="/path/to/output"
 ## Full Run
 
 ```bash
-# command for full run, maybe only on think
+# command for full run, maybe only on primary-heavy
 ```
 
 ## Build / Lint / Type Check

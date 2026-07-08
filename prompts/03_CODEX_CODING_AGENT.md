@@ -3,7 +3,7 @@
 ใช้กับ Codex, IDE agent, coding agent, หรือ project ที่ต้องแก้โค้ด
 
 ```text
-Use the Spec–Eval–Loop Workflow plus the WSL2/OneDrive machine-aware protocol for this coding task.
+Use the Spec–Eval–Loop Workflow plus the machine-aware machine-aware protocol for this coding task.
 
 Before editing code:
 1. Read AGENTS.md and .ai/computing-environment if present.
@@ -14,7 +14,7 @@ Before editing code:
    - .ai/RUNBOOK.md
    - .ai/TOKEN_BUDGET.md
    - .ai/SESSION_LOG.md
-3. Detect current machine using hostname if possible: think / madlab-i9 / black5 / unknown.
+3. Detect current machine using hostname if possible: known compatible machine / unknown.
 4. Detect whether running in WSL2 if possible.
 5. Inspect the repository structure in a targeted way.
 6. Identify the relevant files.
@@ -25,8 +25,8 @@ Before editing code:
 11. Check whether required local data/cache/intermediate resources exist before running heavy commands.
 
 Storage / portability rules:
-1. OneDrive files are portable; WSL-local/HDD/cache files are not.
-2. Record all non-OneDrive resources in .ai/LOCAL_RESOURCES.md.
+1. shared/synced project storage files are portable; WSL-local/HDD/cache files are not.
+2. Record all non-shared/synced project storage resources in .ai/LOCAL_RESOURCES.md.
 3. Do not hardcode machine-specific absolute paths into source code.
 4. Prefer environment variables: PROJECT_DATA_ROOT, PROJECT_CACHE_ROOT, PROJECT_OUTPUT_ROOT.
 5. Keep small portable smoke tests when feasible.
@@ -35,7 +35,7 @@ During implementation:
 1. Make small, focused changes.
 2. Prefer minimal changes that satisfy the spec.
 3. Run relevant tests, scripts, lint, type checks, or smoke checks whenever possible.
-4. Use smoke tests first if on black5 or if resource availability is uncertain.
+4. Use smoke tests first if on portable-laptop or if resource availability is uncertain.
 5. If something fails, read the error, explain the likely cause, and fix it.
 6. Do not delete or weaken tests just to pass.
 7. Do not introduce large architectural changes unless necessary.

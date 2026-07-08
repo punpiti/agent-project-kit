@@ -9,9 +9,9 @@
 
 | Machine | Role for this project | Can edit? | Can run smoke test? | Can run full pipeline? | Required local resources | Notes |
 |---|---|---:|---:|---:|---|---|
-| `think` | default heavy-run | yes | yes | yes/unknown | | should be able to run all projects unless noted |
-| `madlab-i9` | office machine | yes | yes/unknown | yes/no/unknown | | check cache/data availability |
-| `black5` | portable notebook | yes | yes/unknown | no/unknown | | prefer light tasks unless resources exist |
+| `primary-heavy` | default heavy-run | yes | yes | yes/unknown | | should be able to run all projects unless noted |
+| `office-desktop` | office machine | yes | yes/unknown | yes/no/unknown | | check cache/data availability |
+| `portable-laptop` | portable notebook | yes | yes/unknown | no/unknown | | prefer light tasks unless resources exist |
 | other | unknown | yes/unknown | unknown | unknown | | inspect first |
 
 ## Recommended Task Placement

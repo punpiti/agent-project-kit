@@ -1,5 +1,6 @@
 # Agent Project Kit development state
 .ai/
+local-profiles/
 
 # Python/cache/editor noise
 __pycache__/

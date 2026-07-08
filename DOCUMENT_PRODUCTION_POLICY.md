@@ -145,11 +145,11 @@ Each document project should record:
 
 Use `.ai/DOCUMENT_PIPELINE.md` and `.ai/DOCUMENT_QA.md` for this.
 
-## Important WSL2 / OneDrive Note
+## Important WSL2 / shared/synced project storage Note
 
-Source Markdown and styles should live in OneDrive so they move across machines.
+Source Markdown and styles should live in shared/synced project storage so they move across machines.
 
-Large intermediate build folders, temporary images, OCR outputs, and cache files may live outside OneDrive, but must be recorded in:
+Large intermediate build folders, temporary images, OCR outputs, and cache files may live outside shared/synced project storage, but must be recorded in:
 
 ```text
 .ai/LOCAL_RESOURCES.md

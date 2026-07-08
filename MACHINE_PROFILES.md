@@ -1,29 +1,43 @@
-# MACHINE_PROFILES — WSL2 + OneDrive Multi-Machine Setup
+# MACHINE_PROFILES
 
-ไฟล์นี้คือบริบทเครื่องหลักของผู้ใช้ สำหรับให้ Codex / IDE agent / AI agent ใช้ตัดสินใจก่อนรันงานหนักหรือสร้าง path ภายนอก OneDrive
+Machine profiles help AI agents avoid assuming that every project folder has the
+same operating system, path layout, data cache, or runtime environment.
+
+Use this document as the portable public policy. Put personal machine names,
+sync-folder conventions, and family/team-specific setup notes in an ignored
+local profile folder, not in the public package.
 
 ## Default Storage Model
 
-- Source code, documents, specs, prompts, small sample data, and project state should live under **Windows OneDrive** so they sync across machines.
-- Codex is usually run inside **WSL2**.
-- OneDrive folders from Windows are accessed in WSL2 through `/mnt/c/...` or another mounted Windows drive.
-- Large intermediate files, cache, model checkpoints, generated datasets, build artifacts, temporary exports, and heavy experiment outputs may live outside OneDrive.
-- Anything outside OneDrive is **not portable** and may be missing on another machine.
+- Source code, documents, specs, prompts, small sample data, and project state
+  should live in the project folder or another intentionally synced/shared
+  location.
+- Large intermediate files, caches, model checkpoints, generated datasets,
+  build artifacts, temporary exports, and heavy experiment outputs may live in
+  machine-local storage.
+- Anything outside the project folder may be missing on another machine and
+  must be recorded in `.ai/LOCAL_RESOURCES.md`.
+- Secrets and credentials must not be stored in project docs or committed files.
 
 ## Machine Roles
 
-| Machine | Hardware / Role | Expected Use | Portability Assumption |
-|---|---|---|---|
-| `think` | Xeon PC | Main heavy-run machine. At home and sometimes moved to the garden on weekends. | Treat as the machine that can run every project unless proven otherwise. |
-| `madlab-i9` | Core i9 PC | Office machine. Good for serious work, but may not have all local caches or external HDD paths. | Check local resource manifest before heavy runs. |
-| `black5` | Core i7 notebook | Always with the user. Best for editing, review, light experiments, meetings, teaching work, and project steering. | Avoid assuming large caches exist. Prefer lightweight tasks unless manifest says otherwise. |
-| other / unknown | Less-used machines | Use cautiously. | Inspect first; do not assume external resources exist. |
+Projects should define their own machine labels in `.ai/MACHINE_PROFILE.md`.
 
-## Required Behavior for AI Agents
+Common role labels:
+
+| Role | Expected Use | Portability Assumption |
+|---|---|---|
+| `primary-heavy` | Full builds, expensive tests, GPU/data-heavy runs | Check local resource manifest before use |
+| `office-desktop` | Regular development and medium runs | Local resources may differ |
+| `portable-laptop` | Editing, review, smoke tests, meetings, teaching | Avoid assuming large caches exist |
+| `remote-server` | Deployment, services, batch jobs | Treat paths and permissions as machine-specific |
+| `unknown` | New or unprofiled machine | Inspect before heavy work |
+
+## Required Behavior For AI Agents
 
 At the start of every non-trivial project session:
 
-1. Detect or ask for the current machine name if possible.
+1. Detect or ask for the current machine identity if possible.
 2. Read project-local files if they exist:
    - `.ai/PROJECT_STATE.md`
    - `.ai/MACHINE_PROFILE.md`
@@ -32,37 +46,38 @@ At the start of every non-trivial project session:
    - `.ai/SESSION_LOG.md`
    - `.ai/RUNBOOK.md`
 3. If `.ai/MACHINE_PROFILE.md` already has a fresh entry for the current
-   machine, do the minimal resume check: `hostname`, OS/platform, WSL2 yes/no,
-   current path style, and whether required local paths still exist.
+   machine, do the minimal resume check: hostname, OS/platform, path style, and
+   whether required local paths still exist.
 4. If the current machine is unknown, stale, or the platform/storage layout has
    changed, run first-use discovery and update `.ai/MACHINE_PROFILE.md` before
    heavy work.
 5. Check whether required data/cache paths are available on the current machine.
-6. If a task needs large local files and the current machine is not marked compatible, say so directly and suggest running on `think` or updating `.ai/LOCAL_RESOURCES.md`.
-7. Do not hardcode machine-specific paths into code. Use environment variables or config files.
-8. Keep a small portable smoke-test path under OneDrive when feasible.
+6. If a task needs missing local files, do not declare the project broken. State
+   what is missing and propose a smoke path, resource setup step, or compatible
+   machine.
+7. Do not hardcode machine-specific paths into source code. Use environment
+   variables or config files.
 
-## Two-Stage Machine Protocol
-
-### First-use discovery
+## First-Use Discovery
 
 Use this when a project is opened on a new machine, a known machine has changed
-OS/storage layout, or the project is copied outside the user's usual OneDrive
-setup.
+OS/storage layout, or the project is copied to a different sync/storage system.
 
 Record the result in `.ai/MACHINE_PROFILE.md`:
 
 - machine identity: hostname, human label if known, OS, shell, architecture
-- execution context: WSL2, Windows-native, macOS, Linux, container, SSH/remote
-- project path style: `/mnt/c/...`, `/home/...`, `C:\...`, `/Users/...`, or other
-- sync/storage assumption: OneDrive personal/business, iCloud, local disk, network drive, unknown
-- available interpreters/package managers: Python, conda/mamba, Node, PowerShell, shell
+- execution context: Windows-native, WSL2, macOS, Linux, container, SSH/remote
+- project path style: `C:\...`, `/mnt/c/...`, `/Users/...`, `/home/...`, or other
+- sync/storage assumption: local disk, shared/synced project storage, iCloud, Dropbox, network drive,
+  external drive, remote server, unknown
+- available interpreters/package managers: Python, conda/mamba, Node,
+  PowerShell, shell
 - GPU/accelerator summary when relevant
 - project-specific local paths checked from `.ai/LOCAL_RESOURCES.md`
 - recommended task level on this machine: edit, smoke, medium, full/heavy
 - last verified date and command/source used
 
-Recommended commands:
+Useful shell commands:
 
 ```bash
 hostname
@@ -75,7 +90,7 @@ command -v pwsh || command -v powershell || true
 command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi || true
 ```
 
-On Windows-native PowerShell, use:
+Useful Windows PowerShell commands:
 
 ```powershell
 $env:COMPUTERNAME
@@ -84,11 +99,7 @@ Get-Location
 Get-PSDrive -PSProvider FileSystem
 ```
 
-On macOS, also check whether the project is under iCloud, OneDrive, or a local
-folder. Do not assume the WSL2/OneDrive rules fit macOS until the profile says
-so.
-
-### Resume check
+## Resume Check
 
 Use this when `.ai/MACHINE_PROFILE.md` already has a current entry for the
 machine.
@@ -101,12 +112,12 @@ uname -a  # or platform equivalent
 pwd
 ```
 
-Then read the matching machine row in `.ai/MACHINE_PROFILE.md` and only verify
-required local paths for the current task. Do not rescan hardware, package
+Then read the matching machine row in `.ai/MACHINE_PROFILE.md` and verify only
+the local paths needed for the current task. Do not rescan hardware, package
 managers, or broad storage unless the identity/path does not match or the task
 needs resources not yet recorded.
 
-### Package update check
+## Package Update Check
 
 When `.ai/computing-environment/` is updated in an existing project, read
 `.ai/COMPUTING_ENVIRONMENT_VERSION.md` before deciding to rescan the machine.
@@ -121,14 +132,14 @@ When `.ai/computing-environment/` is updated in an existing project, read
 
 Prefer this split:
 
-| Resource Type | Preferred Location | Sync? | Notes |
+| Resource Type | Preferred Location | Portable? | Notes |
 |---|---|---:|---|
-| Source code / manuscript / slides / specs | OneDrive project folder | Yes | Portable across machines |
-| Small fixtures / tiny sample data | OneDrive project folder | Yes | Use for smoke tests |
-| Python virtualenv, node_modules, build cache | WSL-local or machine-local | No | Recreate per machine |
-| Large datasets / radar data / image caches / model checkpoints | WSL-local or HDD | No | Must be recorded in `.ai/LOCAL_RESOURCES.md` |
-| Generated figures for paper/report | Usually OneDrive if final, local cache if intermediate | Depends | Final artifacts should be portable; massive intermediates should not |
-| Secrets / credentials | Never in OneDrive project docs | No | Use local secret manager or ignored env files |
+| Source code / manuscript / slides / specs | Project folder or synced source folder | Usually | Keep small and intentional |
+| Small fixtures / tiny sample data | Project folder | Yes | Use for smoke tests |
+| Python virtualenv, `node_modules`, build cache | Machine-local | No | Recreate per machine |
+| Large datasets / model checkpoints / generated caches | Machine-local or external storage | No | Must be recorded in `.ai/LOCAL_RESOURCES.md` |
+| Final figures/reports | Project folder if deliverable | Usually | Keep reproducible sources |
+| Secrets / credentials | Secret manager or ignored env files | No | Never commit real secrets |
 
 ## Environment Variable Convention
 
@@ -140,12 +151,11 @@ PROJECT_CACHE_ROOT=/path/to/cache
 PROJECT_OUTPUT_ROOT=/path/to/nonportable/outputs
 ```
 
-The project should include `.env.example` or `.ai/ENVIRONMENT_VARIABLES.md`, not real secrets.
+The project should include `.env.example` or `.ai/ENVIRONMENT_VARIABLES.md`, not
+real secrets.
 
 ## Hard Rule
 
-If a project uses files outside OneDrive, record them in `.ai/LOCAL_RESOURCES.md`. Otherwise the next machine switch will waste time.
-
-If a project is not on the user's WSL2 + Windows OneDrive layout, record that in
-`.ai/MACHINE_PROFILE.md` instead of forcing the default assumptions onto the
-project.
+If a project uses files outside the project folder or outside the shared/synced
+source tree, record them in `.ai/LOCAL_RESOURCES.md`. Otherwise the next machine
+switch will waste time.

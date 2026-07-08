@@ -62,11 +62,9 @@ $items = @(
     "ANTIGRAVITY.md",
     "AI_CLIENTS.md",
     "MACHINE_PROFILES.md",
-    "WSL2_ONEDRIVE_WORKFLOW.md",
     "TOKEN_DISCIPLINE.md",
     "DOCUMENT_PRODUCTION_POLICY.md",
     "ENVIRONMENT_POLICY.md",
-    "PROJECT_RUNS.md",
     "GLOBAL_START_PROMPT.md",
     "bootstrap_ai_project.py",
     "prompts",
@@ -222,7 +220,6 @@ layer unless explicitly requested.
 - `.ai/computing-environment/SPEC_EVAL_LOOP_INSTRUCTION.md`
 - `.ai/computing-environment/AGENTS.md`
 - `.ai/computing-environment/MACHINE_PROFILES.md`
-- `.ai/computing-environment/WSL2_ONEDRIVE_WORKFLOW.md`
 - `.ai/computing-environment/TOKEN_DISCIPLINE.md`
 
 Then read project state:
@@ -240,7 +237,7 @@ Then read project state:
 Use Spec–Eval–Loop Workflow.
 Do not pretend L2 or L3 has been resolved by L1 alone.
 Record machine identity/storage assumptions in `.ai/MACHINE_PROFILE.md`.
-Do not pretend files outside OneDrive exist on every machine.
+Do not pretend files outside the project/shared source tree exist on every machine.
 <!-- END COMPUTING-ENVIRONMENT -->
 "@
 
@@ -310,7 +307,7 @@ if (Test-Path $sessionLog) {
 - Result: Installed from $SourcePath
 - Local resources used: none
 - Decisions made: none
-- Open questions: Fill PROJECT_HIERARCHY.md to declare whether this directory is a project/subproject/plain subdir; fill MACHINE_PROFILE.md for new machines; if package version changed but machine profile schema did not, reuse the existing profile; fill LOCAL_RESOURCES.md if project uses non-OneDrive cache/data
+- Open questions: Fill PROJECT_HIERARCHY.md to declare whether this directory is a project/subproject/plain subdir; fill MACHINE_PROFILE.md for new machines; if package version changed but machine profile schema did not, reuse the existing profile; fill LOCAL_RESOURCES.md if project uses non-portable cache/data
 - Next action: Resume project via PROJECT_STATE.md
 - Token note: Future sessions should read PROJECT_STATE.md before scanning broadly.
 "@

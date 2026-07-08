@@ -1,6 +1,6 @@
 # AGENTS.md
 
-This repository or project should be handled using the **Spec–Eval–Loop Workflow** plus the user's **WSL2 + OneDrive multi-machine protocol**.
+This repository or project should be handled using the **Spec–Eval–Loop Workflow** plus the portable machine/profile protocol.
 
 Package identity: Agent Project Kit (`agent-project-kit`). Legacy-compatible
 folder/path name: `computing-environment`.
@@ -10,9 +10,8 @@ Before doing substantial work, read:
 1. `START_HERE.md`
 2. `SPEC_EVAL_LOOP_INSTRUCTION.md`
 3. `MACHINE_PROFILES.md`
-4. `WSL2_ONEDRIVE_WORKFLOW.md`
-5. `TOKEN_DISCIPLINE.md`
-6. Relevant files under `prompts/`, `templates/`, and `checklists/`
+4. `TOKEN_DISCIPLINE.md`
+5. Relevant files under `prompts/`, `templates/`, and `checklists/`
 
 If these files are copied into a project under `.ai/computing-environment/`, read that folder first.
 
@@ -44,12 +43,9 @@ Do not treat an L1 output as proof that L2 or L3 has been solved.
 
 ## Machine / Portability Protocol
 
-The user mainly runs Codex inside WSL2 while projects are mapped from Windows OneDrive. The user works across:
-
-- `think` — Xeon PC, main heavy-run machine, can run all projects unless noted otherwise
-- `madlab-i9` — Core i9 office PC, strong but local resources may differ
-- `black5` — Core i7 notebook, portable, prefer light/edit/review/smoke tasks
-- other machines — treat as unknown
+Projects may be opened on macOS, Windows, Linux, WSL2, containers, remote
+servers, or synced folders. Do not assume that local data/cache paths or runtime
+environments exist on every machine.
 
 At the start of non-trivial coding/data sessions:
 
@@ -70,9 +66,9 @@ At the start of non-trivial coding/data sessions:
 6. If `.ai/MACHINE_PROFILE.md` has a fresh entry for the current machine and the machine-profile schema is unchanged, do only a minimal resume check before reusing it.
 7. If the machine, OS, path style, sync/storage layout, or machine-profile schema is new or stale, update `.ai/MACHINE_PROFILE.md` before heavy work.
 8. Check whether required local data/cache/intermediate files exist on this machine before running heavy commands.
-9. If local resources are missing, do not declare the project broken. State what is missing and propose a light/smoke path or suggest running on `think`.
+9. If local resources are missing, do not declare the project broken. State what is missing and propose a light/smoke path, resource setup step, or compatible machine.
 10. Do not hardcode machine-specific paths in source code. Use environment variables or config.
-11. Record hierarchy declarations in `.ai/PROJECT_HIERARCHY.md`, machine identity/storage assumptions in `.ai/MACHINE_PROFILE.md`, and non-OneDrive resources in `.ai/LOCAL_RESOURCES.md`.
+11. Record hierarchy declarations in `.ai/PROJECT_HIERARCHY.md`, machine identity/storage assumptions in `.ai/MACHINE_PROFILE.md`, and non-portable resources in `.ai/LOCAL_RESOURCES.md`.
 
 ---
 
@@ -114,7 +110,7 @@ During implementation:
 - Make small, focused changes.
 - Prefer minimal edits that satisfy the spec.
 - Run relevant tests, scripts, lint, type checks, or smoke checks whenever possible.
-- Use smoke tests first if on `black5` or if local cache availability is uncertain.
+- Use smoke tests first if local cache/resource availability is uncertain.
 - If a check fails, read the error and fix the cause.
 - Do not delete or weaken tests to pass.
 - Do not introduce broad architectural changes without explaining why.
@@ -235,7 +231,6 @@ Before working on this project, read:
 - `.ai/computing-environment/SPEC_EVAL_LOOP_INSTRUCTION.md`
 - `.ai/computing-environment/AGENTS.md`
 - `.ai/computing-environment/MACHINE_PROFILES.md`
-- `.ai/computing-environment/WSL2_ONEDRIVE_WORKFLOW.md`
 - `.ai/computing-environment/TOKEN_DISCIPLINE.md`
 - `.ai/computing-environment/DOCUMENT_PRODUCTION_POLICY.md`
 - `.ai/computing-environment/MARKDOWN_ORGANIZATION_POLICY.md`
@@ -250,7 +245,7 @@ Before working on this project, read:
 - `.ai/RUNBOOK.md`
 - `.ai/TOKEN_BUDGET.md`
 
-Use Spec–Eval–Loop Workflow, check project hierarchy and installed package/schema version before rerunning discovery, record machine identity/storage assumptions, record non-OneDrive local resources, and keep AI Markdown in the `.ai/` pipeline.
+Use Spec–Eval–Loop Workflow, check project hierarchy and installed package/schema version before rerunning discovery, record machine identity/storage assumptions, record non-portable local resources, and keep AI Markdown in the `.ai/` pipeline.
 Do not pretend L2/L3 or non-portable resources are solved by L1 alone.
 
 <!-- END COMPUTING-ENVIRONMENT -->

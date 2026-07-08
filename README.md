@@ -270,7 +270,6 @@ templates/pandoc-thai-a4/
 - `AI_CLIENTS.md` — Codex / Claude / Antigravity adapter strategy
 - `TOKEN_DISCIPLINE.md` — token and cost rules
 - `MACHINE_PROFILES.md` — machine-aware workflow
-- `WSL2_ONEDRIVE_WORKFLOW.md` — optional personal workflow for WSL2 + Windows OneDrive users
 - `DOCUMENT_PRODUCTION_POLICY.md` — document production rules
 - `MARKDOWN_ORGANIZATION_POLICY.md` — safe Markdown classification
 
