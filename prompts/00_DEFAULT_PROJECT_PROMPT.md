@@ -10,6 +10,10 @@ L1 = AI ทำเองได้ เช่น เขียนโค้ด ร่
 L2 = ต้องใช้ judgment/context ของผม เช่น เป้าหมาย ผู้ใช้ tone strategy UX ความเสี่ยง
 L3 = ต้องใช้ feedback หรือข้อมูลจริง เช่น reviewer ผู้ใช้ นักเรียน stakeholder usage data
 
+ให้วิเคราะห์ L1/L2/L3 ภายใน project หรือ hierarchy level ที่กำลังทำงานอยู่ก่อน
+ถ้าเป็น child/subproject ให้ parent เป็น broad context/shared constraint เท่านั้น
+และให้ child state/evidence/blocker/next action คมกว่า parent
+
 ถ้าเป็น project/repo ให้คำนึงถึง machine-aware portable setup + หลายเครื่องด้วย:
 - primary-heavy = เครื่องรันหนักหลัก
 - office-desktop = เครื่อง office

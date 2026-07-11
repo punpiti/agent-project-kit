@@ -11,6 +11,11 @@ Claude Code, Antigravity หรือ agent อื่นรู้ว่าคว
 เหมาะกับโปรเจคที่คุณจะเปิดใช้กับ AI มากกว่าหนึ่งครั้ง หรืออยากให้คนในบ้านลอง
 clone แล้วเริ่มใช้ได้โดยไม่ต้องตั้งโครงสร้างเองทุกครั้ง
 
+ประโยชน์หลักคือช่วยให้ AI กลับมาเริ่มงานในโปรเจคเดิมได้โดยไม่ต้องเริ่มใหม่:
+รู้ว่าครั้งก่อนทำถึงไหน เครื่องนี้เหมาะกับงานแค่ไหน มี resource เฉพาะเครื่อง
+อะไร ต้องใช้ parent/child context แค่ไหน และงานต่อไปควรทำอะไรก่อนตาม
+priority/deadline
+
 ## ได้อะไรจากการติดตั้ง
 
 - มีไฟล์ `AGENTS.md`, `CLAUDE.md`, `ANTIGRAVITY.md` ให้ AI แต่ละตัวรู้จุดเริ่ม
@@ -71,12 +76,23 @@ ANTIGRAVITY.md
 
 ไฟล์ root เช่น `AGENTS.md`, `CLAUDE.md`, `ANTIGRAVITY.md` จะบอก AI แต่ละตัวให้ไปอ่านกติกาและ note ใน `.ai/`
 
+## Changelog
+
+ดูการเปลี่ยนแปลงของ package ได้ที่ [CHANGELOG.md](CHANGELOG.md)
+
 ## Prompt แรกที่ควรบอก AI
 
 ```text
 อ่าน AGENTS.md และ .ai/computing-environment ก่อน
 จากนั้นอ่าน note ที่เกี่ยวข้องใน .ai/
 สรุปว่าโปรเจคนี้คืออะไร เครื่องนี้คือเครื่องอะไร และต้องรู้อะไรก่อนเริ่มงาน
+รายงาน Agent Project Kit version ที่ติดตั้งจาก .ai/COMPUTING_ENVIRONMENT_VERSION.md
+ถ้าโปรเจคนี้อยู่ใต้ parent/upper folder ที่เคย scan แล้ว ให้ reuse parent
+summary และ machine profile ได้ ไม่ต้อง scan parent ซ้ำกว้าง ๆ แต่ให้ถือ parent
+เป็น broad context เท่านั้น ส่วนโปรเจคลูกต้องสรุป state ของตัวเองให้ลึกและคมกว่า
+ถ้าโปรเจคมี status หรือ deadline ให้เริ่มจากครั้งสุดท้ายทำอะไร และควรทำอะไรต่อ
+โดยเรียงตาม priority และ deadline
+ถ้ายังไม่ได้เช็ก update ของ kit มาสักพัก ให้บอกก่อนทำงานระดับ package
 ```
 
 ## อัปเดต

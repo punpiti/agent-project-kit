@@ -54,6 +54,8 @@ Report clearly:
 - Remaining risks
 - Decisions that require human judgment
 - Suggestions for the next loop
+- If this project has statuses or deadlines: last session summary plus next
+  actions ordered by priority and due date
 - Token note: how to make the next session cheaper without reducing quality
 
 After meaningful work, update or propose updates to:
@@ -62,6 +64,12 @@ After meaningful work, update or propose updates to:
 - .ai/LOCAL_RESOURCES.md if local paths/resources changed
 - .ai/MACHINE_COMPATIBILITY.md if machine capability became clearer
 - .ai/RUNBOOK.md if new commands were discovered
+
+For deadline/status-heavy projects, .ai/PROJECT_STATE.md must say:
+- what happened in the last session
+- what remains blocked/waiting/done
+- the next actions ordered by priority and deadline
+- the evidence/source for each due date or status when available
 
 Treat this task as possibly involving:
 L1 = code/build/test loop

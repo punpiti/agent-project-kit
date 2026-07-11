@@ -31,6 +31,9 @@
 4. Loop Diagnosis
    แยกว่า project นี้มี L1/L2/L3 อะไรบ้าง
    โดยเฉพาะส่วนไหนเป็น code execution, ส่วนไหนต้องใช้ human judgment, ส่วนไหนต้องใช้ external feedback
+   ถ้า project นี้เป็น child/subproject ให้ประเมิน loops จาก local objective,
+   active files, evidence, blockers, และ next action ของ child ก่อน แล้วค่อยใช้
+   parent เป็น broad framing/shared constraint
 
 5. Current Working Spec
    สรุปว่า project นี้น่าจะทำอะไร

@@ -26,6 +26,14 @@
 |---|---|---|
 |  |  |  |
 
+## Status / Deadline Update
+
+| Priority | Due / Trigger | Status | Item | Next action |
+|---:|---|---|---|---|
+| P0 |  |  |  |  |
+| P1 |  |  |  |  |
+| P2 |  |  |  |  |
+
 ## Recommended Next Loop
 
 เลือกหนึ่งหรือมากกว่า:

@@ -23,17 +23,31 @@
 
 ## Where We Left Off
 
+- Last session date:
+- Last session objective:
 - Last completed:
 - Last files touched:
 - Last commands/tests run:
 - Last result:
 - Current blocker:
 
-## Next Actions
+## Status / Deadline Dashboard
 
-1.
-2.
-3.
+ใช้เมื่อ project มี deadline, submission, review round, meeting, class date,
+stakeholder follow-up, หรือ task ที่มีสถานะค้างหลายรายการ ถ้าไม่เกี่ยว ให้เขียน
+`No active deadline/status dashboard needed.`
+
+| Priority | Due / Trigger | Status | Item | Evidence / Source | Next action |
+|---:|---|---|---|---|---|
+| P0 |  | not-started / in-progress / blocked / waiting / done |  |  |  |
+| P1 |  | not-started / in-progress / blocked / waiting / done |  |  |  |
+| P2 |  | not-started / in-progress / blocked / waiting / done |  |  |  |
+
+## Next Actions By Priority
+
+1. P0:
+2. P1:
+3. P2:
 
 ## Open Decisions for Human
 

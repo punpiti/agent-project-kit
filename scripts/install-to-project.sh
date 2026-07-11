@@ -64,6 +64,7 @@ mkdir -p "$TARGET"
 items=(
   manifest.json
   PACKAGE_CONTENTS.md
+  CHANGELOG.md
   README.md
   README.th.md
   INSTALL_IN_PROJECT.md
@@ -171,6 +172,10 @@ cat > "$AI_DIR/COMPUTING_ENVIRONMENT_VERSION.md" <<EOF2
 - Previous package version: $PREVIOUS_PACKAGE_VERSION
 - Previous machine profile schema version: $PREVIOUS_MACHINE_PROFILE_SCHEMA_VERSION
 - Installed/updated: $(date -Iseconds)
+- Update check cadence: report installed version every startup; check upstream when last check is missing, older than 14 days, before package-level/release work, or when explicitly asked
+- Last update check: not checked by installer
+- Latest known upstream version: unknown
+- Update check source: $SOURCE_PATH
 - Source path: $SOURCE_PATH
 - Installer: install-to-project.sh
 - Machine: $MACHINE
@@ -184,6 +189,13 @@ hostname/platform/path style changed.
 
 Project-local state files are preserved by the installer. Update package
 snapshots and missing template files without overwriting project-specific state.
+
+## Update Check Rule
+
+Every startup should report the installed Agent Project Kit package name and
+version from this file. Do not fetch/pull package updates every time. Check
+upstream when \`Last update check\` is missing/stale, before package-level or
+release work, or when explicitly asked.
 EOF2
 
 cat > "$AI_DIR/INSTALLATION_INFO.md" <<EOF2

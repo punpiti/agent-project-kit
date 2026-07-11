@@ -17,6 +17,7 @@ from pathlib import Path
 ITEMS = [
     "manifest.json",
     "PACKAGE_CONTENTS.md",
+    "CHANGELOG.md",
     "README.md",
     "README.th.md",
     "INSTALL_IN_PROJECT.md",
@@ -338,6 +339,10 @@ def main() -> int:
 - Previous package version: {previous_package_version}
 - Previous machine profile schema version: {previous_profile_schema}
 - Installed/updated: {_dt.datetime.now().isoformat(timespec='seconds')}
+- Update check cadence: report installed version every startup; check upstream when last check is missing, older than 14 days, before package-level/release work, or when explicitly asked
+- Last update check: not checked by installer
+- Latest known upstream version: unknown
+- Update check source: {source}
 - Source path: {source}
 - Installer: bootstrap_ai_project.py
 - Machine: {socket.gethostname().lower()}
@@ -352,6 +357,13 @@ hostname/platform/path style changed.
 
 Project-local state files are preserved by the installer. Update package
 snapshots and missing template files without overwriting project-specific state.
+
+## Update Check Rule
+
+Every startup should report the installed Agent Project Kit package name and
+version from this file. Do not fetch/pull package updates every time. Check
+upstream when `Last update check` is missing/stale, before package-level or
+release work, or when explicitly asked.
 """
     (ai_dir / "COMPUTING_ENVIRONMENT_VERSION.md").write_text(version_info, encoding="utf-8")
 

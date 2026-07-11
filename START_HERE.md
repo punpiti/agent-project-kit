@@ -24,7 +24,8 @@ governance files first, then the root `.ai/` project-state files.
 
 ## Core Rule
 
-ทุกงานต้องแยกให้ชัดว่าอยู่ใน loop ใดบ้าง:
+ทุกงานต้องแยกให้ชัดว่าอยู่ใน loop ใดบ้างภายใน project หรือ hierarchy level
+ที่กำลังทำงานอยู่:
 
 - **L1 = AI ทำเองได้**  
   เช่น เขียนโค้ด ร่างเอกสาร วิเคราะห์ แก้บั๊ก สรุปข้อมูล สร้างสไลด์ จัดตาราง
@@ -37,6 +38,12 @@ governance files first, then the root `.ai/` project-state files.
 
 งานจริงมักเป็น 1+2, 2+3 หรือ 1+2+3  
 ห้าม treat งานใหญ่เหมือนเป็น L1 อย่างเดียว
+
+Loop diagnosis ต้องเป็น project-local: ถ้าอยู่ใน child/subproject ให้ประเมิน
+L1/L2/L3 จาก objective, evidence, stakeholder, reviewer, user, data, และ
+blocker ของ child นั้นก่อน Parent context ใช้เป็น framing และ constraints ได้
+แต่ไม่ควรทำให้ loop ของ child กลายเป็น loop กว้างของ parent เว้นแต่งานนั้นถูก
+ประกาศว่าเป็น parent-level หรือ cross-project task ชัดเจน
 
 ---
 
@@ -75,7 +82,8 @@ PROJECT_OUTPUT_ROOT=/path/to/output
 ให้ทำ 5 ขั้นนี้เสมอ เว้นแต่งานเล็กมาก:
 
 1. **Loop Diagnosis**  
-   ระบุว่าโจทย์นี้เกี่ยวข้องกับ L1 / L2 / L3 อย่างไร
+   ระบุว่าโจทย์นี้เกี่ยวข้องกับ L1 / L2 / L3 อย่างไรภายใน current project /
+   current hierarchy level
 
 2. **Working Spec**  
    สรุปเป้าหมาย ผู้ใช้/ผู้อ่าน ขอบเขต สิ่งที่ไม่ควรทำ assumption และข้อจำกัด
@@ -95,14 +103,30 @@ PROJECT_OUTPUT_ROOT=/path/to/output
 
 ผู้ใช้สลับงานหลาย project แทบทุกวัน ดังนั้น agent ต้องช่วยจำสถานะงานผ่านไฟล์ project-local:
 
-- `.ai/PROJECT_STATE.md` — ค้างตรงไหน เป้าหมายคืออะไร next action คืออะไร
+- `.ai/PROJECT_STATE.md` — ค้างตรงไหน เป้าหมายคืออะไร next action คืออะไร;
+  สำหรับงานที่มี deadline/status ต้องมี last session summary และ next actions
+  เรียงตาม priority/deadline
 - `.ai/PROJECT_HIERARCHY.md` — directory นี้เป็น project/subproject/plain subdir หรือไม่ และสัมพันธ์กับ parent/child อย่างไร
 - `.ai/MACHINE_PROFILE.md` — เครื่องนี้คืออะไร path/storage layout เป็นแบบไหน และเคยตรวจละเอียดเมื่อไร
-- `.ai/COMPUTING_ENVIRONMENT_VERSION.md` — package/schema version ที่ติดตั้งใน project นี้
+- `.ai/COMPUTING_ENVIRONMENT_VERSION.md` — package/schema version ที่ติดตั้งใน project นี้ และสถานะ update check
 - `.ai/SESSION_LOG.md` — log สั้นหลังแต่ละ session
 - `.ai/TOKEN_BUDGET.md` — ควรอ่านอะไรเพื่อประหยัด token
 
 เมื่อเริ่ม project เดิม ให้ resume จากไฟล์เหล่านี้ก่อน ไม่ใช่ scan ทุกอย่างใหม่ทันที
+ทุก startup/resume ควรรายงานชื่อ package และ version ที่ติดตั้ง:
+`Agent Project Kit` / `agent-project-kit` จาก `.ai/COMPUTING_ENVIRONMENT_VERSION.md`
+พร้อม legacy path `.ai/computing-environment/` ถ้ายังใช้อยู่
+
+ให้เช็กว่ามี package version ใหม่หรือไม่แบบเป็นช่วง ๆ ไม่ใช่ fetch/pull ทุกครั้ง:
+ถ้าไม่เคยเช็ก, เช็กครั้งล่าสุดเกิน 14 วัน, กำลังทำ package-level/release work,
+หรือผู้ใช้ถามเรื่อง version/update ให้รายงานว่า update check ควรทำหรือทำแล้ว
+ถ้าจะอัปเดตจริง ให้ preserve project-local `.ai/` state และเทียบ schema ก่อน
+
+ถ้า project มี deadline, submission, review round, meeting, class date, หรือ
+status ค้างหลายรายการ ให้เปิดด้วย dashboard สั้น ๆ: ครั้งสุดท้ายเข้ามาทำอะไร,
+อะไร done/blocked/waiting, อะไรต้องทำต่อก่อนหลัง, deadline หรือ trigger คืออะไร,
+และหลักฐานของ status/deadline มาจากไฟล์หรือแหล่งไหน ถ้าไม่รู้ deadline ให้ระบุ
+`unknown` แทนการเดา
 
 ## Token Cost Rule
 

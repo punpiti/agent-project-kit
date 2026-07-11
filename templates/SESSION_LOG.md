@@ -14,7 +14,7 @@
 - Local resources used:
 - Decisions made:
 - Open questions:
-- Next action:
+- Next action by priority/deadline:
 - Token note:
 ```
 

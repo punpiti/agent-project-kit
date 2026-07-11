@@ -18,18 +18,29 @@ Before editing or running heavy commands:
    - .ai/TOKEN_BUDGET.md
 3. Detect current machine using hostname if possible.
 4. Detect whether this is WSL2 if possible.
-5. If this machine already has a fresh profile in .ai/MACHINE_PROFILE.md and the
+5. Report the installed Agent Project Kit package name/version from
+   .ai/COMPUTING_ENVIRONMENT_VERSION.md, including the last update check if recorded.
+6. If this machine already has a fresh profile in .ai/MACHINE_PROFILE.md and the
    machine profile schema in .ai/COMPUTING_ENVIRONMENT_VERSION.md is unchanged,
    do only a minimal resume check: hostname, platform, current path style, and
    required task-local paths.
-6. If this is a new/stale machine or the project is on Windows-native, macOS,
+7. If this is a new/stale machine or the project is on Windows-native, macOS,
    Linux server, container, or a non-shared/synced project storage sync folder, do first-use discovery
    and update .ai/MACHINE_PROFILE.md before heavy work.
-7. Check whether required local resources exist.
-8. State whether this machine is suitable for the requested task.
+8. Check whether required local resources exist.
+9. State whether this machine is suitable for the requested task.
 
 Nested project rule:
+- Read .ai/PROJECT_HIERARCHY.md before deciding whether a directory is a real
+  project/subproject. Directory depth alone is not enough.
+- If a parent or upper folder was already scanned, reuse its summary, hierarchy
+  note, shared constraints, and compatible machine profile when they still
+  match the current host/path/task.
+- Do not rerun broad parent/upper-folder scans unless the current task directly
+  touches that level or the stored summary is stale for the question.
 - A child project may read parent project summaries as a read-only interface.
+- Keep the child project sharper than the parent: summarize the local objective,
+  active files, evidence, blockers, and next action from the child .ai/ notes.
 - Do not edit parent files, parent .ai state, parent logs, parent resource
   manifests, or sibling projects unless explicitly asked for a parent-level or
   cross-project change.
@@ -54,6 +65,8 @@ After work:
 - Report local resources used.
 - Update or propose updates to .ai/PROJECT_STATE.md, .ai/LOCAL_RESOURCES.md, .ai/MACHINE_COMPATIBILITY.md, and .ai/SESSION_LOG.md.
 - Do not rerun first-use discovery just because the package version changed; rerun only when machine profile schema or actual machine/path identity changed.
+- Do not fetch/pull package updates on every startup. Check for newer versions
+  when last update check is missing/stale, before package-level work, or when asked.
 - Include a token note if the next session can be made cheaper.
 
 Important:

@@ -50,6 +50,7 @@ New-Item -ItemType Directory -Force -Path $target | Out-Null
 $items = @(
     "manifest.json",
     "PACKAGE_CONTENTS.md",
+    "CHANGELOG.md",
     "README.md",
     "README.th.md",
     "INSTALL_IN_PROJECT.md",
@@ -162,6 +163,10 @@ $versionInfo = @"
 - Previous package version: $previousPackageVersion
 - Previous machine profile schema version: $previousProfileSchema
 - Installed/updated: $(Get-Date -Format o)
+- Update check cadence: report installed version every startup; check upstream when last check is missing, older than 14 days, before package-level/release work, or when explicitly asked
+- Last update check: not checked by installer
+- Latest known upstream version: unknown
+- Update check source: $SourcePath
 - Source path: $SourcePath
 - Installer: install-to-project.ps1
 - Machine: $machine
@@ -175,6 +180,13 @@ hostname/platform/path style changed.
 
 Project-local state files are preserved by the installer. Update package
 snapshots and missing template files without overwriting project-specific state.
+
+## Update Check Rule
+
+Every startup should report the installed Agent Project Kit package name and
+version from this file. Do not fetch/pull package updates every time. Check
+upstream when `Last update check` is missing/stale, before package-level or
+release work, or when explicitly asked.
 "@
 Set-Content -Path (Join-Path $aiDir "COMPUTING_ENVIRONMENT_VERSION.md") -Value $versionInfo -Encoding UTF8
 
