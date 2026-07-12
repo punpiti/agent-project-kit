@@ -46,12 +46,29 @@ cd my-project
 
 For an existing project, `cd` into that project folder first.
 
-### macOS / Linux / WSL2
+### macOS / Linux
 
 ```bash
 mkdir -p .ai
 git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit
 bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
+code .
+```
+
+### WSL2 With A Windows-Synced Project Folder
+
+If the project lives under a Windows-mounted folder such as OneDrive, keep the
+Git clone in WSL-local cache and install only the project snapshot into `.ai/`.
+This avoids Windows permission/sync issues with `.git/config`.
+
+```bash
+KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
+if [ -d "$KIT/.git" ]; then
+  git -C "$KIT" pull --ff-only
+else
+  git clone https://github.com/punpiti/agent-project-kit.git "$KIT"
+fi
+bash "$KIT/scripts/install-to-project.sh" . "$KIT"
 code .
 ```
 
@@ -124,22 +141,38 @@ If the kit has not been checked for updates recently, say so before doing
 package-level work.
 ```
 
-## Update
+## Update An Existing Project
 
-Update the cloned kit and reinstall the snapshot.
+For a full update checklist, see
+[UPDATE_EXISTING_PROJECT.md](UPDATE_EXISTING_PROJECT.md).
 
-macOS / Linux / WSL2:
+The short version is: read the current version, run a dry run, then apply the
+update. Existing project-local `.ai/` state is preserved.
+
+Dry run:
 
 ```bash
-git -C .ai/agent-project-kit pull --ff-only
-bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
+bash .ai/agent-project-kit/scripts/install-from-git.sh --dry-run . https://github.com/punpiti/agent-project-kit.git main
+```
+
+macOS / Linux:
+
+```bash
+bash .ai/agent-project-kit/scripts/install-from-git.sh . https://github.com/punpiti/agent-project-kit.git main
+```
+
+WSL2 with a Windows-synced project folder:
+
+```bash
+KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
+bash "$KIT/scripts/install-from-git.sh" . https://github.com/punpiti/agent-project-kit.git main
 ```
 
 Windows PowerShell:
 
 ```powershell
-git -C ".ai\agent-project-kit" pull --ff-only
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
+powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-from-git.ps1" -ProjectPath . -RepoUrl "https://github.com/punpiti/agent-project-kit.git" -Ref main -DryRun
+powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-from-git.ps1" -ProjectPath . -RepoUrl "https://github.com/punpiti/agent-project-kit.git" -Ref main
 ```
 
 ## Repository Notes

@@ -43,6 +43,9 @@ out the requested ref. If not, it clones first.
 
 ## Update
 
+For the full existing-project update workflow, including preflight, dry run,
+verification, and rollback, read `UPDATE_EXISTING_PROJECT.md`.
+
 Pinned release update:
 
 ```bash

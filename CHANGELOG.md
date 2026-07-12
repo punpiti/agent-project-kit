@@ -2,6 +2,15 @@
 
 All notable changes to Agent Project Kit are summarized here.
 
+## 6.28-existing-project-update — 2026-07-12
+
+- Added `UPDATE_EXISTING_PROJECT.md` with a preflight, dry-run, apply, verify,
+  schema-decision, and rollback loop for projects that already have the kit.
+- Added `--dry-run` support to `scripts/install-from-git.sh` and `-DryRun` to
+  `scripts/install-from-git.ps1`.
+- Updated README and install docs so existing-project updates use
+  `install-from-git` and preserve project-local `.ai/` state.
+
 ## 6.27-readme-changelog — 2026-07-11
 
 - Added this changelog and included it in the installed package snapshot.

@@ -84,6 +84,26 @@ It creates project-local files only if they do not already exist:
 
 Project-local state is preserved when the package is updated.
 
+## Update An Existing Install
+
+Use [UPDATE_EXISTING_PROJECT.md](UPDATE_EXISTING_PROJECT.md) for the full
+preflight, dry-run, apply, verify, and rollback loop.
+
+Preview first:
+
+```bash
+bash .ai/agent-project-kit/scripts/install-from-git.sh --dry-run . https://github.com/punpiti/agent-project-kit.git main
+```
+
+Then apply:
+
+```bash
+bash .ai/agent-project-kit/scripts/install-from-git.sh . https://github.com/punpiti/agent-project-kit.git main
+```
+
+For WSL2 projects under a Windows-synced folder, use the WSL-local clone path
+shown in the README and pass the same `--dry-run` flag before applying.
+
 ## Use With Claude / Antigravity / Other Agents
 
 The installer creates or appends these root adapter files without overwriting

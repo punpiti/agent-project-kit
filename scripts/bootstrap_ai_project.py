@@ -20,6 +20,7 @@ ITEMS = [
     "CHANGELOG.md",
     "README.md",
     "README.th.md",
+    "UPDATE_EXISTING_PROJECT.md",
     "INSTALL_IN_PROJECT.md",
     "GIT_DISTRIBUTION.md",
     "OPEN_WITH_AGENT.md",

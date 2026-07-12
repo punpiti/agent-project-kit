@@ -8,8 +8,8 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "6.27-readme-changelog",
-  "updated": "2026-07-11T00:00:00+07:00",
+  "version": "6.28-existing-project-update",
+  "updated": "2026-07-12T00:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
   "purpose": "Agent Project Kit: a portable starter kit that installs AI-agent instruction files and project-local .ai templates. The legacy package/path name is computing-environment.",
@@ -28,6 +28,7 @@
     "GLOBAL_START_PROMPT.md",
     "GIT_DISTRIBUTION.md",
     "OPEN_WITH_AGENT.md",
+    "UPDATE_EXISTING_PROJECT.md",
     "README.th.md",
     "MIGRATION_FROM_OLD.md",
     "SECURITY_EXCLUSIONS.md",
@@ -84,6 +85,8 @@
     "Clarified that L1/L2/L3 loop diagnosis is project-local and should be evaluated at the current hierarchy level before using parent context.",
     "Added status/deadline dashboard guidance so project resumes summarize the last session and next actions by priority and due date.",
     "Added startup version reporting and periodic update-check guidance for installed Agent Project Kit snapshots.",
-    "Added a changelog and concise README benefit statements."
+    "Added a changelog and concise README benefit statements.",
+    "Added an existing-project update guide with dry-run, verification, schema decision, and rollback steps.",
+    "Added dry-run support to install-from-git scripts so projects can preview package and schema changes before updating."
   ]
 }

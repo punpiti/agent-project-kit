@@ -21,6 +21,7 @@
 - `SPEC_EVAL_LOOP_INSTRUCTION.md`
 - `START_HERE.md`
 - `TOKEN_DISCIPLINE.md`
+- `UPDATE_EXISTING_PROJECT.md`
 - `bootstrap_ai_project.py`
 - `checklists/CODING_CHECKLIST.md`
 - `checklists/DOCUMENT_CHECKLIST.md`
