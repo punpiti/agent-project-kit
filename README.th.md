@@ -7,6 +7,10 @@ folder ให้เป็นระเบียบขึ้น
 
 เมื่อติดตั้งแล้ว โปรเจคจะมีไฟล์คำสั่งและ template ใต้ `.ai/` เพื่อให้ Codex,
 Claude Code, Antigravity หรือ agent อื่นรู้ว่าควรเริ่มอ่านจากตรงไหน
+ตัว kit ตั้งใจให้เล็กและแยกชั้น: code ของโปรเจคยังเป็นของโปรเจค, note เฉพาะ
+โปรเจคอยู่ใต้ `.ai/`, ส่วน snapshot ของ kit refresh ทีหลังได้
+
+release ปัจจุบัน: `6.34-readme-refresh`
 
 เหมาะกับโปรเจคที่คุณจะเปิดใช้กับ AI มากกว่าหนึ่งครั้ง หรืออยากให้คนในบ้านลอง
 clone แล้วเริ่มใช้ได้โดยไม่ต้องตั้งโครงสร้างเองทุกครั้ง
@@ -25,9 +29,23 @@ counter-argument, data interpretation และ research brief เพิ่ม�
 - มีไฟล์ `AGENTS.md`, `CLAUDE.md`, `ANTIGRAVITY.md` ให้ AI แต่ละตัวรู้จุดเริ่ม
 - มี `.ai/` สำหรับจด state และ note ของโปรเจค
 - มีที่จดว่าเครื่องนี้เหมาะกับงานแบบไหน และควรรัน parallel ได้ระดับไหน
+- มีที่ประกาศ prompt pack, local resource และข้อจำกัดเฉพาะโปรเจค
 - มีคำสั่ง install/update สำหรับ macOS, Linux, WSL2 และ Windows PowerShell
 
 ถ้าเป็นงานเล็กครั้งเดียว ไม่ต้องติดตั้งก็ได้
+
+## path ที่ใช้ตอนนี้
+
+```text
+.ai/agent-project-kit/        # managed snapshot ของ kit, update แล้ว refresh ได้
+.ai/agent-project-kit-source/ # git clone/source copy สำหรับติดตั้ง
+.ai/PROJECT_STATE.md          # state เฉพาะโปรเจค, ต้อง preserve ตอน update
+```
+
+อย่าเก็บ note หรือ prompt pack เฉพาะโปรเจคไว้ใน `.ai/agent-project-kit/`
+เพราะ folder นี้เป็นของ kit และ updater มีสิทธิ์ refresh ได้ ให้เก็บ prompt
+ของโปรเจคไว้เช่น `.ai/prompts/`, `.ai/prompt-packs/`, `.ai/custom-prompts/`
+หรือ path อื่นที่ระบุใน `.ai/PROJECT_STATE.md` หรือ `.ai/RUNBOOK.md`
 
 ## เริ่มใช้กับโปรเจคใหม่
 
@@ -98,6 +116,28 @@ ANTIGRAVITY.md
 ```
 
 ไฟล์ root เช่น `AGENTS.md`, `CLAUDE.md`, `ANTIGRAVITY.md` จะบอก AI แต่ละตัวให้ไปอ่านกติกาและ note ใน `.ai/` ถ้ามีไฟล์เหล่านี้อยู่แล้ว installer จะเติม managed block เฉพาะที่จำเป็น ไม่แทนที่ไฟล์เดิม และถ้าเจอ `.ai/agent-project-kit/` หรือ metadata ชื่อเดียวกันที่ไม่ใช่ของ Agent Project Kit จะหยุดแทนการเขียนทับ
+
+source clone กับ installed snapshot ใช้คนละ path กัน เพื่อไม่ให้ `git clone`
+ไปชนกับ directory ที่ installer ต้อง refresh
+
+## Prompt pack
+
+prompt ที่มากับ kit อยู่ที่:
+
+```text
+.ai/agent-project-kit/prompts/
+```
+
+prompt pack เฉพาะโปรเจคควรอยู่ข้างนอก managed snapshot เช่น:
+
+```text
+.ai/prompts/
+.ai/prompt-packs/
+.ai/custom-prompts/
+```
+
+ให้จด path ของ prompt pack เฉพาะโปรเจคไว้ใน `.ai/PROJECT_STATE.md` หรือ
+`.ai/RUNBOOK.md` เพื่อให้ session ถัดไปรู้ว่าต้องอ่านตรงไหน
 
 ถ้าเป็นงานวิจัย ให้ดู prompt ชุดนี้:
 

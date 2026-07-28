@@ -2,6 +2,15 @@
 
 All notable changes to Agent Project Kit are summarized here.
 
+## 6.34-readme-refresh — 2026-07-28
+
+- Refreshed `README.md` and `README.th.md` so the repository README content
+  matches the newer GitHub Pages positioning.
+- Added clear current-path guidance for `.ai/agent-project-kit/` and
+  `.ai/agent-project-kit-source/`.
+- Documented where project-specific prompt packs should live so they are not
+  placed inside the managed kit snapshot.
+
 ## 6.33-gh-pages-content — 2026-07-28
 
 - Added `index.md` as the GitHub Pages landing page instead of relying on the

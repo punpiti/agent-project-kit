@@ -8,7 +8,7 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "6.33-gh-pages-content",
+  "version": "6.34-readme-refresh",
   "updated": "2026-07-28T00:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
@@ -93,7 +93,8 @@
     "Added GitHub Pages manifest update checks that refresh package concepts through the existing preserve-state installer.",
     "Added first-install conflict guards so existing user files or directories with Agent Project Kit names are not overwritten unless they already look like kit-managed files.",
     "Changed the canonical installed snapshot path from .ai/computing-environment to .ai/agent-project-kit while keeping computing-environment as a legacy migration path.",
-    "Added a GitHub Pages landing page that explains install paths, update checks, safety rules, and where project prompt packs should live."
+    "Added a GitHub Pages landing page that explains install paths, update checks, safety rules, and where project prompt packs should live.",
+    "Refreshed the English and Thai README files so they explain current paths, prompt-pack ownership, and first-install safety rules."
   ],
   "installed_paths": [
     ".ai/agent-project-kit"

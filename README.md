@@ -7,6 +7,10 @@ project folder.
 
 It installs a few instruction files and `.ai/` templates so tools such as
 Codex, Claude Code, Antigravity, or similar agents have a clear place to start.
+It is intentionally small: your application code stays yours, project-local
+notes stay under `.ai/`, and the managed kit snapshot can be refreshed later.
+
+Current release: `6.34-readme-refresh`
 
 Use it when you want a project to keep simple notes about:
 
@@ -15,6 +19,8 @@ Use it when you want a project to keep simple notes about:
 - whether the current machine is suitable for the task
 - how much local parallelism is reasonable for CPU, GPU, memory, and storage
 - where project-local AI notes should live
+- which prompt packs, local resources, and project constraints are specific to
+  this project
 
 It helps an AI assistant resume a real project without starting from scratch:
 what happened last time, which machine and local resources matter, which parent
@@ -25,6 +31,19 @@ source checking, counter-arguments, data interpretation, and research briefs.
 The old package/path name was `computing-environment`. New installs use
 `.ai/agent-project-kit/` as the installed snapshot path; old projects with
 `.ai/computing-environment/` can still be migrated.
+
+## Current Paths
+
+```text
+.ai/agent-project-kit/        # managed installed snapshot, refreshed by updates
+.ai/agent-project-kit-source/ # optional git clone/source copy for new installs
+.ai/PROJECT_STATE.md          # project-local state, preserved on updates
+```
+
+Do not put project-specific notes or custom prompt packs inside
+`.ai/agent-project-kit/`. That directory is kit-owned and may be replaced during
+an update. Put project-owned prompts under `.ai/prompts/`, `.ai/prompt-packs/`,
+or another path documented in `.ai/PROJECT_STATE.md` or `.ai/RUNBOOK.md`.
 
 ## Why Install It?
 
@@ -116,6 +135,8 @@ ANTIGRAVITY.md
 The root files tell AI clients where to start. Project-specific notes stay under
 `.ai/`.
 
+## Safety Model
+
 The installer refreshes the package snapshot but does not overwrite existing
 project notes such as `.ai/PROJECT_STATE.md`, `.ai/MACHINE_PROFILE.md`, or
 `.ai/LOCAL_RESOURCES.md`. If a first install finds an existing
@@ -123,6 +144,29 @@ project notes such as `.ai/PROJECT_STATE.md`, `.ai/MACHINE_PROFILE.md`, or
 does not look like Agent Project Kit, it stops instead of overwriting the user
 file. Existing `AGENTS.md`,
 `CLAUDE.md`, and `ANTIGRAVITY.md` files are appended to, not replaced.
+
+The source clone and installed snapshot use different paths so `git clone`
+cannot accidentally become the same directory that the installer refreshes.
+
+## Prompt Packs
+
+Kit prompts live in:
+
+```text
+.ai/agent-project-kit/prompts/
+```
+
+Project-specific prompt packs should live outside the managed snapshot, for
+example:
+
+```text
+.ai/prompts/
+.ai/prompt-packs/
+.ai/custom-prompts/
+```
+
+Tell future agents where those project prompt packs are by documenting them in
+`.ai/PROJECT_STATE.md` or `.ai/RUNBOOK.md`.
 
 For research projects, see:
 
