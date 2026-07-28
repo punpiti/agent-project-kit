@@ -2,6 +2,14 @@
 
 All notable changes to Agent Project Kit are summarized here.
 
+## 6.33-gh-pages-content — 2026-07-28
+
+- Added `index.md` as the GitHub Pages landing page instead of relying on the
+  repository README rendering alone.
+- Summarized current install paths, update checks, first-install conflict
+  behavior, and project prompt-pack placement for readers arriving from Pages.
+- Included `index.md` in package contents and installer snapshots.
+
 ## 6.32-agent-project-kit-path — 2026-07-28
 
 - Changed the canonical installed snapshot path to `.ai/agent-project-kit/`.

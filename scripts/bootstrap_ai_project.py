@@ -22,6 +22,7 @@ ITEMS = [
     "README.th.md",
     "UPDATE_EXISTING_PROJECT.md",
     "INSTALL_IN_PROJECT.md",
+    "index.md",
     "GIT_DISTRIBUTION.md",
     "OPEN_WITH_AGENT.md",
     "MARKDOWN_OVER_ARCHIVE_RECOVERY.md",

@@ -8,7 +8,7 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "6.32-agent-project-kit-path",
+  "version": "6.33-gh-pages-content",
   "updated": "2026-07-28T00:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
@@ -27,6 +27,7 @@
     "MARKDOWN_ORGANIZATION_POLICY.md",
     "GLOBAL_START_PROMPT.md",
     "GIT_DISTRIBUTION.md",
+    "index.md",
     "OPEN_WITH_AGENT.md",
     "UPDATE_EXISTING_PROJECT.md",
     "README.th.md",
@@ -91,7 +92,8 @@
     "Added research-project prompt pack for deep dives, literature reviews, counter-argument checks, source credibility, competitive intelligence, trend scans, data interpretation, expert breakdowns, and research briefs.",
     "Added GitHub Pages manifest update checks that refresh package concepts through the existing preserve-state installer.",
     "Added first-install conflict guards so existing user files or directories with Agent Project Kit names are not overwritten unless they already look like kit-managed files.",
-    "Changed the canonical installed snapshot path from .ai/computing-environment to .ai/agent-project-kit while keeping computing-environment as a legacy migration path."
+    "Changed the canonical installed snapshot path from .ai/computing-environment to .ai/agent-project-kit while keeping computing-environment as a legacy migration path.",
+    "Added a GitHub Pages landing page that explains install paths, update checks, safety rules, and where project prompt packs should live."
   ],
   "installed_paths": [
     ".ai/agent-project-kit"
