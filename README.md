@@ -13,14 +13,18 @@ Use it when you want a project to keep simple notes about:
 - what the project is
 - how an AI agent should start work
 - whether the current machine is suitable for the task
+- how much local parallelism is reasonable for CPU, GPU, memory, and storage
 - where project-local AI notes should live
 
 It helps an AI assistant resume a real project without starting from scratch:
 what happened last time, which machine and local resources matter, which parent
 or child context applies, and what should happen next by priority or deadline.
+For research projects, it also includes prompt templates for literature review,
+source checking, counter-arguments, data interpretation, and research briefs.
 
-The old package name was `computing-environment`. Installed projects still use
-`.ai/computing-environment/` as the compatibility snapshot path.
+The old package/path name was `computing-environment`. New installs use
+`.ai/agent-project-kit/` as the installed snapshot path; old projects with
+`.ai/computing-environment/` can still be migrated.
 
 ## Why Install It?
 
@@ -50,8 +54,8 @@ For an existing project, `cd` into that project folder first.
 
 ```bash
 mkdir -p .ai
-git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit
-bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
+git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit-source
+bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-project-kit-source
 code .
 ```
 
@@ -81,15 +85,15 @@ Antigravity, or another coding agent.
 New-Item -ItemType Directory -Force -Path "my-project" | Out-Null
 Set-Location "my-project"
 New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
-git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit"
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
+git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit-source"
+powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
 code .
 ```
 
 PowerShell 7 also works:
 
 ```powershell
-pwsh -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
+pwsh -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
 ```
 
 ## What Gets Installed
@@ -100,7 +104,7 @@ After install, the project root has files like:
 AGENTS.md
 CLAUDE.md
 ANTIGRAVITY.md
-.ai/computing-environment/
+.ai/agent-project-kit/
 .ai/PROJECT_STATE.md
 .ai/MACHINE_PROFILE.md
 .ai/LOCAL_RESOURCES.md
@@ -114,7 +118,17 @@ The root files tell AI clients where to start. Project-specific notes stay under
 
 The installer refreshes the package snapshot but does not overwrite existing
 project notes such as `.ai/PROJECT_STATE.md`, `.ai/MACHINE_PROFILE.md`, or
-`.ai/LOCAL_RESOURCES.md`.
+`.ai/LOCAL_RESOURCES.md`. If a first install finds an existing
+`.ai/agent-project-kit/` directory or metadata file with the same name that
+does not look like Agent Project Kit, it stops instead of overwriting the user
+file. Existing `AGENTS.md`,
+`CLAUDE.md`, and `ANTIGRAVITY.md` files are appended to, not replaced.
+
+For research projects, see:
+
+```text
+.ai/agent-project-kit/prompts/13_RESEARCH_PROJECT_PROMPTS.md
+```
 
 ## Changelog
 
@@ -125,7 +139,7 @@ See [CHANGELOG.md](CHANGELOG.md) for package changes.
 After installing and opening the folder, tell the agent:
 
 ```text
-Read AGENTS.md and .ai/computing-environment first.
+Read AGENTS.md and .ai/agent-project-kit first.
 Then read the project notes under .ai/.
 Summarize what this project appears to be, what machine this is, and what you
 need before starting the task.
@@ -137,6 +151,10 @@ parent as broad context only; the child project must keep the sharper
 task-specific state in its own .ai/ notes.
 If the project has statuses or deadlines, start with what happened last time and
 the next actions ordered by priority and due date.
+If a task could benefit from parallel execution, first decide whether this
+machine is suitable: check available CPU cores, GPU/accelerator type, memory,
+storage pressure, and any project resource limits, then choose a conservative
+parallelism level and report it before running heavy parallel work.
 If the kit has not been checked for updates recently, say so before doing
 package-level work.
 ```
@@ -146,33 +164,35 @@ package-level work.
 For a full update checklist, see
 [UPDATE_EXISTING_PROJECT.md](UPDATE_EXISTING_PROJECT.md).
 
-The short version is: read the current version, run a dry run, then apply the
-update. Existing project-local `.ai/` state is preserved.
+The short version is: read the current version, check the GitHub Pages manifest
+with a dry run, then apply the update. Existing project-local `.ai/` state is
+preserved; package concepts are refreshed under `.ai/agent-project-kit/`.
 
 Dry run:
 
 ```bash
-bash .ai/agent-project-kit/scripts/install-from-git.sh --dry-run . https://github.com/punpiti/agent-project-kit.git main
+bash .ai/agent-project-kit/scripts/update-from-pages.sh --dry-run .
 ```
 
 macOS / Linux:
 
 ```bash
-bash .ai/agent-project-kit/scripts/install-from-git.sh . https://github.com/punpiti/agent-project-kit.git main
+bash .ai/agent-project-kit/scripts/update-from-pages.sh .
 ```
 
 WSL2 with a Windows-synced project folder:
 
 ```bash
 KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
-bash "$KIT/scripts/install-from-git.sh" . https://github.com/punpiti/agent-project-kit.git main
+bash "$KIT/scripts/update-from-pages.sh" --dry-run .
+bash "$KIT/scripts/update-from-pages.sh" .
 ```
 
 Windows PowerShell:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-from-git.ps1" -ProjectPath . -RepoUrl "https://github.com/punpiti/agent-project-kit.git" -Ref main -DryRun
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-from-git.ps1" -ProjectPath . -RepoUrl "https://github.com/punpiti/agent-project-kit.git" -Ref main
+powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\update-from-pages.ps1" -ProjectPath . -DryRun
+powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\update-from-pages.ps1" -ProjectPath .
 ```
 
 ## Repository Notes

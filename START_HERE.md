@@ -11,10 +11,10 @@ For migration from old packages, read `MIGRATION_FROM_OLD.md`.
 
 When the current project is Agent Project Kit itself, including the legacy
 `computing-environment` folder, the root-level files in this folder are the
-canonical source of truth. Treat `.ai/computing-environment/` as an installed
+canonical source of truth. Treat `.ai/agent-project-kit/` as an installed
 snapshot for downstream-project testing, not as another nested project context.
 
-Do not recurse into `.ai/computing-environment/.ai/` or read another
+Do not recurse into `.ai/agent-project-kit/.ai/` or read another
 `computing-environment` layer unless the user explicitly asks to inspect the
 packaged copy. For normal development of this repository, read root-level
 governance files first, then the root `.ai/` project-state files.
@@ -115,7 +115,7 @@ PROJECT_OUTPUT_ROOT=/path/to/output
 เมื่อเริ่ม project เดิม ให้ resume จากไฟล์เหล่านี้ก่อน ไม่ใช่ scan ทุกอย่างใหม่ทันที
 ทุก startup/resume ควรรายงานชื่อ package และ version ที่ติดตั้ง:
 `Agent Project Kit` / `agent-project-kit` จาก `.ai/COMPUTING_ENVIRONMENT_VERSION.md`
-พร้อม legacy path `.ai/computing-environment/` ถ้ายังใช้อยู่
+พร้อม legacy path `.ai/agent-project-kit/` ถ้ายังใช้อยู่
 
 ให้เช็กว่ามี package version ใหม่หรือไม่แบบเป็นช่วง ๆ ไม่ใช่ fetch/pull ทุกครั้ง:
 ถ้าไม่เคยเช็ก, เช็กครั้งล่าสุดเกิน 14 วัน, กำลังทำ package-level/release work,
@@ -242,7 +242,7 @@ Use this order:
 2. If Markdown files are scattered, run or ask the agent to run:
 
 ```bash
-python3 .ai/computing-environment/scripts/organize-project-markdown.py .
+python3 .ai/agent-project-kit/scripts/organize-project-markdown.py .
 ```
 
 3. Review `.ai/MARKDOWN_INVENTORY.md`.
@@ -250,13 +250,13 @@ python3 .ai/computing-environment/scripts/organize-project-markdown.py .
 5. Use `--apply` only for high-confidence AI scratch candidates. Ambiguous files must stay in place.
 
 ```bash
-python3 .ai/computing-environment/scripts/organize-project-markdown.py . --apply
+python3 .ai/agent-project-kit/scripts/organize-project-markdown.py . --apply
 ```
 
 The script never deletes files. With `--apply`, it archives only high-confidence AI scratch candidates, not serious Markdown documents. To review files that may already have been archived too aggressively, run:
 
 ```bash
-python3 .ai/computing-environment/scripts/organize-project-markdown.py . --include-archive
+python3 .ai/agent-project-kit/scripts/organize-project-markdown.py . --include-archive
 ```
 
 New AI working Markdown must be created under `.ai/`. Serious Markdown document sources may remain as project documents or be moved deliberately to `documents/<document-id>/content.md` and registered in `.ai/DOCUMENT_PIPELINE.md`.

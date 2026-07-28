@@ -40,6 +40,7 @@
 - `prompts/10_DOCUMENT_PRODUCTION.md`
 - `prompts/11_DOCUMENT_STYLE_BOOTSTRAP.md`
 - `prompts/12_MARKDOWN_CLEANUP.md`
+- `prompts/13_RESEARCH_PROJECT_PROMPTS.md`
 - `scripts/bootstrap_ai_project.py`
 - `scripts/install-from-git.ps1`
 - `scripts/install-from-git.sh`
@@ -48,6 +49,8 @@
 - `scripts/organize-project-markdown.py`
 - `scripts/register_project_run.sh`
 - `scripts/scan_machine_resources.sh`
+- `scripts/update-from-pages.ps1`
+- `scripts/update-from-pages.sh`
 - `templates/DOCUMENT_PIPELINE.md`
 - `templates/DOCUMENT_QA.md`
 - `templates/DOCUMENT_STYLE.md`

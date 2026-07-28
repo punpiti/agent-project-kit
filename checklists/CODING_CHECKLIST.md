@@ -2,7 +2,7 @@
 
 ## Before Editing
 
-- [ ] อ่าน `AGENTS.md` และ `.ai/computing-environment/`
+- [ ] อ่าน `AGENTS.md` และ `.ai/agent-project-kit/`
 - [ ] อ่าน `.ai/PROJECT_STATE.md` เพื่อรู้ว่าค้างตรงไหน
 - [ ] อ่าน `.ai/LOCAL_RESOURCES.md` และ `.ai/MACHINE_COMPATIBILITY.md` ถ้า project มี data/cache/intermediate ใหญ่
 - [ ] ตรวจ current machine: `primary-heavy` / `office-desktop` / `portable-laptop` / unknown

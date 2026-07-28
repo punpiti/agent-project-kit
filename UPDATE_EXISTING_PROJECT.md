@@ -11,7 +11,7 @@ target project's root `.ai/` files as project-local state.
 The installer may replace the package snapshot under:
 
 ```text
-.ai/computing-environment/
+.ai/agent-project-kit/
 ```
 
 It must preserve existing project-local files such as:
@@ -45,30 +45,30 @@ test -f .ai/PROJECT_STATE.md && sed -n '1,80p' .ai/PROJECT_STATE.md
 test -f .ai/MACHINE_PROFILE.md && sed -n '1,80p' .ai/MACHINE_PROFILE.md
 ```
 
-3. Preview the update.
+3. Preview the update by checking the GitHub Pages manifest.
 
 ```bash
-bash .ai/agent-project-kit/scripts/install-from-git.sh --dry-run . https://github.com/punpiti/agent-project-kit.git main
+bash .ai/agent-project-kit/scripts/update-from-pages.sh --dry-run .
 ```
 
 For WSL2 projects under a Windows-synced folder, use a WSL-local kit cache:
 
 ```bash
 KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
-bash "$KIT/scripts/install-from-git.sh" --dry-run . https://github.com/punpiti/agent-project-kit.git main
+bash "$KIT/scripts/update-from-pages.sh" --dry-run .
 ```
 
 4. Apply the update.
 
 ```bash
-bash .ai/agent-project-kit/scripts/install-from-git.sh . https://github.com/punpiti/agent-project-kit.git main
+bash .ai/agent-project-kit/scripts/update-from-pages.sh .
 ```
 
 For WSL2 with a Windows-synced project folder:
 
 ```bash
 KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
-bash "$KIT/scripts/install-from-git.sh" . https://github.com/punpiti/agent-project-kit.git main
+bash "$KIT/scripts/update-from-pages.sh" .
 ```
 
 5. Verify the result.
@@ -97,7 +97,7 @@ Use `.ai/COMPUTING_ENVIRONMENT_VERSION.md` after the update:
 - If `Machine profile schema version` changed, update missing machine-profile
   fields without deleting existing machine notes.
 - If `State schema version` changed, compare templates in
-  `.ai/computing-environment/templates/` and add missing fields to project-local
+  `.ai/agent-project-kit/templates/` and add missing fields to project-local
   files while preserving their content.
 - If hostname, OS, path style, or storage layout changed, refresh
   `.ai/MACHINE_PROFILE.md` before heavy work.
@@ -117,8 +117,10 @@ tag and preserved project-local state. Do not delete `.ai/PROJECT_STATE.md`,
 ## Trial Checklist
 
 - The dry run reports current and target package versions.
+- The GitHub Pages check reports the manifest URL and latest known upstream
+  version.
 - The dry run reports whether state or machine-profile schema changes.
-- The real update rewrites `.ai/computing-environment/`.
+- The real update rewrites `.ai/agent-project-kit/`.
 - Existing project-local state files are still present after update.
 - `.ai/COMPUTING_ENVIRONMENT_VERSION.md` records previous and current versions.
 - `.ai/SESSION_LOG.md` has an update entry.

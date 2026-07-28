@@ -12,8 +12,8 @@ Create and enter the project folder first:
 mkdir my-project
 cd my-project
 mkdir -p .ai
-git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit
-bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
+git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit-source
+bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-project-kit-source
 code .
 ```
 
@@ -23,8 +23,8 @@ Windows PowerShell:
 New-Item -ItemType Directory -Force -Path "my-project" | Out-Null
 Set-Location "my-project"
 New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
-git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit"
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
+git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit-source"
+powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
 code .
 ```
 
@@ -34,8 +34,8 @@ From the existing project root:
 
 ```bash
 mkdir -p .ai
-git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit
-bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
+git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit-source
+bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-project-kit-source
 ```
 
 Then open the project folder:
@@ -50,7 +50,7 @@ After install, the project root has:
 AGENTS.md
 CLAUDE.md
 ANTIGRAVITY.md
-.ai/computing-environment/
+.ai/agent-project-kit/
 .ai/PROJECT_STATE.md
 .ai/TOKEN_BUDGET.md
 ```
@@ -64,8 +64,8 @@ From the project root:
 
 ```powershell
 New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
-git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit"
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
+git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit-source"
+powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
 code .
 ```
 
@@ -75,24 +75,25 @@ Tell the agent:
 
 ```text
 If this project has `.ai/agent-project-kit/` but does not yet have root
-`AGENTS.md`, `CLAUDE.md`, `ANTIGRAVITY.md`, and `.ai/computing-environment/`,
-run the Agent Project Kit installer from `.ai/agent-project-kit/scripts/`.
-Then read `AGENTS.md`, `.ai/computing-environment/`, and project-local `.ai/`
+`AGENTS.md`, `CLAUDE.md`, `ANTIGRAVITY.md`, and `.ai/agent-project-kit/`,
+run the Agent Project Kit installer from `.ai/agent-project-kit-source/scripts/`
+or run the updater from `.ai/agent-project-kit/scripts/`.
+Then read `AGENTS.md`, `.ai/agent-project-kit/`, and project-local `.ai/`
 state before working.
 ```
 
 ## Update Later
 
 ```bash
-git -C .ai/agent-project-kit pull --ff-only
-bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
+git -C .ai/agent-project-kit-source pull --ff-only
+bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-project-kit-source
 ```
 
 Windows:
 
 ```powershell
-git -C ".ai\agent-project-kit" pull --ff-only
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
+git -C ".ai\agent-project-kit-source" pull --ff-only
+powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
 ```
 
 Project-local files under `.ai/` are preserved.

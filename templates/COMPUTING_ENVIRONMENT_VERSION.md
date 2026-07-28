@@ -3,7 +3,7 @@
 บันทึก version ของ Agent Project Kit ที่ติดตั้งใน project นี้
 
 ชื่อ package ปัจจุบันคือ `agent-project-kit`; ชื่อ/path เดิม
-`computing-environment` และ `.ai/computing-environment/` ยังรองรับเพื่อ
+`computing-environment` และ `.ai/agent-project-kit/` ยังรองรับเพื่อ
 compatibility
 
 ไฟล์นี้เป็น metadata ของ package ที่ติดตั้ง ไม่ใช่ project state หลัก สามารถ
@@ -30,7 +30,8 @@ overwrite ได้ตอน update package โดยไม่ต้องลบ
 - Installed/updated:
 - Update check cadence: report installed version every startup; check upstream
   when last check is missing, older than 14 days, before package-level/release
-  work, or when explicitly asked
+  work, or when explicitly asked; default check source is
+  https://punpiti.github.io/agent-project-kit/manifest.json
 - Last update check:
 - Latest known upstream version:
 - Update check source:
@@ -51,6 +52,10 @@ reuse `.ai/MACHINE_PROFILE.md` เดิมได้ ไม่ต้อง rerun
 ถ้า `state_schema_version` เปลี่ยน ให้ตรวจ template ใหม่และเติม field ที่ขาดลงใน
 project-local state files แบบ preserve existing content
 
+ตอน first install ถ้ามีไฟล์หรือโฟลเดอร์ชื่อเดียวกับ path ที่ package ต้องใช้
+แต่เนื้อหาไม่ใช่ของ Agent Project Kit ให้หยุดก่อนเขียนทับและบอกให้ผู้ใช้ rename เอง
+ก่อนเขียนไฟล์ของ package ห้ามเขียนทับเงียบ ๆ
+
 ## Update Check Rule
 
 ทุกครั้งที่ resume project ให้รายงาน installed package:
@@ -68,4 +73,5 @@ project-local state files แบบ preserve existing content
 - เมื่อผู้ใช้ถามเรื่อง version/update
 
 ถ้ามี version ใหม่ ให้สรุปก่อนว่า package version, state schema, และ machine
-profile schema เปลี่ยนหรือไม่ แล้วค่อยเสนอ update path
+profile schema เปลี่ยนหรือไม่ แล้วค่อยเสนอ update path ผ่าน
+`scripts/update-from-pages.sh` หรือ `scripts/update-from-pages.ps1`

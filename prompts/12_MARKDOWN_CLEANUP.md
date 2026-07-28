@@ -3,12 +3,12 @@
 Use this when an old project has many Markdown files.
 
 ```text
-Read AGENTS.md and .ai/computing-environment first.
+Read AGENTS.md and .ai/agent-project-kit first.
 This project may contain serious Markdown sources and AI scratch Markdown mixed together.
 Do NOT assume all .md files are temporary.
 
 First run inventory only:
-python3 .ai/computing-environment/scripts/organize-project-markdown.py .
+python3 .ai/agent-project-kit/scripts/organize-project-markdown.py .
 
 Then read .ai/MARKDOWN_INVENTORY.md and classify files as:
 - human-facing-doc
@@ -34,7 +34,7 @@ Never delete Markdown files.
 ```text
 Some Markdown may have been over-archived into .ai/archive/legacy-md/.
 Run:
-python3 .ai/computing-environment/scripts/organize-project-markdown.py . --include-archive
+python3 .ai/agent-project-kit/scripts/organize-project-markdown.py . --include-archive
 
 Then inspect files classified as archived-legacy and propose which should be restored as document-source or human-facing-doc.
 Do not restore blindly if destination files already exist.

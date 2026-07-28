@@ -20,8 +20,8 @@ Then run:
 
 ```bash
 mkdir -p .ai
-git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit
-bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
+git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit-source
+bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-project-kit-source
 ```
 
 Windows PowerShell:
@@ -30,16 +30,16 @@ Windows PowerShell:
 New-Item -ItemType Directory -Force -Path "my-project" | Out-Null
 Set-Location "my-project"
 New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
-git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit"
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
+git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit-source"
+powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
 ```
 
 The project will have:
 
 ```text
-.ai/agent-project-kit/        # git clone of the kit
-.ai/computing-environment/    # installed snapshot read by agents
-.ai/PROJECT_STATE.md          # project-local state, preserved on updates
+.ai/agent-project-kit-source/ # git clone/source copy of the kit
+.ai/agent-project-kit/        # installed snapshot read by agents
+.ai/PROJECT_STATE.md         # project-local state, preserved on updates
 ```
 
 ## Local Folder Install
@@ -64,7 +64,7 @@ The installer creates or updates:
 AGENTS.md
 CLAUDE.md
 ANTIGRAVITY.md
-.ai/computing-environment/
+.ai/agent-project-kit/
 ```
 
 It creates project-local files only if they do not already exist:
@@ -82,7 +82,12 @@ It creates project-local files only if they do not already exist:
 .ai/ENVIRONMENT_VARIABLES.md
 ```
 
-Project-local state is preserved when the package is updated.
+Project-local state is preserved when the package is updated. On first install,
+root files such as `AGENTS.md`, `CLAUDE.md`, and `ANTIGRAVITY.md` are created
+only if missing; otherwise the installer appends a managed block. If
+`.ai/agent-project-kit/` or required metadata files already exist and do not
+look like Agent Project Kit files, the installer stops instead of
+overwriting them.
 
 ## Update An Existing Install
 
@@ -115,7 +120,7 @@ ANTIGRAVITY.md
 ```
 
 These files point AI clients back to `AGENTS.md`,
-`.ai/computing-environment/`, and project-local `.ai/` state. Keep canonical
+`.ai/agent-project-kit/`, and project-local `.ai/` state. Keep canonical
 policy in one place instead of maintaining separate rules for each AI client.
 
 ## After Install
@@ -123,7 +128,7 @@ policy in one place instead of maintaining separate rules for each AI client.
 Tell the agent:
 
 ```text
-Read AGENTS.md and .ai/computing-environment first.
+Read AGENTS.md and .ai/agent-project-kit first.
 Then inspect .ai/PROJECT_STATE.md, .ai/PROJECT_HIERARCHY.md,
 .ai/COMPUTING_ENVIRONMENT_VERSION.md, .ai/MACHINE_PROFILE.md,
 .ai/LOCAL_RESOURCES.md, .ai/MACHINE_COMPATIBILITY.md, .ai/RUNBOOK.md,

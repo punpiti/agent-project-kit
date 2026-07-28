@@ -2,6 +2,42 @@
 
 All notable changes to Agent Project Kit are summarized here.
 
+## 6.32-agent-project-kit-path — 2026-07-28
+
+- Changed the canonical installed snapshot path to `.ai/agent-project-kit/`.
+- Kept `.ai/computing-environment/` as a legacy migration path only.
+- Changed local git clone/source examples to `.ai/agent-project-kit-source/` so
+  the source clone does not collide with the installed snapshot.
+
+## 6.31-first-install-conflict-guard — 2026-07-28
+
+- Added first-install conflict guards for `.ai/agent-project-kit/`,
+  `.ai/COMPUTING_ENVIRONMENT_VERSION.md`, and
+  `.ai/INSTALLATION_INFO.md`.
+- Installers now stop on same-name non-kit files or directories instead of
+  overwriting or moving existing user content.
+- Root client files such as `AGENTS.md`, `CLAUDE.md`, and `ANTIGRAVITY.md` keep
+  the existing append-managed-block behavior.
+
+## 6.30-gh-pages-update-check — 2026-07-28
+
+- Added `scripts/update-from-pages.sh` and `scripts/update-from-pages.ps1`.
+- The new update path checks the GitHub Pages `manifest.json` first, reports
+  package/schema differences, and only calls the existing git updater when a
+  newer or different package version is found.
+- Existing project-local `.ai/` state is still preserved; updated package
+  concepts are refreshed under `.ai/agent-project-kit/`.
+
+## 6.29-research-project-prompts — 2026-07-12
+
+- Added `prompts/13_RESEARCH_PROJECT_PROMPTS.md` for research-oriented projects.
+- The prompt pack covers deep dives, recent literature reviews,
+  counter-argument checks, source credibility verification, competitive or
+  alternative analysis, trend scans, data interpretation, expert breakdowns,
+  and concise research briefs.
+- Added a research-project startup prompt that routes agents to the right
+  research mode before scanning or browsing broadly.
+
 ## 6.28-existing-project-update — 2026-07-12
 
 - Added `UPDATE_EXISTING_PROJECT.md` with a preflight, dry-run, apply, verify,

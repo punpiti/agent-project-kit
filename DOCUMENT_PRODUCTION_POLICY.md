@@ -187,7 +187,7 @@ Use it when a project needs a formal Thai PDF and does not already have a better
 Example from a project folder:
 
 ```bash
-.ai/computing-environment/templates/pandoc-thai-a4/build-thai-a4-pdf.sh documents/<document-id>/content.md output/<document-id>.pdf
+.ai/agent-project-kit/templates/pandoc-thai-a4/build-thai-a4-pdf.sh documents/<document-id>/content.md output/<document-id>.pdf
 ```
 
 For final PDFs, visually inspect the rendered PDF. Automated build success is not enough.

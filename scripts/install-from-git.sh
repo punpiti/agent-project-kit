@@ -38,7 +38,7 @@ default_clone_dir() {
   if is_wsl2 && [[ "$PROJECT_PATH" == /mnt/[a-zA-Z]/* ]]; then
     echo "${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
   else
-    echo "$AI_DIR/agent-project-kit"
+    echo "$AI_DIR/agent-project-kit-source"
   fi
 }
 
@@ -50,7 +50,11 @@ if [ -d "$CLONE_DIR/.git" ]; then
   git -C "$CLONE_DIR" remote set-url origin "$REPO_URL"
   git -C "$CLONE_DIR" fetch --tags --prune origin
 else
-  rm -rf "$CLONE_DIR"
+  if [ -e "$CLONE_DIR" ]; then
+    echo "Refusing to overwrite existing non-git clone path: $CLONE_DIR" >&2
+    echo "Move or rename it first, or pass a different clone-dir argument." >&2
+    exit 1
+  fi
   git clone "$REPO_URL" "$CLONE_DIR"
   git -C "$CLONE_DIR" fetch --tags --prune origin
 fi
@@ -93,7 +97,7 @@ if [ "$DRY_RUN" = "yes" ]; then
   echo "Ref: $REF"
   echo "Commit: $COMMIT"
   echo "Clone path: $CLONE_DIR"
-  echo "Snapshot path that would be refreshed: $AI_DIR/computing-environment"
+  echo "Snapshot path that would be refreshed: $AI_DIR/agent-project-kit"
   echo "Current package version: ${CURRENT_PACKAGE_VERSION:-none}"
   echo "Target package version: ${TARGET_PACKAGE_VERSION:-unknown}"
   echo "Current state schema: ${CURRENT_STATE_SCHEMA:-none}"

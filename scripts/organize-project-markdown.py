@@ -5,10 +5,10 @@ This is intentionally conservative. Markdown may be a serious source document.
 Default mode: inventory only; no moves.
 
 Useful commands:
-  python3 .ai/computing-environment/scripts/organize-project-markdown.py .
-  python3 .ai/computing-environment/scripts/organize-project-markdown.py . --include-archive
-  python3 .ai/computing-environment/scripts/organize-project-markdown.py . --apply
-  python3 .ai/computing-environment/scripts/organize-project-markdown.py . --include-archive --restore-archived
+  python3 .ai/agent-project-kit/scripts/organize-project-markdown.py .
+  python3 .ai/agent-project-kit/scripts/organize-project-markdown.py . --include-archive
+  python3 .ai/agent-project-kit/scripts/organize-project-markdown.py . --apply
+  python3 .ai/agent-project-kit/scripts/organize-project-markdown.py . --include-archive --restore-archived
 """
 from __future__ import annotations
 

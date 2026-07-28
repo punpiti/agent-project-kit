@@ -52,10 +52,16 @@ At the start of every non-trivial project session:
    changed, run first-use discovery and update `.ai/MACHINE_PROFILE.md` before
    heavy work.
 5. Check whether required data/cache paths are available on the current machine.
-6. If a task needs missing local files, do not declare the project broken. State
+6. If the task could benefit from parallel execution, decide the local
+   parallelism policy before running it. Check CPU core count, GPU/accelerator
+   type and availability, RAM, storage pressure, thermal/remote-session
+   constraints when relevant, and any project-specific resource limits. Choose a
+   conservative worker count or batch size, record the reasoning in the session
+   report, and prefer a small smoke run before heavy parallel work.
+7. If a task needs missing local files, do not declare the project broken. State
    what is missing and propose a smoke path, resource setup step, or compatible
    machine.
-7. Do not hardcode machine-specific paths into source code. Use environment
+8. Do not hardcode machine-specific paths into source code. Use environment
    variables or config files.
 
 ## First-Use Discovery
@@ -73,6 +79,8 @@ Record the result in `.ai/MACHINE_PROFILE.md`:
 - available interpreters/package managers: Python, conda/mamba, Node,
   PowerShell, shell
 - GPU/accelerator summary when relevant
+- parallel execution readiness: CPU core count, usable GPU/accelerator,
+  memory/storage constraints, and recommended worker count or batch-size range
 - project-specific local paths checked from `.ai/LOCAL_RESOURCES.md`
 - recommended task level on this machine: edit, smoke, medium, full/heavy
 - last verified date and command/source used
@@ -84,6 +92,9 @@ hostname
 uname -a
 printf '%s\n' "$PWD"
 test -r /proc/version && grep -iE 'microsoft|wsl' /proc/version || true
+nproc 2>/dev/null || getconf _NPROCESSORS_ONLN 2>/dev/null || true
+command -v lscpu >/dev/null 2>&1 && lscpu | sed -n '1,20p' || true
+free -h 2>/dev/null || true
 df -h . /
 command -v python3 || command -v python || true
 command -v pwsh || command -v powershell || true
@@ -97,6 +108,9 @@ $env:COMPUTERNAME
 [System.Environment]::OSVersion.VersionString
 Get-Location
 Get-PSDrive -PSProvider FileSystem
+Get-CimInstance Win32_Processor | Select-Object Name,NumberOfCores,NumberOfLogicalProcessors
+Get-CimInstance Win32_VideoController | Select-Object Name,AdapterRAM
+Get-CimInstance Win32_OperatingSystem | Select-Object TotalVisibleMemorySize,FreePhysicalMemory
 ```
 
 ## Resume Check
@@ -119,7 +133,7 @@ needs resources not yet recorded.
 
 ## Package Update Check
 
-When `.ai/computing-environment/` is updated in an existing project, read
+When `.ai/agent-project-kit/` is updated in an existing project, read
 `.ai/COMPUTING_ENVIRONMENT_VERSION.md` before deciding to rescan the machine.
 
 - If only the package version changed, reuse the existing machine profile.

@@ -51,7 +51,7 @@ SOURCE_PATH="$(find_source_path)" || {
 
 PROJECT_PATH="$(cd "$PROJECT_PATH" && pwd)"
 AI_DIR="$PROJECT_PATH/.ai"
-TARGET="$AI_DIR/computing-environment"
+TARGET="$AI_DIR/agent-project-kit"
 MACHINE="$(hostname 2>/dev/null | tr '[:upper:]' '[:lower:]' || echo unknown)"
 if grep -qi microsoft /proc/version 2>/dev/null || grep -qi wsl /proc/version 2>/dev/null; then
   IS_WSL2="yes"
@@ -59,6 +59,58 @@ else
   IS_WSL2="unknown/no"
 fi
 
+is_managed_snapshot() {
+  local path="$1"
+  if [ ! -e "$path" ]; then
+    return 0
+  fi
+  if [ -d "$path" ] && [ -f "$path/manifest.json" ] && grep -Eq '"name"[[:space:]]*:[[:space:]]*"(agent-project-kit|computing-environment)"' "$path/manifest.json" 2>/dev/null; then
+    return 0
+  fi
+  return 1
+}
+
+ensure_managed_or_missing() {
+  local path="$1"
+  local purpose="$2"
+  if ! is_managed_snapshot "$path"; then
+    echo "Refusing to overwrite existing $purpose: $path" >&2
+    echo "This path exists but does not look like an Agent Project Kit snapshot." >&2
+    echo "Move or rename it first, then rerun the installer." >&2
+    exit 1
+  fi
+}
+
+is_agent_project_kit_metadata() {
+  local path="$1"
+  if [ ! -e "$path" ]; then
+    return 0
+  fi
+  if grep -qiE 'Agent Project Kit|agent-project-kit|computing-environment|Computing environment source|Agent Project Kit source' "$path" 2>/dev/null; then
+    return 0
+  fi
+  return 1
+}
+
+ensure_metadata_safe() {
+  local path="$1"
+  if ! is_agent_project_kit_metadata "$path"; then
+    echo "Refusing to overwrite existing user file: $path" >&2
+    echo "This file name is needed for Agent Project Kit metadata, but the existing file does not look like kit metadata." >&2
+    echo "Move or rename it first, then rerun the installer." >&2
+    exit 1
+  fi
+}
+
+mkdir -p "$AI_DIR"
+if [ "$(cd "$SOURCE_PATH" && pwd)" = "$TARGET" ]; then
+  echo "Source path equals install target: $TARGET" >&2
+  echo "Clone Agent Project Kit into .ai/agent-project-kit-source or use a cache path, then rerun." >&2
+  exit 1
+fi
+ensure_managed_or_missing "$TARGET" ".ai/agent-project-kit snapshot"
+ensure_metadata_safe "$AI_DIR/COMPUTING_ENVIRONMENT_VERSION.md"
+ensure_metadata_safe "$AI_DIR/INSTALLATION_INFO.md"
 mkdir -p "$TARGET"
 
 items=(
@@ -173,7 +225,7 @@ cat > "$AI_DIR/COMPUTING_ENVIRONMENT_VERSION.md" <<EOF2
 - Previous package version: $PREVIOUS_PACKAGE_VERSION
 - Previous machine profile schema version: $PREVIOUS_MACHINE_PROFILE_SCHEMA_VERSION
 - Installed/updated: $(date -Iseconds)
-- Update check cadence: report installed version every startup; check upstream when last check is missing, older than 14 days, before package-level/release work, or when explicitly asked
+- Update check cadence: report installed version every startup; check GitHub Pages manifest when last check is missing, older than 14 days, before package-level/release work, or when explicitly asked
 - Last update check: not checked by installer
 - Latest known upstream version: unknown
 - Update check source: $SOURCE_PATH
@@ -190,14 +242,19 @@ hostname/platform/path style changed.
 
 Project-local state files are preserved by the installer. Update package
 snapshots and missing template files without overwriting project-specific state.
+On first install, same-name paths that do not look like Agent Project Kit
+content are left untouched and the installer stops before writing kit-owned files.
 
 ## Update Check Rule
 
 Every startup should report the installed Agent Project Kit package name and
-version from this file. Do not fetch/pull package updates every time. Check
-upstream when \`Last update check\` is missing/stale, before package-level or
-release work, or when explicitly asked.
+version from this file. Do not fetch/pull package updates every time. Check the
+GitHub Pages manifest with \`scripts/update-from-pages.sh --dry-run\` when
+\`Last update check\` is missing/stale, before package-level or release work, or
+when explicitly asked. Apply updates through \`scripts/update-from-pages.sh\` so
+project-local state is preserved.
 EOF2
+
 
 cat > "$AI_DIR/INSTALLATION_INFO.md" <<EOF2
 # INSTALLATION_INFO
@@ -207,14 +264,14 @@ cat > "$AI_DIR/INSTALLATION_INFO.md" <<EOF2
 - Machine profile schema version: $MACHINE_PROFILE_SCHEMA_VERSION
 - Installed/updated: $(date -Iseconds)
 - Project path: $PROJECT_PATH
-- Computing environment source: $SOURCE_PATH
+- Agent Project Kit source: $SOURCE_PATH
 - Machine detected: $MACHINE
 - WSL2 detected: $IS_WSL2
 
 Read this project with:
 
 1. AGENTS.md
-2. .ai/computing-environment/START_HERE.md
+2. .ai/agent-project-kit/START_HERE.md
 3. .ai/PROJECT_STATE.md
 4. .ai/PROJECT_HIERARCHY.md
 5. .ai/MACHINE_PROFILE.md
@@ -236,18 +293,18 @@ Before working on this project, read the project-local AI working rules:
 
 If this project is the Agent Project Kit source repository itself, including the
 legacy `computing-environment` folder, use the root-level governance files as
-canonical and treat `.ai/computing-environment/` as a packaged downstream
+canonical and treat `.ai/agent-project-kit/` as the packaged downstream
 snapshot. Do not recurse into another Agent Project Kit / `computing-environment`
 layer unless explicitly requested.
 
-- `.ai/computing-environment/START_HERE.md`
-- `.ai/computing-environment/SPEC_EVAL_LOOP_INSTRUCTION.md`
-- `.ai/computing-environment/AGENTS.md`
-- `.ai/computing-environment/MACHINE_PROFILES.md`
-- `.ai/computing-environment/TOKEN_DISCIPLINE.md`
-- `.ai/computing-environment/DOCUMENT_PRODUCTION_POLICY.md`
-- `.ai/computing-environment/MARKDOWN_ORGANIZATION_POLICY.md`
-- `.ai/computing-environment/ENVIRONMENT_POLICY.md`
+- `.ai/agent-project-kit/START_HERE.md`
+- `.ai/agent-project-kit/SPEC_EVAL_LOOP_INSTRUCTION.md`
+- `.ai/agent-project-kit/AGENTS.md`
+- `.ai/agent-project-kit/MACHINE_PROFILES.md`
+- `.ai/agent-project-kit/TOKEN_DISCIPLINE.md`
+- `.ai/agent-project-kit/DOCUMENT_PRODUCTION_POLICY.md`
+- `.ai/agent-project-kit/MARKDOWN_ORGANIZATION_POLICY.md`
+- `.ai/agent-project-kit/ENVIRONMENT_POLICY.md`
 
 Then read project state:
 
@@ -298,20 +355,21 @@ else
 Self-hosting guard: if this project is the Agent Project Kit source repository
 itself, including the legacy `computing-environment` folder, use root-level
 governance files as canonical and treat `.ai/computing-environment/` as a
-packaged downstream snapshot. Do not recurse into another Agent Project Kit /
+legacy packaged downstream snapshot. New installs use `.ai/agent-project-kit/`.
+Do not recurse into another Agent Project Kit /
 `computing-environment` layer unless explicitly requested.
 
 Before working on this project, read:
 
-- `.ai/computing-environment/START_HERE.md`
-- `.ai/computing-environment/SPEC_EVAL_LOOP_INSTRUCTION.md`
-- `.ai/computing-environment/AGENTS.md`
-- `.ai/computing-environment/MACHINE_PROFILES.md`
-- `.ai/computing-environment/TOKEN_DISCIPLINE.md`
-- `.ai/computing-environment/DOCUMENT_PRODUCTION_POLICY.md`
-- `.ai/computing-environment/MARKDOWN_ORGANIZATION_POLICY.md`
-- `.ai/computing-environment/ENVIRONMENT_POLICY.md`
-- `.ai/computing-environment/MARKDOWN_ORGANIZATION_POLICY.md`
+- `.ai/agent-project-kit/START_HERE.md`
+- `.ai/agent-project-kit/SPEC_EVAL_LOOP_INSTRUCTION.md`
+- `.ai/agent-project-kit/AGENTS.md`
+- `.ai/agent-project-kit/MACHINE_PROFILES.md`
+- `.ai/agent-project-kit/TOKEN_DISCIPLINE.md`
+- `.ai/agent-project-kit/DOCUMENT_PRODUCTION_POLICY.md`
+- `.ai/agent-project-kit/MARKDOWN_ORGANIZATION_POLICY.md`
+- `.ai/agent-project-kit/ENVIRONMENT_POLICY.md`
+- `.ai/agent-project-kit/MARKDOWN_ORGANIZATION_POLICY.md`
 - `.ai/PROJECT_STATE.md`
 - `.ai/PROJECT_HIERARCHY.md`
 - `.ai/MACHINE_PROFILE.md`
@@ -376,7 +434,7 @@ if [ -f "$AI_DIR/SESSION_LOG.md" ]; then
 ## $(date +%F) — $MACHINE — Agent Project Kit installed/updated
 - Objective: Install/update Agent Project Kit workflow files.
 - Mode: T0 Quick
-- Files touched: AGENTS.md, .ai/computing-environment/, .ai project templates if missing
+- Files touched: AGENTS.md, .ai/agent-project-kit/, .ai project templates if missing; existing user files with conflicting metadata/snapshot names are not overwritten
 - Commands/tests run: install-to-project.sh
 - Result: Installed from $SOURCE_PATH
 - Local resources used: none

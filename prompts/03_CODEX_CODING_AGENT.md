@@ -6,7 +6,7 @@
 Use the Spec–Eval–Loop Workflow plus the machine-aware machine-aware protocol for this coding task.
 
 Before editing code:
-1. Read AGENTS.md and .ai/computing-environment if present.
+1. Read AGENTS.md and .ai/agent-project-kit if present.
 2. Read project-local state files if present:
    - .ai/PROJECT_STATE.md
    - .ai/LOCAL_RESOURCES.md

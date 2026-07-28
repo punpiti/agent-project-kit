@@ -13,14 +13,18 @@ clone แล้วเริ่มใช้ได้โดยไม่ต้อ�
 
 ประโยชน์หลักคือช่วยให้ AI กลับมาเริ่มงานในโปรเจคเดิมได้โดยไม่ต้องเริ่มใหม่:
 รู้ว่าครั้งก่อนทำถึงไหน เครื่องนี้เหมาะกับงานแค่ไหน มี resource เฉพาะเครื่อง
-อะไร ต้องใช้ parent/child context แค่ไหน และงานต่อไปควรทำอะไรก่อนตาม
+อะไร ถ้างานควรรัน parallel ควรใช้ CPU/GPU/RAM/storage ของเครื่องนี้แค่ไหน
+ต้องใช้ parent/child context แค่ไหน และงานต่อไปควรทำอะไรก่อนตาม
 priority/deadline
+
+ถ้าเป็นโปรเจควิจัย จะมี prompt สำหรับ literature review, source check,
+counter-argument, data interpretation และ research brief เพิ่มให้ใช้เป็นฐาน
 
 ## ได้อะไรจากการติดตั้ง
 
 - มีไฟล์ `AGENTS.md`, `CLAUDE.md`, `ANTIGRAVITY.md` ให้ AI แต่ละตัวรู้จุดเริ่ม
 - มี `.ai/` สำหรับจด state และ note ของโปรเจค
-- มีที่จดว่าเครื่องนี้เหมาะกับงานแบบไหน
+- มีที่จดว่าเครื่องนี้เหมาะกับงานแบบไหน และควรรัน parallel ได้ระดับไหน
 - มีคำสั่ง install/update สำหรับ macOS, Linux, WSL2 และ Windows PowerShell
 
 ถ้าเป็นงานเล็กครั้งเดียว ไม่ต้องติดตั้งก็ได้
@@ -33,8 +37,8 @@ macOS / Linux:
 mkdir my-project
 cd my-project
 mkdir -p .ai
-git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit
-bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
+git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit-source
+bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-project-kit-source
 code .
 ```
 
@@ -59,8 +63,8 @@ Windows PowerShell:
 New-Item -ItemType Directory -Force -Path "my-project" | Out-Null
 Set-Location "my-project"
 New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
-git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit"
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
+git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit-source"
+powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
 code .
 ```
 
@@ -84,7 +88,7 @@ bash "$KIT/scripts/install-to-project.sh" . "$KIT"
 AGENTS.md
 CLAUDE.md
 ANTIGRAVITY.md
-.ai/computing-environment/
+.ai/agent-project-kit/
 .ai/PROJECT_STATE.md
 .ai/MACHINE_PROFILE.md
 .ai/LOCAL_RESOURCES.md
@@ -93,7 +97,13 @@ ANTIGRAVITY.md
 .ai/SESSION_LOG.md
 ```
 
-ไฟล์ root เช่น `AGENTS.md`, `CLAUDE.md`, `ANTIGRAVITY.md` จะบอก AI แต่ละตัวให้ไปอ่านกติกาและ note ใน `.ai/`
+ไฟล์ root เช่น `AGENTS.md`, `CLAUDE.md`, `ANTIGRAVITY.md` จะบอก AI แต่ละตัวให้ไปอ่านกติกาและ note ใน `.ai/` ถ้ามีไฟล์เหล่านี้อยู่แล้ว installer จะเติม managed block เฉพาะที่จำเป็น ไม่แทนที่ไฟล์เดิม และถ้าเจอ `.ai/agent-project-kit/` หรือ metadata ชื่อเดียวกันที่ไม่ใช่ของ Agent Project Kit จะหยุดแทนการเขียนทับ
+
+ถ้าเป็นงานวิจัย ให้ดู prompt ชุดนี้:
+
+```text
+.ai/agent-project-kit/prompts/13_RESEARCH_PROJECT_PROMPTS.md
+```
 
 ## Changelog
 
@@ -102,7 +112,7 @@ ANTIGRAVITY.md
 ## Prompt แรกที่ควรบอก AI
 
 ```text
-อ่าน AGENTS.md และ .ai/computing-environment ก่อน
+อ่าน AGENTS.md และ .ai/agent-project-kit ก่อน
 จากนั้นอ่าน note ที่เกี่ยวข้องใน .ai/
 สรุปว่าโปรเจคนี้คืออะไร เครื่องนี้คือเครื่องอะไร และต้องรู้อะไรก่อนเริ่มงาน
 รายงาน Agent Project Kit version ที่ติดตั้งจาก .ai/COMPUTING_ENVIRONMENT_VERSION.md
@@ -111,6 +121,9 @@ summary และ machine profile ได้ ไม่ต้อง scan parent �
 เป็น broad context เท่านั้น ส่วนโปรเจคลูกต้องสรุป state ของตัวเองให้ลึกและคมกว่า
 ถ้าโปรเจคมี status หรือ deadline ให้เริ่มจากครั้งสุดท้ายทำอะไร และควรทำอะไรต่อ
 โดยเรียงตาม priority และ deadline
+ถ้างานไหนควรรัน parallel ให้ตัดสินใจก่อนว่าเครื่องนี้มี CPU กี่ core, มี GPU
+หรือ accelerator แบบไหน, RAM/storage พอหรือไม่ และมี resource limit ของโปรเจค
+หรือไม่ จากนั้นเลือกระดับ parallelism แบบ conservative แล้วรายงานก่อนรันงานหนัก
 ถ้ายังไม่ได้เช็ก update ของ kit มาสักพัก ให้บอกก่อนทำงานระดับ package
 ```
 
@@ -118,32 +131,33 @@ summary และ machine profile ได้ ไม่ต้อง scan parent �
 
 ดู checklist เต็มได้ที่ [UPDATE_EXISTING_PROJECT.md](UPDATE_EXISTING_PROJECT.md)
 
-หลักคืออ่าน version เดิม, dry-run ก่อน, แล้วค่อย apply update โดยไม่ลบ
-project-local state ใต้ `.ai/`
+หลักคืออ่าน version เดิม, เช็ก `manifest.json` บน GitHub Pages แบบ dry-run
+ก่อน, แล้วค่อย apply update โดยไม่ลบ project-local state ใต้ `.ai/` ส่วน
+แนวคิด/ไฟล์ package ใหม่จะถูก refresh ใต้ `.ai/agent-project-kit/`
 
 dry-run:
 
 ```bash
-bash .ai/agent-project-kit/scripts/install-from-git.sh --dry-run . https://github.com/punpiti/agent-project-kit.git main
+bash .ai/agent-project-kit/scripts/update-from-pages.sh --dry-run .
 ```
 
 macOS / Linux:
 
 ```bash
-bash .ai/agent-project-kit/scripts/install-from-git.sh . https://github.com/punpiti/agent-project-kit.git main
+bash .ai/agent-project-kit/scripts/update-from-pages.sh .
 ```
 
 WSL2 ที่โปรเจคอยู่ในโฟลเดอร์ฝั่ง Windows เช่น OneDrive:
 
 ```bash
 KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
-bash "$KIT/scripts/install-from-git.sh" --dry-run . https://github.com/punpiti/agent-project-kit.git main
-bash "$KIT/scripts/install-from-git.sh" . https://github.com/punpiti/agent-project-kit.git main
+bash "$KIT/scripts/update-from-pages.sh" --dry-run .
+bash "$KIT/scripts/update-from-pages.sh" .
 ```
 
 Windows PowerShell:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-from-git.ps1" -ProjectPath . -RepoUrl "https://github.com/punpiti/agent-project-kit.git" -Ref main -DryRun
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-from-git.ps1" -ProjectPath . -RepoUrl "https://github.com/punpiti/agent-project-kit.git" -Ref main
+powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\update-from-pages.ps1" -ProjectPath . -DryRun
+powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\update-from-pages.ps1" -ProjectPath .
 ```

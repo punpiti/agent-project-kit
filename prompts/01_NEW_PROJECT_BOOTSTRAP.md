@@ -3,7 +3,7 @@
 ใช้เมื่อต้องเริ่ม project ใหม่
 
 ```text
-อ่านกติกาจาก shared/synced project storage/computing-environment หรือจาก .ai/computing-environment ใน project นี้ก่อน
+อ่านกติกาจาก shared/synced project storage/agent-project-kit หรือจาก .ai/agent-project-kit ใน project นี้ก่อน
 แล้วเริ่ม project นี้ด้วย Spec–Eval–Loop Workflow + machine-aware multi-machine protocol
 
 โจทย์โปรเจกต์:

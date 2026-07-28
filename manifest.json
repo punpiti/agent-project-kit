@@ -8,11 +8,11 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "6.28-existing-project-update",
-  "updated": "2026-07-12T00:00:00+07:00",
+  "version": "6.32-agent-project-kit-path",
+  "updated": "2026-07-28T00:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
-  "purpose": "Agent Project Kit: a portable starter kit that installs AI-agent instruction files and project-local .ai templates. The legacy package/path name is computing-environment.",
+  "purpose": "Agent Project Kit: a portable starter kit that installs AI-agent instruction files and project-local .ai templates. New installs use .ai/agent-project-kit; computing-environment remains a legacy name/path for migration only.",
   "entry_points": [
     "START_HERE.md",
     "AGENTS.md",
@@ -87,6 +87,13 @@
     "Added startup version reporting and periodic update-check guidance for installed Agent Project Kit snapshots.",
     "Added a changelog and concise README benefit statements.",
     "Added an existing-project update guide with dry-run, verification, schema decision, and rollback steps.",
-    "Added dry-run support to install-from-git scripts so projects can preview package and schema changes before updating."
+    "Added dry-run support to install-from-git scripts so projects can preview package and schema changes before updating.",
+    "Added research-project prompt pack for deep dives, literature reviews, counter-argument checks, source credibility, competitive intelligence, trend scans, data interpretation, expert breakdowns, and research briefs.",
+    "Added GitHub Pages manifest update checks that refresh package concepts through the existing preserve-state installer.",
+    "Added first-install conflict guards so existing user files or directories with Agent Project Kit names are not overwritten unless they already look like kit-managed files.",
+    "Changed the canonical installed snapshot path from .ai/computing-environment to .ai/agent-project-kit while keeping computing-environment as a legacy migration path."
+  ],
+  "installed_paths": [
+    ".ai/agent-project-kit"
   ]
 }

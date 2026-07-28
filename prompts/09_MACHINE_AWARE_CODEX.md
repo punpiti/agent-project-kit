@@ -6,7 +6,7 @@
 Use the Spec–Eval–Loop Workflow and the machine-aware machine-aware protocol.
 
 Before editing or running heavy commands:
-1. Read AGENTS.md and .ai/computing-environment if present.
+1. Read AGENTS.md and .ai/agent-project-kit if present.
 2. Read:
    - .ai/PROJECT_STATE.md
    - .ai/PROJECT_HIERARCHY.md

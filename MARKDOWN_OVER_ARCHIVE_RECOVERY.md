@@ -9,7 +9,7 @@ Do not assume archived Markdown is trash. Some archived `.md` files may be serio
 ## Step 1 — Inspect archived files
 
 ```bash
-python3 .ai/computing-environment/scripts/organize-project-markdown.py . --include-archive
+python3 .ai/agent-project-kit/scripts/organize-project-markdown.py . --include-archive
 ```
 
 Read:
@@ -31,7 +31,7 @@ These are archived files whose original path/name looks like a serious document 
 Only after reviewing the inventory:
 
 ```bash
-python3 .ai/computing-environment/scripts/organize-project-markdown.py . --include-archive --restore-archived
+python3 .ai/agent-project-kit/scripts/organize-project-markdown.py . --include-archive --restore-archived
 ```
 
 The script restores only files marked as restore candidates and only when the destination path does not already exist.

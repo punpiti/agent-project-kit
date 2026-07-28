@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install computing-environment rules into a project.
+"""Install Agent Project Kit rules into a project.
 
 Works from WSL2, Linux, macOS, or Windows Python.
 """
@@ -125,6 +125,50 @@ def find_source(explicit: str | None, script_path: Path) -> Path:
     raise FileNotFoundError("Could not auto-detect Agent Project Kit. Pass --source-path.")
 
 
+def is_managed_snapshot(path: Path) -> bool:
+    if not path.exists():
+        return True
+    manifest = path / "manifest.json"
+    if not manifest.exists():
+        return False
+    try:
+        data = json.loads(manifest.read_text(encoding="utf-8"))
+    except Exception:
+        return False
+    return data.get("name") in {"agent-project-kit", "computing-environment"}
+
+
+def is_kit_metadata(path: Path) -> bool:
+    if not path.exists():
+        return True
+    text = path.read_text(encoding="utf-8", errors="ignore")
+    return (
+        "Package name: agent-project-kit" in text
+        or "Package name: computing-environment" in text
+        or "Computing environment source" in text
+        or "Agent Project Kit source" in text
+    )
+
+
+def ensure_managed_or_missing(path: Path, purpose: str) -> None:
+    if not is_managed_snapshot(path):
+        raise RuntimeError(
+            f"Refusing to overwrite existing {purpose}: {path}. "
+            "This path exists but does not look like an Agent Project Kit snapshot. "
+            "Move or rename it first, then rerun the installer."
+        )
+
+
+def ensure_metadata_safe(path: Path) -> None:
+    if not is_kit_metadata(path):
+        raise RuntimeError(
+            f"Refusing to overwrite existing user file: {path}. "
+            "This file name is needed for Agent Project Kit metadata, but the existing file "
+            "does not look like kit metadata. Move or rename it first, then rerun the installer."
+        )
+
+
+
 def copy_item(src: Path, dst: Path) -> None:
     if not src.exists():
         print(f"Warning: missing item {src}")
@@ -186,18 +230,18 @@ Before working on this project, read the project-local AI working rules:
 
 If this project is the Agent Project Kit source repository itself, including the
 legacy `computing-environment` folder, use the root-level governance files as
-canonical and treat `.ai/computing-environment/` as a packaged downstream
+canonical and treat `.ai/agent-project-kit/` as a packaged downstream
 snapshot. Do not recurse into another Agent Project Kit / `computing-environment`
 layer unless explicitly requested.
 
-- `.ai/computing-environment/START_HERE.md`
-- `.ai/computing-environment/SPEC_EVAL_LOOP_INSTRUCTION.md`
-- `.ai/computing-environment/AGENTS.md`
-- `.ai/computing-environment/MACHINE_PROFILES.md`
-- `.ai/computing-environment/TOKEN_DISCIPLINE.md`
-- `.ai/computing-environment/DOCUMENT_PRODUCTION_POLICY.md`
-- `.ai/computing-environment/MARKDOWN_ORGANIZATION_POLICY.md`
-- `.ai/computing-environment/ENVIRONMENT_POLICY.md`
+- `.ai/agent-project-kit/START_HERE.md`
+- `.ai/agent-project-kit/SPEC_EVAL_LOOP_INSTRUCTION.md`
+- `.ai/agent-project-kit/AGENTS.md`
+- `.ai/agent-project-kit/MACHINE_PROFILES.md`
+- `.ai/agent-project-kit/TOKEN_DISCIPLINE.md`
+- `.ai/agent-project-kit/DOCUMENT_PRODUCTION_POLICY.md`
+- `.ai/agent-project-kit/MARKDOWN_ORGANIZATION_POLICY.md`
+- `.ai/agent-project-kit/ENVIRONMENT_POLICY.md`
 
 Then read project state:
 
@@ -280,7 +324,7 @@ def append_session_log(ai_dir: Path, source: Path, project: Path) -> None:
 ## {today} — {machine} — Agent Project Kit installed/updated
 - Objective: Install/update Agent Project Kit workflow files.
 - Mode: T0 Quick
-- Files touched: AGENTS.md, .ai/computing-environment/, .ai project templates if missing
+- Files touched: AGENTS.md, .ai/agent-project-kit/, .ai project templates if missing; existing user files with conflicting metadata/snapshot names are not overwritten
 - Commands/tests run: bootstrap_ai_project.py
 - Result: Installed from {source}
 - Local resources used: none
@@ -306,7 +350,18 @@ def main() -> int:
         raise FileNotFoundError(project)
 
     ai_dir = project / ".ai"
-    target = ai_dir / "computing-environment"
+    target = ai_dir / "agent-project-kit"
+    ai_dir.mkdir(parents=True, exist_ok=True)
+    if source == target.resolve():
+        raise RuntimeError(
+            f"Source path equals install target: {target}. "
+            "Clone Agent Project Kit into .ai/agent-project-kit-source or use a cache path, then rerun."
+        )
+    version_path = ai_dir / "COMPUTING_ENVIRONMENT_VERSION.md"
+    install_info_path = ai_dir / "INSTALLATION_INFO.md"
+    ensure_managed_or_missing(target, ".ai/agent-project-kit snapshot")
+    ensure_metadata_safe(version_path)
+    ensure_metadata_safe(install_info_path)
     target.mkdir(parents=True, exist_ok=True)
 
     for item in ITEMS:
@@ -324,7 +379,6 @@ def main() -> int:
     package_updated = manifest.get("updated", "unknown")
     state_schema = manifest.get("state_schema_version", "unknown")
     profile_schema = manifest.get("machine_profile_schema_version", "unknown")
-    version_path = ai_dir / "COMPUTING_ENVIRONMENT_VERSION.md"
     previous_package_version = read_version_line(version_path, "Package version")
     previous_profile_schema = read_version_line(version_path, "Machine profile schema version")
 
@@ -340,7 +394,7 @@ def main() -> int:
 - Previous package version: {previous_package_version}
 - Previous machine profile schema version: {previous_profile_schema}
 - Installed/updated: {_dt.datetime.now().isoformat(timespec='seconds')}
-- Update check cadence: report installed version every startup; check upstream when last check is missing, older than 14 days, before package-level/release work, or when explicitly asked
+- Update check cadence: report installed version every startup; check GitHub Pages manifest when last check is missing, older than 14 days, before package-level/release work, or when explicitly asked
 - Last update check: not checked by installer
 - Latest known upstream version: unknown
 - Update check source: {source}
@@ -358,15 +412,19 @@ hostname/platform/path style changed.
 
 Project-local state files are preserved by the installer. Update package
 snapshots and missing template files without overwriting project-specific state.
+On first install, same-name paths that do not look like Agent Project Kit
+content are left untouched and the installer stops before writing kit-owned files.
 
 ## Update Check Rule
 
 Every startup should report the installed Agent Project Kit package name and
-version from this file. Do not fetch/pull package updates every time. Check
-upstream when `Last update check` is missing/stale, before package-level or
-release work, or when explicitly asked.
+version from this file. Do not fetch/pull package updates every time. Check the
+GitHub Pages manifest with `scripts/update-from-pages.sh --dry-run` when
+`Last update check` is missing/stale, before package-level or release work, or
+when explicitly asked. Apply updates through `scripts/update-from-pages.sh` so
+project-local state is preserved.
 """
-    (ai_dir / "COMPUTING_ENVIRONMENT_VERSION.md").write_text(version_info, encoding="utf-8")
+    version_path.write_text(version_info, encoding="utf-8")
 
     install_info = f"""# INSTALLATION_INFO
 
@@ -375,7 +433,7 @@ release work, or when explicitly asked.
 - Machine profile schema version: {profile_schema}
 - Installed/updated: {_dt.datetime.now().isoformat(timespec='seconds')}
 - Project path: {project}
-- Computing environment source: {source}
+- Agent Project Kit source: {source}
 - Machine detected: {socket.gethostname().lower()}
 - Platform: {platform.platform()}
 - WSL2 detected: {'yes' if is_wsl() else 'no/unknown'}
@@ -383,7 +441,7 @@ release work, or when explicitly asked.
 Read this project with:
 
 1. AGENTS.md
-2. .ai/computing-environment/START_HERE.md
+2. .ai/agent-project-kit/START_HERE.md
 3. .ai/PROJECT_STATE.md
 4. .ai/PROJECT_HIERARCHY.md
 5. .ai/MACHINE_PROFILE.md
@@ -393,7 +451,8 @@ Read this project with:
 9. .ai/TOKEN_BUDGET.md
 10. .ai/COMPUTING_ENVIRONMENT_VERSION.md
 """
-    (ai_dir / "INSTALLATION_INFO.md").write_text(install_info, encoding="utf-8")
+    install_info_path = ai_dir / "INSTALLATION_INFO.md"
+    install_info_path.write_text(install_info, encoding="utf-8")
 
     update_agents(project)
     update_adapter(project, "CLAUDE.md")

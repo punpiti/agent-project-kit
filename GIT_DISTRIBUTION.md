@@ -10,13 +10,13 @@ project/
     MACHINE_PROFILE.md
     LOCAL_RESOURCES.md
     ...
-    agent-project-kit/        # git clone of the kit
-    computing-environment/    # installed snapshot used by agents
+    agent-project-kit-source/ # git clone/source cache of the kit
+    agent-project-kit/        # installed snapshot used by agents
 ```
 
 Project-local state stays directly under `.ai/`. The Git clone is only the
-package source. The installed snapshot remains `.ai/computing-environment/` for
-compatibility.
+package source. The installed snapshot is `.ai/agent-project-kit/`. The old
+`.ai/computing-environment/` path is legacy-only.
 
 ## Install From Git
 
@@ -24,8 +24,8 @@ Agent-first flow from the target project:
 
 ```bash
 mkdir -p .ai
-git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit
-bash .ai/agent-project-kit/scripts/install-to-project.sh . .ai/agent-project-kit
+git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit-source
+bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-project-kit-source
 code .
 ```
 
@@ -38,8 +38,8 @@ From the target project:
 bash /path/to/agent-project-kit/scripts/install-from-git.sh . https://github.com/punpiti/agent-project-kit.git v6.16.0
 ```
 
-If the project already has `.ai/agent-project-kit`, the script fetches and checks
-out the requested ref. If not, it clones first.
+If the project already has `.ai/agent-project-kit-source`, the script fetches
+and checks out the requested ref. If not, it clones first.
 
 ## Update
 
@@ -65,8 +65,8 @@ friends who want the latest behavior.
 
 ```powershell
 New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
-git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit"
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit"
+git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit-source"
+powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
 ```
 
 ## Rules

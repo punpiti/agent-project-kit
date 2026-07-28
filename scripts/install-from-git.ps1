@@ -19,7 +19,7 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
 $project = (Resolve-Path $ProjectPath).Path
 $aiDir = Join-Path $project ".ai"
 if (-not $CloneDir) {
-    $CloneDir = Join-Path $aiDir "agent-project-kit"
+    $CloneDir = Join-Path $aiDir "agent-project-kit-source"
 }
 
 New-Item -ItemType Directory -Force -Path $aiDir | Out-Null
@@ -28,7 +28,9 @@ if (Test-Path (Join-Path $CloneDir ".git")) {
     git -C $CloneDir remote set-url origin $RepoUrl
     git -C $CloneDir fetch --tags --prune origin
 } else {
-    if (Test-Path $CloneDir) { Remove-Item $CloneDir -Recurse -Force }
+    if (Test-Path $CloneDir) {
+        throw "Refusing to overwrite existing non-git clone path: $CloneDir. Move or rename it first, or pass a different CloneDir argument."
+    }
     git clone $RepoUrl $CloneDir
     git -C $CloneDir fetch --tags --prune origin
 }
@@ -81,7 +83,7 @@ if ($DryRun) {
     Write-Host "Ref: $Ref"
     Write-Host "Commit: $commit"
     Write-Host "Clone path: $CloneDir"
-    Write-Host "Snapshot path that would be refreshed: $(Join-Path $aiDir 'computing-environment')"
+    Write-Host "Snapshot path that would be refreshed: $(Join-Path $aiDir 'agent-project-kit')"
     Write-Host "Current package version: $(Read-VersionLine $versionFile 'Package version')"
     Write-Host "Target package version: $targetPackageVersion"
     Write-Host "Current state schema: $(Read-VersionLine $versionFile 'State schema version')"

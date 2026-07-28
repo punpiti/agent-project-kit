@@ -3,7 +3,7 @@
 ใช้กับ project ที่มีอยู่แล้ว และต้องการให้ AI เข้าใจระบบก่อนลงมือแก้
 
 ```text
-อ่านกติกาจาก shared/synced project storage/computing-environment หรือจาก .ai/computing-environment ใน project นี้ก่อน
+อ่านกติกาจาก shared/synced project storage/agent-project-kit หรือจาก .ai/agent-project-kit ใน project นี้ก่อน
 แล้ว onboard ตัวเองกับ project นี้ด้วย Spec–Eval–Loop Workflow + machine-aware multi-machine protocol
 
 ให้คุณทำดังนี้:

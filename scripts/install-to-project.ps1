@@ -42,9 +42,59 @@ function Find-SourcePath {
 $SourcePath = Find-SourcePath $SourcePath
 $project = (Resolve-Path $ProjectPath).Path
 $aiDir = Join-Path $project ".ai"
-$target = Join-Path $aiDir "computing-environment"
-$machine = ($env:COMPUTERNAME).ToLower()
+$target = Join-Path $aiDir "agent-project-kit"
+$machine = if ($env:COMPUTERNAME) { $env:COMPUTERNAME.ToLower() } else { "unknown" }
+New-Item -ItemType Directory -Force -Path $aiDir | Out-Null
 
+if ((Resolve-Path $SourcePath).Path -eq (Resolve-Path -LiteralPath $target -ErrorAction SilentlyContinue).Path) {
+    throw "Source path equals install target: $target. Clone Agent Project Kit into .ai/agent-project-kit-source or use a cache path, then rerun."
+}
+
+function Test-ManagedSnapshot {
+    param([string]$Path)
+    if (-not (Test-Path $Path)) { return $true }
+    $manifestPath = Join-Path $Path "manifest.json"
+    if (Test-Path $manifestPath) {
+        try {
+            $manifest = Get-Content $manifestPath -Raw | ConvertFrom-Json
+            return ($manifest.name -eq "agent-project-kit" -or $manifest.name -eq "computing-environment")
+        } catch {
+            return $false
+        }
+    }
+    return $false
+}
+
+function Assert-ManagedOrMissing {
+    param([string]$Path, [string]$Purpose)
+    if (-not (Test-ManagedSnapshot $Path)) {
+        throw "Refusing to overwrite existing ${Purpose}: ${Path}. This path exists but does not look like an Agent Project Kit snapshot. Move or rename it first, then rerun the installer."
+    }
+}
+
+function Test-KitMetadata {
+    param([string]$Path)
+    if (-not (Test-Path $Path)) { return $true }
+    foreach ($line in Get-Content $Path -ErrorAction SilentlyContinue) {
+        if ($line -match 'Package name:\s*(agent-project-kit|computing-environment)') { return $true }
+        if ($line -match 'Computing environment source') { return $true }
+        if ($line -match 'Agent Project Kit source') { return $true }
+    }
+    return $false
+}
+
+function Assert-MetadataSafe {
+    param([string]$Path)
+    if (-not (Test-KitMetadata $Path)) {
+        throw "Refusing to overwrite existing user file: ${Path}. This file name is needed for Agent Project Kit metadata, but the existing file does not look like kit metadata. Move or rename it first, then rerun the installer."
+    }
+}
+
+$versionPath = Join-Path $aiDir "COMPUTING_ENVIRONMENT_VERSION.md"
+$installInfoPath = Join-Path $aiDir "INSTALLATION_INFO.md"
+Assert-MetadataSafe $versionPath
+Assert-MetadataSafe $installInfoPath
+Assert-ManagedOrMissing $target ".ai/agent-project-kit snapshot"
 New-Item -ItemType Directory -Force -Path $target | Out-Null
 
 $items = @(
@@ -67,12 +117,16 @@ $items = @(
     "MACHINE_PROFILES.md",
     "TOKEN_DISCIPLINE.md",
     "DOCUMENT_PRODUCTION_POLICY.md",
+    "MARKDOWN_ORGANIZATION_POLICY.md",
+    "SECURITY_EXCLUSIONS.md",
+    "MIGRATION_FROM_OLD.md",
     "ENVIRONMENT_POLICY.md",
     "GLOBAL_START_PROMPT.md",
     "bootstrap_ai_project.py",
     "prompts",
     "templates",
-    "checklists"
+    "checklists",
+    "scripts"
 )
 
 foreach ($item in $items) {
@@ -147,7 +201,6 @@ function Read-VersionLine($Path, $Label) {
     return "none"
 }
 
-$versionPath = Join-Path $aiDir "COMPUTING_ENVIRONMENT_VERSION.md"
 $previousPackageVersion = Read-VersionLine $versionPath "Package version"
 $previousProfileSchema = Read-VersionLine $versionPath "Machine profile schema version"
 
@@ -164,7 +217,7 @@ $versionInfo = @"
 - Previous package version: $previousPackageVersion
 - Previous machine profile schema version: $previousProfileSchema
 - Installed/updated: $(Get-Date -Format o)
-- Update check cadence: report installed version every startup; check upstream when last check is missing, older than 14 days, before package-level/release work, or when explicitly asked
+- Update check cadence: report installed version every startup; check GitHub Pages manifest when last check is missing, older than 14 days, before package-level/release work, or when explicitly asked
 - Last update check: not checked by installer
 - Latest known upstream version: unknown
 - Update check source: $SourcePath
@@ -181,15 +234,21 @@ hostname/platform/path style changed.
 
 Project-local state files are preserved by the installer. Update package
 snapshots and missing template files without overwriting project-specific state.
+On first install, same-name paths that do not look like Agent Project Kit
+content are left untouched and the installer stops before writing kit-owned files.
 
 ## Update Check Rule
 
 Every startup should report the installed Agent Project Kit package name and
-version from this file. Do not fetch/pull package updates every time. Check
-upstream when `Last update check` is missing/stale, before package-level or
-release work, or when explicitly asked.
+version from this file. Do not fetch/pull package updates every time. Check the
+GitHub Pages manifest with `scripts/update-from-pages.ps1 -DryRun` when
+`Last update check` is missing/stale, before package-level or release work, or
+when explicitly asked. Apply updates through `scripts/update-from-pages.ps1` so
+project-local state is preserved.
 "@
-Set-Content -Path (Join-Path $aiDir "COMPUTING_ENVIRONMENT_VERSION.md") -Value $versionInfo -Encoding UTF8
+Set-Content -Path $versionPath -Value $versionInfo -Encoding UTF8
+
+$installInfoPath = Join-Path $aiDir "INSTALLATION_INFO.md"
 
 $installInfo = @"
 # INSTALLATION_INFO
@@ -199,14 +258,14 @@ $installInfo = @"
 - Machine profile schema version: $profileSchema
 - Installed/updated: $(Get-Date -Format o)
 - Project path: $project
-- Computing environment source: $SourcePath
+- Agent Project Kit source: $SourcePath
 - Machine detected: $machine
 - WSL2 detected: no / Windows PowerShell
 
 Read this project with:
 
 1. AGENTS.md
-2. .ai/computing-environment/START_HERE.md
+2. .ai/agent-project-kit/START_HERE.md
 3. .ai/PROJECT_STATE.md
 4. .ai/PROJECT_HIERARCHY.md
 5. .ai/MACHINE_PROFILE.md
@@ -216,7 +275,7 @@ Read this project with:
 9. .ai/TOKEN_BUDGET.md
 10. .ai/COMPUTING_ENVIRONMENT_VERSION.md
 "@
-Set-Content -Path (Join-Path $aiDir "INSTALLATION_INFO.md") -Value $installInfo -Encoding UTF8
+Set-Content -Path $installInfoPath -Value $installInfo -Encoding UTF8
 
 $projectAgents = Join-Path $project "AGENTS.md"
 $managedBlock = "<!-- BEGIN COMPUTING-ENVIRONMENT -->"
@@ -226,15 +285,15 @@ Before working on this project, read the project-local AI working rules:
 
 If this project is the Agent Project Kit source repository itself, including the
 legacy `computing-environment` folder, use the root-level governance files as
-canonical and treat `.ai/computing-environment/` as a packaged downstream
+canonical and treat `.ai/agent-project-kit/` as a packaged downstream
 snapshot. Do not recurse into another Agent Project Kit / `computing-environment`
 layer unless explicitly requested.
 
-- `.ai/computing-environment/START_HERE.md`
-- `.ai/computing-environment/SPEC_EVAL_LOOP_INSTRUCTION.md`
-- `.ai/computing-environment/AGENTS.md`
-- `.ai/computing-environment/MACHINE_PROFILES.md`
-- `.ai/computing-environment/TOKEN_DISCIPLINE.md`
+- `.ai/agent-project-kit/START_HERE.md`
+- `.ai/agent-project-kit/SPEC_EVAL_LOOP_INSTRUCTION.md`
+- `.ai/agent-project-kit/AGENTS.md`
+- `.ai/agent-project-kit/MACHINE_PROFILES.md`
+- `.ai/agent-project-kit/TOKEN_DISCIPLINE.md`
 
 Then read project state:
 
@@ -316,7 +375,7 @@ if (Test-Path $sessionLog) {
 ## $(Get-Date -Format yyyy-MM-dd) — $machine — Agent Project Kit installed/updated
 - Objective: Install/update Agent Project Kit workflow files.
 - Mode: T0 Quick
-- Files touched: AGENTS.md, .ai/computing-environment/, .ai project templates if missing
+- Files touched: AGENTS.md, .ai/agent-project-kit/, .ai project templates if missing; existing user files with conflicting metadata/snapshot names are not overwritten
 - Commands/tests run: install-to-project.ps1
 - Result: Installed from $SourcePath
 - Local resources used: none

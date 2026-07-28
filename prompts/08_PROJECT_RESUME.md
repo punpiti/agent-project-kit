@@ -3,7 +3,7 @@
 ใช้เมื่อกลับมาเปิด project เดิมหลังจากสลับไปทำงานอื่นหลายวัน/หลายชั่วโมง
 
 ```text
-อ่าน AGENTS.md และ .ai/computing-environment ก่อน
+อ่าน AGENTS.md และ .ai/agent-project-kit ก่อน
 จากนั้นอ่านไฟล์ project state เหล่านี้ถ้ามี:
 - .ai/PROJECT_STATE.md
 - .ai/PROJECT_HIERARCHY.md

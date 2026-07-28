@@ -3,7 +3,7 @@
 Use this once per document-heavy project.
 
 ```text
-อ่าน .ai/computing-environment/DOCUMENT_PRODUCTION_POLICY.md และ bootstrap เอกสารของโปรเจคนี้
+อ่าน .ai/agent-project-kit/DOCUMENT_PRODUCTION_POLICY.md และ bootstrap เอกสารของโปรเจคนี้
 
 ให้ตรวจว่า project มีสิ่งต่อไปนี้หรือยัง:
 - docs/source/

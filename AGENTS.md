@@ -13,12 +13,12 @@ Before doing substantial work, read:
 4. `TOKEN_DISCIPLINE.md`
 5. Relevant files under `prompts/`, `templates/`, and `checklists/`
 
-If these files are copied into a project under `.ai/computing-environment/`, read that folder first.
+If these files are copied into a project under `.ai/agent-project-kit/`, read that folder first.
 
 When this repository is Agent Project Kit itself, including the legacy
 `computing-environment` folder, do not treat
-`.ai/computing-environment/` as a second project to recurse into. The root-level
-files are canonical; `.ai/computing-environment/` is only an installed snapshot
+`.ai/agent-project-kit/` as a second project to recurse into. The root-level
+files are canonical; `.ai/agent-project-kit/` is only an installed snapshot
 used to verify downstream packaging unless the user explicitly asks to inspect
 that packaged copy.
 
@@ -222,20 +222,20 @@ Default document workflow: Markdown first, content critique/revision second, fin
 Self-hosting guard: this repository is the canonical Agent Project Kit source,
 using the legacy-compatible `computing-environment` path. For normal work here,
 read root-level governance files and root `.ai/` state files. Do not recurse into
-`.ai/computing-environment/` unless the task is specifically about the packaged
+`.ai/agent-project-kit/` unless the task is specifically about the packaged
 downstream copy.
 
 Before working on this project, read:
 
-- `.ai/computing-environment/START_HERE.md`
-- `.ai/computing-environment/SPEC_EVAL_LOOP_INSTRUCTION.md`
-- `.ai/computing-environment/AGENTS.md`
-- `.ai/computing-environment/MACHINE_PROFILES.md`
-- `.ai/computing-environment/TOKEN_DISCIPLINE.md`
-- `.ai/computing-environment/DOCUMENT_PRODUCTION_POLICY.md`
-- `.ai/computing-environment/MARKDOWN_ORGANIZATION_POLICY.md`
-- `.ai/computing-environment/ENVIRONMENT_POLICY.md`
-- `.ai/computing-environment/MARKDOWN_ORGANIZATION_POLICY.md`
+- `.ai/agent-project-kit/START_HERE.md`
+- `.ai/agent-project-kit/SPEC_EVAL_LOOP_INSTRUCTION.md`
+- `.ai/agent-project-kit/AGENTS.md`
+- `.ai/agent-project-kit/MACHINE_PROFILES.md`
+- `.ai/agent-project-kit/TOKEN_DISCIPLINE.md`
+- `.ai/agent-project-kit/DOCUMENT_PRODUCTION_POLICY.md`
+- `.ai/agent-project-kit/MARKDOWN_ORGANIZATION_POLICY.md`
+- `.ai/agent-project-kit/ENVIRONMENT_POLICY.md`
+- `.ai/agent-project-kit/MARKDOWN_ORGANIZATION_POLICY.md`
 - `.ai/PROJECT_STATE.md`
 - `.ai/PROJECT_HIERARCHY.md`
 - `.ai/COMPUTING_ENVIRONMENT_VERSION.md`

@@ -6,7 +6,7 @@ Kit installed.
 ## General
 
 ```text
-Read AGENTS.md and .ai/computing-environment first.
+Read AGENTS.md and .ai/agent-project-kit first.
 
 Then read these project-local state files if they exist:
 - .ai/PROJECT_STATE.md
