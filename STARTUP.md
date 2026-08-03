@@ -93,5 +93,19 @@ Use `scripts/run-once.py` for commands that must not repeat unnecessarily. It
 records successful runs in `.ai/AGENT_PROJECT_KIT_STATE.json`; failed commands
 are never marked complete.
 
+At startup, run the lightweight update notice through the persisted cadence:
+
+```bash
+python3 .ai/agent-project-kit/scripts/run-once.py --project . \
+  --key update-notice --ttl-days 14 --quiet-valid -- \
+  python3 .ai/agent-project-kit/scripts/check-update-notice.py --project .
+```
+
+This command reads the published manifest, reports availability, and records
+only check metadata/cadence in `.ai/`. It must never clone, pull, install, or
+replace package or project content. A failed network check is not recorded and
+may be retried in a later session. On Windows, use
+`python` instead of `python3` when that is the configured Python command.
+
 Run `python3 .ai/agent-project-kit/scripts/apk_doctor.py . --quick` when startup
 state appears stale or contradictory, not automatically every session.

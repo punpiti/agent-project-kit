@@ -16,6 +16,7 @@ def main() -> int:
     p.add_argument("--project", default="."); p.add_argument("--key", required=True)
     p.add_argument("--scope", choices=("project", "machine"), default="project")
     p.add_argument("--ttl-days", type=int); p.add_argument("--force", action="store_true")
+    p.add_argument("--quiet-valid", action="store_true", help="print nothing when a cached success is still valid")
     p.add_argument("command", nargs=argparse.REMAINDER); a = p.parse_args()
     command = a.command[1:] if a.command[:1] == ["--"] else a.command
     if not command: p.error("a command is required after --")
@@ -27,7 +28,9 @@ def main() -> int:
         if a.ttl_days is not None:
             try: valid = now - dt.datetime.fromisoformat(entry["completed_at"]) < dt.timedelta(days=a.ttl_days)
             except (KeyError, TypeError, ValueError): pass
-    if valid: print(f"SKIP {key}: successful result is still valid"); return 0
+    if valid:
+        if not a.quiet_valid: print(f"SKIP {key}: successful result is still valid")
+        return 0
     result = subprocess.run(command, cwd=root, check=False)
     if result.returncode: print(f"NOT RECORDED {key}: exit {result.returncode}"); return result.returncode
     path.parent.mkdir(parents=True, exist_ok=True)

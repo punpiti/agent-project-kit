@@ -47,6 +47,10 @@ test -f .ai/MACHINE_PROFILE.md && sed -n '1,80p' .ai/MACHINE_PROFILE.md
 
 3. Preview the update by checking the GitHub Pages manifest.
 
+Normal startup may run `check-update-notice.py` through `run-once.py` every 14
+days. That path is notification-only: it reads the manifest and never invokes
+the installer. A full dry run remains an explicit user/agent action.
+
 ```bash
 bash .ai/agent-project-kit/scripts/update-from-pages.sh --dry-run .
 ```

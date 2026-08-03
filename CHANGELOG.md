@@ -4,6 +4,8 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## 7.1-shared-runtime-canary — 2026-08-03
 
+- Added a persisted 14-day update notice that checks only the published
+  manifest, reports a newer version, and never installs automatically.
 - Added an opt-in shared-runtime prototype with immutable side-by-side versions.
 - Added exact project binding through `.ai/apk.json` and explicit resolver errors
   for missing or mismatched versions.

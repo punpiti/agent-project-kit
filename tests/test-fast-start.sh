@@ -26,6 +26,7 @@ test -f "$PROJECT/.ai/project.json"
 test -f "$PROJECT/.ai/state.json"
 test -f "$PROJECT/.ai/local-resources.json"
 test -f "$PROJECT/.ai/agent-project-kit/config/routes.json"
+test -f "$PROJECT/.ai/agent-project-kit/scripts/check-update-notice.py"
 python3 "$SOURCE_PATH/tests/test-v7-context.py" >/dev/null
 python3 "$SOURCE_PATH/scripts/context.py" --project "$SOURCE_PATH" "resume package release" --output "$TEST_ROOT/root-context.json" || test "$?" -eq 2
 python3 - "$TEST_ROOT/root-context.json" "$SOURCE_PATH" <<'PY'
@@ -41,6 +42,17 @@ python3 "$SOURCE_PATH/scripts/run-once.py" --project "$PROJECT" --key fixture --
 test "$(wc -c < "$PROJECT/counter")" -eq 1
 if python3 "$SOURCE_PATH/scripts/run-once.py" --project "$PROJECT" --key failing -- false >/dev/null; then exit 1; fi
 ! grep -q 'project:failing' "$PROJECT/.ai/AGENT_PROJECT_KIT_STATE.json"
+printf '%s\n' '{"version":"7.2.0","updated":"2026-08-04T00:00:00+07:00"}' > "$TEST_ROOT/latest-manifest.json"
+notice_url="file://$TEST_ROOT/latest-manifest.json"
+notice_command=(python3 "$PROJECT/.ai/agent-project-kit/scripts/run-once.py" --project "$PROJECT" --key update-notice-test --ttl-days 14 --quiet-valid -- python3 "$PROJECT/.ai/agent-project-kit/scripts/check-update-notice.py" --project "$PROJECT" --manifest-url "$notice_url")
+"${notice_command[@]}" > "$TEST_ROOT/notice-first.txt"
+grep -q 'update available' "$TEST_ROOT/notice-first.txt"
+grep -q 'No package files were installed or updated' "$TEST_ROOT/notice-first.txt"
+printf '%s\n' 'not-json' > "$TEST_ROOT/latest-manifest.json"
+"${notice_command[@]}" > "$TEST_ROOT/notice-second.txt"
+test ! -s "$TEST_ROOT/notice-second.txt"
+if python3 "$PROJECT/.ai/agent-project-kit/scripts/run-once.py" --project "$PROJECT" --key update-notice-failure --ttl-days 14 --quiet-valid -- python3 "$PROJECT/.ai/agent-project-kit/scripts/check-update-notice.py" --project "$PROJECT" --manifest-url "file://$TEST_ROOT/missing.json" >/dev/null; then exit 1; fi
+! grep -q 'project:update-notice-failure' "$PROJECT/.ai/AGENT_PROJECT_KIT_STATE.json"
 if python3 "$SOURCE_PATH/scripts/apk_doctor.py" "$PROJECT" --quick >/dev/null; then
   echo "doctor should flag a placeholder PROJECT_STATE" >&2; exit 1
 fi

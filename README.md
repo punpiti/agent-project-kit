@@ -212,6 +212,10 @@ The short version is: read the current version, check the GitHub Pages manifest
 with a dry run, then apply the update. Existing project-local `.ai/` state is
 preserved; package concepts are refreshed under `.ai/agent-project-kit/`.
 
+Normal agent startup uses a persisted 14-day manifest-only check. It reports
+when a newer version is available but never clones, pulls, or installs by
+itself. Repeated startups within the 14-day window do not contact the network.
+
 Dry run:
 
 ```bash

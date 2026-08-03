@@ -175,6 +175,10 @@ summary และ machine profile ได้ ไม่ต้อง scan parent �
 ก่อน, แล้วค่อย apply update โดยไม่ลบ project-local state ใต้ `.ai/` ส่วน
 แนวคิด/ไฟล์ package ใหม่จะถูก refresh ใต้ `.ai/agent-project-kit/`
 
+การเริ่มงานตามปกติจะตรวจเฉพาะ manifest ทุก 14 วันและแจ้งเมื่อมีเวอร์ชันใหม่
+โดยไม่ clone, pull หรือติดตั้งให้อัตโนมัติ การเปิดซ้ำภายในช่วง 14 วันจะไม่ยิง
+network ซ้ำ
+
 dry-run:
 
 ```bash
