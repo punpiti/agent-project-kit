@@ -2,7 +2,13 @@
 
 ใช้กับ project ที่มีอยู่แล้ว และต้องการให้ AI เข้าใจระบบก่อนลงมือแก้
 
+Cadence: once per project, or only after a material repository restructuring.
+Do not onboard again merely because a new session or agent started.
+
 ```text
+Before execution, check the run-once ledger and whether PROJECT_STATE is
+configured rather than placeholder/stale. Reuse valid prior discovery.
+
 อ่านกติกาจาก shared/synced project storage/agent-project-kit หรือจาก .ai/agent-project-kit ใน project นี้ก่อน
 แล้ว onboard ตัวเองกับ project นี้ด้วย Spec–Eval–Loop Workflow + machine-aware multi-machine protocol
 

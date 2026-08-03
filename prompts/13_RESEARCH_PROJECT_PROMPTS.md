@@ -5,6 +5,12 @@ synthesis, policy research, product/market research, หรือ decision brief
 แยก evidence, source credibility, competing interpretations, และ limitation
 ให้ชัด
 
+## Routing Rule
+
+This file is a mode library. Select one numbered mode from the request and read
+that section; do not load or execute every mode. Add a secondary workflow only
+when its trigger is present (for example reviewer response or data analytics).
+
 ให้ใช้ร่วมกับ Spec-Eval-Loop:
 
 - L1 = ค้น/สรุป/จัด matrix/วิเคราะห์ข้อมูล

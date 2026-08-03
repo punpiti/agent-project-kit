@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "package": "agent-project-kit",
+  "version": "7.1-shared-runtime-canary",
+  "version_policy": "exact",
+  "profile": "standard",
+  "local_prompt_dirs": [".ai/prompts"]
+}

@@ -2,6 +2,9 @@
 
 Use this once per document-heavy project.
 
+Do not run again when `.ai/DOCUMENT_STYLE.md` and the build pipeline remain
+valid. Revalidate only after the output format, template, or toolchain changes.
+
 ```text
 อ่าน .ai/agent-project-kit/DOCUMENT_PRODUCTION_POLICY.md และ bootstrap เอกสารของโปรเจคนี้
 

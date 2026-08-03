@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "routes": {
+    "software": {"label":"Software Development & Automation","prompt":"prompts/19_SOFTWARE_DEVELOPMENT_AUTOMATION.md","instruction":"Define behavior, inspect targeted code, make a focused change, and run the smallest relevant test."},
+    "research": {"label":"Research Activities","prompt":"prompts/13_RESEARCH_PROJECT_PROMPTS.md","instruction":"Define the research question, evidence standard, uncertainty, and one appropriate research mode."},
+    "education": {"label":"Course Material Development","prompt":"prompts/17_COURSE_MATERIAL_DEVELOPMENT.md","instruction":"Align learner context, observable outcomes, activity, feedback, and assessment."},
+    "governance": {"label":"Educational Policy Development","prompt":"prompts/18_EDUCATIONAL_POLICY_DEVELOPMENT.md","instruction":"Identify authority, stakeholders, evidence, options, feasibility, implementation, and review gate."},
+    "operations": {"label":"Administrative & Professional Operations","prompt":"prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md","instruction":"Verify requirement, deadline, status, evidence, owner, next action, and proof of completion."},
+    "general": {"label":"General / Technical Other","prompt":null,"instruction":"Clarify the concrete requested outcome and apply only task-relevant constraints."}
+  },
+  "deliverables": {
+    "code":"working software or code change","analysis":"analysis or evidence-backed finding","paper":"academic manuscript or reviewer response","policy":"policy, governance decision, or institutional proposal","presentation":"slides, talk, briefing, or pitch","course-material":"lesson, syllabus, exercise, assessment, or teaching asset","document":"formal document, correspondence, dossier, or report","decision":"recommendation or decision brief"
+  },
+  "methods": {
+    "content-analysis":"systematic coding or interpretation of a corpus","data-analytics":"data validation, metrics, statistics, or visualization","web-development":"browser, frontend, backend web API, accessibility, or web performance","research-synthesis":"literature, external evidence, or source synthesis","strategy-advisory":"option comparison, advising, or direction setting"
+  },
+  "lifecycles": ["bootstrap","resume","create","implement","review","publish","monitor"]
+}

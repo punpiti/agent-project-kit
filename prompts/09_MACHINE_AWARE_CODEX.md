@@ -1,75 +1,18 @@
-# 09 — Machine-Aware Codex Prompt
+# 09 — Machine Discovery / Revalidation (One-Time)
 
-ใช้กับ Codex ใน WSL2 เมื่อ project มีข้อมูล/cache/intermediate ใหญ่หรือทำงานข้ามหลายเครื่อง
+This is a conditional environment check, not a task route.
 
-```text
-Use the Spec–Eval–Loop Workflow and the machine-aware machine-aware protocol.
+Run only when the current machine is missing/stale, the OS/path/storage layout
+changed, or a heavy/resource-dependent task needs capability not already verified.
 
-Before editing or running heavy commands:
-1. Read AGENTS.md and .ai/agent-project-kit if present.
-2. Read:
-   - .ai/PROJECT_STATE.md
-   - .ai/PROJECT_HIERARCHY.md
-   - .ai/COMPUTING_ENVIRONMENT_VERSION.md
-   - .ai/MACHINE_PROFILE.md
-   - .ai/LOCAL_RESOURCES.md
-   - .ai/MACHINE_COMPATIBILITY.md
-   - .ai/RUNBOOK.md
-   - .ai/TOKEN_BUDGET.md
-3. Detect current machine using hostname if possible.
-4. Detect whether this is WSL2 if possible.
-5. Report the installed Agent Project Kit package name/version from
-   .ai/COMPUTING_ENVIRONMENT_VERSION.md, including the last update check if recorded.
-6. If this machine already has a fresh profile in .ai/MACHINE_PROFILE.md and the
-   machine profile schema in .ai/COMPUTING_ENVIRONMENT_VERSION.md is unchanged,
-   do only a minimal resume check: hostname, platform, current path style, and
-   required task-local paths.
-7. If this is a new/stale machine or the project is on Windows-native, macOS,
-   Linux server, container, or a non-shared/synced project storage sync folder, do first-use discovery
-   and update .ai/MACHINE_PROFILE.md before heavy work.
-8. Check whether required local resources exist.
-9. State whether this machine is suitable for the requested task.
+1. Read `.ai/MACHINE_PROFILE.md`, `.ai/LOCAL_RESOURCES.md`, and version metadata.
+2. If the current host has a compatible entry less than 30 days old, verify only
+   hostname, platform/path style, and task-required resource paths.
+3. Otherwise inspect OS/WSL/container context, CPU, memory, storage pressure,
+   accelerator, runtimes, and required non-portable resources.
+4. Record stable facts and task suitability in `.ai/MACHINE_PROFILE.md`; record
+   non-portable paths in `.ai/LOCAL_RESOURCES.md`.
+5. Use `run-once.py --scope machine --ttl-days 30` for repeatable discovery.
 
-Nested project rule:
-- Read .ai/PROJECT_HIERARCHY.md before deciding whether a directory is a real
-  project/subproject. Directory depth alone is not enough.
-- If a parent or upper folder was already scanned, reuse its summary, hierarchy
-  note, shared constraints, and compatible machine profile when they still
-  match the current host/path/task.
-- Do not rerun broad parent/upper-folder scans unless the current task directly
-  touches that level or the stored summary is stale for the question.
-- A child project may read parent project summaries as a read-only interface.
-- Keep the child project sharper than the parent: summarize the local objective,
-  active files, evidence, blockers, and next action from the child .ai/ notes.
-- Do not edit parent files, parent .ai state, parent logs, parent resource
-  manifests, or sibling projects unless explicitly asked for a parent-level or
-  cross-project change.
-
-Storage rules:
-- shared/synced project storage-synced files are portable.
-- Files outside shared/synced project storage are non-portable and must be recorded in .ai/LOCAL_RESOURCES.md.
-- Machine identity and storage assumptions must be recorded in .ai/MACHINE_PROFILE.md.
-- Installed package and schema versions are recorded in .ai/COMPUTING_ENVIRONMENT_VERSION.md.
-- Do not hardcode machine-specific absolute paths into source code.
-- Prefer environment variables such as PROJECT_DATA_ROOT, PROJECT_CACHE_ROOT, PROJECT_OUTPUT_ROOT.
-- Keep small sample/smoke-test data portable when feasible.
-
-Execution rules:
-- Use the smallest test that proves the change first.
-- Do not run full heavy pipelines unless the current machine is suitable.
-- If local resources are missing, explain what is missing and suggest: smoke test, regenerate cache, set env var, mount HDD, or run on primary-heavy.
-
-After work:
-- Report files changed.
-- Report tests/checks run.
-- Report local resources used.
-- Update or propose updates to .ai/PROJECT_STATE.md, .ai/LOCAL_RESOURCES.md, .ai/MACHINE_COMPATIBILITY.md, and .ai/SESSION_LOG.md.
-- Do not rerun first-use discovery just because the package version changed; rerun only when machine profile schema or actual machine/path identity changed.
-- Do not fetch/pull package updates on every startup. Check for newer versions
-  when last update check is missing/stale, before package-level work, or when asked.
-- Include a token note if the next session can be made cheaper.
-
-Important:
-Do not pretend a project is broken just because this machine lacks a non-portable cache.
-Do not pretend L2 or L3 has been solved by L1 alone.
-```
+Do not scan parent projects, reinstall runtimes, benchmark hardware, or run a
+full pipeline unless the current task specifically requires it.

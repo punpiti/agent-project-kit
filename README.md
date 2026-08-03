@@ -10,7 +10,7 @@ Codex, Claude Code, Antigravity, or similar agents have a clear place to start.
 It is intentionally small: your application code stays yours, project-local
 notes stay under `.ai/`, and the managed kit snapshot can be refreshed later.
 
-Current release: `6.34-readme-refresh`
+Current release: `7.1-shared-runtime-canary`
 
 Use it when you want a project to keep simple notes about:
 

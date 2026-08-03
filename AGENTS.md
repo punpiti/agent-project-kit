@@ -215,37 +215,28 @@ For document-producing work, also read:
 
 Default document workflow: Markdown first, content critique/revision second, final PDF/build last. Formal Thai documents use TH Sarabun New for Thai text; public documents use modern minimal readable fonts. Paper output defaults to A4; screen output defaults to 16:9. Final PDFs must pass table, Thai word-break, spelling, hanging title, and hanging line checks before being called final.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- BEGIN COMPUTING-ENVIRONMENT -->
+This project uses Agent Project Kit. On each request:
 
-## Agent Project Kit Rules
+1. Read `.ai/PROJECT_STATE.md` and `.ai/agent-project-kit/STARTUP.md`.
+2. Classify the task and load only the routed prompt/state files.
+3. If the task is clear, proceed; ask one outcome question only when materially ambiguous.
 
-Self-hosting guard: this repository is the canonical Agent Project Kit source,
-using the legacy-compatible `computing-environment` path. For normal work here,
-read root-level governance files and root `.ai/` state files. Do not recurse into
-`.ai/agent-project-kit/` unless the task is specifically about the packaged
-downstream copy.
-
-Before working on this project, read:
-
-- `.ai/agent-project-kit/START_HERE.md`
-- `.ai/agent-project-kit/SPEC_EVAL_LOOP_INSTRUCTION.md`
-- `.ai/agent-project-kit/AGENTS.md`
-- `.ai/agent-project-kit/MACHINE_PROFILES.md`
-- `.ai/agent-project-kit/TOKEN_DISCIPLINE.md`
-- `.ai/agent-project-kit/DOCUMENT_PRODUCTION_POLICY.md`
-- `.ai/agent-project-kit/MARKDOWN_ORGANIZATION_POLICY.md`
-- `.ai/agent-project-kit/ENVIRONMENT_POLICY.md`
-- `.ai/agent-project-kit/MARKDOWN_ORGANIZATION_POLICY.md`
-- `.ai/PROJECT_STATE.md`
-- `.ai/PROJECT_HIERARCHY.md`
-- `.ai/COMPUTING_ENVIRONMENT_VERSION.md`
-- `.ai/MACHINE_PROFILE.md`
-- `.ai/LOCAL_RESOURCES.md`
-- `.ai/MACHINE_COMPATIBILITY.md`
-- `.ai/RUNBOOK.md`
-- `.ai/TOKEN_BUDGET.md`
-
-Use Spec–Eval–Loop Workflow, check project hierarchy and installed package/schema version before rerunning discovery, record machine identity/storage assumptions, record non-portable local resources, and keep AI Markdown in the `.ai/` pipeline.
-Do not pretend L2/L3 or non-portable resources are solved by L1 alone.
-
+Do not scan the managed snapshot or rerun onboarding, machine discovery, update
+checks, or repository scans merely because a new session started. Follow the
+cadence and `run-once.py` guidance in `STARTUP.md`. Keep L1 execution distinct
+from L2 human judgment and L3 external evidence.
 <!-- END COMPUTING-ENVIRONMENT -->

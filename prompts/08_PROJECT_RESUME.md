@@ -2,18 +2,16 @@
 
 ใช้เมื่อกลับมาเปิด project เดิมหลังจากสลับไปทำงานอื่นหลายวัน/หลายชั่วโมง
 
+This is a secondary workflow. Load it only for an explicit resume/status request
+or when `PROJECT_STATE.md` is insufficient—not on every normal task.
+
 ```text
-อ่าน AGENTS.md และ .ai/agent-project-kit ก่อน
-จากนั้นอ่านไฟล์ project state เหล่านี้ถ้ามี:
-- .ai/PROJECT_STATE.md
-- .ai/PROJECT_HIERARCHY.md
-- .ai/COMPUTING_ENVIRONMENT_VERSION.md
-- .ai/MACHINE_PROFILE.md
-- .ai/LOCAL_RESOURCES.md
-- .ai/MACHINE_COMPATIBILITY.md
-- .ai/RUNBOOK.md
-- .ai/SESSION_LOG.md
-- .ai/TOKEN_BUDGET.md
+อ่าน AGENTS.md, .ai/PROJECT_STATE.md และ
+.ai/agent-project-kit/STARTUP.md ก่อน แล้วหยุดอ่านเพื่อจัดประเภทงาน
+
+โหลดไฟล์อื่นแบบมีเงื่อนไขตาม STARTUP.md เท่านั้น อย่าอ่าน project state ทุกไฟล์
+เพียงเพราะไฟล์มีอยู่ และอย่ารัน onboarding, machine discovery, repository scan
+หรือ update check ซ้ำถ้าผลเดิมยังใช้ได้
 
 ถ้า project นี้อยู่ใน parent/upper folder ที่เคย scan หรือมี state summary แล้ว:
 - reuse parent summary, hierarchy note, shared constraint, และ machine profile

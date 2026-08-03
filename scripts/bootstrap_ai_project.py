@@ -40,10 +40,13 @@ ITEMS = [
     "MIGRATION_FROM_OLD.md",
     "ENVIRONMENT_POLICY.md",
     "GLOBAL_START_PROMPT.md",
+    "STARTUP.md",
+    "SHARED_RUNTIME_EXPERIMENT.md",
     "bootstrap_ai_project.py",
     "prompts",
     "templates",
     "checklists",
+    "config",
     "scripts",
 ]
 
@@ -62,6 +65,9 @@ PROJECT_TEMPLATES = [
     "DOCUMENT_STYLE.md",
     "DOCUMENT_QA.md",
     "MARKDOWN_INVENTORY.md",
+    "project.json",
+    "state.json",
+    "local-resources.json",
 ]
 
 
@@ -318,11 +324,14 @@ def append_session_log(ai_dir: Path, source: Path, project: Path) -> None:
     log = ai_dir / "SESSION_LOG.md"
     if not log.exists():
         return
+    marker = "Agent Project Kit installation first recorded"
+    if marker in log.read_text(encoding="utf-8", errors="ignore"):
+        return
     machine = socket.gethostname().lower()
     today = _dt.date.today().isoformat()
     entry = f"""
 
-## {today} — {machine} — Agent Project Kit installed/updated
+## {today} — {machine} — {marker}
 - Objective: Install/update Agent Project Kit workflow files.
 - Mode: T0 Quick
 - Files touched: AGENTS.md, .ai/agent-project-kit/, .ai project templates if missing; existing user files with conflicting metadata/snapshot names are not overwritten
@@ -439,18 +448,11 @@ project-local state is preserved.
 - Platform: {platform.platform()}
 - WSL2 detected: {'yes' if is_wsl() else 'no/unknown'}
 
-Read this project with:
+Minimal startup (read other files only when STARTUP.md triggers them):
 
 1. AGENTS.md
-2. .ai/agent-project-kit/START_HERE.md
-3. .ai/PROJECT_STATE.md
-4. .ai/PROJECT_HIERARCHY.md
-5. .ai/MACHINE_PROFILE.md
-6. .ai/LOCAL_RESOURCES.md
-7. .ai/MACHINE_COMPATIBILITY.md
-8. .ai/RUNBOOK.md
-9. .ai/TOKEN_BUDGET.md
-10. .ai/COMPUTING_ENVIRONMENT_VERSION.md
+2. .ai/PROJECT_STATE.md
+3. .ai/agent-project-kit/STARTUP.md
 """
     install_info_path = ai_dir / "INSTALLATION_INFO.md"
     install_info_path.write_text(install_info, encoding="utf-8")

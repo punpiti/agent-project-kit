@@ -1,46 +1,17 @@
-# 05 — Slides / Teaching Prompt
+# 05 — Presentation
 
-ใช้กับสไลด์ วิชาเรียน workshop เอกสารสอน หรือการนำเสนอ
+Use when the requested deliverable is a talk, slide deck, briefing, pitch, or
+visual presentation. Course design belongs to `17_COURSE_MATERIAL_DEVELOPMENT.md`;
+load that route instead when learning materials are the primary deliverable.
 
-```text
-งานนี้ใช้ Spec–Eval–Loop Workflow
-เน้น slides / teaching / learning material
+1. Identify audience, occasion, duration, delivery mode, and desired audience action.
+2. State one core message and the evidence or example needed to support it.
+3. Build a storyline before slide-level content.
+4. Give each slide one job; control text density and visual load.
+5. Use examples, transitions, speaker notes, and takeaways appropriate to the setting.
+6. Check accessibility, readability at presentation distance, timing, and source attribution.
+7. Separate a polished deck (L1) from presenter judgment (L2) and audience response (L3).
 
-ก่อนสร้างเนื้อหา ให้ระบุ:
-
-1. Audience
-   ใครคือคนฟัง/ผู้เรียน
-   พื้นฐานเขาประมาณไหน
-
-2. Objective
-   ต้องการให้เขาเข้าใจอะไร ทำอะไรได้ หรือเชื่ออะไรหลังจบ
-
-3. Loop Diagnosis
-   L1 = AI ช่วยร่างสไลด์/ตัวอย่าง/แบบฝึก
-   L2 = ต้องใช้ judgment ของผมเรื่องระดับผู้เรียน น้ำเสียง บริบทห้องเรียน
-   L3 = ต้องดู feedback จากนักเรียน ผล quiz งานที่ส่ง หรือ classroom observation
-
-4. Storyline
-   แยก:
-   - core message
-   - prerequisite
-   - example
-   - exercise
-   - misconception
-   - takeaway
-
-5. Slide Criteria
-   ตรวจว่า:
-   - flow ชัด
-   - visual load ไม่แน่น
-   - มีตัวอย่างพอ
-   - ไม่ข้าม concept สำคัญ
-   - แต่ละ slide มี message เดียว
-   - คนฟังเข้าใจได้ในเวลาจริง
-
-6. Execution
-   สร้าง outline / slide-by-slide draft / speaker notes / exercise
-
-7. Review Gate
-   ระบุส่วนที่ต้องให้ผมตัดสินใจ เช่น depth, tone, example, assessment
-```
+Load Course Material Development secondarily only when the presentation teaches
+an assessed learning outcome. Load Strategy & Advisory for a decision/pitch and
+Data Analytics for quantitative evidence. Do not automatically load all three.

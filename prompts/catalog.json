@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "composition": {
+    "primary_required": 1,
+    "primary_max": 1,
+    "secondary_max": 2,
+    "rule": "Choose by requested deliverable; load one primary and at most two triggered secondary workflows. One-time prompts require missing, stale, or changed state."
+  },
+  "prompts": [
+    {"path":"00_DEFAULT_PROJECT_PROMPT.md","type":"reference","cadence":"never-by-default","trigger":"legacy entry point; redirect to STARTUP.md"},
+    {"path":"01_NEW_PROJECT_BOOTSTRAP.md","type":"one-time","cadence":"once-per-project","trigger":"new project without initialized state"},
+    {"path":"02_EXISTING_PROJECT_ONBOARDING.md","type":"one-time","cadence":"once-per-project","trigger":"existing project with missing or placeholder state"},
+    {"path":"03_CODEX_CODING_AGENT.md","type":"secondary","cadence":"per-substantial-code-task","trigger":"implementation, debugging, or test loop"},
+    {"path":"04_PAPER_REVIEWER_RESPONSE.md","type":"secondary","cadence":"per-review-round","trigger":"paper, proposal, thesis, or reviewer response"},
+    {"path":"05_SLIDES_TEACHING.md","type":"primary","route":"presentation","cadence":"per-task","trigger":"presentation or slide deliverable"},
+    {"path":"06_POLICY_GOVERNANCE.md","type":"reference","cadence":"never-by-default","trigger":"legacy redirect to educational policy route"},
+    {"path":"07_EXTERNAL_FEEDBACK.md","type":"secondary","cadence":"per-feedback-cycle","trigger":"real users, learners, reviewers, stakeholders, or observations"},
+    {"path":"08_PROJECT_RESUME.md","type":"secondary","cadence":"when-state-summary-is-needed","trigger":"resume/status request or insufficient current state"},
+    {"path":"09_MACHINE_AWARE_CODEX.md","type":"one-time","cadence":"once-per-machine-or-30-days","trigger":"new/stale/changed machine or resource-dependent heavy work"},
+    {"path":"10_DOCUMENT_PRODUCTION.md","type":"secondary","cadence":"per-document-deliverable","trigger":"formal document, report, handout, or final PDF"},
+    {"path":"11_DOCUMENT_STYLE_BOOTSTRAP.md","type":"one-time","cadence":"once-per-document-project","trigger":"document-heavy project without style/pipeline state"},
+    {"path":"12_MARKDOWN_CLEANUP.md","type":"secondary","cadence":"on-explicit-cleanup-request","trigger":"Markdown inventory, migration, or recovery"},
+    {"path":"13_RESEARCH_PROJECT_PROMPTS.md","type":"primary","route":"research-activities","cadence":"per-task-select-one-mode","trigger":"research, evidence synthesis, literature, or research brief"},
+    {"path":"14_WEB_DEVELOPMENT.md","type":"secondary","cadence":"per-web-task","trigger":"browser UI, web API, accessibility, responsive behavior, or web performance"},
+    {"path":"15_CONTENT_ANALYSIS.md","type":"primary","route":"content-analysis","cadence":"per-task","trigger":"systematic qualitative or quantitative content coding"},
+    {"path":"16_DATA_ANALYTICS.md","type":"primary","route":"data-analytics","cadence":"per-task","trigger":"data quality, metrics, analysis, visualization, or dashboard"},
+    {"path":"17_COURSE_MATERIAL_DEVELOPMENT.md","type":"primary","route":"course-material-development","cadence":"per-task","trigger":"course, lesson, exercise, assessment, rubric, or teaching material"},
+    {"path":"18_EDUCATIONAL_POLICY_DEVELOPMENT.md","type":"primary","route":"educational-policy-development","cadence":"per-task","trigger":"education policy, governance, standard, regulation, or institutional proposal"},
+    {"path":"19_SOFTWARE_DEVELOPMENT_AUTOMATION.md","type":"primary","route":"software-development-automation","cadence":"per-task","trigger":"web, API, CLI, desktop, automation, integration, vision, or pipeline software"},
+    {"path":"20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md","type":"primary","route":"administrative-professional-operations","cadence":"per-task","trigger":"deadline, compliance, correspondence, dossier, submission, or follow-up"},
+    {"path":"21_STRATEGY_ADVISORY.md","type":"secondary","cadence":"per-decision-task","trigger":"option comparison, direction choice, advising, or implementation strategy"}
+  ]
+}

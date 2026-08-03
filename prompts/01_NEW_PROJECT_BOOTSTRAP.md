@@ -2,7 +2,13 @@
 
 ใช้เมื่อต้องเริ่ม project ใหม่
 
+Cadence: once per project. Do not run when project state is already initialized
+unless the user explicitly requests a reset/re-bootstrap.
+
 ```text
+Before execution, use `run-once.py` with a project-scoped key such as
+`new-project-bootstrap`. A failed/incomplete bootstrap must not be marked done.
+
 อ่านกติกาจาก shared/synced project storage/agent-project-kit หรือจาก .ai/agent-project-kit ใน project นี้ก่อน
 แล้วเริ่ม project นี้ด้วย Spec–Eval–Loop Workflow + machine-aware multi-machine protocol
 

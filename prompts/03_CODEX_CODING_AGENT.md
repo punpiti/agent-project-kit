@@ -2,20 +2,18 @@
 
 ใช้กับ Codex, IDE agent, coding agent, หรือ project ที่ต้องแก้โค้ด
 
+This is a secondary implementation workflow. The primary route is Software
+Development & Automation or another deliverable route requiring code.
+
 ```text
-Use the Spec–Eval–Loop Workflow plus the machine-aware machine-aware protocol for this coding task.
+Use the Spec–Eval–Loop Workflow plus the machine-aware protocol for this coding task.
 
 Before editing code:
-1. Read AGENTS.md and .ai/agent-project-kit if present.
-2. Read project-local state files if present:
-   - .ai/PROJECT_STATE.md
-   - .ai/LOCAL_RESOURCES.md
-   - .ai/MACHINE_COMPATIBILITY.md
-   - .ai/RUNBOOK.md
-   - .ai/TOKEN_BUDGET.md
-   - .ai/SESSION_LOG.md
-3. Detect current machine using hostname if possible: known compatible machine / unknown.
-4. Detect whether running in WSL2 if possible.
+1. Read AGENTS.md, .ai/PROJECT_STATE.md, and the kit STARTUP.md.
+2. Classify the request as coding/debugging/testing before loading this prompt.
+3. Read RUNBOOK or local-resource files only if the requested command needs them.
+4. Detect/revalidate the machine only for heavy/resource-dependent work or when
+   the recorded machine is missing/stale; do not repeat discovery per session.
 5. Inspect the repository structure in a targeted way.
 6. Identify the relevant files.
 7. Summarize the current behavior.

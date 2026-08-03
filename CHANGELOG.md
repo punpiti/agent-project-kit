@@ -2,6 +2,106 @@
 
 All notable changes to Agent Project Kit are summarized here.
 
+## 7.1-shared-runtime-canary — 2026-08-03
+
+- Added an opt-in shared-runtime prototype with immutable side-by-side versions.
+- Added exact project binding through `.ai/apk.json` and explicit resolver errors
+  for missing or mismatched versions.
+- Kept the existing per-project snapshot installer as the unchanged default.
+- Added isolated tests for install, resolve, context execution, and missing-version failure.
+- Defined promotion gates and rollback as removing the binding while retaining
+  the existing project snapshot.
+
+## 7.0.2-onedrive-route-audit — 2026-08-03
+
+- Audited all 47 discovered OneDrive `PROJECT_STATE.md` markers: 27 configured
+  projects and 20 placeholder states.
+- Reviewed configured routes across education, research, governance, software,
+  administration, advising, presentations, and technical fallback work.
+- Added regression coverage for seminars, course decks, IOI/POSN governance,
+  research supervision, correspondence, nominations, and academic-rank files.
+- Removed broad code signals such as generic `test`, `build`, and `package`
+  mentions when they do not express a software deliverable.
+- Kept clarification intentionally for a context-only parent workspace and a
+  technical DIY project outside the core routes.
+
+## 7.0.1-route-hardening — 2026-08-03
+
+- Trialed structured routing read-only against six real downstream projects:
+  educational policy, course development, research paper, software, compliance
+  operations, and council presentation.
+- Fixed `manuscript` being misclassified as software because it contains the
+  substring `script`.
+- Made explicit output forms such as presentation outrank subject terms such as
+  policy when selecting the deliverable axis.
+- Added real failure cases to bilingual routing fixtures.
+
+## 7.0-structured-context — 2026-08-03
+
+- Added structured four-axis routing: domain, deliverable, methods, and lifecycle.
+- Added declarative route, workflow, and policy configuration under `config/`.
+- Added `scripts/context.py` to compile a minimal auditable context bundle with
+  source, byte, and estimated-token metrics.
+- Added non-destructive `project.json`, `state.json`, and `local-resources.json`
+  alongside Markdown compatibility state.
+- Added bilingual routing fixtures and structured-context acceptance tests.
+- Kept existing Markdown state and prompts as compatibility/human-readable
+  interfaces during incremental downstream migration.
+
+## 6.39-composable-prompt-catalog — 2026-08-03
+
+- Added `prompts/catalog.json` as the machine-readable source of truth for
+  prompt role, trigger, cadence, and composition.
+- Enforced one primary route and at most two secondary workflows per request.
+- Classified all 22 prompts as primary, secondary, one-time, or reference.
+- Split Presentation from Course Material Development, converted the legacy
+  policy prompt into a redirect, and reduced machine discovery to a conditional
+  one-time workflow.
+- Added prompt-catalog validation to the acceptance suite.
+
+## 6.38-practical-route-coverage — 2026-08-03
+
+- Added Software Development & Automation as a primary route; web development
+  is now a focused subtype rather than a competing top-level category.
+- Added Administrative & Professional Operations for compliance, deadlines,
+  correspondence, dossiers, and professional case management.
+- Added Strategy & Advisory as a secondary workflow for mixed deliverables.
+- Added a Technical / Other fallback while keeping personal finance under its
+  project-specific workflow.
+- Extended doctor checks to flag placeholder and stale `PROJECT_STATE.md` files.
+
+## 6.37-education-policy-route — 2026-08-03
+
+- Added Educational Policy Development as a seventh primary work route for
+  university governance, education agencies, curriculum policy, standards, and
+  academic-competition governance.
+- Clarified routing by deliverable: policy/decision work uses the policy route;
+  studies and evidence synthesis use Research Activities.
+- Defined Research Activities as a secondary evidence workflow when supporting
+  an educational policy deliverable.
+
+## 6.36-work-type-router — 2026-08-03
+
+- Changed startup routing to six primary work types: Web Development, Research
+  Activities, Content Analysis, Data Analytics, Presentation, and Course
+  Material Development.
+- Added focused route prompts for web development, content analysis, data
+  analytics, and course material development.
+- Reclassified resume, onboarding, reviewer response, document production, and
+  package maintenance as secondary workflows rather than competing task types.
+
+## 6.35-fast-start-router — 2026-08-03
+
+- Added `STARTUP.md` as a three-file startup contract with task routing and
+  conditional context loading.
+- Added `scripts/run-once.py` to record successful project- or machine-scoped
+  checks with optional expiry; failed commands are not recorded.
+- Added read-only `scripts/apk_doctor.py` consistency checks.
+- Made installer-managed `AGENTS.md` blocks upgradeable and concise while
+  preserving user-authored content.
+- Stopped repeated installs from appending duplicate installation log entries.
+- Added repeatable fast-start acceptance tests.
+
 ## 6.34-readme-refresh — 2026-07-28
 
 - Refreshed `README.md` and `README.th.md` so the repository README content

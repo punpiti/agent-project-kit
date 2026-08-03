@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "workflows": {
+    "implementation":{"prompt":"prompts/03_CODEX_CODING_AGENT.md","instruction":"Use a spec-test-review implementation loop.","cadence":"per substantial code task"},
+    "reviewer-response":{"prompt":"prompts/04_PAPER_REVIEWER_RESPONSE.md","instruction":"Map concern to actual problem, change, location, and evidence.","cadence":"per review round"},
+    "external-feedback":{"prompt":"prompts/07_EXTERNAL_FEEDBACK.md","instruction":"Define hypothesis, source, method, and decision rule for real feedback.","cadence":"per feedback cycle"},
+    "resume":{"prompt":"prompts/08_PROJECT_RESUME.md","instruction":"Use current state first and read history only if insufficient.","cadence":"when state is insufficient"},
+    "document-production":{"prompt":"prompts/10_DOCUMENT_PRODUCTION.md","instruction":"Use Markdown-first production and verify final output before calling it final.","cadence":"per document deliverable"},
+    "web":{"prompt":"prompts/14_WEB_DEVELOPMENT.md","instruction":"Check user-visible behavior, responsive states, accessibility, and relevant web tests.","cadence":"per web task"},
+    "strategy":{"prompt":"prompts/21_STRATEGY_ADVISORY.md","instruction":"Compare status quo and credible options with explicit criteria and uncertainty.","cadence":"per decision task"},
+    "machine-discovery":{"prompt":"prompts/09_MACHINE_AWARE_CODEX.md","instruction":"Revalidate only missing, stale, changed, or task-required machine facts.","cadence":"once per machine or 30 days"}
+  },
+  "one_time": ["prompts/01_NEW_PROJECT_BOOTSTRAP.md","prompts/02_EXISTING_PROJECT_ONBOARDING.md","prompts/09_MACHINE_AWARE_CODEX.md","prompts/11_DOCUMENT_STYLE_BOOTSTRAP.md"]
+}

@@ -123,10 +123,13 @@ $items = @(
     "MIGRATION_FROM_OLD.md",
     "ENVIRONMENT_POLICY.md",
     "GLOBAL_START_PROMPT.md",
+    "STARTUP.md",
+    "SHARED_RUNTIME_EXPERIMENT.md",
     "bootstrap_ai_project.py",
     "prompts",
     "templates",
     "checklists",
+    "config",
     "scripts"
 )
 
@@ -164,6 +167,9 @@ Copy-TemplateIfMissing "MACHINE_COMPATIBILITY.md" "MACHINE_COMPATIBILITY.md"
 Copy-TemplateIfMissing "RUNBOOK.md" "RUNBOOK.md"
 Copy-TemplateIfMissing "TOKEN_BUDGET.md" "TOKEN_BUDGET.md"
 Copy-TemplateIfMissing "SESSION_LOG.md" "SESSION_LOG.md"
+Copy-TemplateIfMissing "project.json" "project.json"
+Copy-TemplateIfMissing "state.json" "state.json"
+Copy-TemplateIfMissing "local-resources.json" "local-resources.json"
 Copy-TemplateIfMissing "ENVIRONMENT_VARIABLES.md" "ENVIRONMENT_VARIABLES.md"
 
 $manifestPath = Join-Path $SourcePath "manifest.json"
@@ -263,18 +269,11 @@ $installInfo = @"
 - Machine detected: $machine
 - WSL2 detected: no / Windows PowerShell
 
-Read this project with:
+Minimal startup (read other files only when STARTUP.md triggers them):
 
 1. AGENTS.md
-2. .ai/agent-project-kit/START_HERE.md
-3. .ai/PROJECT_STATE.md
-4. .ai/PROJECT_HIERARCHY.md
-5. .ai/MACHINE_PROFILE.md
-6. .ai/LOCAL_RESOURCES.md
-7. .ai/MACHINE_COMPATIBILITY.md
-8. .ai/RUNBOOK.md
-9. .ai/TOKEN_BUDGET.md
-10. .ai/COMPUTING_ENVIRONMENT_VERSION.md
+2. .ai/PROJECT_STATE.md
+3. .ai/agent-project-kit/STARTUP.md
 "@
 Set-Content -Path $installInfoPath -Value $installInfo -Encoding UTF8
 
@@ -282,36 +281,16 @@ $projectAgents = Join-Path $project "AGENTS.md"
 $managedBlock = "<!-- BEGIN COMPUTING-ENVIRONMENT -->"
 $agentsBlock = @"
 <!-- BEGIN COMPUTING-ENVIRONMENT -->
-Before working on this project, read the project-local AI working rules:
+This project uses Agent Project Kit. On each request:
 
-If this project is the Agent Project Kit source repository itself, including the
-legacy `computing-environment` folder, use the root-level governance files as
-canonical and treat `.ai/agent-project-kit/` as a packaged downstream
-snapshot. Do not recurse into another Agent Project Kit / `computing-environment`
-layer unless explicitly requested.
+1. Read `.ai/PROJECT_STATE.md` and `.ai/agent-project-kit/STARTUP.md`.
+2. Classify the task and load only the routed prompt/state files.
+3. If the task is clear, proceed; ask one outcome question only when materially ambiguous.
 
-- `.ai/agent-project-kit/START_HERE.md`
-- `.ai/agent-project-kit/SPEC_EVAL_LOOP_INSTRUCTION.md`
-- `.ai/agent-project-kit/AGENTS.md`
-- `.ai/agent-project-kit/MACHINE_PROFILES.md`
-- `.ai/agent-project-kit/TOKEN_DISCIPLINE.md`
-
-Then read project state:
-
-- `.ai/PROJECT_STATE.md`
-- `.ai/PROJECT_HIERARCHY.md`
-- `.ai/MACHINE_PROFILE.md`
-- `.ai/LOCAL_RESOURCES.md`
-- `.ai/MACHINE_COMPATIBILITY.md`
-- `.ai/RUNBOOK.md`
-- `.ai/TOKEN_BUDGET.md`
-- `.ai/SESSION_LOG.md`
-- `.ai/COMPUTING_ENVIRONMENT_VERSION.md`
-
-Use Spec–Eval–Loop Workflow.
-Do not pretend L2 or L3 has been resolved by L1 alone.
-Record machine identity/storage assumptions in `.ai/MACHINE_PROFILE.md`.
-Do not pretend files outside the project/shared source tree exist on every machine.
+Do not scan the managed snapshot or rerun onboarding, machine discovery, update
+checks, or repository scans merely because a new session started. Follow the
+cadence and run-once guidance in STARTUP.md. Keep L1 execution distinct from L2
+human judgment and L3 external evidence.
 <!-- END COMPUTING-ENVIRONMENT -->
 "@
 
@@ -319,7 +298,11 @@ if (-not (Test-Path $projectAgents)) {
     Set-Content -Path $projectAgents -Value "# AGENTS.md`n`n$agentsBlock" -Encoding UTF8
 } else {
     $existing = Get-Content $projectAgents -Raw
-    if ($existing -notmatch [regex]::Escape($managedBlock)) {
+    if ($existing -match [regex]::Escape($managedBlock)) {
+        $pattern = "(?s)" + [regex]::Escape($managedBlock) + ".*?" + [regex]::Escape("<!-- END COMPUTING-ENVIRONMENT -->")
+        $updated = [regex]::Replace($existing, $pattern, $agentsBlock)
+        Set-Content -Path $projectAgents -Value $updated -Encoding UTF8
+    } else {
         Add-Content -Path $projectAgents -Value "`n$agentsBlock" -Encoding UTF8
     }
 }
@@ -337,15 +320,9 @@ Read these first:
 
 1. `AGENTS.md`
 2. `.ai/PROJECT_STATE.md`
-3. `.ai/PROJECT_HIERARCHY.md`
-4. `.ai/COMPUTING_ENVIRONMENT_VERSION.md`
-5. `.ai/MACHINE_PROFILE.md`
-6. `.ai/LOCAL_RESOURCES.md`
-7. `.ai/MACHINE_COMPATIBILITY.md`
-8. `.ai/RUNBOOK.md`
-9. `.ai/TOKEN_BUDGET.md`
+3. `.ai/agent-project-kit/STARTUP.md`
 
-Follow the Spec-Eval-Loop workflow in `AGENTS.md`.
+Classify the task, then load only the files routed by STARTUP.md.
 Do not overwrite project-local `.ai/` state when updating Agent Project Kit.
 <!-- END AGENT-PROJECT-KIT-ADAPTER -->
 "@
@@ -370,10 +347,11 @@ Update-AdapterFile "CLAUDE.md"
 Update-AdapterFile "ANTIGRAVITY.md"
 
 $sessionLog = Join-Path $aiDir "SESSION_LOG.md"
-if (Test-Path $sessionLog) {
+$installLogMarker = "Agent Project Kit installation first recorded"
+if ((Test-Path $sessionLog) -and -not (Select-String -Path $sessionLog -SimpleMatch $installLogMarker -Quiet)) {
     Add-Content -Path $sessionLog -Encoding UTF8 -Value @"
 
-## $(Get-Date -Format yyyy-MM-dd) — $machine — Agent Project Kit installed/updated
+## $(Get-Date -Format yyyy-MM-dd) — $machine — $installLogMarker
 - Objective: Install/update Agent Project Kit workflow files.
 - Mode: T0 Quick
 - Files touched: AGENTS.md, .ai/agent-project-kit/, .ai project templates if missing; existing user files with conflicting metadata/snapshot names are not overwritten

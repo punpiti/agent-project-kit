@@ -139,10 +139,13 @@ items=(
   MIGRATION_FROM_OLD.md
   ENVIRONMENT_POLICY.md
   GLOBAL_START_PROMPT.md
+  STARTUP.md
+  SHARED_RUNTIME_EXPERIMENT.md
   bootstrap_ai_project.py
   prompts
   templates
   checklists
+  config
   scripts
 )
 
@@ -203,6 +206,9 @@ create_from_template DOCUMENT_PIPELINE.md "$AI_DIR/DOCUMENT_PIPELINE.md"
 create_from_template DOCUMENT_STYLE.md "$AI_DIR/DOCUMENT_STYLE.md"
 create_from_template DOCUMENT_QA.md "$AI_DIR/DOCUMENT_QA.md"
 create_from_template MARKDOWN_INVENTORY.md "$AI_DIR/MARKDOWN_INVENTORY.md"
+create_from_template project.json "$AI_DIR/project.json"
+create_from_template state.json "$AI_DIR/state.json"
+create_from_template local-resources.json "$AI_DIR/local-resources.json"
 
 PREVIOUS_PACKAGE_VERSION=""
 PREVIOUS_MACHINE_PROFILE_SCHEMA_VERSION=""
@@ -269,123 +275,41 @@ cat > "$AI_DIR/INSTALLATION_INFO.md" <<EOF2
 - Machine detected: $MACHINE
 - WSL2 detected: $IS_WSL2
 
-Read this project with:
+Minimal startup (read other files only when STARTUP.md triggers them):
 
 1. AGENTS.md
-2. .ai/agent-project-kit/START_HERE.md
-3. .ai/PROJECT_STATE.md
-4. .ai/PROJECT_HIERARCHY.md
-5. .ai/MACHINE_PROFILE.md
-6. .ai/LOCAL_RESOURCES.md
-7. .ai/MACHINE_COMPATIBILITY.md
-8. .ai/RUNBOOK.md
-9. .ai/TOKEN_BUDGET.md
-10. .ai/COMPUTING_ENVIRONMENT_VERSION.md
+2. .ai/PROJECT_STATE.md
+3. .ai/agent-project-kit/STARTUP.md
 EOF2
 
 PROJECT_AGENTS="$PROJECT_PATH/AGENTS.md"
 MANAGED_BLOCK='<!-- BEGIN COMPUTING-ENVIRONMENT -->'
-if [ ! -f "$PROJECT_AGENTS" ]; then
-  cat > "$PROJECT_AGENTS" <<'EOF2'
-# AGENTS.md
-
-<!-- BEGIN COMPUTING-ENVIRONMENT -->
-Before working on this project, read the project-local AI working rules:
-
-If this project is the Agent Project Kit source repository itself, including the
-legacy `computing-environment` folder, use the root-level governance files as
-canonical and treat `.ai/agent-project-kit/` as the packaged downstream
-snapshot. Do not recurse into another Agent Project Kit / `computing-environment`
-layer unless explicitly requested.
-
-- `.ai/agent-project-kit/START_HERE.md`
-- `.ai/agent-project-kit/SPEC_EVAL_LOOP_INSTRUCTION.md`
-- `.ai/agent-project-kit/AGENTS.md`
-- `.ai/agent-project-kit/MACHINE_PROFILES.md`
-- `.ai/agent-project-kit/TOKEN_DISCIPLINE.md`
-- `.ai/agent-project-kit/DOCUMENT_PRODUCTION_POLICY.md`
-- `.ai/agent-project-kit/MARKDOWN_ORGANIZATION_POLICY.md`
-- `.ai/agent-project-kit/ENVIRONMENT_POLICY.md`
-
-Then read project state:
-
-- `.ai/PROJECT_STATE.md`
-- `.ai/PROJECT_HIERARCHY.md`
-- `.ai/MACHINE_PROFILE.md`
-- `.ai/LOCAL_RESOURCES.md`
-- `.ai/MACHINE_COMPATIBILITY.md`
-- `.ai/RUNBOOK.md`
-- `.ai/TOKEN_BUDGET.md`
-- `.ai/SESSION_LOG.md`
-- `.ai/DOCUMENT_PIPELINE.md`
-- `.ai/DOCUMENT_STYLE.md`
-- `.ai/DOCUMENT_QA.md`
-- `.ai/MARKDOWN_INVENTORY.md`
-- `.ai/COMPUTING_ENVIRONMENT_VERSION.md`
-
-Use Spec–Eval–Loop Workflow:
-
-- L1 = AI execution: code, test, debug, draft, analyze
-- L2 = human context: product direction, audience, UX, academic judgment, stakeholder risk
-- L3 = external feedback: users, reviewers, students, stakeholders, data, experiments
-
-Record machine identity/storage assumptions in `.ai/MACHINE_PROFILE.md`.
-
-For non-trivial tasks, respond with:
-
-1. Loop Diagnosis
-2. Working Spec
-3. Evals / Acceptance Criteria
-4. Execution
-5. Review Gate, including machine/local-resource and token notes when relevant
-
-Do not pretend L2 or L3 has been resolved by L1 alone.
-Do not pretend files outside the project/shared source tree exist on every machine.
-For document work, start with Markdown, use project style sheets, and run final PDF QA before calling a document final.
-Do not create loose Markdown scratch files; put AI working notes in `.ai/` and register document sources in `.ai/DOCUMENT_PIPELINE.md`.
-<!-- END COMPUTING-ENVIRONMENT -->
-EOF2
-else
-  if ! grep -q "$MANAGED_BLOCK" "$PROJECT_AGENTS"; then
-    cat >> "$PROJECT_AGENTS" <<'EOF2'
-
-<!-- BEGIN COMPUTING-ENVIRONMENT -->
-
-## Computing Environment Rules
-
-Self-hosting guard: if this project is the Agent Project Kit source repository
-itself, including the legacy `computing-environment` folder, use root-level
-governance files as canonical and treat `.ai/computing-environment/` as a
-legacy packaged downstream snapshot. New installs use `.ai/agent-project-kit/`.
-Do not recurse into another Agent Project Kit /
-`computing-environment` layer unless explicitly requested.
-
-Before working on this project, read:
-
-- `.ai/agent-project-kit/START_HERE.md`
-- `.ai/agent-project-kit/SPEC_EVAL_LOOP_INSTRUCTION.md`
-- `.ai/agent-project-kit/AGENTS.md`
-- `.ai/agent-project-kit/MACHINE_PROFILES.md`
-- `.ai/agent-project-kit/TOKEN_DISCIPLINE.md`
-- `.ai/agent-project-kit/DOCUMENT_PRODUCTION_POLICY.md`
-- `.ai/agent-project-kit/MARKDOWN_ORGANIZATION_POLICY.md`
-- `.ai/agent-project-kit/ENVIRONMENT_POLICY.md`
-- `.ai/agent-project-kit/MARKDOWN_ORGANIZATION_POLICY.md`
-- `.ai/PROJECT_STATE.md`
-- `.ai/PROJECT_HIERARCHY.md`
-- `.ai/MACHINE_PROFILE.md`
-- `.ai/LOCAL_RESOURCES.md`
-- `.ai/MACHINE_COMPATIBILITY.md`
-- `.ai/RUNBOOK.md`
-- `.ai/TOKEN_BUDGET.md`
-
-Use Spec–Eval–Loop Workflow, record machine identity/storage assumptions in `.ai/MACHINE_PROFILE.md`, record non-portable local resources, and keep AI Markdown in the `.ai/` pipeline.
-Do not pretend L2/L3 or non-portable resources are solved by L1 alone.
-
-<!-- END COMPUTING-ENVIRONMENT -->
-EOF2
-  fi
+MANAGED_END='<!-- END COMPUTING-ENVIRONMENT -->'
+if [ ! -f "$PROJECT_AGENTS" ]; then printf '# AGENTS.md\n' > "$PROJECT_AGENTS"; fi
+if grep -q "$MANAGED_BLOCK" "$PROJECT_AGENTS"; then
+  tmp_agents="$(mktemp)"
+  awk -v begin="$MANAGED_BLOCK" -v end="$MANAGED_END" '
+    $0 == begin { skip=1; next }
+    $0 == end { skip=0; next }
+    !skip { print }
+  ' "$PROJECT_AGENTS" > "$tmp_agents"
+  mv "$tmp_agents" "$PROJECT_AGENTS"
 fi
+cat >> "$PROJECT_AGENTS" <<'EOF2'
+
+<!-- BEGIN COMPUTING-ENVIRONMENT -->
+This project uses Agent Project Kit. On each request:
+
+1. Read `.ai/PROJECT_STATE.md` and `.ai/agent-project-kit/STARTUP.md`.
+2. Classify the task and load only the routed prompt/state files.
+3. If the task is clear, proceed; ask one outcome question only when materially ambiguous.
+
+Do not scan the managed snapshot or rerun onboarding, machine discovery, update
+checks, or repository scans merely because a new session started. Follow the
+cadence and `run-once.py` guidance in `STARTUP.md`. Keep L1 execution distinct
+from L2 human judgment and L3 external evidence.
+<!-- END COMPUTING-ENVIRONMENT -->
+EOF2
 
 create_adapter_file() {
   local target_file="$1"
@@ -429,10 +353,11 @@ EOF2
 create_adapter_file "$PROJECT_PATH/CLAUDE.md" "CLAUDE.md"
 create_adapter_file "$PROJECT_PATH/ANTIGRAVITY.md" "ANTIGRAVITY.md"
 
-if [ -f "$AI_DIR/SESSION_LOG.md" ]; then
+INSTALL_LOG_MARKER="Agent Project Kit installation first recorded"
+if [ -f "$AI_DIR/SESSION_LOG.md" ] && ! grep -q "$INSTALL_LOG_MARKER" "$AI_DIR/SESSION_LOG.md"; then
   cat >> "$AI_DIR/SESSION_LOG.md" <<EOF2
 
-## $(date +%F) — $MACHINE — Agent Project Kit installed/updated
+## $(date +%F) — $MACHINE — $INSTALL_LOG_MARKER
 - Objective: Install/update Agent Project Kit workflow files.
 - Mode: T0 Quick
 - Files touched: AGENTS.md, .ai/agent-project-kit/, .ai project templates if missing; existing user files with conflicting metadata/snapshot names are not overwritten
