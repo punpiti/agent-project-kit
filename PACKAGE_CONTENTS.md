@@ -62,6 +62,8 @@
 - `scripts/context.py`
 - `scripts/install-from-git.ps1`
 - `scripts/install-shared.py`
+- shared installs generate `PACKAGE_CHECKSUMS.json`; project bindings pin its
+  aggregate SHA-256 outside the shared runtime
 - `scripts/install-from-git.sh`
 - `scripts/install-to-project.ps1`
 - `scripts/install-to-project.sh`

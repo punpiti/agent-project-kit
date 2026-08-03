@@ -7,8 +7,11 @@ All notable changes to Agent Project Kit are summarized here.
 - Added an opt-in shared-runtime prototype with immutable side-by-side versions.
 - Added exact project binding through `.ai/apk.json` and explicit resolver errors
   for missing or mismatched versions.
+- Added a package file manifest and aggregate SHA-256 pinned in the project
+  binding; the resolver now rejects missing, added, or modified runtime files.
 - Kept the existing per-project snapshot installer as the unchanged default.
-- Added isolated tests for install, resolve, context execution, and missing-version failure.
+- Added isolated tests for install, resolve, context execution, missing-version
+  failure, content tampering, snapshot rollback, and root non-recursion.
 - Defined promotion gates and rollback as removing the binding while retaining
   the existing project snapshot.
 

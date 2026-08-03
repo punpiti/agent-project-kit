@@ -9,14 +9,14 @@ the default and must not be removed during the canary.
 - No `.ai/agent-project-kit/` snapshot is deleted.
 - Shared versions are immutable and installed side by side.
 - Projects pin an exact version in `.ai/apk.json`.
+- Projects pin the installed package content SHA-256 outside the shared runtime.
 - Missing/mismatched runtimes fail explicitly; they do not silently use another version.
 - Rollback is deleting `.ai/apk.json`; the existing snapshot path continues to work.
 
 ## Canary Commands
 
 ```bash
-python3 scripts/install-shared.py
-cp templates/apk.json /path/to/canary-project/.ai/apk.json
+python3 scripts/install-shared.py --bind-project /path/to/canary-project
 python3 scripts/apk.py --project /path/to/canary-project resolve
 python3 scripts/apk.py --project /path/to/canary-project context "<request>"
 ```
@@ -31,3 +31,4 @@ Do not change the default installer until all are true:
 4. Missing-runtime and wrong-version failures are understandable and safe.
 5. Rollback to the project snapshot is tested.
 6. Project-specific prompts remain project-local.
+7. Content tampering fails before shared code is invoked.

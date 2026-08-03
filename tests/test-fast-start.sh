@@ -27,6 +27,14 @@ test -f "$PROJECT/.ai/state.json"
 test -f "$PROJECT/.ai/local-resources.json"
 test -f "$PROJECT/.ai/agent-project-kit/config/routes.json"
 python3 "$SOURCE_PATH/tests/test-v7-context.py" >/dev/null
+python3 "$SOURCE_PATH/scripts/context.py" --project "$SOURCE_PATH" "resume package release" --output "$TEST_ROOT/root-context.json" || test "$?" -eq 2
+python3 - "$TEST_ROOT/root-context.json" "$SOURCE_PATH" <<'PY'
+import json,sys
+d=json.load(open(sys.argv[1]))
+assert all('/.ai/agent-project-kit/.ai/' not in source for source in d['sources'])
+assert all(source.startswith(sys.argv[2]+'/.ai/') for source in d['sources'])
+PY
+grep -q 'second project to recurse into' "$SOURCE_PATH/AGENTS.md"
 test "$(grep -c -- 'Package display name:' "$PROJECT/.ai/COMPUTING_ENVIRONMENT_VERSION.md")" -eq 1
 python3 "$SOURCE_PATH/scripts/run-once.py" --project "$PROJECT" --key fixture -- sh -c 'printf x >> counter' >/dev/null
 python3 "$SOURCE_PATH/scripts/run-once.py" --project "$PROJECT" --key fixture -- sh -c 'printf x >> counter' >/dev/null

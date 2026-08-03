@@ -80,6 +80,7 @@
     "private certificate/key material; see SECURITY_EXCLUSIONS.md"
   ],
   "release_notes": [
+    "Pinned an aggregate package SHA-256 in each shared-runtime project binding and added tamper rejection, real snapshot rollback, and root non-recursion acceptance tests.",
     "Added an opt-in, version-pinned shared-runtime canary with immutable side-by-side installs, explicit resolution failures, isolated tests, and no change to the default per-project snapshot installer.",
     "Completed a route audit across all 47 discovered OneDrive project-state markers: 27 configured projects were reviewed and 20 placeholders were intentionally excluded from routing.",
     "Hardened routing for seminars, course decks, IOI/POSN governance, research supervision, correspondence, nominations, academic-rank operations, and negative mentions of code/tests.",

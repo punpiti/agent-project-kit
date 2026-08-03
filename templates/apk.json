@@ -3,6 +3,7 @@
   "package": "agent-project-kit",
   "version": "7.1-shared-runtime-canary",
   "version_policy": "exact",
+  "content_sha256": "",
   "profile": "standard",
   "local_prompt_dirs": [".ai/prompts"]
 }
