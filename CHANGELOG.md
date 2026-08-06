@@ -2,7 +2,7 @@
 
 All notable changes to Agent Project Kit are summarized here.
 
-## 7.2.1-shared-runtime-v2-canary — 2026-08-06
+## 7.2.2-shared-runtime-v2-canary — 2026-08-06
 
 - Prepared shared-runtime binding schema v2 with separate synced package and
   machine-local homes through `APK_SHARED_ROOT` and `APK_MACHINE_HOME`.
@@ -13,6 +13,8 @@ All notable changes to Agent Project Kit are summarized here.
 - Canonicalized aggregate checksum ordering by relative path so one shared
   artifact verifies consistently from WSL/Linux and native Windows.
 - Documented Windows PowerShell recovery for WSL2/OneDrive long-path I/O errors.
+- Added opt-in, idempotent POSIX shell configuration for shared/machine roots
+  and launcher `PATH`, with existing rc content preserved.
 
 - Added `scripts/repair_thai_wordbreak_docx.py` as the standard post-build
   finalizer for AI-generated Thai DOCX files.

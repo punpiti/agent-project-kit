@@ -10,7 +10,7 @@ Codex, Claude Code, Antigravity, or similar agents have a clear place to start.
 It is intentionally small: your application code stays yours, project-local
 notes stay under `.ai/`, and the managed kit snapshot can be refreshed later.
 
-Current release: `7.2.1-shared-runtime-v2-canary`
+Current release: `7.2.2-shared-runtime-v2-canary`
 
 Use it when you want a project to keep simple notes about:
 
@@ -114,6 +114,96 @@ PowerShell 7 also works:
 ```powershell
 pwsh -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
 ```
+
+## Shared Runtime For Several WSL2 Projects (Canary)
+
+If several projects run under Ubuntu/WSL2, the generic versioned kit can be
+installed once under the OneDrive root. Project content and state remain in
+each project workspace; the machine-local launcher and configuration remain
+under the WSL home directory.
+
+Set paths for the current machine and project:
+
+```bash
+PROJECT="/home/<user>/OneDrive/path/to/project"
+KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
+APK_SHARED_ROOT="/home/<user>/OneDrive/.agent-project-kit"
+APK_MACHINE_HOME="$HOME/.local/share/agent-project-kit"
+```
+
+Install or update the shared immutable version first:
+
+```bash
+python3 "$KIT/scripts/install-shared.py" \
+  --source "$KIT" \
+  --shared-root "$APK_SHARED_ROOT" \
+  --machine-home "$APK_MACHINE_HOME" \
+  --configure-shell
+```
+
+`--configure-shell` writes one managed, idempotent block to `~/.bashrc` with
+`APK_SHARED_ROOT`, `APK_MACHINE_HOME`, and the launcher `PATH`. Start a new shell
+or run `source ~/.bashrc` afterward. Use `--shell-rc /path/to/rc` when Bash reads
+a different file. Later package updates do not need `--configure-shell` unless
+the paths change.
+
+For a new project, install its preserved fallback snapshot and create the
+project binding:
+
+```bash
+bash "$KIT/scripts/install-to-project.sh" "$PROJECT" "$KIT"
+python3 "$KIT/scripts/install-shared.py" \
+  --source "$KIT" \
+  --shared-root "$APK_SHARED_ROOT" \
+  --machine-home "$APK_MACHINE_HOME" \
+  --bind-project "$PROJECT"
+```
+
+Before upgrading an existing binding, keep a versioned backup:
+
+```bash
+cp -p "$PROJECT/.ai/apk.json" \
+  "$PROJECT/.ai/apk.json.before-7.2.1"
+bash "$KIT/scripts/install-to-project.sh" "$PROJECT" "$KIT"
+python3 "$KIT/scripts/install-shared.py" \
+  --source "$KIT" \
+  --shared-root "$APK_SHARED_ROOT" \
+  --machine-home "$APK_MACHINE_HOME" \
+  --bind-project "$PROJECT"
+```
+
+Verify resolution and one representative request:
+
+```bash
+APK_MACHINE_HOME="$APK_MACHINE_HOME" \
+  "$APK_MACHINE_HOME/bin/apk" --project "$PROJECT" resolve
+APK_MACHINE_HOME="$APK_MACHINE_HOME" \
+  "$APK_MACHINE_HOME/bin/apk" --project "$PROJECT" context \
+  "<a concrete request for this project>"
+```
+
+Rollback disables only the shared binding. The preserved project snapshot then
+remains available under `.ai/agent-project-kit/`:
+
+```bash
+APK_MACHINE_HOME="$APK_MACHINE_HOME" \
+  python3 "$KIT/scripts/apk.py" --project "$PROJECT" rollback
+```
+
+To restore the same binding after verification:
+
+```bash
+mv "$PROJECT/.ai/apk.json.disabled" "$PROJECT/.ai/apk.json"
+```
+
+Do not bulk-migrate projects until a small canary batch has passed normal use
+and rollback checks. Keep old shared versions and project snapshots during the
+canary period.
+
+If a Windows-backed OneDrive path becomes too long and WSL2 reports an I/O
+error, stop retrying the operation from Linux. Check that no process has the
+file open, then rename or move it from Windows PowerShell using the exact
+Windows path and `-LiteralPath`; reopen WSL2 and verify the result.
 
 ## What Gets Installed
 

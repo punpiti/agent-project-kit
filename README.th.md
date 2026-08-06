@@ -10,7 +10,7 @@ Claude Code, Antigravity หรือ agent อื่นรู้ว่าคว
 ตัว kit ตั้งใจให้เล็กและแยกชั้น: code ของโปรเจคยังเป็นของโปรเจค, note เฉพาะ
 โปรเจคอยู่ใต้ `.ai/`, ส่วน snapshot ของ kit refresh ทีหลังได้
 
-release ปัจจุบัน: `7.2.1-shared-runtime-v2-canary`
+release ปัจจุบัน: `7.2.2-shared-runtime-v2-canary`
 
 เหมาะกับโปรเจคที่คุณจะเปิดใช้กับ AI มากกว่าหนึ่งครั้ง หรืออยากให้คนในบ้านลอง
 clone แล้วเริ่มใช้ได้โดยไม่ต้องตั้งโครงสร้างเองทุกครั้ง
@@ -99,6 +99,94 @@ else
 fi
 bash "$KIT/scripts/install-to-project.sh" . "$KIT"
 ```
+
+## ใช้ shared runtime กับหลายโปรเจคบน WSL2 (Canary)
+
+ถ้าโปรเจคส่วนใหญ่รันด้วย Ubuntu/WSL2 สามารถติดตั้งส่วน generic และ versioned
+ของ kit ไว้ใต้ OneDrive root เพียงชุดเดียวได้ ส่วน content และ state เฉพาะ
+โปรเจคยังอยู่ใน workspace ของแต่ละโปรเจค ขณะที่ launcher/config เฉพาะเครื่อง
+อยู่ใต้ WSL home
+
+กำหนด path ของเครื่องและโปรเจคก่อน:
+
+```bash
+PROJECT="/home/<user>/OneDrive/path/to/project"
+KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
+APK_SHARED_ROOT="/home/<user>/OneDrive/.agent-project-kit"
+APK_MACHINE_HOME="$HOME/.local/share/agent-project-kit"
+```
+
+ติดตั้งหรืออัปเดต immutable shared version ก่อน:
+
+```bash
+python3 "$KIT/scripts/install-shared.py" \
+  --source "$KIT" \
+  --shared-root "$APK_SHARED_ROOT" \
+  --machine-home "$APK_MACHINE_HOME" \
+  --configure-shell
+```
+
+`--configure-shell` จะเขียน managed block หนึ่งชุดแบบ idempotent ลง `~/.bashrc`
+เพื่อกำหนด `APK_SHARED_ROOT`, `APK_MACHINE_HOME` และเพิ่ม launcher ใน `PATH`
+จากนั้นเปิด shell ใหม่หรือรัน `source ~/.bashrc` ถ้า Bash ของเครื่องอ่าน rc file
+อื่น ให้ระบุ `--shell-rc /path/to/rc` รอบอัปเดตครั้งต่อไปไม่ต้องใส่
+`--configure-shell` เว้นแต่ตำแหน่ง path เปลี่ยน
+
+สำหรับโปรเจคใหม่ ให้ติดตั้ง snapshot สำหรับ fallback แล้วสร้าง binding:
+
+```bash
+bash "$KIT/scripts/install-to-project.sh" "$PROJECT" "$KIT"
+python3 "$KIT/scripts/install-shared.py" \
+  --source "$KIT" \
+  --shared-root "$APK_SHARED_ROOT" \
+  --machine-home "$APK_MACHINE_HOME" \
+  --bind-project "$PROJECT"
+```
+
+ถ้าโปรเจคมี binding เดิม ให้สำรองแบบระบุ version ก่อนอัปเกรด:
+
+```bash
+cp -p "$PROJECT/.ai/apk.json" \
+  "$PROJECT/.ai/apk.json.before-7.2.1"
+bash "$KIT/scripts/install-to-project.sh" "$PROJECT" "$KIT"
+python3 "$KIT/scripts/install-shared.py" \
+  --source "$KIT" \
+  --shared-root "$APK_SHARED_ROOT" \
+  --machine-home "$APK_MACHINE_HOME" \
+  --bind-project "$PROJECT"
+```
+
+ตรวจ resolve และคำขอตัวอย่างที่ตรงกับงานของโปรเจค:
+
+```bash
+APK_MACHINE_HOME="$APK_MACHINE_HOME" \
+  "$APK_MACHINE_HOME/bin/apk" --project "$PROJECT" resolve
+APK_MACHINE_HOME="$APK_MACHINE_HOME" \
+  "$APK_MACHINE_HOME/bin/apk" --project "$PROJECT" context \
+  "<คำขอที่ชัดเจนและตรงกับโปรเจคนี้>"
+```
+
+ถ้าต้อง rollback คำสั่งนี้จะปิดเฉพาะ shared binding โดย snapshot ใต้
+`.ai/agent-project-kit/` ยังอยู่:
+
+```bash
+APK_MACHINE_HOME="$APK_MACHINE_HOME" \
+  python3 "$KIT/scripts/apk.py" --project "$PROJECT" rollback
+```
+
+ถ้าตรวจแล้วต้องการเปิด binding เดิมกลับ:
+
+```bash
+mv "$PROJECT/.ai/apk.json.disabled" "$PROJECT/.ai/apk.json"
+```
+
+อย่า migrate ทุกโปรเจคพร้อมกัน ให้เริ่มจาก canary batch เล็กและทดสอบ rollback
+ก่อน ช่วง canary ให้เก็บ shared version เก่าและ snapshot ของโปรเจคไว้
+
+ถ้า path หรือชื่อไฟล์ใน OneDrive ฝั่ง Windows ยาวเกินจน WSL2 รายงาน I/O error
+ให้หยุด retry จาก Linux ก่อน ตรวจว่าไม่มี process เปิดไฟล์อยู่ แล้วใช้ Windows
+PowerShell กับ Windows path ที่แน่นอนและ `-LiteralPath` เพื่อ rename หรือ move
+ไป path ที่สั้นกว่า จากนั้นกลับมาเปิด WSL2 และตรวจผลอีกครั้ง
 
 ## หลังติดตั้งแล้วจะได้อะไร
 

@@ -24,10 +24,20 @@ PY
 printf '# canonical source marker\n' > "$PROJECT/START_HERE.md"
 printf '# project-only state APK_PROJECT_SECRET_6f62d5\n' > "$PROJECT/.ai/PROJECT_STATE.md"
 printf '# project-only prompt APK_PROJECT_PROMPT_90c2af\n' > "$PROJECT/.ai/prompts/local.md"
+printf '# keep existing shell setup\nexport KEEP_ME=yes\n' > "$TEST_ROOT/bashrc"
 
 python3 "$SOURCE/scripts/install-shared.py" \
   --source "$SOURCE" --shared-root "$SHARED_ROOT" \
-  --machine-home "$MACHINE_ONE" --bind-project "$PROJECT" >/dev/null
+  --machine-home "$MACHINE_ONE" --bind-project "$PROJECT" \
+  --configure-shell --shell-rc "$TEST_ROOT/bashrc" >/dev/null
+python3 "$SOURCE/scripts/install-shared.py" \
+  --source "$SOURCE" --shared-root "$SHARED_ROOT" \
+  --machine-home "$MACHINE_ONE" \
+  --configure-shell --shell-rc "$TEST_ROOT/bashrc" >/dev/null
+test "$(grep -c '^# BEGIN AGENT PROJECT KIT SHARED RUNTIME$' "$TEST_ROOT/bashrc")" -eq 1
+test "$(grep -c '^# END AGENT PROJECT KIT SHARED RUNTIME$' "$TEST_ROOT/bashrc")" -eq 1
+grep -q '^export KEEP_ME=yes$' "$TEST_ROOT/bashrc"
+env -i PATH=/usr/bin:/bin bash -c ". '$TEST_ROOT/bashrc'; test \"\$APK_SHARED_ROOT\" = '$SHARED_ROOT'; test \"\$APK_MACHINE_HOME\" = '$MACHINE_ONE'; case :\$PATH: in *:'$MACHINE_ONE/bin':*) ;; *) exit 1;; esac"
 
 python3 - "$PROJECT/.ai/apk.json" <<'PY'
 import json,sys
@@ -62,7 +72,7 @@ APK_MACHINE_HOME="$MACHINE_ONE" python3 "$SOURCE/scripts/apk.py" \
 sed -i 's/"schema_version": 1/"schema_version": 2/' "$PROJECT/.ai/apk.json"
 
 # Normal resolution is read-only against an immutable installed version.
-RUNTIME="$SHARED_ROOT/versions/7.2.1-shared-runtime-v2-canary"
+RUNTIME="$SHARED_ROOT/versions/7.2.2-shared-runtime-v2-canary"
 chmod -R a-w "$RUNTIME"
 APK_MACHINE_HOME="$MACHINE_ONE" python3 "$SOURCE/scripts/apk.py" \
   --project "$PROJECT" resolve >/dev/null

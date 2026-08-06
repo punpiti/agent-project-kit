@@ -19,6 +19,7 @@ the default and must not be removed during the canary.
 python3 scripts/install-shared.py \
   --shared-root /path/to/synced/agent-project-kit \
   --machine-home /path/to/machine-local/agent-project-kit \
+  --configure-shell \
   --bind-project /path/to/canary-project
 python3 scripts/apk.py --project /path/to/canary-project resolve
 python3 scripts/apk.py --project /path/to/canary-project context "<request>"
