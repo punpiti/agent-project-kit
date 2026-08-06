@@ -16,10 +16,19 @@ the default and must not be removed during the canary.
 ## Canary Commands
 
 ```bash
-python3 scripts/install-shared.py --bind-project /path/to/canary-project
+python3 scripts/install-shared.py \
+  --shared-root /path/to/synced/agent-project-kit \
+  --machine-home /path/to/machine-local/agent-project-kit \
+  --bind-project /path/to/canary-project
 python3 scripts/apk.py --project /path/to/canary-project resolve
 python3 scripts/apk.py --project /path/to/canary-project context "<request>"
+python3 scripts/apk.py --project /path/to/canary-project rollback
 ```
+
+`APK_SHARED_ROOT` locates immutable generic package versions.
+`APK_MACHINE_HOME` locates the disposable launcher/config/cache area for the
+current machine. `APK_HOME` and `--home` remain compatibility aliases during the
+schema-v1 migration window.
 
 ## Promotion Gates
 

@@ -108,3 +108,4 @@
 - `templates/pandoc-thai-a4/thai-a4-header.tex`
 - `tests/test-fast-start.sh`
 - `tests/test-shared-runtime.sh`
+- `tests/test-shared-runtime-v2.sh`

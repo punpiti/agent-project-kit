@@ -2,7 +2,14 @@
 
 All notable changes to Agent Project Kit are summarized here.
 
-## Unreleased
+## 7.2-shared-runtime-v2-canary — 2026-08-06
+
+- Prepared shared-runtime binding schema v2 with separate synced package and
+  machine-local homes through `APK_SHARED_ROOT` and `APK_MACHINE_HOME`.
+- Kept `APK_HOME`/`--home` compatibility, added guarded project-binding
+  rollback, and retained schema-v1 resolution during migration.
+- Added temporary multi-machine, project-content leakage, read-only runtime,
+  self-host source-preservation, and rollback acceptance coverage.
 
 - Added `scripts/repair_thai_wordbreak_docx.py` as the standard post-build
   finalizer for AI-generated Thai DOCX files.

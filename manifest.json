@@ -8,8 +8,8 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "7.1-shared-runtime-canary",
-  "updated": "2026-08-03T00:00:00+07:00",
+  "version": "7.2-shared-runtime-v2-canary",
+  "updated": "2026-08-06T00:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
   "purpose": "Agent Project Kit: a portable starter kit that installs AI-agent instruction files and project-local .ai templates. New installs use .ai/agent-project-kit; computing-environment remains a legacy name/path for migration only.",
@@ -80,6 +80,9 @@
     "private certificate/key material; see SECURITY_EXCLUSIONS.md"
   ],
   "release_notes": [
+    "Separated the synced immutable package root from machine-local launcher and configuration state.",
+    "Added project binding schema v2, schema-v1 compatibility, guarded rollback, and multi-machine/self-host safety tests.",
+    "Added a Thai DOCX language finalizer with text-preserving Thai/Latin run metadata and downstream installation coverage.",
     "Added a persisted 14-day manifest-only update notice that reports availability without cloning or installing.",
     "Pinned an aggregate package SHA-256 in each shared-runtime project binding and added tamper rejection, real snapshot rollback, and root non-recursion acceptance tests.",
     "Added an opt-in, version-pinned shared-runtime canary with immutable side-by-side installs, explicit resolution failures, isolated tests, and no change to the default per-project snapshot installer.",
