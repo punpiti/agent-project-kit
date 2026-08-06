@@ -24,11 +24,17 @@ def content_manifest(root: Path) -> dict:
 def legacy_home() -> Path:
     return Path(os.environ.get("APK_HOME", Path.home()/".local/share/agent-project-kit"))
 
-def shared_root() -> Path:
-    return Path(os.environ.get("APK_SHARED_ROOT", legacy_home()))
-
 def machine_home() -> Path:
     return Path(os.environ.get("APK_MACHINE_HOME", legacy_home()))
+
+def shared_root(local_home: Path) -> Path:
+    if os.environ.get("APK_SHARED_ROOT"):
+        return Path(os.environ["APK_SHARED_ROOT"])
+    config_path=local_home/"config.json"
+    if config_path.exists():
+        config=json.loads(config_path.read_text(encoding="utf-8"))
+        if config.get("shared_root"): return Path(config["shared_root"])
+    return legacy_home()
 
 def configure_shell_rc(path: Path, package_root: Path, local_home: Path) -> None:
     block="\n".join((
@@ -60,8 +66,8 @@ def main() -> int:
     p=argparse.ArgumentParser(description=__doc__);p.add_argument("--source",default=str(Path(__file__).resolve().parent.parent));p.add_argument("--shared-root",type=Path);p.add_argument("--machine-home",type=Path);p.add_argument("--home",type=Path,help="deprecated compatibility option: use one directory for shared and machine state");p.add_argument("--version");p.add_argument("--force",action="store_true");p.add_argument("--bind-project",type=Path);p.add_argument("--configure-shell",action="store_true",help="write an idempotent managed block to a POSIX shell rc file");p.add_argument("--shell-rc",type=Path,help="shell rc file used with --configure-shell (default: ~/.bashrc)");a=p.parse_args()
     if a.home and (a.shared_root or a.machine_home): raise SystemExit("Use --home alone, or use --shared-root and --machine-home")
     if a.shell_rc and not a.configure_shell: raise SystemExit("--shell-rc requires --configure-shell")
-    package_root=(a.home or a.shared_root or shared_root()).resolve()
     local_home=(a.home or a.machine_home or machine_home()).resolve()
+    package_root=(a.home or a.shared_root or shared_root(local_home)).resolve()
     source=Path(a.source).resolve();manifest=json.loads((source/"manifest.json").read_text(encoding="utf-8"));version=a.version or manifest["version"]
     if version != manifest["version"]: raise SystemExit(f"Requested version {version} does not match source manifest {manifest['version']}")
     target=package_root/"versions"/version

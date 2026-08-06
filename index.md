@@ -15,7 +15,7 @@ user's work.
 ## Current Release
 
 - Package name: `agent-project-kit`
-- Current package version: `7.2.2-shared-runtime-v2-canary`
+- Current package version: `7.2.3-shared-runtime-v2-canary`
 - Installed snapshot path: `.ai/agent-project-kit/`
 - Source clone path for new installs: `.ai/agent-project-kit-source/`
 - Legacy path: `.ai/computing-environment/` is migration-only

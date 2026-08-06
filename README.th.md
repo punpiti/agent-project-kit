@@ -10,7 +10,7 @@ Claude Code, Antigravity หรือ agent อื่นรู้ว่าคว
 ตัว kit ตั้งใจให้เล็กและแยกชั้น: code ของโปรเจคยังเป็นของโปรเจค, note เฉพาะ
 โปรเจคอยู่ใต้ `.ai/`, ส่วน snapshot ของ kit refresh ทีหลังได้
 
-release ปัจจุบัน: `7.2.2-shared-runtime-v2-canary`
+release ปัจจุบัน: `7.2.3-shared-runtime-v2-canary`
 
 เหมาะกับโปรเจคที่คุณจะเปิดใช้กับ AI มากกว่าหนึ่งครั้ง หรืออยากให้คนในบ้านลอง
 clone แล้วเริ่มใช้ได้โดยไม่ต้องตั้งโครงสร้างเองทุกครั้ง
@@ -138,10 +138,13 @@ python3 "$KIT/scripts/install-shared.py" \
 bash "$KIT/scripts/install-to-project.sh" "$PROJECT" "$KIT"
 python3 "$KIT/scripts/install-shared.py" \
   --source "$KIT" \
-  --shared-root "$APK_SHARED_ROOT" \
-  --machine-home "$APK_MACHINE_HOME" \
   --bind-project "$PROJECT"
 ```
+
+หลังตั้งค่า shell ครั้งแรก รอบอัปเกรดปกติจะอ่าน `APK_SHARED_ROOT` และ
+`APK_MACHINE_HOME` เอง ถ้าเป็น non-interactive shell ที่ยังไม่ได้โหลด env
+installer จะ fallback ไปอ่าน shared root จาก `config.json` เฉพาะเครื่องที่
+สร้างไว้ตอนติดตั้งครั้งแรก
 
 ถ้าโปรเจคมี binding เดิม ให้สำรองแบบระบุ version ก่อนอัปเกรด:
 
@@ -151,8 +154,6 @@ cp -p "$PROJECT/.ai/apk.json" \
 bash "$KIT/scripts/install-to-project.sh" "$PROJECT" "$KIT"
 python3 "$KIT/scripts/install-shared.py" \
   --source "$KIT" \
-  --shared-root "$APK_SHARED_ROOT" \
-  --machine-home "$APK_MACHINE_HOME" \
   --bind-project "$PROJECT"
 ```
 

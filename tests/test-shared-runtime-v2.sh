@@ -34,6 +34,10 @@ python3 "$SOURCE/scripts/install-shared.py" \
   --source "$SOURCE" --shared-root "$SHARED_ROOT" \
   --machine-home "$MACHINE_ONE" \
   --configure-shell --shell-rc "$TEST_ROOT/bashrc" >/dev/null
+# Normal upgrades can omit the shared root; the installer reads machine config.
+env -u APK_SHARED_ROOT -u APK_HOME APK_MACHINE_HOME="$MACHINE_ONE" \
+  python3 "$SOURCE/scripts/install-shared.py" --source "$SOURCE" >/dev/null
+test -d "$SHARED_ROOT/versions/7.2.3-shared-runtime-v2-canary"
 test "$(grep -c '^# BEGIN AGENT PROJECT KIT SHARED RUNTIME$' "$TEST_ROOT/bashrc")" -eq 1
 test "$(grep -c '^# END AGENT PROJECT KIT SHARED RUNTIME$' "$TEST_ROOT/bashrc")" -eq 1
 grep -q '^export KEEP_ME=yes$' "$TEST_ROOT/bashrc"
@@ -72,7 +76,7 @@ APK_MACHINE_HOME="$MACHINE_ONE" python3 "$SOURCE/scripts/apk.py" \
 sed -i 's/"schema_version": 1/"schema_version": 2/' "$PROJECT/.ai/apk.json"
 
 # Normal resolution is read-only against an immutable installed version.
-RUNTIME="$SHARED_ROOT/versions/7.2.2-shared-runtime-v2-canary"
+RUNTIME="$SHARED_ROOT/versions/7.2.3-shared-runtime-v2-canary"
 chmod -R a-w "$RUNTIME"
 APK_MACHINE_HOME="$MACHINE_ONE" python3 "$SOURCE/scripts/apk.py" \
   --project "$PROJECT" resolve >/dev/null

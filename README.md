@@ -10,7 +10,7 @@ Codex, Claude Code, Antigravity, or similar agents have a clear place to start.
 It is intentionally small: your application code stays yours, project-local
 notes stay under `.ai/`, and the managed kit snapshot can be refreshed later.
 
-Current release: `7.2.2-shared-runtime-v2-canary`
+Current release: `7.2.3-shared-runtime-v2-canary`
 
 Use it when you want a project to keep simple notes about:
 
@@ -154,10 +154,13 @@ project binding:
 bash "$KIT/scripts/install-to-project.sh" "$PROJECT" "$KIT"
 python3 "$KIT/scripts/install-shared.py" \
   --source "$KIT" \
-  --shared-root "$APK_SHARED_ROOT" \
-  --machine-home "$APK_MACHINE_HOME" \
   --bind-project "$PROJECT"
 ```
+
+After the first shell setup, normal upgrades read `APK_SHARED_ROOT` and
+`APK_MACHINE_HOME` automatically. If a non-interactive shell has not loaded the
+environment, the installer falls back to the machine-local `config.json`
+written during first install.
 
 Before upgrading an existing binding, keep a versioned backup:
 
@@ -167,8 +170,6 @@ cp -p "$PROJECT/.ai/apk.json" \
 bash "$KIT/scripts/install-to-project.sh" "$PROJECT" "$KIT"
 python3 "$KIT/scripts/install-shared.py" \
   --source "$KIT" \
-  --shared-root "$APK_SHARED_ROOT" \
-  --machine-home "$APK_MACHINE_HOME" \
   --bind-project "$PROJECT"
 ```
 
