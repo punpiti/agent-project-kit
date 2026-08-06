@@ -10,6 +10,17 @@ MACHINE_ONE="$TEST_ROOT/machine-one"
 MACHINE_TWO="$TEST_ROOT/machine-two"
 PROJECT="$TEST_ROOT/self host project"
 mkdir -p "$PROJECT/.ai/prompts"
+
+python3 - "$SOURCE" <<'PY'
+import importlib.util,sys
+from pathlib import Path
+source=Path(sys.argv[1])
+for script in ("scripts/install-shared.py","scripts/apk.py"):
+    spec=importlib.util.spec_from_file_location("apk_digest",source/script)
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    assert module.aggregate_digest({"z":"2","A":"1"}) == module.aggregate_digest({"A":"1","z":"2"})
+PY
+
 printf '# canonical source marker\n' > "$PROJECT/START_HERE.md"
 printf '# project-only state APK_PROJECT_SECRET_6f62d5\n' > "$PROJECT/.ai/PROJECT_STATE.md"
 printf '# project-only prompt APK_PROJECT_PROMPT_90c2af\n' > "$PROJECT/.ai/prompts/local.md"
@@ -51,7 +62,7 @@ APK_MACHINE_HOME="$MACHINE_ONE" python3 "$SOURCE/scripts/apk.py" \
 sed -i 's/"schema_version": 1/"schema_version": 2/' "$PROJECT/.ai/apk.json"
 
 # Normal resolution is read-only against an immutable installed version.
-RUNTIME="$SHARED_ROOT/versions/7.2-shared-runtime-v2-canary"
+RUNTIME="$SHARED_ROOT/versions/7.2.1-shared-runtime-v2-canary"
 chmod -R a-w "$RUNTIME"
 APK_MACHINE_HOME="$MACHINE_ONE" python3 "$SOURCE/scripts/apk.py" \
   --project "$PROJECT" resolve >/dev/null

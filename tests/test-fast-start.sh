@@ -45,7 +45,7 @@ python3 "$SOURCE_PATH/scripts/run-once.py" --project "$PROJECT" --key fixture --
 test "$(wc -c < "$PROJECT/counter")" -eq 1
 if python3 "$SOURCE_PATH/scripts/run-once.py" --project "$PROJECT" --key failing -- false >/dev/null; then exit 1; fi
 ! grep -q 'project:failing' "$PROJECT/.ai/AGENT_PROJECT_KIT_STATE.json"
-printf '%s\n' '{"version":"7.2.0","updated":"2026-08-04T00:00:00+07:00"}' > "$TEST_ROOT/latest-manifest.json"
+printf '%s\n' '{"version":"7.3.0","updated":"2026-08-07T00:00:00+07:00"}' > "$TEST_ROOT/latest-manifest.json"
 notice_url="file://$TEST_ROOT/latest-manifest.json"
 notice_command=(python3 "$PROJECT/.ai/agent-project-kit/scripts/run-once.py" --project "$PROJECT" --key update-notice-test --ttl-days 14 --quiet-valid -- python3 "$PROJECT/.ai/agent-project-kit/scripts/check-update-notice.py" --project "$PROJECT" --manifest-url "$notice_url")
 "${notice_command[@]}" > "$TEST_ROOT/notice-first.txt"

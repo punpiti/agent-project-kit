@@ -316,6 +316,9 @@ version cleanup is a separate maintenance operation.
 - Native Windows and WSL2 acceptance tests pass.
 - Synced-folder conflict files cannot become active package versions.
 - The release can be reconstructed from Git and its published manifest.
+- If WSL2 cannot operate on a Windows-backed file because a path is too long or
+  returns an I/O error, recovery uses Windows PowerShell with an exact
+  `-LiteralPath`; Linux-side retries must not be treated as proof of corruption.
 
 ## 11. Required tests
 

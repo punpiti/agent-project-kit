@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "package": "agent-project-kit",
-  "version": "7.2-shared-runtime-v2-canary",
+  "version": "7.2.1-shared-runtime-v2-canary",
   "version_policy": "exact",
   "content_sha256": "",
   "profile": "standard",

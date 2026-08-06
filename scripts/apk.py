@@ -4,6 +4,10 @@ from __future__ import annotations
 import argparse,hashlib,json,os,subprocess,sys
 from pathlib import Path
 
+def aggregate_digest(files: dict) -> str:
+    payload="".join(f"{name}\0{files[name]}\n" for name in sorted(files))
+    return hashlib.sha256(payload.encode()).hexdigest()
+
 def binding(project: Path) -> dict:
     path=project/".ai/apk.json"
     if not path.exists(): raise SystemExit(f"No project binding: {path}")
@@ -33,7 +37,7 @@ def verify_content(runtime: Path, expected: str) -> None:
     checksums=json.loads(checksum_path.read_text(encoding="utf-8"));actual_files={}
     for path in sorted(p for p in runtime.rglob("*") if p.is_file() and p.name != checksum_path.name):
         name=path.relative_to(runtime).as_posix();actual_files[name]=hashlib.sha256(path.read_bytes()).hexdigest()
-    aggregate=hashlib.sha256("".join(f"{name}\0{digest}\n" for name,digest in actual_files.items()).encode()).hexdigest()
+    aggregate=aggregate_digest(actual_files)
     if actual_files != checksums.get("files") or aggregate != checksums.get("content_sha256") or aggregate != expected:
         raise SystemExit(f"Shared runtime content checksum mismatch: {runtime}")
 

@@ -144,6 +144,17 @@ When `.ai/agent-project-kit/` is updated in an existing project, read
 
 ## Path Policy
 
+### WSL2 long-path / OneDrive recovery note
+
+On a Windows-backed OneDrive workspace, WSL2 may report an I/O error when a
+path or filename becomes too long even though the file is still visible from
+Windows. Do not keep retrying rename/delete operations from the Linux side.
+First check that no process has the file open, then use Windows PowerShell with
+the Windows path and `-LiteralPath` to rename or move the item to a shorter
+path. Reopen WSL2 and verify the result afterward. Use the `\\?\` extended-path
+prefix only when the normal PowerShell path still fails and the target has been
+resolved exactly.
+
 Prefer this split:
 
 | Resource Type | Preferred Location | Portable? | Notes |

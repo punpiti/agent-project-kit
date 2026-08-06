@@ -7,12 +7,16 @@ from pathlib import Path
 INCLUDE=("config","prompts","scripts","checklists","templates","STARTUP.md","SHARED_RUNTIME_EXPERIMENT.md","manifest.json","PACKAGE_CONTENTS.md")
 CHECKSUM_FILE="PACKAGE_CHECKSUMS.json"
 
+def aggregate_digest(files: dict) -> str:
+    payload="".join(f"{name}\0{files[name]}\n" for name in sorted(files))
+    return hashlib.sha256(payload.encode()).hexdigest()
+
 def content_manifest(root: Path) -> dict:
     files={}
     for path in sorted(p for p in root.rglob("*") if p.is_file() and p.name != CHECKSUM_FILE):
         relative=path.relative_to(root).as_posix()
         files[relative]=hashlib.sha256(path.read_bytes()).hexdigest()
-    aggregate=hashlib.sha256("".join(f"{name}\0{digest}\n" for name,digest in files.items()).encode()).hexdigest()
+    aggregate=aggregate_digest(files)
     return {"algorithm":"sha256","content_sha256":aggregate,"files":files}
 
 def legacy_home() -> Path:

@@ -8,7 +8,7 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "7.2-shared-runtime-v2-canary",
+  "version": "7.2.1-shared-runtime-v2-canary",
   "updated": "2026-08-06T00:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
@@ -80,6 +80,7 @@
     "private certificate/key material; see SECURITY_EXCLUSIONS.md"
   ],
   "release_notes": [
+    "Canonicalized aggregate checksum ordering by relative path so the same shared artifact verifies on WSL/Linux and native Windows.",
     "Separated the synced immutable package root from machine-local launcher and configuration state.",
     "Added project binding schema v2, schema-v1 compatibility, guarded rollback, and multi-machine/self-host safety tests.",
     "Added a Thai DOCX language finalizer with text-preserving Thai/Latin run metadata and downstream installation coverage.",
