@@ -103,6 +103,44 @@ When creating a document:
 
 AI should not force repeated user prompting for these steps. It should propose and run a complete document loop when possible.
 
+## Mandatory Thai DOCX Language/Script Finalization
+
+AI-generated DOCX files containing Thai must not rely on visible fonts alone.
+Before delivery, runs and document defaults must contain language/script metadata
+that Word can use for Thai line breaking, font shaping, and spell checking:
+
+- Thai runs: a complex-script font (`w:rFonts/@w:cs`), complex-script hint and
+  run marker, and `th-TH` in `w:lang/@w:val`, `w:eastAsia`, and `w:bidi`.
+- Latin runs: `en-US` language metadata without forcing the run through the
+  Thai complex-script proofing path.
+- Mixed Thai/Latin runs: split into script-specific runs without changing any
+  character in the visible text.
+- Document styles/settings: consistent Latin, East Asian, and bidirectional
+  language defaults.
+- All Word text stories: document body, headers, footers, footnotes, endnotes,
+  and comments when present.
+
+After generating a Thai DOCX, run:
+
+```bash
+conda activate text
+python .ai/agent-project-kit/scripts/repair_thai_wordbreak_docx.py \
+  input.docx output.docx
+```
+
+The repair is a post-build gate, not a substitute for visual Word/PDF QA. Verify
+afterward that:
+
+- extracted text is identical before and after repair;
+- the DOCX ZIP structure is valid;
+- embedded images, hyperlinks, headers/footers, tables, and page geometry remain;
+- Thai line wrapping and spell checking behave correctly in Microsoft Word;
+- English terms use the English proofing language and are not checked with the
+  Thai dictionary.
+
+The script requires Python plus `lxml`; use a machine-local document environment
+such as `text`, not a project-local virtual environment inside synced storage.
+
 ## Final PDF QA
 
 Before calling a PDF final, check:

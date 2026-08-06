@@ -27,6 +27,9 @@ test -f "$PROJECT/.ai/state.json"
 test -f "$PROJECT/.ai/local-resources.json"
 test -f "$PROJECT/.ai/agent-project-kit/config/routes.json"
 test -f "$PROJECT/.ai/agent-project-kit/scripts/check-update-notice.py"
+test -f "$PROJECT/.ai/agent-project-kit/scripts/repair_thai_wordbreak_docx.py"
+grep -q 'Mandatory Thai DOCX gate' "$PROJECT/.ai/agent-project-kit/AGENTS.md"
+grep -q 'repair_thai_wordbreak_docx.py' "$PROJECT/.ai/agent-project-kit/prompts/10_DOCUMENT_PRODUCTION.md"
 python3 "$SOURCE_PATH/tests/test-v7-context.py" >/dev/null
 python3 "$SOURCE_PATH/scripts/context.py" --project "$SOURCE_PATH" "resume package release" --output "$TEST_ROOT/root-context.json" || test "$?" -eq 2
 python3 - "$TEST_ROOT/root-context.json" "$SOURCE_PATH" <<'PY'

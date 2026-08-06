@@ -215,6 +215,16 @@ For document-producing work, also read:
 
 Default document workflow: Markdown first, content critique/revision second, final PDF/build last. Formal Thai documents use TH Sarabun New for Thai text; public documents use modern minimal readable fonts. Paper output defaults to A4; screen output defaults to 16:9. Final PDFs must pass table, Thai word-break, spelling, hanging title, and hanging line checks before being called final.
 
+**Mandatory Thai DOCX gate:** Whenever an agent creates or materially rebuilds
+a DOCX containing Thai, it must run
+`scripts/repair_thai_wordbreak_docx.py` (or the installed
+`.ai/agent-project-kit/scripts/repair_thai_wordbreak_docx.py`) after generation.
+Do not call the DOCX ready merely because it opens. Verify unchanged visible
+text, valid ZIP structure, preserved images/hyperlinks, explicit `th-TH` markup
+on Thai runs and `en-US` on Latin runs, then sample Thai wrapping and bilingual
+spell checking in Microsoft Word when available. Record the repair command and
+QA result in `.ai/DOCUMENT_PIPELINE.md` or `.ai/DOCUMENT_QA.md`.
+
 
 
 

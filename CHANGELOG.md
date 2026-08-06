@@ -2,6 +2,24 @@
 
 All notable changes to Agent Project Kit are summarized here.
 
+## Unreleased
+
+- Added `scripts/repair_thai_wordbreak_docx.py` as the standard post-build
+  finalizer for AI-generated Thai DOCX files.
+- Documented explicit Thai complex-script and English proofing-language markup,
+  mixed-run splitting, text-preservation checks, and Word visual QA.
+- Applied repair across the document body, headers, footers, footnotes,
+  endnotes, and comments rather than only the main document story.
+- Corrected Thai runs to use `w:lang/@w:val="th-TH"` as well as Thai
+  East-Asian/bidirectional metadata; Latin segments use `en-US`. This fixes the
+  prior behavior where Word could still apply English space-only wrapping and
+  proofing rules to Thai text.
+- Added a mixed Thai/English regression test using a real clause-style sentence.
+- Made Thai DOCX repair an explicit Agent Project Kit instruction in `AGENTS.md`,
+  `START_HERE.md`, and the routed document-production prompt, including required
+  invariant checks and pipeline/QA recording.
+- Added downstream-install coverage so project snapshots receive the repair tool.
+
 ## 7.1-shared-runtime-canary — 2026-08-03
 
 - Added a persisted 14-day update notice that checks only the published

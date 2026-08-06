@@ -33,3 +33,12 @@ Use this for Markdown -> PDF/DOCX/HTML/document workflows.
 - [ ] Page numbers/header/footer consistent where used.
 - [ ] PDF opens correctly.
 - [ ] Final output path recorded in `.ai/DOCUMENT_PIPELINE.md`.
+
+## Editable Thai DOCX QA
+
+- [ ] Thai runs contain complex-script font/language metadata, not only a visible font name.
+- [ ] Latin runs use an English/Latin proofing language.
+- [ ] Mixed Thai/Latin runs were finalized with `scripts/repair_thai_wordbreak_docx.py`.
+- [ ] Extracted text is identical before and after repair.
+- [ ] Embedded images and hyperlinks are preserved.
+- [ ] Thai line wrapping and Thai/English spell checking were sampled in Microsoft Word.

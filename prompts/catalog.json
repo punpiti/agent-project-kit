@@ -17,7 +17,7 @@
     {"path":"07_EXTERNAL_FEEDBACK.md","type":"secondary","cadence":"per-feedback-cycle","trigger":"real users, learners, reviewers, stakeholders, or observations"},
     {"path":"08_PROJECT_RESUME.md","type":"secondary","cadence":"when-state-summary-is-needed","trigger":"resume/status request or insufficient current state"},
     {"path":"09_MACHINE_AWARE_CODEX.md","type":"one-time","cadence":"once-per-machine-or-30-days","trigger":"new/stale/changed machine or resource-dependent heavy work"},
-    {"path":"10_DOCUMENT_PRODUCTION.md","type":"secondary","cadence":"per-document-deliverable","trigger":"formal document, report, handout, or final PDF"},
+    {"path":"10_DOCUMENT_PRODUCTION.md","type":"secondary","cadence":"per-document-deliverable","trigger":"formal document, report, handout, DOCX, Word file, or final PDF"},
     {"path":"11_DOCUMENT_STYLE_BOOTSTRAP.md","type":"one-time","cadence":"once-per-document-project","trigger":"document-heavy project without style/pipeline state"},
     {"path":"12_MARKDOWN_CLEANUP.md","type":"secondary","cadence":"on-explicit-cleanup-request","trigger":"Markdown inventory, migration, or recovery"},
     {"path":"13_RESEARCH_PROJECT_PROMPTS.md","type":"primary","route":"research-activities","cadence":"per-task-select-one-mode","trigger":"research, evidence synthesis, literature, or research brief"},

@@ -70,6 +70,7 @@
 - `scripts/install-to-project.sh`
 - `scripts/organize-project-markdown.py`
 - `scripts/register_project_run.sh`
+- `scripts/repair_thai_wordbreak_docx.py`
 - `scripts/route_task.py`
 - `scripts/run-once.py`
 - `scripts/validate_prompt_catalog.py`
