@@ -1,0 +1,22 @@
+name: image
+channels:
+  - conda-forge
+dependencies:
+  - imageio
+  - ipython
+  - ipywidgets
+  - jupyterlab
+  - matplotlib
+  - numpy
+  - opencv
+  - pillow
+  - pip
+  - pytesseract
+  - python=3.11
+  - pywavelets
+  - scikit-image
+  - scipy
+  - tesseract
+  - tifffile
+  - tqdm
+

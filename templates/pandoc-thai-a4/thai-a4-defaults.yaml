@@ -5,9 +5,9 @@ variables:
   classoption:
     - 11pt
     - a4paper
-  mainfont: TH Sarabun New
-  sansfont: TH Sarabun New
-  monofont: TH Sarabun New
+  mainfont: Sarabun
+  sansfont: Sarabun
+  monofont: Sarabun
   geometry: margin=2cm
   fontsize: 11pt
   colorlinks: false

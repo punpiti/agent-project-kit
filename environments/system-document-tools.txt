@@ -1,0 +1,9 @@
+# Observed on madlab-i9 (WSL2), 2026-08-07.
+# These are OS-level requirements visible from `text`, not Conda packages.
+pandoc=3.1.11.1+ds-4
+latexmk=1:4.87~ds-1
+poppler-utils=25.03.0-10ubuntu0.2
+texlive-fonts-recommended=2024.20250309-1
+texlive-latex-base=2024.20250309-1
+texlive-latex-extra=2024.20250309-2
+texlive-xetex=2024.20250309-1

@@ -27,6 +27,43 @@ KNOWN_PROPER_NAMES = (
     "TPACK",
 )
 
+LEGACY_THAI_FONT_KEYS = {
+    "thsarabunpsk",
+    "thsarabun๙",
+    "thsarabunit๙",
+    "thsarabun9",
+    "thsarabunit9",
+}
+TARGET_THAI_FONT = "TH Sarabun New"
+
+
+def font_key(name):
+    """Normalize spacing/punctuation/case while preserving Thai or Latin digits."""
+    return "".join(character for character in name.casefold() if character.isalnum())
+
+
+def normalize_legacy_font_names(root):
+    """Replace legacy TH Sarabun font attributes anywhere in an XML tree."""
+    replacements = 0
+    for element in root.iter():
+        for attribute, value in list(element.attrib.items()):
+            if font_key(value) in LEGACY_THAI_FONT_KEYS:
+                element.set(attribute, TARGET_THAI_FONT)
+                replacements += 1
+    return replacements
+
+
+def repair_font_names(xml_bytes):
+    """Normalize legacy font names without rewriting XML when no match exists."""
+    root = etree.fromstring(xml_bytes)
+    replacements = normalize_legacy_font_names(root)
+    if not replacements:
+        return xml_bytes, 0
+    return (
+        etree.tostring(root, xml_declaration=True, encoding="UTF-8", standalone=True),
+        replacements,
+    )
+
 
 def contains_thai(text):
     return any("\u0e00" <= character <= "\u0e7f" for character in text)
@@ -76,6 +113,7 @@ def ensure_child(parent, name, before=None):
 
 def repair_document(xml_bytes):
     root = etree.fromstring(xml_bytes)
+    normalize_legacy_font_names(root)
     repaired_runs = 0
     split_runs = 0
     for run in list(root.xpath(".//w:r", namespaces=NS)):
@@ -175,6 +213,7 @@ def repair_document(xml_bytes):
 
 def repair_styles(xml_bytes):
     root = etree.fromstring(xml_bytes)
+    normalize_legacy_font_names(root)
     defaults = root.find(".//w:docDefaults/w:rPrDefault/w:rPr", namespaces=NS)
     if defaults is None:
         raise RuntimeError("styles.xml has no default run properties")
@@ -230,11 +269,23 @@ def main():
         repaired_payloads = {}
         repaired_runs = 0
         split_runs = 0
+        normalized_auxiliary_font_references = 0
         for name in story_parts:
             payload, part_repaired_runs, part_split_runs = repair_document(source.read(name))
             repaired_payloads[name] = payload
             repaired_runs += part_repaired_runs
             split_runs += part_split_runs
+        for name in source.namelist():
+            if (
+                name.startswith("word/")
+                and name.endswith(".xml")
+                and name not in story_parts
+                and name not in {"word/styles.xml", "word/settings.xml"}
+            ):
+                payload, replacements = repair_font_names(source.read(name))
+                if replacements:
+                    repaired_payloads[name] = payload
+                    normalized_auxiliary_font_references += replacements
         styles_xml = repair_styles(source.read("word/styles.xml"))
         settings_xml = repair_settings(
             source.read("word/settings.xml"),
@@ -255,6 +306,10 @@ def main():
     print(f"repaired_thai_runs={repaired_runs}")
     print(f"split_mixed_runs={split_runs}")
     print(f"repaired_story_parts={len(story_parts)}")
+    print(
+        "normalized_auxiliary_legacy_font_references="
+        f"{normalized_auxiliary_font_references}"
+    )
 
 
 if __name__ == "__main__":

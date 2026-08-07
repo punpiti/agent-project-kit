@@ -57,4 +57,38 @@ for run in latin_runs:
     assert language.get(MODULE.QN("bidi")) == "en-US"
     assert run.find("w:rPr/w:cs", namespaces=NS) is None
 
+LEGACY_FONT_XML = f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="{W}">
+  <w:body>
+    <w:p>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="TH SarabunPSK" w:hAnsi="THSarabunPSK"
+                    w:eastAsia="TH Sarabun ๙" w:cs="TH Sarabun IT๙"/>
+        </w:rPr>
+        <w:t>ข้อความทดสอบ</w:t>
+      </w:r>
+    </w:p>
+  </w:body>
+</w:document>
+""".encode()
+
+legacy_repaired, _, _ = MODULE.repair_document(LEGACY_FONT_XML)
+legacy_root = etree.fromstring(legacy_repaired)
+legacy_fonts = legacy_root.find(".//w:rFonts", namespaces=NS)
+assert legacy_fonts is not None
+for attribute in ("ascii", "hAnsi", "eastAsia", "cs"):
+    assert legacy_fonts.get(MODULE.QN(attribute)) == "TH Sarabun New"
+
+GENERIC_FONT_XML = f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:fonts xmlns:w="{W}">
+  <w:font w:name="th-sarabun-psk"><w:altName w:val="TH Sarabun 9"/></w:font>
+</w:fonts>
+""".encode()
+generic_repaired, generic_count = MODULE.repair_font_names(GENERIC_FONT_XML)
+generic_root = etree.fromstring(generic_repaired)
+assert generic_count == 2
+assert generic_root.find(".//w:font", namespaces=NS).get(MODULE.QN("name")) == "TH Sarabun New"
+assert generic_root.find(".//w:altName", namespaces=NS).get(MODULE.QN("val")) == "TH Sarabun New"
+
 print("thai DOCX language metadata regression: PASS")

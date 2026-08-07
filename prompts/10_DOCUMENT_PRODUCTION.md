@@ -19,6 +19,7 @@ Use this when creating formal documents, reports, public PDFs, teaching handouts
 
 กติกาเอกสาร:
 - ถ้าเป็นงานเอกสารทางการ: Thai text ใช้ TH Sarabun New; English ใช้ modern thin/light sans-serif หรือ fallback ที่ระบุ
+- ถ้า output เป็น Microsoft Word/DOCX ให้ใช้ TH Sarabun New; ถ้าเป็น LaTeX/XeLaTeX/LuaLaTeX ให้เน้น Google Fonts Sarabun และตรวจว่าฟอนต์/น้ำหนักที่ต้องใช้มีจริงก่อน build
 - ถ้าเป็นเอกสารเผยแพร่: ใช้ฟอนต์ทันสมัย minimal ตัวบาง อ่านง่าย
 - ใช้สีแบบ minimal แต่มีสีสรรค์พอควร
 - โปรเจคเดียวกันใช้ stylesheet/template เดียวกัน
@@ -26,16 +27,28 @@ Use this when creating formal documents, reports, public PDFs, teaching handouts
 - เอกสารสำหรับจอภาพใช้ 16:9
 
 Workflow:
+0. ถ้ามี PDF ที่จะใช้อ้างอิง ให้ใช้ PDF-to-text แกะเป็น text/Markdown และเก็บเป็น
+   cache ก่อนอ่านเชิงลึก; PDF แบบสองคอลัมน์ให้จัด reading order ใหม่เป็นหนึ่งคอลัมน์
+   ถ้าเป็น scanned PDF หรือไม่มี text layer ที่ใช้ได้ ให้แจ้งผู้ใช้และรอการตัดสินใจ
+   ก่อนทำ OCR พร้อมอธิบายว่า OCR อาจช้าและผลอาจไม่สมบูรณ์แม้ใช้ token ไม่มาก
+   เมื่อผู้ใช้อนุมัติให้ทำ OCR ให้ลอง Tesseract ก่อน และใช้ AI-based OCR เฉพาะเมื่อ
+   Tesseract ใช้ไม่ได้หรือผลไม่เพียงพอต่องาน โดยให้รัน OCR ผ่าน shared conda-family
+   env `image` และแจ้งเหตุผลที่ต้องเปลี่ยนวิธี
+   สำหรับ PDF ขนาดใหญ่ให้แกะเฉพาะหน้า/ส่วนที่จำเป็นเป็น partial cache ได้ โดยบันทึก
+   source, ขอบเขตหน้า/ส่วน, เครื่องมือ, cache path และ OCR status ให้ชัดเจน
 1. สร้าง/แก้ Markdown ก่อน
 2. critique content หนึ่งรอบก่อน layout
 3. อัปเดต Markdown จนพร้อม
 4. สร้าง PDF/output
 5. ถ้าสร้างหรือ rebuild DOCX ที่มีภาษาไทย ต้องรัน post-build gate เสมอ:
-   - `python .ai/agent-project-kit/scripts/repair_thai_wordbreak_docx.py input.docx repaired.docx`
+   - ลำดับบังคับ: ตรวจ TH Sarabun New -> สร้าง DOCX -> ซ่อมใน shared `text` env -> ตรวจ invariant/Word QA
+   - `micromamba run -n text python .ai/agent-project-kit/scripts/repair_thai_wordbreak_docx.py input.docx repaired.docx`
    - Thai runs ต้องเป็น `th-TH` ทั้ง primary/eastAsia/bidi language metadata
    - Latin runs ต้องเป็น `en-US`; run ผสมต้องแยก script โดยข้อความรวมไม่เปลี่ยน
    - ตรวจว่า extracted text เหมือนเดิม, ZIP เปิดได้, รูปและ hyperlink อยู่ครบ
+   - ถ้ามี TH Sarabun ๙, TH Sarabun IT๙ หรือ TH SarabunPSK ให้ normalize เป็น TH Sarabun New ทุกจุด
    - ห้ามเรียก DOCX ว่าพร้อมเพียงเพราะไฟล์เปิดได้
+   - ไฟล์ที่ส่งมอบต้องเป็น repaired output ไม่ใช่ไฟล์ intermediate ก่อนซ่อม
 6. ทำ final QA:
    - spell/typo
    - Thai word break

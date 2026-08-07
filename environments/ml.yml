@@ -1,0 +1,12 @@
+name: ml
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - matplotlib
+  - numpy
+  - pandas
+  - scikit-learn
+  - scipy
+

@@ -70,6 +70,58 @@ At the start of non-trivial coding/data sessions:
 10. Do not hardcode machine-specific paths in source code. Use environment variables or config.
 11. Record hierarchy declarations in `.ai/PROJECT_HIERARCHY.md`, machine identity/storage assumptions in `.ai/MACHINE_PROFILE.md`, and non-portable resources in `.ai/LOCAL_RESOURCES.md`.
 
+### Conda-Family Environment Routing
+
+Use shared Conda-family environments. Choose the first available manager in
+this order: `micromamba`, `mamba`, `microconda`, then `conda`. The three primary
+environments are:
+
+- `text`: document processing and document generation, including PDF-to-text,
+  LaTeX, Pandoc, Markdown, PDF, DOCX, HTML, and related text workflows.
+- `image`: OpenCV, image processing, video processing, Tesseract, and other OCR
+  workflows.
+- `ml`: machine-learning training, inference, evaluation, and model tooling.
+
+For Thai document work in `text`, verify the required fonts before building.
+Use `TH Sarabun New` for Microsoft Word/DOCX output. For LaTeX, especially
+XeLaTeX or LuaLaTeX, prefer the Google Fonts `Sarabun` family. Treat fonts as
+machine-level requirements and download them only when the current task needs
+them, subject to the metered-network warning and approval rule below.
+Use `scripts/install-thai-fonts.py` when installation is needed; it must not
+download until the user has reviewed network cost and enabled the download flag.
+
+Do not install CUDA, GPU-specific frameworks, or GPU runtime packages until the
+target machine has been verified to have a usable compatible GPU and driver. If
+GPU availability or compatibility is uncertain, use the non-CUDA `ml` baseline.
+
+Use the narrowest matching environment. For reproducible non-interactive
+commands, use the available manager's `run -n <environment> <command>` form.
+Do not create `venv`, `.venv`, or another per-project copy of these environments;
+duplicating dependencies wastes disk space. If a required shared environment or
+dependency is missing, report it as a local-resource gap rather than silently
+creating a project-local environment or substituting another one.
+
+Use the undated manifests under `environments/` as the common defaults. Treat
+dated `*-observed-YYYYMMDD.yml` files as audit evidence only; do not install
+them by default or promote their task-specific/transitive packages without
+review.
+
+Install or update an environment only when the current task actually needs it.
+Before any environment solve, create, update, or large package installation,
+warn the user that downloads may be substantial, especially for ML/CUDA,
+OpenCV/video, OCR, LaTeX, and document toolchains. If the connection may be
+metered, state the expected download size when it can be estimated and wait for
+the user's approval before downloading. Prefer an already-installed environment
+or a lightweight smoke path when that can complete the task safely.
+
+During first installation, check for the Conda-family manager in the stated
+priority order and record the result. Defer a missing manager when it can be
+installed user-locally without root/admin access. Any declared prerequisite
+that genuinely requires root/admin privileges belongs in the explicit
+first-install bootstrap: disclose the package, reason, privilege requirement,
+and likely download cost, then obtain approval before installation. Never invoke
+privilege escalation silently during later task execution.
+
 ---
 
 ## Required Workflow for Non-Trivial Tasks
@@ -145,6 +197,25 @@ When editing academic, proposal, policy, or technical documents:
 - Reviewer responses should answer the real concern, not only sound polite.
 - For important revisions, create a mapping from concern to change to evidence.
 
+### PDF Reference Ingestion
+
+- Whenever a PDF will be used as a reference, run a PDF-to-text extraction first
+  and keep the extracted text or Markdown as a reusable cache for later sessions.
+- For two-column PDFs, normalize the extracted content into a single-column
+  reading order so that headings, paragraphs, footnotes, and references remain
+  convenient to search and reuse.
+- If the PDF is scanned or has no usable text layer, tell the user before doing
+  OCR and let the user decide how to proceed. Explain that OCR may be worthwhile
+  for an important source, but it is often slow and may produce incomplete or
+  inaccurate text even when token cost is low.
+- After the user approves OCR, try Tesseract first. Use AI-based OCR only as a
+  fallback when Tesseract is unavailable or its output is inadequate for the
+  task, and tell the user why escalation is needed.
+- For large PDFs, extraction may be incremental: convert only the pages or
+  sections needed for the current task and retain them as a clearly identified
+  partial cache. Record the source PDF, extracted page range or section, tool,
+  and cache path so later work can extend rather than repeat the extraction.
+
 ---
 
 ## Slides / Teaching Rules
@@ -219,11 +290,18 @@ Default document workflow: Markdown first, content critique/revision second, fin
 a DOCX containing Thai, it must run
 `scripts/repair_thai_wordbreak_docx.py` (or the installed
 `.ai/agent-project-kit/scripts/repair_thai_wordbreak_docx.py`) after generation.
+The required order is: verify `TH Sarabun New`, generate the Word/DOCX file, run
+the repair script through the shared `text` environment, then perform invariant
+and Microsoft Word QA. Never deliver the un-repaired generated file as ready.
+When repairing an existing DOCX, normalize all `TH Sarabun ๙`, `TH Sarabun IT๙`,
+and `TH SarabunPSK` font references to `TH Sarabun New` throughout the package.
 Do not call the DOCX ready merely because it opens. Verify unchanged visible
 text, valid ZIP structure, preserved images/hyperlinks, explicit `th-TH` markup
 on Thai runs and `en-US` on Latin runs, then sample Thai wrapping and bilingual
 spell checking in Microsoft Word when available. Record the repair command and
 QA result in `.ai/DOCUMENT_PIPELINE.md` or `.ai/DOCUMENT_QA.md`.
+
+
 
 
 

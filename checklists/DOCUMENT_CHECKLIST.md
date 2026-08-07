@@ -11,12 +11,23 @@ Use this for Markdown -> PDF/DOCX/HTML/document workflows.
 - [ ] Claims are supported by evidence or marked as judgment/assumption.
 - [ ] The document has been critiqued once before final formatting.
 
+## PDF References
+
+- [ ] Reference PDFs were converted to reusable text/Markdown before in-depth reading.
+- [ ] Two-column sources were normalized to a single-column reading order.
+- [ ] Scanned PDFs were disclosed to the user and OCR was not run without their decision.
+- [ ] Approved OCR used Tesseract first; any AI-based OCR fallback records why Tesseract was inadequate.
+- [ ] Large-PDF partial caches identify the extracted pages/sections and do not claim full coverage.
+- [ ] Source PDF, extraction tool, cache path, page/section scope, and OCR status were recorded.
+
 ## Style
 
 - [ ] Project has one shared style sheet/template.
 - [ ] Paper target uses A4.
 - [ ] Screen target uses 16:9.
 - [ ] Formal Thai documents use TH Sarabun New for Thai text.
+- [ ] Word/DOCX uses TH Sarabun New; LaTeX uses Google Fonts Sarabun unless an approved style specifies otherwise.
+- [ ] Required font family and weights are installed and verified on the build machine.
 - [ ] English text uses a modern thin/light sans-serif or documented fallback.
 - [ ] Public documents use a modern minimal readable font set.
 - [ ] Color palette is minimal and consistent.
@@ -36,6 +47,9 @@ Use this for Markdown -> PDF/DOCX/HTML/document workflows.
 
 ## Editable Thai DOCX QA
 
+- [ ] TH Sarabun New was available before generating the Word/DOCX file.
+- [ ] The delivered file is the post-repair output, not the original generated intermediate.
+- [ ] TH Sarabun ๙ / TH Sarabun IT๙ / TH SarabunPSK references were normalized to TH Sarabun New.
 - [ ] Thai runs contain complex-script font/language metadata, not only a visible font name.
 - [ ] Latin runs use an English/Latin proofing language.
 - [ ] Mixed Thai/Latin runs were finalized with `scripts/repair_thai_wordbreak_docx.py`.

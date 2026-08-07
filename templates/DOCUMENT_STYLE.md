@@ -19,7 +19,9 @@ Use one style profile per project unless a clear variant is needed.
 
 ### Thai
 
-- Formal Thai: TH Sarabun New
+- Formal Thai: select by output toolchain below
+- Microsoft Word / DOCX: TH Sarabun New
+- LaTeX / XeLaTeX / LuaLaTeX: Google Fonts Sarabun
 - Public/minimal Thai option:
 
 ### English

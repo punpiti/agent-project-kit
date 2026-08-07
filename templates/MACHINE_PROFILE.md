@@ -49,6 +49,7 @@ pwd
 - GPU/accelerator:
 - Required local resources checked:
 - Missing local resources:
+- Network metering / large-download constraint:
 - Recommended task level:
 
 ## First-Use Discovery Commands
@@ -66,7 +67,8 @@ test -r /proc/version && grep -iE 'microsoft|wsl' /proc/version || true
 df -h . /
 command -v python3 || command -v python || true
 python3 --version 2>/dev/null || python --version 2>/dev/null || true
-command -v conda || command -v micromamba || true
+command -v micromamba || command -v mamba || command -v microconda || command -v conda || true
+micromamba env list 2>/dev/null || mamba env list 2>/dev/null || microconda env list 2>/dev/null || conda env list 2>/dev/null || true
 command -v node || true
 command -v pwsh || command -v powershell || true
 command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi || true
@@ -80,6 +82,7 @@ $env:COMPUTERNAME
 Get-Location
 Get-PSDrive -PSProvider FileSystem
 Get-Command python, py, pwsh, powershell, node -ErrorAction SilentlyContinue
+Get-Command micromamba, mamba, microconda, conda -ErrorAction SilentlyContinue
 ```
 
 ### macOS-specific checks

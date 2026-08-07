@@ -9,6 +9,15 @@
 - `config/policies.json`
 - `CLAUDE.md`
 - `DOCUMENT_PRODUCTION_POLICY.md`
+- `environments/README.md`
+- `environments/text.yml`
+- `environments/image.yml`
+- `environments/image-observed-20260807.yml`
+- `environments/ml.yml`
+- `environments/ml-cuda118.yml`
+- `environments/text-observed-20260807.yml`
+- `environments/system-document-tools.txt`
+- `environments/font-requirements.md`
 - `ENVIRONMENT_POLICY.md`
 - `GLOBAL_START_PROMPT.md`
 - `GIT_DISTRIBUTION.md`
@@ -62,6 +71,7 @@
 - `scripts/context.py`
 - `scripts/install-from-git.ps1`
 - `scripts/install-shared.py`
+- `scripts/install-thai-fonts.py`
 - `scripts/check-update-notice.py`
 - shared installs generate `PACKAGE_CHECKSUMS.json`; project bindings pin its
   aggregate SHA-256 outside the shared runtime

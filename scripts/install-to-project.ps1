@@ -43,7 +43,19 @@ $SourcePath = Find-SourcePath $SourcePath
 $project = (Resolve-Path $ProjectPath).Path
 $aiDir = Join-Path $project ".ai"
 $target = Join-Path $aiDir "agent-project-kit"
+$firstInstall = if (Test-Path $target) { "no" } else { "yes" }
 $machine = if ($env:COMPUTERNAME) { $env:COMPUTERNAME.ToLower() } else { "unknown" }
+$environmentManager = "none (deferred; install user-local micromamba only when an environment is needed)"
+foreach ($managerName in @("micromamba", "mamba", "microconda", "conda")) {
+    $managerCommand = Get-Command $managerName -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($managerCommand) {
+        $environmentManager = "$managerName ($($managerCommand.Source))"
+        break
+    }
+}
+if ($firstInstall -eq "yes") {
+    Write-Host "Environment-manager preflight: $environmentManager"
+}
 New-Item -ItemType Directory -Force -Path $aiDir | Out-Null
 
 if ((Resolve-Path $SourcePath).Path -eq (Resolve-Path -LiteralPath $target -ErrorAction SilentlyContinue).Path) {
@@ -130,6 +142,7 @@ $items = @(
     "templates",
     "checklists",
     "config",
+    "environments",
     "scripts"
 )
 
@@ -232,6 +245,8 @@ $versionInfo = @"
 - Installer: install-to-project.ps1
 - Machine: $machine
 - WSL2 detected: no / Windows PowerShell
+- First install: $firstInstall
+- Conda-family manager: $environmentManager
 
 ## Update Rule
 
@@ -268,6 +283,8 @@ $installInfo = @"
 - Agent Project Kit source: $SourcePath
 - Machine detected: $machine
 - WSL2 detected: no / Windows PowerShell
+- First install: $firstInstall
+- Conda-family manager: $environmentManager
 
 Minimal startup (read other files only when STARTUP.md triggers them):
 

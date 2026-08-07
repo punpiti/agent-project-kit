@@ -76,7 +76,7 @@ Record the result in `.ai/MACHINE_PROFILE.md`:
 - project path style: `C:\...`, `/mnt/c/...`, `/Users/...`, `/home/...`, or other
 - sync/storage assumption: local disk, shared/synced project storage, iCloud, Dropbox, network drive,
   external drive, remote server, unknown
-- available interpreters/package managers: Python, conda/mamba, Node,
+- available interpreters/package managers: Python, micromamba/mamba/microconda/conda, Node,
   PowerShell, shell
 - GPU/accelerator summary when relevant
 - parallel execution readiness: CPU core count, usable GPU/accelerator,
@@ -97,6 +97,7 @@ command -v lscpu >/dev/null 2>&1 && lscpu | sed -n '1,20p' || true
 free -h 2>/dev/null || true
 df -h . /
 command -v python3 || command -v python || true
+command -v micromamba || command -v mamba || command -v microconda || command -v conda || true
 command -v pwsh || command -v powershell || true
 command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi || true
 ```
@@ -165,6 +166,36 @@ Prefer this split:
 | Large datasets / model checkpoints / generated caches | Machine-local or external storage | No | Must be recorded in `.ai/LOCAL_RESOURCES.md` |
 | Final figures/reports | Project folder if deliverable | Usually | Keep reproducible sources |
 | Secrets / credentials | Secret manager or ignored env files | No | Never commit real secrets |
+
+## Conda-Family Environment Policy
+
+Use the first available manager in this order: `micromamba`, `mamba`,
+`microconda`, then `conda`. Use it to access shared machine-local environments
+and route work to the smallest suitable environment:
+
+| Environment | Intended work |
+|---|---|
+| `text` | Document processing/generation, PDF-to-text, LaTeX, Pandoc, Markdown, PDF, DOCX, HTML, and text utilities |
+| `image` | OpenCV, image and video processing, Tesseract, and OCR |
+| `ml` | Machine-learning training, inference, evaluation, and model tooling |
+
+CUDA and other GPU-specific packages are opt-in. Before installing them, verify
+the target GPU, driver status, platform, and framework/CUDA compatibility. If
+that evidence is missing or inconclusive, use the non-CUDA `ml` baseline and do
+not install GPU runtime packages.
+
+Prefer `<available-manager> run -n <environment> <command>` in scripts and
+agent-run commands. Do not create `venv`, `.venv`, or equivalent per-project
+environment copies because they duplicate dependencies and consume unnecessary
+disk space. Record missing shared environments or task-critical packages in
+`.ai/LOCAL_RESOURCES.md`; do not treat their absence on one machine as a broken
+project.
+
+Environment installation is demand-driven, not part of routine startup. Create
+or update an environment only when the current task requires it. Warn the user
+before potentially large downloads and identify metered-network risk. When the
+connection may be metered, estimate download size if practical and obtain user
+approval before downloading packages.
 
 ## Environment Variable Convention
 

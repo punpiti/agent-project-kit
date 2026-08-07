@@ -25,10 +25,11 @@ make pdf
 
 ## Build Dependencies
 
-- Markdown/Pandoc/Quarto/LaTeX/WeasyPrint/etc.:
-- Python environment:
+- Document toolchain in `text` (Markdown/Pandoc/Quarto/LaTeX/WeasyPrint/etc.):
+- Shared Conda-family environment (`text`, `image`, or `ml`) and selected manager:
 - Node environment:
 - Fonts required:
+- Thai font route: Word/DOCX = TH Sarabun New; LaTeX = Google Fonts Sarabun
 
 ## Local / Non-shared/synced project storage Build Resources
 
@@ -37,6 +38,12 @@ Record large temporary files, caches, OCR images, exported figures, or external 
 | Resource | Machine | Path | Required for full build? | Portable alternative | Notes |
 |---|---|---|---|---|---|
 |  | known machine roles |  | yes/no |  |  |
+
+## PDF Reference Extraction Cache
+
+| Source PDF | Tool | Cache path | Pages/sections extracted | Layout normalization | OCR status / fallback reason | Notes |
+|---|---|---|---|---|---|---|
+|  | PDF-to-text / Tesseract / AI OCR |  | full / explicit partial scope | single-column / not needed | not needed / Tesseract result / AI fallback reason |  |
 
 ## Final QA Status
 

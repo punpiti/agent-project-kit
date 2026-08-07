@@ -36,13 +36,23 @@ docs/build/* or output/*
 
 ### Formal Thai documents
 
-For official/formal Thai documents:
+For official/formal Thai documents, apply the toolchain-specific routing below:
 
-- Thai body text: `TH Sarabun New`.
-- Thai headings: `TH Sarabun New`, using hierarchy by size/weight, not excessive decoration.
+- Word/DOCX Thai body and headings: `TH Sarabun New`, using hierarchy by
+  size/weight rather than excessive decoration.
+- LaTeX Thai body and headings: prefer Google Fonts `Sarabun`.
 - English text: modern thin/light sans-serif where available.
 - Avoid mixing many fonts.
 - If the exact English font is unavailable, use a documented fallback.
+
+Toolchain-specific Thai font routing:
+
+- Microsoft Word / DOCX: use `TH Sarabun New`.
+- LaTeX, particularly XeLaTeX or LuaLaTeX: prefer Google Fonts `Sarabun`.
+- Verify the selected family and required weights before building. Font
+  substitution can change Thai wrapping, pagination, and table layout.
+- If a required font is missing, download/install it only when the task needs
+  that output and follow the metered-network warning and approval policy.
 
 Suggested English fallback family, in order:
 
@@ -103,6 +113,32 @@ When creating a document:
 
 AI should not force repeated user prompting for these steps. It should propose and run a complete document loop when possible.
 
+## PDF Reference Ingestion and Cache
+
+When a PDF is used as a reference rather than merely checked as a final output:
+
+1. Use a PDF-to-text tool before reading it in depth, and retain the extracted
+   text or Markdown as a reusable cache for later sessions.
+2. If the source uses two columns, reconstruct it into a single-column reading
+   order. Preserve page markers and enough structure to trace passages back to
+   the source.
+3. If the PDF is scanned or lacks a usable text layer, notify the user and ask
+   them to decide before running OCR. State that OCR can be appropriate for an
+   important source, but may be slow and may return incomplete or inaccurate
+   text even though its token cost is usually modest.
+4. Once the user approves OCR, use Tesseract as the first OCR attempt. Escalate
+   to AI-based OCR only if Tesseract is unavailable or its output is inadequate
+   for the task, and record the reason for that escalation. Run Tesseract and
+   other OCR/image-processing tools through the shared Conda-family `image`
+   environment.
+5. For a large PDF, extract only the pages or sections needed for the current
+   task when practical. Treat this as a partial cache that can be extended later
+   instead of reprocessing the whole file.
+6. Record the source PDF, extraction tool, extracted page range or section,
+   cache path, and whether OCR was used in `.ai/DOCUMENT_PIPELINE.md` or
+   `.ai/LOCAL_RESOURCES.md`. Do not imply that a partial cache covers the full
+   document.
+
 ## Mandatory Thai DOCX Language/Script Finalization
 
 AI-generated DOCX files containing Thai must not rely on visible fonts alone.
@@ -123,10 +159,17 @@ that Word can use for Thai line breaking, font shaping, and spell checking:
 After generating a Thai DOCX, run:
 
 ```bash
-conda activate text
-python .ai/agent-project-kit/scripts/repair_thai_wordbreak_docx.py \
+micromamba run -n text python \
+  .ai/agent-project-kit/scripts/repair_thai_wordbreak_docx.py \
   input.docx output.docx
 ```
+
+This step is mandatory for every newly generated or materially rebuilt Thai
+Word/DOCX file. Deliver the repaired output, not the pre-repair intermediate.
+The sequence is: verify `TH Sarabun New`, generate DOCX, repair in the shared
+`text` environment, verify invariants, then sample the result in Microsoft Word.
+The repair must also replace legacy `TH Sarabun ๙`, `TH Sarabun IT๙`, and
+`TH SarabunPSK` font references with `TH Sarabun New` throughout the DOCX.
 
 The repair is a post-build gate, not a substitute for visual Word/PDF QA. Verify
 afterward that:
@@ -138,8 +181,9 @@ afterward that:
 - English terms use the English proofing language and are not checked with the
   Thai dictionary.
 
-The script requires Python plus `lxml`; use a machine-local document environment
-such as `text`, not a project-local virtual environment inside synced storage.
+The script requires Python plus `lxml`; use the shared machine-local `text`
+environment through the preferred available manager (`micromamba`, `mamba`,
+`microconda`, then `conda`), not a project-local virtual environment.
 
 ## Final PDF QA
 
@@ -220,7 +264,7 @@ This package includes a reusable template for Markdown-to-PDF formal Thai A4 doc
 templates/pandoc-thai-a4/
 ```
 
-Use it when a project needs a formal Thai PDF and does not already have a better project-specific style. The template is designed for Pandoc + XeLaTeX and assumes `TH Sarabun New` is installed. For each project, prefer copying or referencing the same style consistently rather than making one-off formatting changes per document.
+Use it when a project needs a formal Thai PDF and does not already have a better project-specific style. The template is designed for Pandoc + XeLaTeX and assumes Google Fonts `Sarabun` is installed. For each project, prefer copying or referencing the same style consistently rather than making one-off formatting changes per document.
 
 Example from a project folder:
 

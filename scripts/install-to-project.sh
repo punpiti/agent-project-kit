@@ -52,11 +52,27 @@ SOURCE_PATH="$(find_source_path)" || {
 PROJECT_PATH="$(cd "$PROJECT_PATH" && pwd)"
 AI_DIR="$PROJECT_PATH/.ai"
 TARGET="$AI_DIR/agent-project-kit"
+if [ -e "$TARGET" ]; then
+  FIRST_INSTALL="no"
+else
+  FIRST_INSTALL="yes"
+fi
 MACHINE="$(hostname 2>/dev/null | tr '[:upper:]' '[:lower:]' || echo unknown)"
 if grep -qi microsoft /proc/version 2>/dev/null || grep -qi wsl /proc/version 2>/dev/null; then
   IS_WSL2="yes"
 else
   IS_WSL2="unknown/no"
+fi
+
+ENV_MANAGER="none (deferred; install user-local micromamba only when an environment is needed)"
+for manager_name in micromamba mamba microconda conda; do
+  if command -v "$manager_name" >/dev/null 2>&1; then
+    ENV_MANAGER="$manager_name ($(command -v "$manager_name"))"
+    break
+  fi
+done
+if [ "$FIRST_INSTALL" = "yes" ]; then
+  echo "Environment-manager preflight: $ENV_MANAGER"
 fi
 
 is_managed_snapshot() {
@@ -146,6 +162,7 @@ items=(
   templates
   checklists
   config
+  environments
   scripts
 )
 
@@ -240,6 +257,8 @@ cat > "$AI_DIR/COMPUTING_ENVIRONMENT_VERSION.md" <<EOF2
 - Installer: install-to-project.sh
 - Machine: $MACHINE
 - WSL2 detected: $IS_WSL2
+- First install: $FIRST_INSTALL
+- Conda-family manager: $ENV_MANAGER
 
 ## Update Rule
 
@@ -274,6 +293,8 @@ cat > "$AI_DIR/INSTALLATION_INFO.md" <<EOF2
 - Agent Project Kit source: $SOURCE_PATH
 - Machine detected: $MACHINE
 - WSL2 detected: $IS_WSL2
+- First install: $FIRST_INSTALL
+- Conda-family manager: $ENV_MANAGER
 
 Minimal startup (read other files only when STARTUP.md triggers them):
 

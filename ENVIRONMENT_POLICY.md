@@ -19,6 +19,63 @@ across Windows, WSL, macOS, Linux, and remote machines.
 
 ## Environment Strategy
 
+Prefer the shared Conda-family environments `text`, `image`, and `ml`. Select
+the first available manager in this order: `micromamba`, `mamba`, `microconda`,
+then `conda`. Do not create a per-project `venv` or `.venv` when these shared
+environments cover the task; duplicated environments consume unnecessary disk.
+
+The package's current rebuild requirements are stored under `environments/`:
+
+- `text.yml`: document processing and generation, including text/PDF tools;
+- `image.yml`: OpenCV, image/video processing, Tesseract, and OCR;
+- `ml.yml`: portable non-CUDA machine-learning baseline;
+- `ml-cuda118.yml`: optional GPU-specific snapshot, used only after compatible
+  NVIDIA GPU and driver verification;
+- `system-document-tools.txt`: document tools currently supplied by the OS
+  rather than the `text` Conda environment.
+- `font-requirements.md`: machine-level Thai font requirements for Word and
+  LaTeX document production.
+
+Undated environment manifests are curated common baselines. Dated
+`*-observed-YYYYMMDD.yml` files are audit snapshots only and must not be used as
+default installation inputs. Do not promote task-specific applications,
+notebook stacks, CUDA packages, or transitive pip pins into a common baseline
+without a separate role-level justification.
+
+CUDA and other GPU runtimes must never be installed merely because an ML task
+was requested. First verify that the current machine has a usable target GPU,
+working driver, and a compatible framework/runtime combination. When the check
+cannot be completed or no compatible GPU exists, use the non-CUDA `ml.yml`.
+
+## Demand-Driven Installation and Network Cost
+
+Do not create, solve, update, or preload an environment merely because its
+manifest exists or a session has started. First confirm that the current task
+needs that environment and check whether the required tools are already
+available.
+
+Before installing or updating packages, warn the user that dependency downloads
+may consume substantial bandwidth. ML/CUDA stacks, OpenCV/video packages, OCR,
+LaTeX, and document toolchains can be especially large. If the connection may
+be metered, estimate the download size when practical and obtain explicit user
+approval before starting the download. If approval is unavailable, use an
+existing environment, a smaller smoke path, or report the missing dependency.
+
+## First-Install Privilege Gate
+
+On the first Agent Project Kit installation on a project/machine, check for an
+environment manager in priority order: `micromamba`, `mamba`, `microconda`, then
+`conda`, and record the result in `.ai/INSTALLATION_INFO.md`.
+
+If no manager exists and the preferred manager can be installed user-locally
+without root/admin privileges, defer its installation until a task actually
+needs one of the shared environments. If a declared prerequisite genuinely
+requires root/admin privileges, handle it during the explicit first-install
+bootstrap rather than invoking privilege escalation unexpectedly in a later
+task. Before that privileged installation, tell the user what will be installed,
+why it needs elevated privileges, and the expected network cost; obtain approval
+before continuing. Never run `sudo` or an administrator install silently.
+
 Each project should keep enough metadata to rebuild dependencies:
 
 - Python: `requirements.txt`, `environment.yml`, `pyproject.toml`, or similar

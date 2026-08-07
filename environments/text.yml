@@ -1,0 +1,15 @@
+name: text
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - beautifulsoup4
+  - lxml
+  - openpyxl
+  - pandas
+  - pypdf
+  - python-docx
+  - pyyaml
+  - requests
+
