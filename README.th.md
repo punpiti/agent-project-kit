@@ -268,6 +268,14 @@ summary และ machine profile ได้ ไม่ต้อง scan parent �
 โดยไม่ clone, pull หรือติดตั้งให้อัตโนมัติ การเปิดซ้ำภายในช่วง 14 วันจะไม่ยิง
 network ซ้ำ
 
+รุ่นล่าสุดยังเพิ่ม `environments/` (ไฟล์ manifest ของ Conda-family สำหรับ
+environment `text`/`image`/`ml` และ requirement ของฟอนต์) กับ
+`scripts/install-thai-fonts.py` เข้าไปใน package snapshot ที่ติดตั้งด้วย ทั้งสอง
+จะถูก refresh ไปพร้อมกับ `.ai/agent-project-kit/` ตอน update ตามขั้นตอนด้านล่าง
+โดยไม่ต้องมีขั้นตอนติดตั้งเพิ่ม ส่วนบรรทัด `Environment-manager preflight: ...`
+จะขึ้นเฉพาะตอนติดตั้งครั้งแรก (ตอนที่ยังไม่มี `.ai/agent-project-kit/`) เท่านั้น
+จึงจะไม่ขึ้นซ้ำตอน update โปรเจคที่ติดตั้งไว้แล้ว
+
 dry-run:
 
 ```bash

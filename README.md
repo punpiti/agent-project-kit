@@ -307,6 +307,15 @@ Normal agent startup uses a persisted 14-day manifest-only check. It reports
 when a newer version is available but never clones, pulls, or installs by
 itself. Repeated startups within the 14-day window do not contact the network.
 
+Recent releases also add `environments/` (Conda-family manifests for the
+`text`/`image`/`ml` environments plus font requirements) and
+`scripts/install-thai-fonts.py` to the installed package snapshot. Both
+refresh automatically with the rest of `.ai/agent-project-kit/` on a normal
+update below — no extra install step is required. The
+`Environment-manager preflight: ...` line only prints on a first install (when
+`.ai/agent-project-kit/` does not exist yet), so it will not reappear on an
+update to an already-installed project.
+
 Dry run:
 
 ```bash
