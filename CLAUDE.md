@@ -132,3 +132,9 @@ bash scripts/update-from-pages.sh --dry-run .
 - Version string lives in `manifest.json` (`version`) and is referenced by
   path in the shared-runtime tests (`RUNTIME="$HOME_DIR/versions/<version>"`)
   — bumping it requires updating both together.
+
+<!-- BEGIN AGENT-PROJECT-KIT-ADAPTER -->
+Agent Project Kit adapter: read `AGENTS.md` and project-local `.ai/` state
+before acting. Do not overwrite project-local `.ai/` state when updating the
+kit.
+<!-- END AGENT-PROJECT-KIT-ADAPTER -->

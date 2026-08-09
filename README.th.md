@@ -24,6 +24,11 @@ priority/deadline
 ถ้าเป็นโปรเจควิจัย จะมี prompt สำหรับ literature review, source check,
 counter-argument, data interpretation และ research brief เพิ่มให้ใช้เป็นฐาน
 
+ถ้าเป็นโปรเจคที่ต้องผลิตเอกสาร จะมี Document Production Workflow แบบ
+Markdown-first ให้ใช้ รวมถึงแนวทางแกะข้อความ/รูปจาก PDF อ้างอิง (แยก raster
+กับ vector figure, reading cache, และการยืนยัน offset เลขหน้า) ก่อนเริ่มเขียน
+เอกสารทางการ
+
 ## ได้อะไรจากการติดตั้ง
 
 - มีไฟล์ `AGENTS.md`, `CLAUDE.md`, `ANTIGRAVITY.md` ให้ AI แต่ละตัวรู้จุดเริ่ม
@@ -232,6 +237,13 @@ prompt pack เฉพาะโปรเจคควรอยู่ข้าง�
 
 ```text
 .ai/agent-project-kit/prompts/13_RESEARCH_PROJECT_PROMPTS.md
+```
+
+ถ้าเป็นงานผลิตเอกสาร (เอกสารทางการ, รายงาน, PDF ที่ build จาก Markdown,
+รวมถึงการแกะข้อความ/รูปจาก PDF อ้างอิง) ให้ดู prompt ชุดนี้:
+
+```text
+.ai/agent-project-kit/prompts/10_DOCUMENT_PRODUCTION.md
 ```
 
 ## Changelog

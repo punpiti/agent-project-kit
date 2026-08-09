@@ -27,6 +27,10 @@ what happened last time, which machine and local resources matter, which parent
 or child context applies, and what should happen next by priority or deadline.
 For research projects, it also includes prompt templates for literature review,
 source checking, counter-arguments, data interpretation, and research briefs.
+For document-heavy projects, it includes a Markdown-first document production
+workflow, including guidance for extracting text and figures from reference
+PDFs (raster vs. vector figures, reading caches, and page-numbering offsets)
+before writing formal documents.
 
 The old package/path name was `computing-environment`. New installs use
 `.ai/agent-project-kit/` as the installed snapshot path; old projects with
@@ -263,6 +267,13 @@ For research projects, see:
 
 ```text
 .ai/agent-project-kit/prompts/13_RESEARCH_PROJECT_PROMPTS.md
+```
+
+For document production (formal documents, reports, PDFs built from
+Markdown, including reference-PDF text/figure extraction), see:
+
+```text
+.ai/agent-project-kit/prompts/10_DOCUMENT_PRODUCTION.md
 ```
 
 ## Changelog

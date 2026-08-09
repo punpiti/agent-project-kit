@@ -215,6 +215,35 @@ When editing academic, proposal, policy, or technical documents:
   sections needed for the current task and retain them as a clearly identified
   partial cache. Record the source PDF, extracted page range or section, tool,
   and cache path so later work can extend rather than repeat the extraction.
+- When a page has embedded figures, distinguish raster images (photos/scans
+  embedded as JPEG/PNG) from vector diagrams (charts, plots, technical
+  drawings built from lines and fills). Image-extraction tools typically only
+  see embedded raster objects and will silently miss vector diagrams even
+  though the page clearly contains a figure — do not conclude a page has "no
+  images" without checking whether its figures are vector-drawn instead.
+- For vector diagrams, render the full page to an image rather than trying to
+  extract just the figure. Do not use automatic figure-cropping heuristics as
+  a default: they have been observed to silently cut captions (which are
+  often laid out spatially separate from the figure) and to keep only one
+  panel of a multi-panel figure, with no error or warning either time. Full-page
+  rendering is slightly less tidy but never drops content; use auto-crop only
+  for a quick single-figure preview, and always visually check the cropped
+  output before relying on it.
+- If a document uses two page-numbering systems (e.g., a printed page number
+  distinct from the file's own page index), do not assume a constant offset
+  between them across the whole document — the offset can change partway
+  through even within the same file. Before citing a printed page number in a
+  new section or page range for the first time, confirm the offset against
+  text known to be on that page (a running header, section number, or
+  equation number), not by extrapolating from an offset confirmed elsewhere.
+- Visually reviewing rendered pages or extracted figures, not just the
+  extracted text, is worth the extra step even when it looks redundant — it
+  routinely catches citation and page-number errors that text-only extraction
+  cannot surface.
+- Keep the reading cache as discrete evidence units, not raw page dumps: for
+  each unit, record the source, edition/version, section, and page, the
+  extracted content, and the scope within which it may be reused. Store only
+  what is relevant to the current task, not the full page or chapter.
 
 ---
 
@@ -300,6 +329,7 @@ text, valid ZIP structure, preserved images/hyperlinks, explicit `th-TH` markup
 on Thai runs and `en-US` on Latin runs, then sample Thai wrapping and bilingual
 spell checking in Microsoft Word when available. Record the repair command and
 QA result in `.ai/DOCUMENT_PIPELINE.md` or `.ai/DOCUMENT_QA.md`.
+
 
 
 

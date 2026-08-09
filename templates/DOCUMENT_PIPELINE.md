@@ -41,9 +41,17 @@ Record large temporary files, caches, OCR images, exported figures, or external 
 
 ## PDF Reference Extraction Cache
 
-| Source PDF | Tool | Cache path | Pages/sections extracted | Layout normalization | OCR status / fallback reason | Notes |
-|---|---|---|---|---|---|---|
-|  | PDF-to-text / Tesseract / AI OCR |  | full / explicit partial scope | single-column / not needed | not needed / Tesseract result / AI fallback reason |  |
+| Source PDF | Tool | Cache path | Pages/sections extracted | Layout normalization | OCR status / fallback reason | Page-offset verified? | Notes |
+|---|---|---|---|---|---|---|---|
+|  | PDF-to-text / Tesseract / AI OCR |  | full / explicit partial scope | single-column / not needed | not needed / Tesseract result / AI fallback reason | yes (anchor text) / n/a |  |
+
+## Figures Extracted from Reference PDFs
+
+Record raster/vector figures pulled from reference PDFs for compositional reference (layout examples), not for direct reuse in the final document unless rights allow it.
+
+| Source PDF | Page (printed/file) | Figure/table ref | Type (raster/vector) | Method (direct extract/full-page render) | File path | Verified by eye? | Notes |
+|---|---|---|---|---|---|---|---|
+|  |  |  | raster / vector | direct extract / full-page render (+ auto-crop if used) |  | yes/no |  |
 
 ## Final QA Status
 
