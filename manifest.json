@@ -8,8 +8,8 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "7.2.3-shared-runtime-v2-canary",
-  "updated": "2026-08-06T00:00:00+07:00",
+  "version": "7.3.0-book-writing-canary",
+  "updated": "2026-08-13T00:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
   "purpose": "Agent Project Kit: a portable starter kit that installs AI-agent instruction files and project-local .ai templates. New installs use .ai/agent-project-kit; computing-environment remains a legacy name/path for migration only.",
@@ -81,6 +81,11 @@
     "private certificate/key material; see SECURITY_EXCLUSIONS.md"
   ],
   "release_notes": [
+    "Added Book Writing as a full evidence-first primary route with a reusable project profile and split validator.",
+    "Recast Document Production as a lifecycle-triggered Publication Production workflow for written and reflowable outputs.",
+    "Added Presentation Production with project-contract, layout, accessibility, media, render, export, and final-artifact gates.",
+    "Made production routing lifecycle-sensitive so planning does not load production workflows until a real artifact is requested.",
+    "Fixed structured context so presentation deliverables retain the Presentation primary route across education and governance domains.",
     "Made normal upgrades reuse APK environment variables or the machine-local shared-root configuration without repeated path arguments.",
     "Added opt-in idempotent POSIX shell configuration for APK_SHARED_ROOT, APK_MACHINE_HOME, and the launcher PATH.",
     "Canonicalized aggregate checksum ordering by relative path so the same shared artifact verifies on WSL/Linux and native Windows.",

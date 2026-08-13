@@ -2,7 +2,7 @@
 
 All notable changes to Agent Project Kit are summarized here.
 
-## Unreleased — 2026-08-13
+## 7.3.0-book-writing-canary — 2026-08-13
 
 - Added Book Writing as a full evidence-first primary route with a reusable,
   project-resolved profile and split validator; retained the complete sharp
