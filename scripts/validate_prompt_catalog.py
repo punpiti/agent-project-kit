@@ -23,7 +23,7 @@ def main() -> int:
         if not entry.get("trigger"): errors.append(f"missing trigger: {path}")
         if entry.get("type") == "primary" and not entry.get("route"): errors.append(f"primary missing route: {path}")
     routes=[e.get("route") for e in entries if e.get("type")=="primary"]
-    if len(routes)!=8 or len(routes)!=len(set(routes)): errors.append("catalog must define exactly eight unique primary routes")
+    if len(routes)!=9 or len(routes)!=len(set(routes)): errors.append("catalog must define exactly nine unique primary routes")
     if data.get("composition",{}).get("secondary_max") != 2: errors.append("secondary_max must be 2")
     if errors:
         print("prompt catalog: FAIL"); [print(f"- {e}") for e in errors]; return 1

@@ -6,7 +6,7 @@ Purpose: record how this project creates documents from Markdown sources.
 
 | Name | Type | Source MD | Output | Page/Screen | Status | Notes |
 |---|---|---|---|---|---|---|
-|  | formal/public/teaching/internal | docs/source/main.md | docs/output/main.pdf | A4 / 16:9 | draft/final |  |
+|  | formal/public/teaching/internal/book | project-defined | project-defined | project-defined (A4/16:9 are non-book fallbacks only) | draft/final |  |
 
 ## Source of Truth
 
@@ -39,11 +39,11 @@ Record large temporary files, caches, OCR images, exported figures, or external 
 |---|---|---|---|---|---|
 |  | known machine roles |  | yes/no |  |  |
 
-## PDF Reference Extraction Cache
+## Large Reference Source Extraction Cache
 
-| Source PDF | Tool | Cache path | Pages/sections extracted | Layout normalization | OCR status / fallback reason | Page-offset verified? | Notes |
-|---|---|---|---|---|---|---|---|
-|  | PDF-to-text / Tesseract / AI OCR |  | full / explicit partial scope | single-column / not needed | not needed / Tesseract result / AI fallback reason | yes (anchor text) / n/a |  |
+| Source + version/hash | Format | Tool | Cache path | Locator/scope extracted | Structure/media/revision handling | OCR/conversion status | Original verified? | Notes |
+|---|---|---|---|---|---|---|---|---|
+|  | PDF/DOCX/PPTX/ODP/EPUB/HTML/text set/other | format-native extractor |  | page/slide/section/paragraph/table; full/partial | headings/tables/notes/comments/revisions/media/layout | not needed / result / fallback reason | yes/no/n/a |  |
 
 ## Figures Extracted from Reference PDFs
 
@@ -57,8 +57,8 @@ Record raster/vector figures pulled from reference PDFs for compositional refere
 
 - Content approved: no
 - Style approved: no
-- PDF generated: no
-- PDF visually inspected: no
+- Required output(s) generated: no
+- Required paged/screen/reflow output(s) inspected with the appropriate viewer: no
 - Tables checked: no
 - Thai word breaks checked: no
 - Hanging titles/lines checked: no

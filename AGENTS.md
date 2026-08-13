@@ -197,7 +197,27 @@ When editing academic, proposal, policy, or technical documents:
 - Reviewer responses should answer the real concern, not only sound polite.
 - For important revisions, create a mapping from concern to change to evidence.
 
-### PDF Reference Ingestion
+### Large Reference Source Ingestion
+
+- Apply extraction-first reading to any large reference source whose repeated
+  full-file reading is inefficient or hard to cite precisely, including PDF,
+  DOCX, PPTX/ODP, EPUB, HTML archives, and large Markdown/text collections.
+- Use a format-native extractor and preserve the locators needed to reopen the
+  source: page, slide, section, paragraph, table, note, comment, revision, or
+  media relationship as applicable. Do not force every format through a PDF
+  extractor or treat extracted text as a substitute for layout/media review.
+- Cache only the relevant scope when practical. Record source path and
+  edition/version or hash, format, extraction tool/version, extracted scope,
+  cache path, structure/media/revision handling, known losses, and reuse scope.
+- For DOCX, decide whether accepted text, tracked revisions, comments,
+  footnotes/endnotes, tables, and images matter. For PPTX/ODP, preserve slide
+  order, speaker notes, grouped/DrawingML text, tables/charts, and media mapping
+  needed by the task.
+- If extraction or conversion would silently discard material that could affect
+  a claim, stop and tell the user before OCR, lossy conversion, or large-scale
+  manual visual reading.
+
+#### PDF-specific rules
 
 - Whenever a PDF will be used as a reference, run a PDF-to-text extraction first
   and keep the extracted text or Markdown as a reusable cache for later sessions.
@@ -257,6 +277,10 @@ When creating slides or teaching material:
 - Use examples where possible.
 - Make the intended takeaway explicit.
 - Do not make slides merely pretty; make them teach or persuade.
+- When an actual deck file must be created, edited, rendered, exported, or
+  final-QA'd, also load `prompts/23_PRESENTATION_PRODUCTION.md` and use project
+  copies of `templates/PRESENTATION_PIPELINE.md`, `PRESENTATION_STYLE.md`, and
+  `PRESENTATION_QA.md`. Storyline work alone does not trigger production.
 
 ---
 
@@ -313,7 +337,7 @@ For document-producing work, also read:
 - `templates/DOCUMENT_STYLE.md`
 - `templates/DOCUMENT_QA.md`
 
-Default document workflow: Markdown first, content critique/revision second, final PDF/build last. Formal Thai documents use TH Sarabun New for Thai text; public documents use modern minimal readable fonts. Paper output defaults to A4; screen output defaults to 16:9. Final PDFs must pass table, Thai word-break, spelling, hanging title, and hanging line checks before being called final.
+Default document workflow: Markdown first, content critique/revision second, final PDF/build last. These are fallbacks for otherwise unspecified non-book documents. Project-local output requirements always control format, source layout, page/screen geometry, fonts, toolchain, and QA. For books/textbooks, the resolved book-writing production contract takes precedence; do not impose Markdown, PDF, DOCX, A4, 16:9, or a legacy template unless that project selects it. Formal Thai documents use TH Sarabun New for Thai text; public documents use modern minimal readable fonts. Final PDFs, when PDF is a required output, must pass table, Thai word-break, spelling, hanging title, and hanging line checks before being called final.
 
 **Mandatory Thai DOCX gate:** Whenever an agent creates or materially rebuilds
 a DOCX containing Thai, it must run

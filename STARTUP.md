@@ -22,6 +22,7 @@ different work, ask one concise question: what outcome should be produced?
 |---|---|---|
 | Software Development & Automation | `prompts/19_SOFTWARE_DEVELOPMENT_AUTOMATION.md` | build/debug/test web, CLI, desktop, automation, and data-pipeline software |
 | Research Activities | `prompts/13_RESEARCH_PROJECT_PROMPTS.md` | select literature, evidence, review, or research-planning mode |
+| Book Writing | `prompts/22_BOOK_WRITING.md` + a resolved copy of `templates/BOOK_WRITING_PROFILE.md` | write from the full evidence-first method; infer profile values from the current book only, ask when unresolved, and validate with `scripts/check_book_writing_split.py` |
 | Content Analysis | `prompts/15_CONTENT_ANALYSIS.md` | define corpus, coding frame, evidence, and interpretation |
 | Data Analytics | `prompts/16_DATA_ANALYTICS.md` | validate data, analyze, visualize, and state decision implications |
 | Presentation | `prompts/05_SLIDES_TEACHING.md` | define audience/outcome and build the story |
@@ -37,10 +38,17 @@ synthesis, analysis, or research output rather than an institutional decision.
 
 Quick answers need no route file. Web development is a subtype of Software
 Development & Automation and may load `14_WEB_DEVELOPMENT.md` secondarily.
-Project resume, onboarding, reviewer response, document production, external
-feedback, Markdown cleanup, package release, and Strategy & Advisory
+Project resume, onboarding, reviewer response, publication production,
+presentation production, external feedback, Markdown cleanup, package release, and Strategy & Advisory
 (`21_STRATEGY_ADVISORY.md`) are secondary workflows: load one only when that
 activity is explicitly needed inside a primary route.
+
+Use Publication Production (`prompts/10_DOCUMENT_PRODUCTION.md`) only when a
+written/reflowable artifact must be built, converted, exported, or final-QA'd.
+Use Presentation Production (`prompts/23_PRESENTATION_PRODUCTION.md`) only when
+an actual deck must be created, edited, rendered, exported, or final-QA'd.
+Planning book prose or a presentation storyline alone does not trigger either
+production workflow.
 
 Personal finance should use its project-local finance workflow rather than a
 generic core route. Rare technical/DIY work uses a `Technical / Other Project`

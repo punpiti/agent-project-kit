@@ -27,3 +27,12 @@
 
 - [ ] จุดที่ต้องให้มนุษย์เลือก depth/tone/example
 - [ ] จุดที่ควร test กับผู้ฟังจริง
+
+## Production Gate — ใช้เมื่อมี deck artifact จริง
+
+- [ ] resolve source/output contract, master/theme, dimensions, fonts และ delivery environment แล้ว
+- [ ] render ทุก slide และตรวจทั้ง montage กับภาพเต็มหลัง source change ครั้งสุดท้าย
+- [ ] ไม่มี overflow, clipping, font substitution, placeholder หรือ author-only content หลุด
+- [ ] link, notes, animation, transition, media และ static fallback ทำงานตามที่สัญญา
+- [ ] เปิด required output ทุกชนิดใน target viewer/application แล้ว
+- [ ] บันทึก build/export และผล QA ตาม `23_PRESENTATION_PRODUCTION.md`

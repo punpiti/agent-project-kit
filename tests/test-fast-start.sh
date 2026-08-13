@@ -18,8 +18,22 @@ grep -q 'Educational Policy Development' "$PROJECT/.ai/agent-project-kit/STARTUP
 test -f "$PROJECT/.ai/agent-project-kit/prompts/19_SOFTWARE_DEVELOPMENT_AUTOMATION.md"
 test -f "$PROJECT/.ai/agent-project-kit/prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md"
 test -f "$PROJECT/.ai/agent-project-kit/prompts/21_STRATEGY_ADVISORY.md"
+test -f "$PROJECT/.ai/agent-project-kit/prompts/22_BOOK_WRITING.md"
+test -f "$PROJECT/.ai/agent-project-kit/prompts/23_PRESENTATION_PRODUCTION.md"
+test -f "$PROJECT/.ai/agent-project-kit/templates/BOOK_WRITING_PROFILE.md"
+test -f "$PROJECT/.ai/agent-project-kit/templates/PRESENTATION_PIPELINE.md"
+test -f "$PROJECT/.ai/agent-project-kit/templates/PRESENTATION_STYLE.md"
+test -f "$PROJECT/.ai/agent-project-kit/templates/PRESENTATION_QA.md"
+test -f "$PROJECT/.ai/agent-project-kit/scripts/check_book_writing_split.py"
+python3 "$PROJECT/.ai/agent-project-kit/scripts/check_book_writing_split.py" >/dev/null
+test "$(wc -l < "$PROJECT/.ai/agent-project-kit/prompts/22_BOOK_WRITING.md")" -ge 400
+grep -q 'กับดักสำคัญที่สุด — nested bullet ปลอม' "$PROJECT/.ai/agent-project-kit/prompts/22_BOOK_WRITING.md"
+grep -q 'กรอบการอธิบายสมการ 4 ส่วน' "$PROJECT/.ai/agent-project-kit/prompts/22_BOOK_WRITING.md"
+grep -q 'ข้อควรระวังและข้อจำกัดของวิธีการนี้' "$PROJECT/.ai/agent-project-kit/prompts/22_BOOK_WRITING.md"
 grep -q 'Software Development & Automation' "$PROJECT/.ai/agent-project-kit/STARTUP.md"
 grep -q 'Administrative & Professional Operations' "$PROJECT/.ai/agent-project-kit/STARTUP.md"
+grep -q 'Book Writing' "$PROJECT/.ai/agent-project-kit/STARTUP.md"
+grep -q 'Presentation Production' "$PROJECT/.ai/agent-project-kit/STARTUP.md"
 python3 "$SOURCE_PATH/scripts/validate_prompt_catalog.py" >/dev/null
 test -f "$PROJECT/.ai/agent-project-kit/prompts/catalog.json"
 test -f "$PROJECT/.ai/project.json"

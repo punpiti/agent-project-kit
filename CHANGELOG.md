@@ -2,6 +2,22 @@
 
 All notable changes to Agent Project Kit are summarized here.
 
+## 7.3.0-book-writing-canary — 2026-08-13
+
+- Added Book Writing as a full evidence-first primary route with a reusable,
+  project-resolved profile and split validator; retained the complete sharp
+  method rather than replacing it with an abbreviated generic prompt.
+- Recast Document Production as the secondary Publication Production workflow
+  for written/reflowable build, conversion, export, and final QA without
+  imposing its fallback frame on book projects.
+- Added Presentation Production as a secondary workflow with project-contract,
+  master/layout, accessibility, media/motion, render/export, target-viewer, and
+  final-artifact gates plus pipeline/style/QA templates.
+- Production routing is lifecycle-sensitive: prose/story planning does not load
+  production; real publication/deck creation, rendering, export, and final QA do.
+- Fixed structured context so a presentation deliverable loads the Presentation
+  primary even when its surrounding subject domain is education or governance.
+
 ## 7.2.3-shared-runtime-v2-canary — 2026-08-06
 
 - Prepared shared-runtime binding schema v2 with separate synced package and

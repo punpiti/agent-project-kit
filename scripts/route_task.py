@@ -7,6 +7,7 @@ RULES = {
  "domain": {
   "software":["code","bug","debug","api","website","web app","script","software","automation","configuration","router","prompt","โปรแกรม","โค้ด","เว็บ","ระบบอัตโนมัติ"],
   "research":["research","paper","manuscript","thesis","literature","experiment","วิจัย","บทความ","วิทยานิพนธ์","หลักฐาน"],
+  "book-writing":["book","textbook","book writing","write a book","write the book","ตำรา","เขียนหนังสือ","เขียนตำรา","ต้นฉบับหนังสือ","ต้นฉบับตำรา"],
   "education":["course","lesson","syllabus","student","teaching","rubric","curriculum","workshop","seminar","หลักสูตร","บทเรียน","รายวิชา","เอกสารคำสอน","สอน","สัมมนา","แบบฝึก","กิจกรรมการเรียน"],
   "governance":["policy","governance","council","regulation","standard","master plan","institutional transformation","ipst","ioi","นโยบาย","สภา","ข้อบังคับ","สสวท","มาตรฐาน","แผนแม่บท"],
   "operations":["deadline","submit","submission","compliance","dossier","correspondence","coordination","follow up","nomination","application","academic promotion","academic-rank","KU forms","meeting follow-up","กำหนดส่ง","ยื่น","เอกสารราชการ","ติดตาม","ประสานงาน","เสนอชื่อ","สมัคร","แฟ้ม","ตำแหน่งวิชาการ","ศาสตราจารย์"]},
@@ -14,6 +15,7 @@ RULES = {
   "code":["code","implement","fix","debug","refactor","build app","โค้ด","แก้บั๊ก","รีแฟกเตอร์","พัฒนาโปรแกรม"],
   "analysis":["analysis","analyze","finding","วิเคราะห์","ผลวิเคราะห์"],
   "paper":["paper","manuscript","thesis","reviewer","บทความ","วิทยานิพนธ์","ผู้ทรงคุณวุฒิ"],
+  "book":["book","textbook","book writing","write a book","write the book","ตำรา","เขียนหนังสือ","เขียนตำรา","ต้นฉบับหนังสือ","ต้นฉบับตำรา"],
   "policy":["policy","regulation","proposal to council","master plan","นโยบาย","ข้อบังคับ","เสนอสภา","แผนแม่บท"],
   "presentation":["slide","slides","presentation","deck","talk","seminar","briefing","สไลด์","นำเสนอ","บรรยาย","สัมมนา"],
   "course-material":["course","lesson","syllabus","exercise","rubric","course material","teaching document","workshop","บทเรียน","ประมวลรายวิชา","รายวิชา","แบบฝึก","เอกสารสอน","เอกสารคำสอน","กิจกรรม"],
@@ -58,7 +60,8 @@ def classify(request: str) -> dict:
     strong_domains=[
       ("software",["fix the","implement","refactor","software project","software package","task router","แก้บั๊ก","พัฒนาซอฟต์แวร์"]),
       ("education",["prepare the lesson","prepare the course","teaching document","course workspace","seminar","เตรียมการสอน","เอกสารคำสอน","พัฒนาการสอน","สัมมนา"]),
-      ("operations",["compliance tracking","organize and preserve correspondence","nomination dossier","academic promotion","academic-rank","KU forms","check the deadline","ติดตามกำหนด","แฟ้มเสนอชื่อ","ตำแหน่งวิชาการ","ศาสตราจารย์"]),
+      ("book-writing",["write a book","write the book","book writing","textbook","build the book","export the book","เขียนหนังสือ","เขียนตำรา","ต้นฉบับหนังสือ","ต้นฉบับตำรา","build หนังสือ","export หนังสือ","จัดรูปเล่มหนังสือ","ผลิตหนังสือ"]),
+      ("operations",["compliance tracking","organize and preserve correspondence","nomination dossier","academic promotion","academic-rank","KU forms","check the deadline","official letter","ติดตามกำหนด","แฟ้มเสนอชื่อ","หนังสือราชการ","หนังสือภายนอก","หนังสือภายใน","ตำแหน่งวิชาการ","ศาสตราจารย์"]),
       ("governance",["policy proposal","master plan","university council","institutional transformation","IOI / POSN","แผนแม่บท","เสนอสภา"])]
     for candidate,hints in strong_domains:
         if contains_any(request,hints): domain,dc=candidate,0.95; break
@@ -68,22 +71,44 @@ def classify(request: str) -> dict:
       ("presentation",["prepare a presentation","create slides","slide deck","slide decks","presentation","seminar","สไลด์","เตรียมนำเสนอ","การบรรยาย","สัมมนา"]),
       ("course-material",["prepare the lesson","prepare the course","teaching document","course material","workshop activity","เตรียมการสอน","เอกสารคำสอน","แบบฝึก"]),
       ("code",["implement","fix the","debug","refactor","code change","task router","แก้บั๊ก","รีแฟกเตอร์","พัฒนาซอฟต์แวร์"]),
-      ("document",["prepare the document","submission document","selection documents","nomination dossier","correspondence","formal letter","จัดทำเอกสาร","แฟ้มเสนอชื่อ","จดหมาย"]),
+      ("document",["prepare the document","submission document","selection documents","nomination dossier","correspondence","formal letter","official letter","จัดทำเอกสาร","แฟ้มเสนอชื่อ","หนังสือราชการ","หนังสือภายนอก","หนังสือภายใน","จดหมาย"]),
       ("paper",["write the paper","review the paper","revise the paper","review the manuscript","revise the manuscript","reviewer concerns","เขียนบทความ","แก้บทความ","ตรวจวิทยานิพนธ์"]),
+      ("book",["write a book","write the book","book writing","textbook","build the book","export the book","เขียนหนังสือ","เขียนตำรา","ต้นฉบับหนังสือ","ต้นฉบับตำรา","build หนังสือ","export หนังสือ","จัดรูปเล่มหนังสือ","ผลิตหนังสือ"]),
       ("policy",["policy proposal","master plan","draft policy","แผนแม่บท","ร่างนโยบาย","เสนอสภา"]),
       ("decision",["assess how to","advise","supervise","recommend a direction","evidence set","academic-rank route","ประเมินแนวทาง","วางแนวทาง","ให้คำแนะนำ"])]
     strong_output=False
     for candidate,hints in strong_outputs:
         if contains_any(request,hints): deliverable,oc,strong_output=candidate,0.95,True; break
     if not strong_output:
-        preferred={"software":"code","research":"paper","education":"course-material","governance":"policy","operations":"document"}.get(domain)
+        preferred={"software":"code","research":"paper","book-writing":"book","education":"course-material","governance":"policy","operations":"document"}.get(domain)
         if preferred and matches(request,RULES["deliverable"][preferred]): deliverable,oc=preferred,0.8
     methods=[key for key,terms in RULES["method"].items() if matches(request,terms)]
     lifecycle,lc=best(request,"lifecycle","create")
     workflows=[]
     if deliverable=="code": workflows.append("implementation")
     if deliverable=="paper" and any(x in request.lower() for x in ("reviewer","review","ผู้ทรง")): workflows.append("reviewer-response")
-    if deliverable=="document": workflows.append("document-production")
+    publication_production=contains_any(request,[
+      "typeset","typesetting","build pdf","generate pdf","create pdf","export pdf",
+      "final pdf","build docx","generate docx","export docx","build epub",
+      "generate epub","export epub","html publication","page layout","final layout",
+      "convert to pdf","convert to docx","convert to epub","จัดรูปเล่ม","สร้าง pdf",
+      "สร้าง docx","สร้าง epub","ส่งออก pdf","ส่งออก docx","ส่งออก epub","เป็น epub","เป็น pdf","ตรวจไฟล์ final"])
+    publication_production = publication_production or (
+      contains_any(request,["build","generate","export","convert","typeset","render","สร้าง","ส่งออก","แปลง","จัดรูปเล่ม"])
+      and contains_any(request,["pdf","docx","word file","epub","html publication","print-ready","ไฟล์พิมพ์"])
+    )
+    presentation_production=contains_any(request,[
+      "create slides","build slides","make slides","create a deck","build a deck",
+      "make a deck","edit pptx","create pptx","build pptx","export pptx",
+      "render slides","render deck","export slides","export deck","final deck",
+      "google slides file","keynote file","html deck","สร้างสไลด์","ทำสไลด์",
+      "สร้าง pptx","แก้ pptx","ส่งออกสไลด์","เรนเดอร์สไลด์","ตรวจไฟล์สไลด์"])
+    if deliverable == "document" or (
+        deliverable in {"book","course-material"} and publication_production
+    ):
+        workflows.append("publication-production")
+    if deliverable == "presentation" and presentation_production:
+        workflows.append("presentation-production")
     if "web-development" in methods: workflows.append("web")
     if "strategy-advisory" in methods: workflows.append("strategy")
     if lifecycle=="resume": workflows.append("resume")

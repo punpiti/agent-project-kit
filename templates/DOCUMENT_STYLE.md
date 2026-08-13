@@ -12,8 +12,10 @@ Use one style profile per project unless a clear variant is needed.
 
 ## Page / Screen
 
-- Paper: A4
-- Screen: 16:9
+- Project-required target:
+- Paper fallback only when unspecified: A4
+- Screen fallback only when unspecified: 16:9
+- For books/textbooks, copy the resolved target from the book production contract; do not use either fallback automatically.
 
 ## Font Policy
 

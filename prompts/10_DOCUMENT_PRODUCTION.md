@@ -1,9 +1,20 @@
-# Prompt: Document Production Workflow
+# 10 — Publication Production Workflow
 
-Use this when creating formal documents, reports, public PDFs, teaching handouts, or other written artifacts.
+Use this secondary workflow when producing, typesetting, converting, exporting,
+or final-QA checking a written or reflowable artifact: formal document, report,
+book/textbook, handout, PDF, DOCX, EPUB, HTML publication, or equivalent output.
+Content-domain routes remain responsible for what the artifact says; this
+workflow is responsible for faithful production of the project-approved source.
+
+When loaded as a secondary workflow for a book/textbook, use it only for the
+output formats and QA gates selected by the book project's resolved production
+contract. It must not impose A4/16:9, Markdown-first, PDF, DOCX, fonts,
+directories, or a build toolchain over explicit project requirements. If the
+book contract is missing or contradictory, ask before build; do not silently
+reuse this prompt's defaults.
 
 ```text
-งานนี้ให้ใช้ Document Production Workflow แบบ Markdown-first
+งานนี้ให้ใช้ Publication Production Workflow โดยยึด source/output contract ของ project
 
 เป้าหมาย:
 - เริ่มจาก Markdown เป็น source of truth
@@ -27,15 +38,19 @@ Use this when creating formal documents, reports, public PDFs, teaching handouts
 - เอกสารสำหรับจอภาพใช้ 16:9
 
 Workflow:
-0. ถ้ามี PDF ที่จะใช้อ้างอิง ให้ใช้ PDF-to-text แกะเป็น text/Markdown และเก็บเป็น
-   cache ก่อนอ่านเชิงลึก; PDF แบบสองคอลัมน์ให้จัด reading order ใหม่เป็นหนึ่งคอลัมน์
+0. ถ้ามีแหล่งอ้างอิงขนาดใหญ่ เช่น PDF, DOCX, PPTX/ODP, EPUB, HTML archive หรือ
+   ชุดไฟล์ข้อความ ให้ใช้ extractor ที่เหมาะกับ format แกะเป็น text/Markdown cache
+   ที่ค้นและย้อน locator เดิมได้ก่อนอ่านเชิงลึก; เก็บ page/slide/section/paragraph,
+   notes/revisions, table และ media mapping เท่าที่จำเป็นต่อ claim
+   สำหรับ PDF แบบสองคอลัมน์ให้จัด reading order ใหม่เป็นหนึ่งคอลัมน์
    ถ้าเป็น scanned PDF หรือไม่มี text layer ที่ใช้ได้ ให้แจ้งผู้ใช้และรอการตัดสินใจ
    ก่อนทำ OCR พร้อมอธิบายว่า OCR อาจช้าและผลอาจไม่สมบูรณ์แม้ใช้ token ไม่มาก
    เมื่อผู้ใช้อนุมัติให้ทำ OCR ให้ลอง Tesseract ก่อน และใช้ AI-based OCR เฉพาะเมื่อ
    Tesseract ใช้ไม่ได้หรือผลไม่เพียงพอต่องาน โดยให้รัน OCR ผ่าน shared conda-family
    env `image` และแจ้งเหตุผลที่ต้องเปลี่ยนวิธี
-   สำหรับ PDF ขนาดใหญ่ให้แกะเฉพาะหน้า/ส่วนที่จำเป็นเป็น partial cache ได้ โดยบันทึก
-   source, ขอบเขตหน้า/ส่วน, เครื่องมือ, cache path และ OCR status ให้ชัดเจน
+   สำหรับ source ขนาดใหญ่ให้แกะเฉพาะหน้า/slide/section/ส่วนที่จำเป็นเป็น partial
+   cache ได้ โดยบันทึก source+version/hash, ชนิดไฟล์, locator/scope, เครื่องมือ,
+   cache path, media/revision handling และ OCR/conversion status ให้ชัดเจน
    ถ้าหน้าที่แกะมีรูปประกอบ ให้แยกก่อนว่าเป็น raster (ภาพฝังไฟล์ JPEG/PNG ดึงตรงได้)
    หรือ vector diagram (กราฟ/แผนภาพเทคนิคที่วาดด้วยเส้น/เติมสี ซึ่งเครื่องมือดึงภาพส่วนใหญ่
    มองไม่เห็นและจะรายงานว่า "ไม่มีรูป" ทั้งที่หน้ามีรูปจริง) — ถ้าเป็น vector ให้ render
