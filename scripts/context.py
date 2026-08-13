@@ -22,7 +22,10 @@ def project_context(project: Path, limit: int=2500) -> tuple[str,list[str]]:
 
 def compile_bundle(request: str, project: Path, max_bytes: int) -> dict:
     route=classify(request); routes=read_json(ROOT/"config"/"routes.json") or {}; workflows=read_json(ROOT/"config"/"workflows.json") or {}; policies=read_json(ROOT/"config"/"policies.json") or {}
-    primary=routes.get("routes",{}).get(route["domain"],routes.get("routes",{}).get("general",{}))
+    # Explicit deliverable routes outrank the surrounding subject domain. Keep
+    # route["domain"] for context while selecting Presentation for a deck/talk.
+    primary_key="presentation" if route["deliverable"]=="presentation" else route["domain"]
+    primary=routes.get("routes",{}).get(primary_key,routes.get("routes",{}).get("general",{}))
     secondary=[]
     for key in route["secondary_workflows"][:2]:
         item=workflows.get("workflows",{}).get(key)

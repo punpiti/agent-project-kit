@@ -4,6 +4,15 @@ This policy applies to formal documents, public documents, reports, PDF handouts
 
 ## Core Principle
 
+Project-local output requirements take precedence over every page, screen,
+format, font, source-layout, and toolchain default in this policy. For book or
+textbook work, the resolved book-writing profile is the controlling production
+contract; this policy contributes QA checks only and must not replace that
+contract with an A4/16:9, Markdown, PDF, DOCX, or directory-layout frame. If the
+project has no output contract, ask for the decision that affects the current
+deliverable before building. Defaults below are fallbacks only for otherwise
+unspecified non-book documents.
+
 Start with Markdown. Improve the content until the structure, argument, evidence, and tone are acceptable. Only then generate PDF, DOCX, HTML, or slide-like outputs.
 
 Do not jump directly into visual formatting while the content is still weak.
@@ -27,8 +36,8 @@ docs/build/* or output/*
 
 ## Page and Screen Defaults
 
-- Paper documents: A4.
-- Screen / presentation / web visual documents: 16:9.
+- Paper documents with no project specification: A4.
+- Screen / presentation / web visual documents with no project specification: 16:9.
 - Use one shared stylesheet per project unless there is a clear reason to create variants.
 - Do not create one-off formatting hacks for each document.
 
@@ -113,13 +122,16 @@ When creating a document:
 
 AI should not force repeated user prompting for these steps. It should propose and run a complete document loop when possible.
 
-## PDF Reference Ingestion and Cache
+## Large Reference Source Ingestion and Cache
 
-When a PDF is used as a reference rather than merely checked as a final output:
+When a large PDF, DOCX, PPTX/ODP, EPUB, HTML archive, or text collection is used
+as a reference rather than merely checked as a final output:
 
-1. Use a PDF-to-text tool before reading it in depth, and retain the extracted
-   text or Markdown as a reusable cache for later sessions.
-2. If the source uses two columns, reconstruct it into a single-column reading
+1. Use a format-native extractor before reading it in depth, and retain the
+   extracted text or Markdown as a reusable cache. Preserve source-native
+   locators such as page, slide, heading, paragraph, table, notes, comments,
+   revisions, and media relationships as needed by the task.
+2. For PDF, if the source uses two columns, reconstruct it into a single-column reading
    order. Preserve page markers and enough structure to trace passages back to
    the source.
 3. If the PDF is scanned or lacks a usable text layer, notify the user and ask
@@ -131,13 +143,20 @@ When a PDF is used as a reference rather than merely checked as a final output:
    for the task, and record the reason for that escalation. Run Tesseract and
    other OCR/image-processing tools through the shared Conda-family `image`
    environment.
-5. For a large PDF, extract only the pages or sections needed for the current
-   task when practical. Treat this as a partial cache that can be extended later
-   instead of reprocessing the whole file.
-6. Record the source PDF, extraction tool, extracted page range or section,
-   cache path, and whether OCR was used in `.ai/DOCUMENT_PIPELINE.md` or
-   `.ai/LOCAL_RESOURCES.md`. Do not imply that a partial cache covers the full
-   document.
+5. For a large source, extract only the pages, slides, headings, sections, or
+   other units needed for the current task when practical. Treat this as a
+   partial cache that can be extended later instead of reprocessing the whole
+   file.
+6. Record source path and version/hash, format, extraction tool/version,
+   source-native locator and extracted scope, cache path, structure/media/
+   revision handling, known losses, and OCR/conversion status in
+   `.ai/DOCUMENT_PIPELINE.md` or `.ai/LOCAL_RESOURCES.md`. Do not imply that a
+   partial cache covers the full source.
+7. For DOCX, explicitly decide whether accepted text, tracked revisions,
+   comments, footnotes/endnotes, tables, and images matter. For PPTX/ODP,
+   preserve slide order, speaker notes, grouped/DrawingML text, charts/tables,
+   and media mapping needed for evidence. Verify the original visually when
+   meaning depends on layout.
 
 ## Mandatory Thai DOCX Language/Script Finalization
 

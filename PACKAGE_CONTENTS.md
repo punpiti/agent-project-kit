@@ -64,6 +64,8 @@
 - `prompts/19_SOFTWARE_DEVELOPMENT_AUTOMATION.md`
 - `prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md`
 - `prompts/21_STRATEGY_ADVISORY.md`
+- `prompts/22_BOOK_WRITING.md`
+- `prompts/23_PRESENTATION_PRODUCTION.md`
 - `prompts/catalog.json`
 - `scripts/bootstrap_ai_project.py`
 - `scripts/apk_doctor.py`
@@ -73,6 +75,7 @@
 - `scripts/install-shared.py`
 - `scripts/install-thai-fonts.py`
 - `scripts/check-update-notice.py`
+- `scripts/check_book_writing_split.py`
 - shared installs generate `PACKAGE_CHECKSUMS.json`; project bindings pin its
   aggregate SHA-256 outside the shared runtime
 - `scripts/install-from-git.sh`
@@ -90,6 +93,7 @@
 - `templates/DOCUMENT_PIPELINE.md`
 - `templates/DOCUMENT_QA.md`
 - `templates/DOCUMENT_STYLE.md`
+- `templates/BOOK_WRITING_PROFILE.md`
 - `templates/ENVIRONMENT_VARIABLES.md`
 - `templates/EVALS.md`
 - `templates/FEEDBACK_SYNTHESIS.md`
@@ -102,6 +106,9 @@
 - `templates/MARKDOWN_INVENTORY.md`
 - `templates/PROJECT_SPEC.md`
 - `templates/PROJECT_STATE.md`
+- `templates/PRESENTATION_PIPELINE.md`
+- `templates/PRESENTATION_QA.md`
+- `templates/PRESENTATION_STYLE.md`
 - `templates/REVIEW_GATE.md`
 - `templates/RUNBOOK.md`
 - `templates/SESSION_LOG.md`
