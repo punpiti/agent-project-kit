@@ -2,6 +2,18 @@
 
 All notable changes to Agent Project Kit are summarized here.
 
+## 7.5.0-book-writing-framework-canary — 2026-08-14
+
+- Added reusable Book Writing profile contracts for book architecture, research
+  integration, reference corpus, figure extraction, book graphics, and
+  publication packaging.
+- Added a user-visible profile/meta resolution report requirement with explicit
+  `confirmed`, `inferred`, `N/A`, and `needs-user` states.
+- Added reusable PDF reference extraction tools for bounded text/cache output,
+  embedded raster images, and vector/full-page figure rendering.
+- Added transactional updater infrastructure and clean benchmark evidence for
+  selective context, cadence avoidance, and covered state-preservation safety.
+
 ## 7.4.0-transactional-update-canary — 2026-08-13
 
 - Build and validate updates in a same-filesystem staging directory before

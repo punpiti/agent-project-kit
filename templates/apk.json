@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "package": "agent-project-kit",
-  "version": "7.4.0-transactional-update-canary",
+  "version": "7.5.0-book-writing-framework-canary",
   "version_policy": "exact",
   "content_sha256": "",
   "profile": "standard",

@@ -8,9 +8,9 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "7.4.0-transactional-update-canary",
-  "git_ref": "v7.4.0-transactional-update-canary",
-  "updated": "2026-08-13T00:00:00+07:00",
+  "version": "7.5.0-book-writing-framework-canary",
+  "git_ref": "v7.5.0-book-writing-framework-canary",
+  "updated": "2026-08-14T00:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
   "purpose": "Agent Project Kit: a portable starter kit that installs AI-agent instruction files and project-local .ai templates. New installs use .ai/agent-project-kit; computing-environment remains a legacy name/path for migration only.",
@@ -82,7 +82,9 @@
     "private certificate/key material; see SECURITY_EXCLUSIONS.md"
   ],
   "release_notes": [
+    "Added reusable Book Writing profile contracts, visible profile resolution reporting, and PDF reference extraction tools for text, raster, and vector figures.",
     "Made snapshot updates transactional with per-file staged SHA-256 validation, one-version backup retention, and automatic rollback of the snapshot and control files on failure.",
+    "Added a disclosed benchmark and clean evidence report for selective context, cadence avoidance, and covered update/state safety behavior.",
     "Pinned Pages-driven updates to the manifest git_ref and reject any checked-out package whose version differs from the advertised version.",
     "Added Book Writing as a full evidence-first primary route with a reusable project profile and split validator.",
     "Recast Document Production as a lifecycle-triggered Publication Production workflow for written and reflowable outputs.",
