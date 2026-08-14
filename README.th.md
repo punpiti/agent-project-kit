@@ -10,7 +10,7 @@ Claude Code, Antigravity หรือ agent อื่นรู้ว่าคว
 ตัว kit ตั้งใจให้เล็กและแยกชั้น: code ของโปรเจคยังเป็นของโปรเจค, note เฉพาะ
 โปรเจคอยู่ใต้ `.ai/`, ส่วน snapshot ของ kit refresh ทีหลังได้
 
-release ปัจจุบัน: `7.3.0-book-writing-canary`
+release ปัจจุบัน: `7.4.0-transactional-update-canary`
 
 เหมาะกับโปรเจคที่คุณจะเปิดใช้กับ AI มากกว่าหนึ่งครั้ง หรืออยากให้คนในบ้านลอง
 clone แล้วเริ่มใช้ได้โดยไม่ต้องตั้งโครงสร้างเองทุกครั้ง
@@ -275,6 +275,10 @@ summary และ machine profile ได้ ไม่ต้อง scan parent �
 หลักคืออ่าน version เดิม, เช็ก `manifest.json` บน GitHub Pages แบบ dry-run
 ก่อน, แล้วค่อย apply update โดยไม่ลบ project-local state ใต้ `.ai/` ส่วน
 แนวคิด/ไฟล์ package ใหม่จะถูก refresh ใต้ `.ai/agent-project-kit/`
+ตัว updater จะสร้างและตรวจ snapshot ใน staging ก่อนสลับใช้งาน เก็บรุ่นก่อนหน้า
+ไว้ที่ `.ai/agent-project-kit.previous` และคืนทั้ง snapshot กับไฟล์ควบคุมเดิม
+อัตโนมัติถ้าขั้นตอนหลังสลับล้ม การอัปเดตผ่าน Pages จะใช้ `git_ref` ตรงตาม
+manifest และปฏิเสธ package ที่ version ไม่ตรงกับที่ประกาศ
 
 การเริ่มงานตามปกติจะตรวจเฉพาะ manifest ทุก 14 วันและแจ้งเมื่อมีเวอร์ชันใหม่
 โดยไม่ clone, pull หรือติดตั้งให้อัตโนมัติ การเปิดซ้ำภายในช่วง 14 วันจะไม่ยิง

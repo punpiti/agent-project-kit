@@ -43,6 +43,60 @@ $SourcePath = Find-SourcePath $SourcePath
 $project = (Resolve-Path $ProjectPath).Path
 $aiDir = Join-Path $project ".ai"
 $target = Join-Path $aiDir "agent-project-kit"
+$previousTarget = Join-Path $aiDir "agent-project-kit.previous"
+$olderPreviousTarget = Join-Path $aiDir "agent-project-kit.previous.old"
+$stage = ""
+$controlBackup = ""
+$controlBackupReady = $false
+$controlPaths = @()
+$snapshotSwapped = $false
+$hadTarget = $false
+$previousRotated = $false
+
+function Restore-SnapshotTransaction {
+    if ($script:snapshotSwapped) {
+        if (Test-Path -LiteralPath $script:target) {
+            Remove-Item -LiteralPath $script:target -Recurse -Force
+        }
+        if ($script:hadTarget -and (Test-Path -LiteralPath $script:previousTarget)) {
+            Move-Item -LiteralPath $script:previousTarget -Destination $script:target
+        }
+        Write-Warning "Install failed; restored the previous Agent Project Kit snapshot."
+    }
+    if ($script:previousRotated -and (Test-Path -LiteralPath $script:olderPreviousTarget)) {
+        if (Test-Path -LiteralPath $script:previousTarget) {
+            Remove-Item -LiteralPath $script:previousTarget -Recurse -Force
+        }
+        Move-Item -LiteralPath $script:olderPreviousTarget -Destination $script:previousTarget
+    }
+    if ($script:stage -and (Test-Path -LiteralPath $script:stage)) {
+        Remove-Item -LiteralPath $script:stage -Recurse -Force
+    }
+    if ($script:controlBackupReady -and $script:controlBackup -and (Test-Path -LiteralPath $script:controlBackup)) {
+        for ($index = 0; $index -lt $script:controlPaths.Count; $index++) {
+            $path = $script:controlPaths[$index]
+            if (Test-Path -LiteralPath $path) {
+                Remove-Item -LiteralPath $path -Recurse -Force
+            }
+            $saved = Join-Path $script:controlBackup ([string]$index)
+            if (Test-Path -LiteralPath $saved) {
+                $parent = Split-Path -Parent $path
+                New-Item -ItemType Directory -Force -Path $parent | Out-Null
+                Copy-Item -LiteralPath $saved -Destination $path -Recurse -Force
+            }
+        }
+    }
+    if ($script:controlBackup -and (Test-Path -LiteralPath $script:controlBackup)) {
+        Remove-Item -LiteralPath $script:controlBackup -Recurse -Force
+    }
+}
+
+trap {
+    Restore-SnapshotTransaction
+    Write-Error $_
+    exit 1
+}
+
 $firstInstall = if (Test-Path $target) { "no" } else { "yes" }
 $machine = if ($env:COMPUTERNAME) { $env:COMPUTERNAME.ToLower() } else { "unknown" }
 $environmentManager = "none (deferred; install user-local micromamba only when an environment is needed)"
@@ -102,12 +156,53 @@ function Assert-MetadataSafe {
     }
 }
 
+function Assert-StagedItemIntegrity {
+    param([string]$SourceRoot, [string]$StageRoot, [string]$Item)
+    $sourceItem = Join-Path $SourceRoot $Item
+    $stageItem = Join-Path $StageRoot $Item
+    $sourceFiles = if ((Get-Item -LiteralPath $sourceItem).PSIsContainer) {
+        @(Get-ChildItem -LiteralPath $sourceItem -File -Recurse)
+    } else {
+        @(Get-Item -LiteralPath $sourceItem)
+    }
+    foreach ($sourceFile in $sourceFiles) {
+        $relative = $sourceFile.FullName.Substring($SourceRoot.Length).TrimStart([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar)
+        $stageFile = Join-Path $StageRoot $relative
+        if (-not (Test-Path -LiteralPath $stageFile -PathType Leaf)) {
+            throw "Staged file missing during SHA-256 verification: $relative"
+        }
+        $sourceHash = (Get-FileHash -LiteralPath $sourceFile.FullName -Algorithm SHA256).Hash
+        $stageHash = (Get-FileHash -LiteralPath $stageFile -Algorithm SHA256).Hash
+        if ($sourceHash -ne $stageHash) {
+            throw "Staged SHA-256 mismatch: $relative"
+        }
+    }
+}
+
 $versionPath = Join-Path $aiDir "COMPUTING_ENVIRONMENT_VERSION.md"
 $installInfoPath = Join-Path $aiDir "INSTALLATION_INFO.md"
 Assert-MetadataSafe $versionPath
 Assert-MetadataSafe $installInfoPath
 Assert-ManagedOrMissing $target ".ai/agent-project-kit snapshot"
-New-Item -ItemType Directory -Force -Path $target | Out-Null
+Assert-ManagedOrMissing $previousTarget ".ai/agent-project-kit.previous snapshot"
+
+$controlPaths = @(
+    $versionPath,
+    $installInfoPath,
+    (Join-Path $aiDir "SESSION_LOG.md"),
+    (Join-Path $project "AGENTS.md"),
+    (Join-Path $project "CLAUDE.md"),
+    (Join-Path $project "ANTIGRAVITY.md")
+)
+$controlBackup = Join-Path $aiDir (".agent-project-kit.control-backup." + [guid]::NewGuid().ToString("N"))
+New-Item -ItemType Directory -Path $controlBackup | Out-Null
+for ($index = 0; $index -lt $controlPaths.Count; $index++) {
+    $path = $controlPaths[$index]
+    if (Test-Path -LiteralPath $path) {
+        Copy-Item -LiteralPath $path -Destination (Join-Path $controlBackup ([string]$index)) -Recurse -Force
+    }
+}
+$controlBackupReady = $true
 
 $items = @(
     "manifest.json",
@@ -146,16 +241,38 @@ $items = @(
     "scripts"
 )
 
+$stage = Join-Path $aiDir (".agent-project-kit.stage." + [guid]::NewGuid().ToString("N"))
+New-Item -ItemType Directory -Path $stage | Out-Null
 foreach ($item in $items) {
     $src = Join-Path $SourcePath $item
-    $dst = Join-Path $target $item
-    if (Test-Path $src) {
-        if (Test-Path $dst) { Remove-Item $dst -Recurse -Force }
-        Copy-Item -Path $src -Destination $dst -Recurse -Force
-    } else {
-        Write-Warning "Missing item: $src"
+    $dst = Join-Path $stage $item
+    if (-not (Test-Path -LiteralPath $src)) {
+        throw "Missing required package item: $src"
     }
+    Copy-Item -LiteralPath $src -Destination $dst -Recurse -Force
+    Assert-StagedItemIntegrity -SourceRoot $SourcePath -StageRoot $stage -Item $item
 }
+
+if (-not (Test-ManagedSnapshot $stage) -or
+    -not (Test-Path -LiteralPath (Join-Path $stage "STARTUP.md")) -or
+    -not (Test-Path -LiteralPath (Join-Path $stage "scripts/context.py"))) {
+    throw "Staged package validation failed: $stage"
+}
+
+if (Test-Path -LiteralPath $previousTarget) {
+    if (Test-Path -LiteralPath $olderPreviousTarget) {
+        Remove-Item -LiteralPath $olderPreviousTarget -Recurse -Force
+    }
+    Move-Item -LiteralPath $previousTarget -Destination $olderPreviousTarget
+    $previousRotated = $true
+}
+if (Test-Path -LiteralPath $target) {
+    $hadTarget = $true
+    Move-Item -LiteralPath $target -Destination $previousTarget
+}
+Move-Item -LiteralPath $stage -Destination $target
+$stage = ""
+$snapshotSwapped = $true
 
 New-Item -ItemType Directory -Force -Path $aiDir | Out-Null
 
@@ -386,3 +503,12 @@ Write-Host "Installed Agent Project Kit into: $target"
 Write-Host "Created/updated project AGENTS.md: $projectAgents"
 Write-Host "Project AI state directory: $aiDir"
 Write-Host "Detected machine: $machine"
+
+if (Test-Path -LiteralPath $olderPreviousTarget) {
+    Remove-Item -LiteralPath $olderPreviousTarget -Recurse -Force
+}
+if (Test-Path -LiteralPath $controlBackup) {
+    Remove-Item -LiteralPath $controlBackup -Recurse -Force
+}
+$controlBackupReady = $false
+$snapshotSwapped = $false

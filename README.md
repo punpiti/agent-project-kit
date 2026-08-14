@@ -10,7 +10,7 @@ Codex, Claude Code, Antigravity, or similar agents have a clear place to start.
 It is intentionally small: your application code stays yours, project-local
 notes stay under `.ai/`, and the managed kit snapshot can be refreshed later.
 
-Current release: `7.3.0-book-writing-canary`
+Current release: `7.4.0-transactional-update-canary`
 
 Use it when you want a project to keep simple notes about:
 
@@ -313,6 +313,11 @@ For a full update checklist, see
 The short version is: read the current version, check the GitHub Pages manifest
 with a dry run, then apply the update. Existing project-local `.ai/` state is
 preserved; package concepts are refreshed under `.ai/agent-project-kit/`.
+The updater builds and validates a staging snapshot before switching it into
+place, retains the prior snapshot as `.ai/agent-project-kit.previous`, and
+automatically restores the snapshot and installer-managed control files if a
+later install step fails. Pages-driven updates use the exact `git_ref` declared
+by the published manifest and reject version mismatches.
 
 Normal agent startup uses a persisted 14-day manifest-only check. It reports
 when a newer version is available but never clones, pulls, or installs by

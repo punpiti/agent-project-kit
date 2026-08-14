@@ -52,6 +52,56 @@ SOURCE_PATH="$(find_source_path)" || {
 PROJECT_PATH="$(cd "$PROJECT_PATH" && pwd)"
 AI_DIR="$PROJECT_PATH/.ai"
 TARGET="$AI_DIR/agent-project-kit"
+PREVIOUS_TARGET="$AI_DIR/agent-project-kit.previous"
+OLDER_PREVIOUS_TARGET="$AI_DIR/agent-project-kit.previous.old"
+STAGE=""
+CONTROL_BACKUP=""
+CONTROL_BACKUP_READY="no"
+SNAPSHOT_SWAPPED="no"
+HAD_TARGET="no"
+PREVIOUS_ROTATED="no"
+
+finish_install() {
+  local status="$?"
+  trap - EXIT INT TERM HUP
+  if [ "$status" -ne 0 ]; then
+    if [ "$SNAPSHOT_SWAPPED" = "yes" ]; then
+      rm -rf -- "$TARGET"
+      if [ "$HAD_TARGET" = "yes" ] && [ -e "$PREVIOUS_TARGET" ]; then
+        mv -- "$PREVIOUS_TARGET" "$TARGET"
+      fi
+      echo "Install failed; restored the previous Agent Project Kit snapshot." >&2
+    fi
+    if [ "$PREVIOUS_ROTATED" = "yes" ] && [ -e "$OLDER_PREVIOUS_TARGET" ]; then
+      rm -rf -- "$PREVIOUS_TARGET"
+      mv -- "$OLDER_PREVIOUS_TARGET" "$PREVIOUS_TARGET"
+    fi
+    if [ "$CONTROL_BACKUP_READY" = "yes" ] && [ -n "$CONTROL_BACKUP" ] && [ -d "$CONTROL_BACKUP" ]; then
+      local index path
+      for index in "${!CONTROL_PATHS[@]}"; do
+        path="${CONTROL_PATHS[$index]}"
+        rm -rf -- "$path"
+        if [ -e "$CONTROL_BACKUP/$index" ]; then
+          mkdir -p "$(dirname "$path")"
+          cp -R "$CONTROL_BACKUP/$index" "$path"
+        fi
+      done
+    fi
+  else
+    rm -rf -- "$OLDER_PREVIOUS_TARGET" || echo "Warning: could not remove old snapshot rotation: $OLDER_PREVIOUS_TARGET" >&2
+  fi
+  if [ -n "$STAGE" ] && [ -e "$STAGE" ]; then
+    rm -rf -- "$STAGE"
+  fi
+  if [ -n "$CONTROL_BACKUP" ] && [ -e "$CONTROL_BACKUP" ]; then
+    rm -rf -- "$CONTROL_BACKUP" || echo "Warning: could not remove installer control backup: $CONTROL_BACKUP" >&2
+  fi
+  exit "$status"
+}
+
+trap finish_install EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM HUP
 if [ -e "$TARGET" ]; then
   FIRST_INSTALL="no"
 else
@@ -118,6 +168,53 @@ ensure_metadata_safe() {
   fi
 }
 
+file_sha256() {
+  local path="$1"
+  if command -v sha256sum >/dev/null 2>&1; then
+    sha256sum "$path" | awk '{print $1}'
+  elif command -v shasum >/dev/null 2>&1; then
+    shasum -a 256 "$path" | awk '{print $1}'
+  elif command -v openssl >/dev/null 2>&1; then
+    openssl dgst -sha256 "$path" | awk '{print $NF}'
+  else
+    return 2
+  fi
+}
+
+verify_staged_item() {
+  local item="$1" source_item="$SOURCE_PATH/$item" staged_item="$STAGE/$item"
+  local source_file relative staged_file source_hash staged_hash
+  if [ -f "$source_item" ]; then
+    source_hash="$(file_sha256 "$source_item")" || {
+      echo "No SHA-256 tool found (sha256sum, shasum, or openssl)." >&2
+      return 1
+    }
+    staged_hash="$(file_sha256 "$staged_item")" || return 1
+    [ "$source_hash" = "$staged_hash" ] || {
+      echo "Staged SHA-256 mismatch: $item" >&2
+      return 1
+    }
+    return 0
+  fi
+  while IFS= read -r -d '' source_file; do
+    relative="${source_file#"$SOURCE_PATH/"}"
+    staged_file="$STAGE/$relative"
+    if [ ! -f "$staged_file" ]; then
+      echo "Staged file missing during SHA-256 verification: $relative" >&2
+      return 1
+    fi
+    source_hash="$(file_sha256 "$source_file")" || {
+      echo "No SHA-256 tool found (sha256sum, shasum, or openssl)." >&2
+      return 1
+    }
+    staged_hash="$(file_sha256 "$staged_file")" || return 1
+    if [ "$source_hash" != "$staged_hash" ]; then
+      echo "Staged SHA-256 mismatch: $relative" >&2
+      return 1
+    fi
+  done < <(find "$source_item" -type f -print0)
+}
+
 mkdir -p "$AI_DIR"
 if [ "$(cd "$SOURCE_PATH" && pwd)" = "$TARGET" ]; then
   echo "Source path equals install target: $TARGET" >&2
@@ -125,9 +222,25 @@ if [ "$(cd "$SOURCE_PATH" && pwd)" = "$TARGET" ]; then
   exit 1
 fi
 ensure_managed_or_missing "$TARGET" ".ai/agent-project-kit snapshot"
+ensure_managed_or_missing "$PREVIOUS_TARGET" ".ai/agent-project-kit.previous snapshot"
 ensure_metadata_safe "$AI_DIR/COMPUTING_ENVIRONMENT_VERSION.md"
 ensure_metadata_safe "$AI_DIR/INSTALLATION_INFO.md"
-mkdir -p "$TARGET"
+
+CONTROL_PATHS=(
+  "$AI_DIR/COMPUTING_ENVIRONMENT_VERSION.md"
+  "$AI_DIR/INSTALLATION_INFO.md"
+  "$AI_DIR/SESSION_LOG.md"
+  "$PROJECT_PATH/AGENTS.md"
+  "$PROJECT_PATH/CLAUDE.md"
+  "$PROJECT_PATH/ANTIGRAVITY.md"
+)
+CONTROL_BACKUP="$(mktemp -d "$AI_DIR/.agent-project-kit.control-backup.XXXXXX")"
+for index in "${!CONTROL_PATHS[@]}"; do
+  if [ -e "${CONTROL_PATHS[$index]}" ]; then
+    cp -R "${CONTROL_PATHS[$index]}" "$CONTROL_BACKUP/$index"
+  fi
+done
+CONTROL_BACKUP_READY="yes"
 
 items=(
   manifest.json
@@ -186,16 +299,35 @@ PACKAGE_UPDATED="${PACKAGE_UPDATED:-unknown}"
 STATE_SCHEMA_VERSION="${STATE_SCHEMA_VERSION:-unknown}"
 MACHINE_PROFILE_SCHEMA_VERSION="${MACHINE_PROFILE_SCHEMA_VERSION:-unknown}"
 
+STAGE="$(mktemp -d "$AI_DIR/.agent-project-kit.stage.XXXXXX")"
 for item in "${items[@]}"; do
   src="$SOURCE_PATH/$item"
-  dst="$TARGET/$item"
-  if [ -e "$src" ]; then
-    rm -rf "$dst"
-    cp -R "$src" "$dst"
-  else
-    echo "Warning: missing item $src" >&2
+  dst="$STAGE/$item"
+  if [ ! -e "$src" ]; then
+    echo "Missing required package item: $src" >&2
+    exit 1
   fi
+  cp -R "$src" "$dst"
+  verify_staged_item "$item"
 done
+
+if ! is_managed_snapshot "$STAGE" || [ ! -f "$STAGE/STARTUP.md" ] || [ ! -f "$STAGE/scripts/context.py" ]; then
+  echo "Staged package validation failed: $STAGE" >&2
+  exit 1
+fi
+
+if [ -e "$PREVIOUS_TARGET" ]; then
+  rm -rf -- "$OLDER_PREVIOUS_TARGET"
+  mv -- "$PREVIOUS_TARGET" "$OLDER_PREVIOUS_TARGET"
+  PREVIOUS_ROTATED="yes"
+fi
+if [ -e "$TARGET" ]; then
+  HAD_TARGET="yes"
+  mv -- "$TARGET" "$PREVIOUS_TARGET"
+fi
+mv -- "$STAGE" "$TARGET"
+STAGE=""
+SNAPSHOT_SWAPPED="yes"
 
 create_from_template() {
   local template="$1"
@@ -317,7 +449,6 @@ if grep -q "$MANAGED_BLOCK" "$PROJECT_AGENTS"; then
   mv "$tmp_agents" "$PROJECT_AGENTS"
 fi
 cat >> "$PROJECT_AGENTS" <<'EOF2'
-
 <!-- BEGIN COMPUTING-ENVIRONMENT -->
 This project uses Agent Project Kit. On each request:
 

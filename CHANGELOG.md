@@ -2,6 +2,22 @@
 
 All notable changes to Agent Project Kit are summarized here.
 
+## 7.4.0-transactional-update-canary — 2026-08-13
+
+- Build and validate updates in a same-filesystem staging directory before
+  switching the installed snapshot into place.
+- Compare SHA-256 for every copied package file before allowing the snapshot
+  switch.
+- Retain the prior snapshot at `.ai/agent-project-kit.previous`; automatically
+  restore it and installer-managed control files if a post-switch step fails.
+- Treat missing package items as preflight failures instead of leaving a mixed
+  or partial snapshot.
+- Pin Pages-driven updates to the manifest `git_ref` and reject a checked-out
+  ref whose package version differs from the advertised manifest version.
+- Add Bash and PowerShell regression coverage for incomplete sources,
+  successful swaps, post-switch failures, rollback cleanup, state preservation,
+  exact-ref selection, and version-mismatch rejection.
+
 ## 7.3.0-book-writing-canary — 2026-08-13
 
 - Added Book Writing as a full evidence-first primary route with a reusable,

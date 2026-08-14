@@ -11,6 +11,7 @@ PROJECT_PATH="${1:-.}"
 REPO_URL="${2:-}"
 REF="${3:-}"
 CLONE_DIR="${4:-}"
+EXPECTED_VERSION="${5:-}"
 
 if [ -z "$REPO_URL" ]; then
   echo "Usage:" >&2
@@ -82,6 +83,12 @@ version_line() {
     sed -n "s/^- $label:[[:space:]]*//p" "$version_file" | head -n 1
   fi
 }
+
+CHECKED_OUT_VERSION="$(manifest_value version)"
+if [ -n "$EXPECTED_VERSION" ] && [ "$CHECKED_OUT_VERSION" != "$EXPECTED_VERSION" ]; then
+  echo "Refusing package version mismatch: manifest advertised $EXPECTED_VERSION but ref $REF contains ${CHECKED_OUT_VERSION:-unknown}." >&2
+  exit 1
+fi
 
 if [ "$DRY_RUN" = "yes" ]; then
   CURRENT_PACKAGE_VERSION="$(version_line "Package version")"
