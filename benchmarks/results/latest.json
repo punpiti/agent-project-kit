@@ -1,0 +1,758 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-14T02:17:18.918858+00:00",
+  "package_version": "7.4.0-transactional-update-canary",
+  "host": {
+    "system": "Linux",
+    "release": "5.15.133.1-microsoft-standard-WSL2",
+    "machine": "x86_64"
+  },
+  "git": {
+    "commit": "f103e0673ee89df872969c1b674c1d43741814a0",
+    "working_tree_dirty": false
+  },
+  "context": {
+    "definition": {
+      "selective": "One compiled primary route, up to two triggered secondary workflows, and configured project/task state.",
+      "reference": "The same configured state plus every catalog entry classified as primary or secondary; one-time and legacy-reference prompts are excluded.",
+      "token_estimate": "UTF-8 serialized bytes divided by four; this is a planning estimate, not provider-billed token usage."
+    },
+    "fixture_cases": 29,
+    "fixture_passed": 29,
+    "fixture_pass_rate_percent": 100.0,
+    "eager_prompt_count": 18,
+    "eager_prompt_paths": [
+      "prompts/03_CODEX_CODING_AGENT.md",
+      "prompts/04_PAPER_REVIEWER_RESPONSE.md",
+      "prompts/05_SLIDES_TEACHING.md",
+      "prompts/07_EXTERNAL_FEEDBACK.md",
+      "prompts/08_PROJECT_RESUME.md",
+      "prompts/10_DOCUMENT_PRODUCTION.md",
+      "prompts/12_MARKDOWN_CLEANUP.md",
+      "prompts/13_RESEARCH_PROJECT_PROMPTS.md",
+      "prompts/22_BOOK_WRITING.md",
+      "prompts/23_PRESENTATION_PRODUCTION.md",
+      "prompts/14_WEB_DEVELOPMENT.md",
+      "prompts/15_CONTENT_ANALYSIS.md",
+      "prompts/16_DATA_ANALYTICS.md",
+      "prompts/17_COURSE_MATERIAL_DEVELOPMENT.md",
+      "prompts/18_EDUCATIONAL_POLICY_DEVELOPMENT.md",
+      "prompts/19_SOFTWARE_DEVELOPMENT_AUTOMATION.md",
+      "prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md",
+      "prompts/21_STRATEGY_ADVISORY.md"
+    ],
+    "eager_reference_bytes": 170555,
+    "median_fast_estimated_tokens": 2045,
+    "p95_fast_estimated_tokens": 30190.8,
+    "median_context_reduction_percent": 95.2,
+    "minimum_context_reduction_percent": 27.01,
+    "maximum_secondary_modules": 2,
+    "rows": [
+      {
+        "request": "fix the responsive website login bug",
+        "expected_domain": "software",
+        "actual_domain": "software",
+        "expected_deliverable": "code",
+        "actual_deliverable": "code",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 6681,
+        "fast_estimated_tokens": 1670,
+        "compiler_envelope_bytes": 2031,
+        "selected_prompt_paths": [
+          "prompts/19_SOFTWARE_DEVELOPMENT_AUTOMATION.md",
+          "prompts/03_CODEX_CODING_AGENT.md",
+          "prompts/14_WEB_DEVELOPMENT.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 96.08,
+        "primary_modules": 1,
+        "secondary_modules": 2,
+        "needs_clarification": false
+      },
+      {
+        "request": "refactor the software prompt routing and run acceptance tests",
+        "expected_domain": "software",
+        "actual_domain": "software",
+        "expected_deliverable": "code",
+        "actual_deliverable": "code",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 5571,
+        "fast_estimated_tokens": 1392,
+        "compiler_envelope_bytes": 1790,
+        "selected_prompt_paths": [
+          "prompts/19_SOFTWARE_DEVELOPMENT_AUTOMATION.md",
+          "prompts/03_CODEX_CODING_AGENT.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 96.73,
+        "primary_modules": 1,
+        "secondary_modules": 1,
+        "needs_clarification": false
+      },
+      {
+        "request": "วิเคราะห์ข้อมูลผลสอบและทำกราฟ",
+        "expected_domain": "general",
+        "actual_domain": "general",
+        "expected_deliverable": "analysis",
+        "actual_deliverable": "analysis",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 789,
+        "fast_estimated_tokens": 197,
+        "compiler_envelope_bytes": 1538,
+        "selected_prompt_paths": [],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 99.54,
+        "primary_modules": 1,
+        "secondary_modules": 0,
+        "needs_clarification": false
+      },
+      {
+        "request": "prepare an IPST education policy proposal for council",
+        "expected_domain": "governance",
+        "actual_domain": "governance",
+        "expected_deliverable": "policy",
+        "actual_deliverable": "policy",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 2697,
+        "fast_estimated_tokens": 674,
+        "compiler_envelope_bytes": 1542,
+        "selected_prompt_paths": [
+          "prompts/18_EDUCATIONAL_POLICY_DEVELOPMENT.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 98.42,
+        "primary_modules": 1,
+        "secondary_modules": 0,
+        "needs_clarification": false
+      },
+      {
+        "request": "review the IPST education policy and prepare recommendations",
+        "expected_domain": "governance",
+        "actual_domain": "governance",
+        "expected_deliverable": "policy",
+        "actual_deliverable": "policy",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 3592,
+        "fast_estimated_tokens": 898,
+        "compiler_envelope_bytes": 1832,
+        "selected_prompt_paths": [
+          "prompts/18_EDUCATIONAL_POLICY_DEVELOPMENT.md",
+          "prompts/21_STRATEGY_ADVISORY.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 97.89,
+        "primary_modules": 1,
+        "secondary_modules": 1,
+        "needs_clarification": false
+      },
+      {
+        "request": "prepare a presentation for the university council policy proposal",
+        "expected_domain": "governance",
+        "actual_domain": "governance",
+        "expected_deliverable": "presentation",
+        "actual_deliverable": "presentation",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 2241,
+        "fast_estimated_tokens": 560,
+        "compiler_envelope_bytes": 1549,
+        "selected_prompt_paths": [
+          "prompts/05_SLIDES_TEACHING.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 98.69,
+        "primary_modules": 1,
+        "secondary_modules": 0,
+        "needs_clarification": false
+      },
+      {
+        "request": "review the genome manuscript against reviewer concerns",
+        "expected_domain": "research",
+        "actual_domain": "research",
+        "expected_deliverable": "paper",
+        "actual_deliverable": "paper",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 10303,
+        "fast_estimated_tokens": 2575,
+        "compiler_envelope_bytes": 1779,
+        "selected_prompt_paths": [
+          "prompts/13_RESEARCH_PROJECT_PROMPTS.md",
+          "prompts/04_PAPER_REVIEWER_RESPONSE.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 93.96,
+        "primary_modules": 1,
+        "secondary_modules": 1,
+        "needs_clarification": false
+      },
+      {
+        "request": "ติดตามกำหนดส่งเอกสาร sabbatical leave",
+        "expected_domain": "operations",
+        "actual_domain": "operations",
+        "expected_deliverable": "document",
+        "actual_deliverable": "document",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 11259,
+        "fast_estimated_tokens": 2814,
+        "compiler_envelope_bytes": 1935,
+        "selected_prompt_paths": [
+          "prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md",
+          "prompts/10_DOCUMENT_PRODUCTION.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 93.4,
+        "primary_modules": 1,
+        "secondary_modules": 1,
+        "needs_clarification": false
+      },
+      {
+        "request": "write a literature review for the rainfall paper",
+        "expected_domain": "research",
+        "actual_domain": "research",
+        "expected_deliverable": "paper",
+        "actual_deliverable": "paper",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 10303,
+        "fast_estimated_tokens": 2575,
+        "compiler_envelope_bytes": 1805,
+        "selected_prompt_paths": [
+          "prompts/13_RESEARCH_PROJECT_PROMPTS.md",
+          "prompts/04_PAPER_REVIEWER_RESPONSE.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 93.96,
+        "primary_modules": 1,
+        "secondary_modules": 1,
+        "needs_clarification": false
+      },
+      {
+        "request": "สร้างสไลด์สำหรับสอน machine learning",
+        "expected_domain": "education",
+        "actual_domain": "education",
+        "expected_deliverable": "presentation",
+        "actual_deliverable": "presentation",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 12588,
+        "fast_estimated_tokens": 3147,
+        "compiler_envelope_bytes": 1899,
+        "selected_prompt_paths": [
+          "prompts/05_SLIDES_TEACHING.md",
+          "prompts/23_PRESENTATION_PRODUCTION.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 92.62,
+        "primary_modules": 1,
+        "secondary_modules": 1,
+        "needs_clarification": false
+      },
+      {
+        "request": "prepare a Decidim participatory-budgeting workshop activity",
+        "expected_domain": "education",
+        "actual_domain": "education",
+        "expected_deliverable": "course-material",
+        "actual_deliverable": "course-material",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 5724,
+        "fast_estimated_tokens": 1431,
+        "compiler_envelope_bytes": 1531,
+        "selected_prompt_paths": [
+          "prompts/17_COURSE_MATERIAL_DEVELOPMENT.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 96.64,
+        "primary_modules": 1,
+        "secondary_modules": 0,
+        "needs_clarification": false
+      },
+      {
+        "request": "review the IPST AI for Future Education master plan",
+        "expected_domain": "governance",
+        "actual_domain": "governance",
+        "expected_deliverable": "policy",
+        "actual_deliverable": "policy",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 2697,
+        "fast_estimated_tokens": 674,
+        "compiler_envelope_bytes": 1539,
+        "selected_prompt_paths": [
+          "prompts/18_EDUCATIONAL_POLICY_DEVELOPMENT.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 98.42,
+        "primary_modules": 1,
+        "secondary_modules": 0,
+        "needs_clarification": false
+      },
+      {
+        "request": "prepare a university alumni award nomination dossier",
+        "expected_domain": "operations",
+        "actual_domain": "operations",
+        "expected_deliverable": "document",
+        "actual_deliverable": "document",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 11259,
+        "fast_estimated_tokens": 2814,
+        "compiler_envelope_bytes": 1910,
+        "selected_prompt_paths": [
+          "prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md",
+          "prompts/10_DOCUMENT_PRODUCTION.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 93.4,
+        "primary_modules": 1,
+        "secondary_modules": 1,
+        "needs_clarification": false
+      },
+      {
+        "request": "coordinate TMD correspondence and meeting follow-up",
+        "expected_domain": "operations",
+        "actual_domain": "operations",
+        "expected_deliverable": "document",
+        "actual_deliverable": "document",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 11259,
+        "fast_estimated_tokens": 2814,
+        "compiler_envelope_bytes": 1909,
+        "selected_prompt_paths": [
+          "prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md",
+          "prompts/10_DOCUMENT_PRODUCTION.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 93.4,
+        "primary_modules": 1,
+        "secondary_modules": 1,
+        "needs_clarification": false
+      },
+      {
+        "request": "develop an open-channel-flow teaching document for the course",
+        "expected_domain": "education",
+        "actual_domain": "education",
+        "expected_deliverable": "course-material",
+        "actual_deliverable": "course-material",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 5724,
+        "fast_estimated_tokens": 1431,
+        "compiler_envelope_bytes": 1533,
+        "selected_prompt_paths": [
+          "prompts/17_COURSE_MATERIAL_DEVELOPMENT.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 96.64,
+        "primary_modules": 1,
+        "secondary_modules": 0,
+        "needs_clarification": false
+      },
+      {
+        "request": "assess how to supervise an undergraduate research student",
+        "expected_domain": "research",
+        "actual_domain": "research",
+        "expected_deliverable": "decision",
+        "actual_deliverable": "decision",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 8180,
+        "fast_estimated_tokens": 2045,
+        "compiler_envelope_bytes": 1527,
+        "selected_prompt_paths": [
+          "prompts/13_RESEARCH_PROJECT_PROMPTS.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 95.2,
+        "primary_modules": 1,
+        "secondary_modules": 0,
+        "needs_clarification": false
+      },
+      {
+        "request": "maintain the IOI / POSN curriculum and selection documents",
+        "expected_domain": "governance",
+        "actual_domain": "governance",
+        "expected_deliverable": "document",
+        "actual_deliverable": "document",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 11992,
+        "fast_estimated_tokens": 2998,
+        "compiler_envelope_bytes": 1904,
+        "selected_prompt_paths": [
+          "prompts/18_EDUCATIONAL_POLICY_DEVELOPMENT.md",
+          "prompts/10_DOCUMENT_PRODUCTION.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 92.97,
+        "primary_modules": 1,
+        "secondary_modules": 1,
+        "needs_clarification": false
+      },
+      {
+        "request": "refactor the task router configuration",
+        "expected_domain": "software",
+        "actual_domain": "software",
+        "expected_deliverable": "code",
+        "actual_deliverable": "code",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 5571,
+        "fast_estimated_tokens": 1392,
+        "compiler_envelope_bytes": 1767,
+        "selected_prompt_paths": [
+          "prompts/19_SOFTWARE_DEVELOPMENT_AUTOMATION.md",
+          "prompts/03_CODEX_CODING_AGENT.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 96.73,
+        "primary_modules": 1,
+        "secondary_modules": 1,
+        "needs_clarification": false
+      },
+      {
+        "request": "prepare a one-hour research review seminar for graduate students",
+        "expected_domain": "education",
+        "actual_domain": "education",
+        "expected_deliverable": "presentation",
+        "actual_deliverable": "presentation",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 2241,
+        "fast_estimated_tokens": 560,
+        "compiler_envelope_bytes": 1546,
+        "selected_prompt_paths": [
+          "prompts/05_SLIDES_TEACHING.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 98.69,
+        "primary_modules": 1,
+        "secondary_modules": 0,
+        "needs_clarification": false
+      },
+      {
+        "request": "maintain the academic promotion evidence and KU forms",
+        "expected_domain": "operations",
+        "actual_domain": "operations",
+        "expected_deliverable": "document",
+        "actual_deliverable": "document",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 11259,
+        "fast_estimated_tokens": 2814,
+        "compiler_envelope_bytes": 1911,
+        "selected_prompt_paths": [
+          "prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md",
+          "prompts/10_DOCUMENT_PRODUCTION.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 93.4,
+        "primary_modules": 1,
+        "secondary_modules": 1,
+        "needs_clarification": false
+      },
+      {
+        "request": "plan an academic-rank evidence set before filling forms",
+        "expected_domain": "operations",
+        "actual_domain": "operations",
+        "expected_deliverable": "decision",
+        "actual_deliverable": "decision",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 1964,
+        "fast_estimated_tokens": 491,
+        "compiler_envelope_bytes": 1558,
+        "selected_prompt_paths": [
+          "prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 98.85,
+        "primary_modules": 1,
+        "secondary_modules": 0,
+        "needs_clarification": false
+      },
+      {
+        "request": "เขียนหนังสือตำรากลศาสตร์ของไหลจากหลักฐานที่ตรวจแล้ว",
+        "expected_domain": "book-writing",
+        "actual_domain": "book-writing",
+        "expected_deliverable": "book",
+        "actual_deliverable": "book",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 115188,
+        "fast_estimated_tokens": 28797,
+        "compiler_envelope_bytes": 1766,
+        "selected_prompt_paths": [
+          "prompts/22_BOOK_WRITING.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 32.46,
+        "primary_modules": 1,
+        "secondary_modules": 0,
+        "needs_clarification": false
+      },
+      {
+        "request": "เขียนหนังสือวิศวกรรมจาก PDF DOCX และ PPTX ขนาดใหญ่",
+        "expected_domain": "book-writing",
+        "actual_domain": "book-writing",
+        "expected_deliverable": "book",
+        "actual_deliverable": "book",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 115188,
+        "fast_estimated_tokens": 28797,
+        "compiler_envelope_bytes": 1732,
+        "selected_prompt_paths": [
+          "prompts/22_BOOK_WRITING.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 32.46,
+        "primary_modules": 1,
+        "secondary_modules": 0,
+        "needs_clarification": false
+      },
+      {
+        "request": "build หนังสือเป็น EPUB และ PDF",
+        "expected_domain": "book-writing",
+        "actual_domain": "book-writing",
+        "expected_deliverable": "book",
+        "actual_deliverable": "book",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 124483,
+        "fast_estimated_tokens": 31120,
+        "compiler_envelope_bytes": 2029,
+        "selected_prompt_paths": [
+          "prompts/22_BOOK_WRITING.md",
+          "prompts/10_DOCUMENT_PRODUCTION.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 27.01,
+        "primary_modules": 1,
+        "secondary_modules": 1,
+        "needs_clarification": false
+      },
+      {
+        "request": "วาง storyline สำหรับ presentation ผู้บริหาร",
+        "expected_domain": "general",
+        "actual_domain": "general",
+        "expected_deliverable": "presentation",
+        "actual_deliverable": "presentation",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 2241,
+        "fast_estimated_tokens": 560,
+        "compiler_envelope_bytes": 1560,
+        "selected_prompt_paths": [
+          "prompts/05_SLIDES_TEACHING.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 98.69,
+        "primary_modules": 1,
+        "secondary_modules": 0,
+        "needs_clarification": false
+      },
+      {
+        "request": "จัดทำหนังสือราชการถึงคณะ",
+        "expected_domain": "operations",
+        "actual_domain": "operations",
+        "expected_deliverable": "document",
+        "actual_deliverable": "document",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 11259,
+        "fast_estimated_tokens": 2814,
+        "compiler_envelope_bytes": 1930,
+        "selected_prompt_paths": [
+          "prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md",
+          "prompts/10_DOCUMENT_PRODUCTION.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 93.4,
+        "primary_modules": 1,
+        "secondary_modules": 1,
+        "needs_clarification": false
+      },
+      {
+        "request": "create slides for the council briefing",
+        "expected_domain": "governance",
+        "actual_domain": "governance",
+        "expected_deliverable": "presentation",
+        "actual_deliverable": "presentation",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 12588,
+        "fast_estimated_tokens": 3147,
+        "compiler_envelope_bytes": 1864,
+        "selected_prompt_paths": [
+          "prompts/05_SLIDES_TEACHING.md",
+          "prompts/23_PRESENTATION_PRODUCTION.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 92.62,
+        "primary_modules": 1,
+        "secondary_modules": 1,
+        "needs_clarification": false
+      },
+      {
+        "request": "export the book manuscript to EPUB",
+        "expected_domain": "book-writing",
+        "actual_domain": "book-writing",
+        "expected_deliverable": "book",
+        "actual_deliverable": "book",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 124483,
+        "fast_estimated_tokens": 31120,
+        "compiler_envelope_bytes": 2003,
+        "selected_prompt_paths": [
+          "prompts/22_BOOK_WRITING.md",
+          "prompts/10_DOCUMENT_PRODUCTION.md"
+        ],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 27.01,
+        "primary_modules": 1,
+        "secondary_modules": 1,
+        "needs_clarification": false
+      },
+      {
+        "request": "build a KPI dashboard from validated product data",
+        "expected_domain": "general",
+        "actual_domain": "general",
+        "expected_deliverable": "analysis",
+        "actual_deliverable": "analysis",
+        "fixture_pass": true,
+        "issues": [],
+        "fast_context_bytes": 789,
+        "fast_estimated_tokens": 197,
+        "compiler_envelope_bytes": 1502,
+        "selected_prompt_paths": [],
+        "eager_reference_bytes": 170555,
+        "eager_estimated_tokens": 42638,
+        "context_reduction_percent": 99.54,
+        "primary_modules": 1,
+        "secondary_modules": 0,
+        "needs_clarification": true
+      }
+    ]
+  },
+  "cadence": {
+    "simulated_starts": 10,
+    "expensive_action_executions": 1,
+    "repeated_actions_avoided": 9,
+    "avoidance_percent": 90.0,
+    "ttl_days": 14,
+    "definition": "Ten starts occur inside one valid 14-day persisted cadence window; the command appends one byte whenever it really executes."
+  },
+  "safety": {
+    "status": "passed",
+    "transactional_suite": {
+      "passed": true,
+      "covers": [
+        "incomplete source rejected before active snapshot changes",
+        "successful staged swap retains a previous snapshot",
+        "post-swap failure restores snapshot, metadata, and control files",
+        "project state survives update and rollback",
+        "manifest git_ref wins when main advances",
+        "advertised-version mismatch is rejected",
+        "Bash and PowerShell installer paths execute under the current WSL test host"
+      ],
+      "stdout_tail": [
+        "transactional update tests: PASS"
+      ],
+      "stderr_tail": [
+        "done.",
+        "Cloning into '/tmp/tmp.ggZC0SQ7cz/ps-clone'...",
+        "done."
+      ]
+    },
+    "fast_start_suite": {
+      "passed": true,
+      "covers": [
+        "project-local state preservation",
+        "managed AGENTS block idempotency",
+        "failed run-once commands are not cached",
+        "manifest notice never installs package files"
+      ],
+      "stdout_tail": [
+        "fast-start acceptance tests: PASS"
+      ],
+      "stderr_tail": []
+    },
+    "native_windows_verified": false,
+    "native_windows_caveat": "PowerShell paths ran with pwsh on WSL; the result is not native-Windows certification."
+  },
+  "metrics": [
+    {
+      "metric": "Controlled routing fixture pass rate",
+      "value": 100.0,
+      "unit": "%",
+      "denominator": 29,
+      "claim_scope": "Bundled bilingual fixture only"
+    },
+    {
+      "metric": "Median selective-context reduction",
+      "value": 95.2,
+      "unit": "%",
+      "denominator": 29,
+      "claim_scope": "Versus documented eager prompt-loading reference"
+    },
+    {
+      "metric": "Maximum secondary workflows loaded",
+      "value": 2,
+      "unit": "modules",
+      "denominator": 29,
+      "claim_scope": "Controlled fixture"
+    },
+    {
+      "metric": "Repeated cadence actions avoided",
+      "value": 90.0,
+      "unit": "%",
+      "denominator": 10,
+      "claim_scope": "Ten starts inside one 14-day TTL window"
+    },
+    {
+      "metric": "Transactional safety suites",
+      "value": 1,
+      "unit": "pass",
+      "denominator": 1,
+      "claim_scope": "Local WSL host; native Windows excluded"
+    }
+  ]
+}

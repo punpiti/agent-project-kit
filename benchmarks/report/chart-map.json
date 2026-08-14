@@ -1,0 +1,30 @@
+{
+  "charts": [
+    {
+      "section": "Selective loading cuts instruction volume, but the gain varies by task",
+      "question": "Does selective loading stay smaller across task domains?",
+      "family": "Comparison & Ranking",
+      "type": "horizontalBar",
+      "fields": [
+        "domain",
+        "median_reduction_percent",
+        "cases",
+        "median_estimated_tokens",
+        "minimum_reduction_percent"
+      ],
+      "supported_claim": "The reduction is broad but varies by domain.",
+      "palette": "single-root blue plus neutrals",
+      "delivery": "benchmarks/report/report.html"
+    }
+  ],
+  "omitted_visuals": [
+    {
+      "section": "Routing and cadence",
+      "reason": "One 10-start discrete simulation is clearer as metric cards and narrative than an underpowered trend."
+    },
+    {
+      "section": "Update safety",
+      "reason": "Exact covered behaviors are an audit lookup; a table is more honest than a chart."
+    }
+  ]
+}

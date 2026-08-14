@@ -7,12 +7,13 @@ param(
     [Parameter(Position = 2)]
     [string]$RepoUrl = "https://github.com/punpiti/agent-project-kit.git",
     [Parameter(Position = 3)]
-    [string]$Ref = "main",
+    [string]$Ref = "",
     [Parameter(Position = 4)]
     [string]$CloneDir = ""
 )
 
 $ErrorActionPreference = "Stop"
+$hostExecutable = (Get-Process -Id $PID).Path
 
 $project = (Resolve-Path $ProjectPath).Path
 $aiDir = Join-Path $project ".ai"
@@ -72,6 +73,10 @@ $latestVersion = if ($manifest.version) { [string]$manifest.version } else { "un
 $latestUpdated = if ($manifest.updated) { [string]$manifest.updated } else { "" }
 $latestStateSchema = if ($manifest.state_schema_version) { [string]$manifest.state_schema_version } else { "unknown" }
 $latestMachineSchema = if ($manifest.machine_profile_schema_version) { [string]$manifest.machine_profile_schema_version } else { "unknown" }
+$manifestRef = if ($manifest.git_ref) { [string]$manifest.git_ref } else { "" }
+if (-not $Ref) {
+    $Ref = if ($manifestRef) { $manifestRef } else { "v$latestVersion" }
+}
 
 $currentVersion = Read-VersionLine $versionFile "Package version"
 $currentUpdated = Read-VersionLine $versionFile "Package updated"
@@ -111,18 +116,20 @@ Write-Host "Project-local state files will be preserved by install-from-git."
 
 if ($DryRun) {
     if ($CloneDir) {
-        powershell -ExecutionPolicy Bypass -File $installer -DryRun -ProjectPath $project -RepoUrl $RepoUrl -Ref $Ref -CloneDir $CloneDir
+        & $hostExecutable -NoProfile -ExecutionPolicy Bypass -File $installer -DryRun -ProjectPath $project -RepoUrl $RepoUrl -Ref $Ref -CloneDir $CloneDir -ExpectedVersion $latestVersion
     } else {
-        powershell -ExecutionPolicy Bypass -File $installer -DryRun -ProjectPath $project -RepoUrl $RepoUrl -Ref $Ref
+        & $hostExecutable -NoProfile -ExecutionPolicy Bypass -File $installer -DryRun -ProjectPath $project -RepoUrl $RepoUrl -Ref $Ref -ExpectedVersion $latestVersion
     }
+    if ($LASTEXITCODE -ne 0) { throw "Agent Project Kit update dry run failed." }
     exit 0
 }
 
 if ($CloneDir) {
-    powershell -ExecutionPolicy Bypass -File $installer -ProjectPath $project -RepoUrl $RepoUrl -Ref $Ref -CloneDir $CloneDir
+    & $hostExecutable -NoProfile -ExecutionPolicy Bypass -File $installer -ProjectPath $project -RepoUrl $RepoUrl -Ref $Ref -CloneDir $CloneDir -ExpectedVersion $latestVersion
 } else {
-    powershell -ExecutionPolicy Bypass -File $installer -ProjectPath $project -RepoUrl $RepoUrl -Ref $Ref
+    & $hostExecutable -NoProfile -ExecutionPolicy Bypass -File $installer -ProjectPath $project -RepoUrl $RepoUrl -Ref $Ref -ExpectedVersion $latestVersion
 }
+if ($LASTEXITCODE -ne 0) { throw "Agent Project Kit update failed; project metadata was not advanced." }
 
 if (Test-Path $versionFile) {
     $text = Get-Content $versionFile -Raw

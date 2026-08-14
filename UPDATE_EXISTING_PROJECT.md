@@ -75,6 +75,13 @@ KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
 bash "$KIT/scripts/update-from-pages.sh" .
 ```
 
+The updater resolves the exact `git_ref` published in the Pages manifest and
+requires the checked-out package version to match the advertised version. The
+installer copies all required package content into a same-filesystem staging
+directory, compares SHA-256 for every copied file, and validates the staged
+snapshot before changing the active snapshot. A missing or mismatched item
+therefore fails before the current snapshot is touched.
+
 5. Verify the result.
 
 ```bash
@@ -108,6 +115,18 @@ Use `.ai/COMPUTING_ENVIRONMENT_VERSION.md` after the update:
 
 ## Rollback
 
+Normal updates keep the immediately previous verified snapshot at:
+
+```text
+.ai/agent-project-kit.previous/
+```
+
+If any installer step fails after the snapshot switch, the installer restores
+the active snapshot and installer-managed control files automatically. The
+`.previous` directory is retained after success as a one-version recovery copy;
+the next successful update rotates it. Project-local state files are never used
+as package rollback storage.
+
 Pinned tags are better than `main` when you need repeatability.
 
 ```bash
@@ -125,6 +144,10 @@ tag and preserved project-local state. Do not delete `.ai/PROJECT_STATE.md`,
   version.
 - The dry run reports whether state or machine-profile schema changes.
 - The real update rewrites `.ai/agent-project-kit/`.
+- The real update retains the prior snapshot under
+  `.ai/agent-project-kit.previous/`.
+- A staged or post-switch failure restores the pre-update snapshot and control
+  files and leaves no staging/rotation debris.
 - Existing project-local state files are still present after update.
 - `.ai/COMPUTING_ENVIRONMENT_VERSION.md` records previous and current versions.
 - `.ai/SESSION_LOG.md` has an update entry.

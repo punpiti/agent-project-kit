@@ -10,7 +10,7 @@ fi
 PROJECT_PATH="${1:-.}"
 PAGES_MANIFEST_URL="${2:-https://punpiti.github.io/agent-project-kit/manifest.json}"
 REPO_URL="${3:-https://github.com/punpiti/agent-project-kit.git}"
-REF="${4:-main}"
+REF="${4:-}"
 CLONE_DIR="${5:-}"
 
 PROJECT_PATH="$(cd "$PROJECT_PATH" && pwd)"
@@ -100,6 +100,7 @@ latest_version="$(printf '%s\n' "$manifest" | json_value version)"
 latest_updated="$(printf '%s\n' "$manifest" | json_value updated)"
 latest_state_schema="$(printf '%s\n' "$manifest" | json_value state_schema_version)"
 latest_machine_schema="$(printf '%s\n' "$manifest" | json_value machine_profile_schema_version)"
+manifest_ref="$(printf '%s\n' "$manifest" | json_value git_ref)"
 current_version="$(read_version_line "Package version")"
 current_updated="$(read_version_line "Package updated")"
 current_state_schema="$(read_version_line "State schema version")"
@@ -107,6 +108,7 @@ current_machine_schema="$(read_version_line "Machine profile schema version")"
 
 current_version="${current_version:-none}"
 latest_version="${latest_version:-unknown}"
+REF="${REF:-${manifest_ref:-v$latest_version}}"
 
 echo "Agent Project Kit GitHub Pages update check"
 echo "Project: $PROJECT_PATH"
@@ -140,19 +142,11 @@ echo "Result: newer or different package version found."
 echo "Project-local state files will be preserved by install-from-git."
 
 if [ "$DRY_RUN" = "yes" ]; then
-  if [ -n "$CLONE_DIR" ]; then
-    bash "$installer" --dry-run "$PROJECT_PATH" "$REPO_URL" "$REF" "$CLONE_DIR"
-  else
-    bash "$installer" --dry-run "$PROJECT_PATH" "$REPO_URL" "$REF"
-  fi
+  bash "$installer" --dry-run "$PROJECT_PATH" "$REPO_URL" "$REF" "$CLONE_DIR" "$latest_version"
   exit 0
 fi
 
-if [ -n "$CLONE_DIR" ]; then
-  bash "$installer" "$PROJECT_PATH" "$REPO_URL" "$REF" "$CLONE_DIR"
-else
-  bash "$installer" "$PROJECT_PATH" "$REPO_URL" "$REF"
-fi
+bash "$installer" "$PROJECT_PATH" "$REPO_URL" "$REF" "$CLONE_DIR" "$latest_version"
 
 if [ -f "$VERSION_FILE" ]; then
   tmp_file="$(mktemp)"

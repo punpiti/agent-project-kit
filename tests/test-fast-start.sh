@@ -59,7 +59,7 @@ python3 "$SOURCE_PATH/scripts/run-once.py" --project "$PROJECT" --key fixture --
 test "$(wc -c < "$PROJECT/counter")" -eq 1
 if python3 "$SOURCE_PATH/scripts/run-once.py" --project "$PROJECT" --key failing -- false >/dev/null; then exit 1; fi
 ! grep -q 'project:failing' "$PROJECT/.ai/AGENT_PROJECT_KIT_STATE.json"
-printf '%s\n' '{"version":"7.3.0","updated":"2026-08-07T00:00:00+07:00"}' > "$TEST_ROOT/latest-manifest.json"
+printf '%s\n' '{"version":"99.0.0","updated":"2099-08-07T00:00:00+07:00"}' > "$TEST_ROOT/latest-manifest.json"
 notice_url="file://$TEST_ROOT/latest-manifest.json"
 notice_command=(python3 "$PROJECT/.ai/agent-project-kit/scripts/run-once.py" --project "$PROJECT" --key update-notice-test --ttl-days 14 --quiet-valid -- python3 "$PROJECT/.ai/agent-project-kit/scripts/check-update-notice.py" --project "$PROJECT" --manifest-url "$notice_url")
 "${notice_command[@]}" > "$TEST_ROOT/notice-first.txt"
@@ -78,8 +78,10 @@ sed -i -e 's/^- Project name:$/- Project name: Fixture/' \
   -e "s/^- Last updated:$/- Last updated: $(date +%F)/" "$PROJECT/.ai/PROJECT_STATE.md"
 python3 "$SOURCE_PATH/scripts/apk_doctor.py" "$PROJECT" --quick >/dev/null
 count="$(grep -c 'Agent Project Kit installation first recorded' "$PROJECT/.ai/SESSION_LOG.md" || true)"
+cp "$PROJECT/AGENTS.md" "$TEST_ROOT/agents-before-repeat.md"
 bash "$SOURCE_PATH/scripts/install-to-project.sh" "$PROJECT" "$SOURCE_PATH" >/dev/null
 test "$(grep -c 'Agent Project Kit installation first recorded' "$PROJECT/.ai/SESSION_LOG.md" || true)" -eq "$count"
 grep -q 'keep-me' "$PROJECT/AGENTS.md"
 test "$(grep -c '<!-- BEGIN COMPUTING-ENVIRONMENT -->' "$PROJECT/AGENTS.md")" -eq 1
+cmp "$TEST_ROOT/agents-before-repeat.md" "$PROJECT/AGENTS.md"
 echo "fast-start acceptance tests: PASS"
