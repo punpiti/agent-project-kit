@@ -58,6 +58,74 @@ book metadata/outline/คำสั่งผู้ใช้ ห้ามใช้
 เป็นค่าเริ่มต้นของหนังสือทุกเล่ม หากยังไม่รู้และมีผลต่อตัวอย่าง/ความลึกให้ถามผู้ใช้
 <!-- BOOK_PROFILE_END:reader-domain-contract -->
 
+## `book-architecture-contract`
+
+<!-- BOOK_PROFILE_BEGIN:book-architecture-contract -->
+{{BOOK:BOOK_ARCHITECTURE_CONTRACT}}
+
+ระบุว่า Book Master Outline, Concept Outline, Chapter Plan/Detailed Chapter
+Outline และ evidence-backed chapter working file อยู่ที่ใด ชื่อจริงคืออะไร
+สัมพันธ์กันอย่างไร และอะไรเป็น source of truth หากยังไม่มีอย่างใด ให้ถามผู้ใช้ว่า
+“มีข้อมูลนี้ไหม และอยู่ที่ไหน” หรือให้ผู้ใช้ยืนยันว่าจะสร้าง template ใหม่ ห้ามยืม
+outline, chapter hierarchy หรือชื่อไฟล์จากหนังสืออื่น
+<!-- BOOK_PROFILE_END:book-architecture-contract -->
+
+## `research-integration-contract`
+
+<!-- BOOK_PROFILE_BEGIN:research-integration-contract -->
+{{BOOK:RESEARCH_INTEGRATION_CONTRACT}}
+
+ระบุว่าจะใช้ paper, thesis, report หรือผลงานของผู้เขียนเป็น case, example, evidence,
+comparison, application, limitation หรือ further reading อย่างไร ต้องกำหนดความสมดุล
+กับแหล่งอิสระ นโยบาย self-citation สถานะ publication และกติกาป้องกันหนังสือกลายเป็น
+การประชาสัมพันธ์งานวิจัย หากยังไม่มีนโยบาย ให้ถามผู้ใช้ว่า “มีหลักเกณฑ์นี้ไหม และอยู่ที่ไหน”
+<!-- BOOK_PROFILE_END:research-integration-contract -->
+
+## `reference-corpus-contract`
+
+<!-- BOOK_PROFILE_BEGIN:reference-corpus-contract -->
+{{BOOK:REFERENCE_CORPUS_CONTRACT}}
+
+ระบุ path และ schema ของ reference manifest, PDF corpus, BibTeX/source bibliography,
+OpenAlex/DOI metadata, extracted cache, evidence Markdown และสถานะ manual-needed/
+restricted/not-found รวมถึงกติกา hash, edition, access และไฟล์ที่ห้ามเข้า Git/ผลลัพธ์
+เผยแพร่ หากยังไม่มี ให้ถามผู้ใช้ว่า “มีคลังแหล่งอ้างอิงหรือโครง manifest แล้วไหม และอยู่ที่ไหน”
+<!-- BOOK_PROFILE_END:reference-corpus-contract -->
+
+## `figure-extraction-contract`
+
+<!-- BOOK_PROFILE_BEGIN:figure-extraction-contract -->
+{{BOOK:FIGURE_EXTRACTION_CONTRACT}}
+
+ระบุว่าจะเก็บ figure, caption และข้อความรอบ figure จาก PDF อย่างไร ใช้ text extraction,
+OCR, embedded-raster extraction หรือ full-page/vector rendering เมื่อใด จด locator และ
+figure index ที่ไหน และกำหนดเส้นแบ่งว่าเป็น compositional reference ไม่ใช่ artwork สำหรับ
+เผยแพร่ หากยังไม่มีขั้นตอน ให้ถามผู้ใช้ว่า “มีวิธีหรือเครื่องมือเดิมไหม และอยู่ที่ไหน”
+<!-- BOOK_PROFILE_END:figure-extraction-contract -->
+
+## `book-graphics-contract`
+
+<!-- BOOK_PROFILE_BEGIN:book-graphics-contract -->
+{{BOOK:BOOK_GRAPHICS_CONTRACT}}
+
+ระบุ visual tokens, font, palette, line weights, aspect ratios, Thai/English label rules,
+graphics API/engine กลาง, output SVG/PDF/PNG, accessibility/alt text, stable figure IDs,
+reproducibility และสิทธิ์ของ bitmap assets ถ้ายังไม่เลือก library หรือยังไม่มี style profile
+ให้ถามผู้ใช้ว่า “มี graphics system หรือ reference style อยู่แล้วไหม และอยู่ที่ไหน”
+<!-- BOOK_PROFILE_END:book-graphics-contract -->
+
+## `publication-package-contract`
+
+<!-- BOOK_PROFILE_BEGIN:publication-package-contract -->
+{{BOOK:PUBLICATION_PACKAGE_CONTRACT}}
+
+ระบุองค์ประกอบระดับเล่ม เช่น ปกหน้า หน้าชื่อเรื่อง metadata/copyright page คำนำ
+acknowledgements สารบัญ สารบัญภาพ สารบัญตาราง บรรณานุกรม ดัชนี ภาคผนวก และปกหลัง
+รวมถึงกติกา preview build กับ final build: preview ทำได้เมื่อ prose บางส่วนเสร็จ แต่
+final pagination และ publication package ต้องรอ prose ทั้งเล่มผ่าน QA หากยังไม่มีรายการ
+องค์ประกอบหรือ production contract ให้ถามผู้ใช้ว่า “มีข้อกำหนดส่วนนี้ไหม และอยู่ที่ไหน”
+<!-- BOOK_PROFILE_END:publication-package-contract -->
+
 ## `primary-teaching-source-label`
 
 <!-- BOOK_PROFILE_BEGIN:primary-teaching-source-label -->

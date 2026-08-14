@@ -36,6 +36,47 @@ figure syntax, build command, draft/production separation และเกณฑ�
 โดยไม่สร้าง frame ซ้ำขึ้นมาแข่งกับ source of truth เดิม หากหา output contract ไม่พบ
 หรือพบข้อกำหนดขัดกัน ให้ถามผู้ใช้ก่อน build หรือเปลี่ยนโครงไฟล์
 
+## สัญญาโครงสร้างและข้อมูลของหนังสือเป้าหมาย
+
+หนังสือแต่ละเล่มต้อง resolve สัญญาต่อไปนี้จาก profile ของโครงการก่อนเริ่มงาน
+ถ้าค่าใดหาไม่พบจากไฟล์ project-local หรือคำสั่งของผู้ใช้ ให้ถามสั้น ๆ ว่า
+**“มีข้อมูลนี้ไหม และอยู่ที่ไหน”** ห้ามสร้างค่าโดยอาศัยหนังสือเล่มอื่นหรือความคุ้นเคย:
+
+- **โครงหนังสือ:** `{{PROFILE:book-architecture-contract}}` — Book Master Outline,
+  Chapter Plan/Detailed Chapter Outline, concept-outline source และความสัมพันธ์กับ
+  `chapter.md`
+- **การบูรณาการงานวิจัย:** `{{PROFILE:research-integration-contract}}` — บทบาทของ
+  paper/thesis/report, ความสมดุลกับแหล่งอิสระ, self-citation และข้อจำกัดการกล่าวถึง
+- **คลังแหล่งอ้างอิง:** `{{PROFILE:reference-corpus-contract}}` — manifest, PDF,
+  OpenAlex/DOI metadata, BibTeX, evidence Markdown, cache, locator และ manual-download
+- **การดึงรูปจากแหล่งอ้างอิง:** `{{PROFILE:figure-extraction-contract}}` — caption,
+  surrounding prose, raster/vector path, compositional-reference boundary และสิทธิ์
+- **ระบบสร้าง graphics:** `{{PROFILE:book-graphics-contract}}` — visual tokens,
+  engine/API กลาง, export, font, accessibility, stable figure ID และ style consistency
+- **การปิดเล่ม:** `{{PROFILE:publication-package-contract}}` — front/back matter,
+  acknowledgements, สารบัญ/สารบัญรูป/สารบัญตาราง, index, preview build และ final build
+
+ค่าทั้งหมดนี้เป็นสัญญาระดับหนังสือ ไม่ใช่ค่า default ระดับสาขา หากยังไม่ทราบให้
+คงเป็น unresolved profile value และหยุดเฉพาะจุดที่ต้องใช้ค่านั้นก่อนดำเนินงานต่อ
+
+## รายงาน meta/profile ก่อนเริ่มงาน
+
+หลัง resolve profile แล้ว ก่อนสร้าง outline, evidence หรือ prose ให้แสดงรายงานสั้น
+ที่ครอบคลุม **ทุก profile block** ใน `BOOK_WRITING_PROFILE.md` ไม่ใช่เฉพาะหกสัญญา
+ข้างต้น โดยแต่ละรายการต้องแสดง:
+
+- ชื่อ profile key
+- ค่าหรือสรุปค่าที่ resolve แล้ว
+- สถานะ: `confirmed`, `inferred`, `N/A` หรือ `needs-user`
+- แหล่งที่มา/ไฟล์/locator ที่ใช้ยืนยัน หรือเหตุผลที่อนุมาน
+- ผลต่อขั้นตอนถัดไปและคำถามที่ต้องถาม หากยัง `needs-user`
+
+รายงานนี้คือ user-visible contract ของหนังสือ ใช้ตรวจว่า AI ไม่ได้เติมค่าเงียบ ๆ
+และช่วยให้ผู้ใช้เห็นว่า meta, policy, outline, source, toolchain, style, graphics,
+และ publication settings ของเล่มนี้คืออะไร หากมีค่าใหม่หรือค่าเปลี่ยนระหว่างงานให้
+อัปเดตรายงานก่อนดำเนินขั้นที่ได้รับผลกระทบ ห้ามแสดง credentials หรือ secret แม้จะอยู่
+ใน path/config ที่อ่านพบ
+
 เพื่อรักษาความคมของวิธีเดิมโดยไม่บังคับ frame เดิม คำว่า `chapter.md` ต่อจากนี้
 หมายถึง **working evidence/outline source** ของ project, `prose.md` หมายถึง
 **reader-facing manuscript source**, heading `#`–`####` หมายถึงระดับโครงเรื่องที่
@@ -47,6 +88,11 @@ figure syntax, build command, draft/production separation และเกณฑ�
 ## หลักการ
 
 ร้อยแก้วของแต่ละหัวข้อ `###` เขียนจาก bullet ใต้ marker `#### ประเด็นที่จะอธิบายตามลำดับ` ใน `chapter.md` โดยรักษาลำดับเหตุผลและความสัมพันธ์ที่พบจากแหล่งอ้างอิง ไม่ใช่นำ bullet มาต่อเป็นประโยคเฉย ๆ Marker ดังกล่าวเป็นส่วนจัดการหลักฐาน ไม่ได้บังคับให้สร้างหัวข้อ `####` ใน `prose.md`
+
+ลำดับโครงสร้างขั้นต่ำของหนังสือคือ **Book Master Outline → Chapter Plan/Detailed
+Chapter Outline → evidence-backed `chapter.md` → reader-facing `prose.md`** ตาม
+`{{PROFILE:book-architecture-contract}}`; ชื่อไฟล์เป็นเพียงตัวอย่าง บทบาทของไฟล์
+ต้อง map กับ source of truth ของโครงการจริง
 
 - **{{PROFILE:primary-teaching-source-label}} กำหนดสาระขั้นต่ำที่ห้ามตัดออก** แหล่งอ้างอิงแนะนำใช้ตรวจความถูกต้อง หาโครงลอจิก และขยายคำอธิบาย
 - ทุกประเด็นและความสัมพันธ์ต้องสืบกลับไปยังข้อความ/ภาพ/ตาราง/สมการที่ **เปิดอ่านจริง** ห้ามสร้างจากความรู้เดิม ห้ามเดา ห้ามใส่ citation ให้ข้อความที่ยังไม่ตรวจพบ
