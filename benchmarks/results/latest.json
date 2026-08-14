@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-14T02:17:18.918858+00:00",
-  "package_version": "7.4.0-transactional-update-canary",
+  "generated_at": "2026-08-14T02:23:14.853608+00:00",
+  "package_version": "7.5.0-book-writing-framework-canary",
   "host": {
     "system": "Linux",
     "release": "5.15.133.1-microsoft-standard-WSL2",
     "machine": "x86_64"
   },
   "git": {
-    "commit": "f103e0673ee89df872969c1b674c1d43741814a0",
+    "commit": "0f9493aca7cfb27fb50b793b32ff750b0cb9545c",
     "working_tree_dirty": false
   },
   "context": {
@@ -41,11 +41,11 @@
       "prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md",
       "prompts/21_STRATEGY_ADVISORY.md"
     ],
-    "eager_reference_bytes": 170555,
+    "eager_reference_bytes": 175401,
     "median_fast_estimated_tokens": 2045,
-    "p95_fast_estimated_tokens": 30190.8,
-    "median_context_reduction_percent": 95.2,
-    "minimum_context_reduction_percent": 27.01,
+    "p95_fast_estimated_tokens": 31402.4,
+    "median_context_reduction_percent": 95.34,
+    "minimum_context_reduction_percent": 26.27,
     "maximum_secondary_modules": 2,
     "rows": [
       {
@@ -64,9 +64,9 @@
           "prompts/03_CODEX_CODING_AGENT.md",
           "prompts/14_WEB_DEVELOPMENT.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 96.08,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 96.19,
         "primary_modules": 1,
         "secondary_modules": 2,
         "needs_clarification": false
@@ -86,9 +86,9 @@
           "prompts/19_SOFTWARE_DEVELOPMENT_AUTOMATION.md",
           "prompts/03_CODEX_CODING_AGENT.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 96.73,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 96.82,
         "primary_modules": 1,
         "secondary_modules": 1,
         "needs_clarification": false
@@ -105,9 +105,9 @@
         "fast_estimated_tokens": 197,
         "compiler_envelope_bytes": 1538,
         "selected_prompt_paths": [],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 99.54,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 99.55,
         "primary_modules": 1,
         "secondary_modules": 0,
         "needs_clarification": false
@@ -126,9 +126,9 @@
         "selected_prompt_paths": [
           "prompts/18_EDUCATIONAL_POLICY_DEVELOPMENT.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 98.42,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 98.46,
         "primary_modules": 1,
         "secondary_modules": 0,
         "needs_clarification": false
@@ -148,9 +148,9 @@
           "prompts/18_EDUCATIONAL_POLICY_DEVELOPMENT.md",
           "prompts/21_STRATEGY_ADVISORY.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 97.89,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 97.95,
         "primary_modules": 1,
         "secondary_modules": 1,
         "needs_clarification": false
@@ -169,9 +169,9 @@
         "selected_prompt_paths": [
           "prompts/05_SLIDES_TEACHING.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 98.69,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 98.72,
         "primary_modules": 1,
         "secondary_modules": 0,
         "needs_clarification": false
@@ -191,9 +191,9 @@
           "prompts/13_RESEARCH_PROJECT_PROMPTS.md",
           "prompts/04_PAPER_REVIEWER_RESPONSE.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 93.96,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 94.13,
         "primary_modules": 1,
         "secondary_modules": 1,
         "needs_clarification": false
@@ -213,9 +213,9 @@
           "prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md",
           "prompts/10_DOCUMENT_PRODUCTION.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 93.4,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 93.58,
         "primary_modules": 1,
         "secondary_modules": 1,
         "needs_clarification": false
@@ -235,9 +235,9 @@
           "prompts/13_RESEARCH_PROJECT_PROMPTS.md",
           "prompts/04_PAPER_REVIEWER_RESPONSE.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 93.96,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 94.13,
         "primary_modules": 1,
         "secondary_modules": 1,
         "needs_clarification": false
@@ -257,9 +257,9 @@
           "prompts/05_SLIDES_TEACHING.md",
           "prompts/23_PRESENTATION_PRODUCTION.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 92.62,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 92.82,
         "primary_modules": 1,
         "secondary_modules": 1,
         "needs_clarification": false
@@ -278,9 +278,9 @@
         "selected_prompt_paths": [
           "prompts/17_COURSE_MATERIAL_DEVELOPMENT.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 96.64,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 96.74,
         "primary_modules": 1,
         "secondary_modules": 0,
         "needs_clarification": false
@@ -299,9 +299,9 @@
         "selected_prompt_paths": [
           "prompts/18_EDUCATIONAL_POLICY_DEVELOPMENT.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 98.42,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 98.46,
         "primary_modules": 1,
         "secondary_modules": 0,
         "needs_clarification": false
@@ -321,9 +321,9 @@
           "prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md",
           "prompts/10_DOCUMENT_PRODUCTION.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 93.4,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 93.58,
         "primary_modules": 1,
         "secondary_modules": 1,
         "needs_clarification": false
@@ -343,9 +343,9 @@
           "prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md",
           "prompts/10_DOCUMENT_PRODUCTION.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 93.4,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 93.58,
         "primary_modules": 1,
         "secondary_modules": 1,
         "needs_clarification": false
@@ -364,9 +364,9 @@
         "selected_prompt_paths": [
           "prompts/17_COURSE_MATERIAL_DEVELOPMENT.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 96.64,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 96.74,
         "primary_modules": 1,
         "secondary_modules": 0,
         "needs_clarification": false
@@ -385,9 +385,9 @@
         "selected_prompt_paths": [
           "prompts/13_RESEARCH_PROJECT_PROMPTS.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 95.2,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 95.34,
         "primary_modules": 1,
         "secondary_modules": 0,
         "needs_clarification": false
@@ -407,9 +407,9 @@
           "prompts/18_EDUCATIONAL_POLICY_DEVELOPMENT.md",
           "prompts/10_DOCUMENT_PRODUCTION.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 92.97,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 93.16,
         "primary_modules": 1,
         "secondary_modules": 1,
         "needs_clarification": false
@@ -429,9 +429,9 @@
           "prompts/19_SOFTWARE_DEVELOPMENT_AUTOMATION.md",
           "prompts/03_CODEX_CODING_AGENT.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 96.73,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 96.82,
         "primary_modules": 1,
         "secondary_modules": 1,
         "needs_clarification": false
@@ -450,9 +450,9 @@
         "selected_prompt_paths": [
           "prompts/05_SLIDES_TEACHING.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 98.69,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 98.72,
         "primary_modules": 1,
         "secondary_modules": 0,
         "needs_clarification": false
@@ -472,9 +472,9 @@
           "prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md",
           "prompts/10_DOCUMENT_PRODUCTION.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 93.4,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 93.58,
         "primary_modules": 1,
         "secondary_modules": 1,
         "needs_clarification": false
@@ -493,9 +493,9 @@
         "selected_prompt_paths": [
           "prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 98.85,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 98.88,
         "primary_modules": 1,
         "secondary_modules": 0,
         "needs_clarification": false
@@ -508,15 +508,15 @@
         "actual_deliverable": "book",
         "fixture_pass": true,
         "issues": [],
-        "fast_context_bytes": 115188,
-        "fast_estimated_tokens": 28797,
+        "fast_context_bytes": 120034,
+        "fast_estimated_tokens": 30008,
         "compiler_envelope_bytes": 1766,
         "selected_prompt_paths": [
           "prompts/22_BOOK_WRITING.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 32.46,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 31.57,
         "primary_modules": 1,
         "secondary_modules": 0,
         "needs_clarification": false
@@ -529,15 +529,15 @@
         "actual_deliverable": "book",
         "fixture_pass": true,
         "issues": [],
-        "fast_context_bytes": 115188,
-        "fast_estimated_tokens": 28797,
+        "fast_context_bytes": 120034,
+        "fast_estimated_tokens": 30008,
         "compiler_envelope_bytes": 1732,
         "selected_prompt_paths": [
           "prompts/22_BOOK_WRITING.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 32.46,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 31.57,
         "primary_modules": 1,
         "secondary_modules": 0,
         "needs_clarification": false
@@ -550,16 +550,16 @@
         "actual_deliverable": "book",
         "fixture_pass": true,
         "issues": [],
-        "fast_context_bytes": 124483,
-        "fast_estimated_tokens": 31120,
+        "fast_context_bytes": 129329,
+        "fast_estimated_tokens": 32332,
         "compiler_envelope_bytes": 2029,
         "selected_prompt_paths": [
           "prompts/22_BOOK_WRITING.md",
           "prompts/10_DOCUMENT_PRODUCTION.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 27.01,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 26.27,
         "primary_modules": 1,
         "secondary_modules": 1,
         "needs_clarification": false
@@ -578,9 +578,9 @@
         "selected_prompt_paths": [
           "prompts/05_SLIDES_TEACHING.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 98.69,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 98.72,
         "primary_modules": 1,
         "secondary_modules": 0,
         "needs_clarification": false
@@ -600,9 +600,9 @@
           "prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md",
           "prompts/10_DOCUMENT_PRODUCTION.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 93.4,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 93.58,
         "primary_modules": 1,
         "secondary_modules": 1,
         "needs_clarification": false
@@ -622,9 +622,9 @@
           "prompts/05_SLIDES_TEACHING.md",
           "prompts/23_PRESENTATION_PRODUCTION.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 92.62,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 92.82,
         "primary_modules": 1,
         "secondary_modules": 1,
         "needs_clarification": false
@@ -637,16 +637,16 @@
         "actual_deliverable": "book",
         "fixture_pass": true,
         "issues": [],
-        "fast_context_bytes": 124483,
-        "fast_estimated_tokens": 31120,
+        "fast_context_bytes": 129329,
+        "fast_estimated_tokens": 32332,
         "compiler_envelope_bytes": 2003,
         "selected_prompt_paths": [
           "prompts/22_BOOK_WRITING.md",
           "prompts/10_DOCUMENT_PRODUCTION.md"
         ],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 27.01,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 26.27,
         "primary_modules": 1,
         "secondary_modules": 1,
         "needs_clarification": false
@@ -663,9 +663,9 @@
         "fast_estimated_tokens": 197,
         "compiler_envelope_bytes": 1502,
         "selected_prompt_paths": [],
-        "eager_reference_bytes": 170555,
-        "eager_estimated_tokens": 42638,
-        "context_reduction_percent": 99.54,
+        "eager_reference_bytes": 175401,
+        "eager_estimated_tokens": 43850,
+        "context_reduction_percent": 99.55,
         "primary_modules": 1,
         "secondary_modules": 0,
         "needs_clarification": true
@@ -698,7 +698,7 @@
       ],
       "stderr_tail": [
         "done.",
-        "Cloning into '/tmp/tmp.ggZC0SQ7cz/ps-clone'...",
+        "Cloning into '/tmp/tmp.jXZKayTfqD/ps-clone'...",
         "done."
       ]
     },
@@ -728,7 +728,7 @@
     },
     {
       "metric": "Median selective-context reduction",
-      "value": 95.2,
+      "value": 95.34,
       "unit": "%",
       "denominator": 29,
       "claim_scope": "Versus documented eager prompt-loading reference"

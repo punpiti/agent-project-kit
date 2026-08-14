@@ -1,8 +1,8 @@
 # Agent Project Kit benchmark results
 
-Generated: 2026-08-14T02:17:18.918858+00:00<br>
-Package: `7.4.0-transactional-update-canary`<br>
-Commit: `f103e0673ee89df872969c1b674c1d43741814a0`<br>
+Generated: 2026-08-14T02:23:14.853608+00:00<br>
+Package: `7.5.0-book-writing-framework-canary`<br>
+Commit: `0f9493aca7cfb27fb50b793b32ff750b0cb9545c`<br>
 Working tree dirty: `false`
 
 ## Results
@@ -10,8 +10,8 @@ Working tree dirty: `false`
 | Measure | Result | Scope |
 |---|---:|---|
 | Controlled routing fixture | 29/29 (100.0%) | Bundled English/Thai cases; not real-world accuracy |
-| Median selective-context reduction | 95.2% | Versus eager loading every primary/secondary prompt |
-| Minimum selective-context reduction | 27.0% | Worst case in the controlled fixture |
+| Median selective-context reduction | 95.3% | Versus eager loading every primary/secondary prompt |
+| Minimum selective-context reduction | 26.3% | Worst case in the controlled fixture |
 | Median selective context | 2045 estimated tokens | UTF-8 bytes / 4, not billed usage |
 | Secondary workflow cap observed | 2 | Controlled fixture |
 | Repeated cadence actions avoided | 9/10 (90.0%) | Ten starts within a 14-day TTL |

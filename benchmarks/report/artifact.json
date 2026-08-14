@@ -5,7 +5,7 @@
     "surface": "report",
     "title": "APK Benchmark: Focused Context and Safer Project Memory",
     "description": "Controlled evidence for Agent Project Kit Marketplace claims",
-    "generatedAt": "2026-08-14T02:17:18.918858+00:00",
+    "generatedAt": "2026-08-14T02:23:14.853608+00:00",
     "sources": [
       {
         "id": "benchmark-summary-sql",
@@ -202,7 +202,7 @@
         "id": "executive-summary",
         "type": "markdown",
         "sourceId": "benchmark-summary-sql",
-        "body": "## Executive Summary\n\n- **APK kept task context focused in the controlled comparison.** Median serialized context was **95.2% smaller** than the eager reference across 29 cases; the worst fixture case was 27.0% smaller.\n- **The disclosed routing fixture passed completely.** All **29/29 assertions** passed, but this is fixture coverage rather than general model accuracy.\n- **Persisted cadence removed predictable repetition.** APK avoided **9 of 10 executions** inside one simulated 14-day window.\n- **The covered update paths failed safely.** Transactional and state-preservation suites passed on Bash and PowerShell through `pwsh` on WSL; native Windows remains unverified.",
+        "body": "## Executive Summary\n\n- **APK kept task context focused in the controlled comparison.** Median serialized context was **95.3% smaller** than the eager reference across 29 cases; the worst fixture case was 26.3% smaller.\n- **The disclosed routing fixture passed completely.** All **29/29 assertions** passed, but this is fixture coverage rather than general model accuracy.\n- **Persisted cadence removed predictable repetition.** APK avoided **9 of 10 executions** inside one simulated 14-day window.\n- **The covered update paths failed safely.** Transactional and state-preservation suites passed on Bash and PowerShell through `pwsh` on WSL; native Windows remains unverified.",
         "layout": "full"
       },
       {
@@ -220,7 +220,7 @@
         "id": "context-finding",
         "type": "markdown",
         "sourceId": "benchmark-summary-sql",
-        "body": "## Selective loading cuts instruction volume, but the gain varies by task\n\n**The median reduction was 95.2%, while the minimum was 27.0%.** The comparison includes the same configured project/task state on both sides. APK loads the selected prompt content and triggered policies; the reference loads all 18 primary and secondary prompts.\n\nThe spread matters: large production workflows naturally retain more context, so the Marketplace claim should use the median and disclose the worst fixture case rather than imply one universal reduction.",
+        "body": "## Selective loading cuts instruction volume, but the gain varies by task\n\n**The median reduction was 95.3%, while the minimum was 26.3%.** The comparison includes the same configured project/task state on both sides. APK loads the selected prompt content and triggered policies; the reference loads all 18 primary and secondary prompts.\n\nThe spread matters: large production workflows naturally retain more context, so the Marketplace claim should use the median and disclose the worst fixture case rather than imply one universal reduction.",
         "layout": "full"
       },
       {
@@ -274,15 +274,15 @@
   },
   "snapshot": {
     "version": 1,
-    "generatedAt": "2026-08-14T02:17:18.918858+00:00",
+    "generatedAt": "2026-08-14T02:23:14.853608+00:00",
     "status": "ready",
     "datasets": {
       "summary": [
         {
           "fixture_pass_rate": 1.0,
           "fixture_cases": 29,
-          "median_context_reduction": 0.9520000000000001,
-          "minimum_context_reduction": 0.2701,
+          "median_context_reduction": 0.9534,
+          "minimum_context_reduction": 0.2627,
           "median_estimated_tokens": 2045.0,
           "cadence_avoidance": 0.9,
           "cadence_starts": 10,
@@ -293,51 +293,51 @@
         {
           "domain": "general",
           "cases": 3,
-          "median_reduction_percent": 99.54,
+          "median_reduction_percent": 99.55,
           "median_estimated_tokens": 197.0,
-          "minimum_reduction_percent": 98.69
+          "minimum_reduction_percent": 98.72
         },
         {
           "domain": "governance",
           "cases": 6,
-          "median_reduction_percent": 98.16,
+          "median_reduction_percent": 98.2,
           "median_estimated_tokens": 786.0,
-          "minimum_reduction_percent": 92.62
+          "minimum_reduction_percent": 92.82
         },
         {
           "domain": "software",
           "cases": 3,
-          "median_reduction_percent": 96.73,
+          "median_reduction_percent": 96.82,
           "median_estimated_tokens": 1392.0,
-          "minimum_reduction_percent": 96.08
+          "minimum_reduction_percent": 96.19
         },
         {
           "domain": "education",
           "cases": 4,
-          "median_reduction_percent": 96.64,
+          "median_reduction_percent": 96.74,
           "median_estimated_tokens": 1431.0,
-          "minimum_reduction_percent": 92.62
+          "minimum_reduction_percent": 92.82
         },
         {
           "domain": "research",
           "cases": 3,
-          "median_reduction_percent": 93.96,
+          "median_reduction_percent": 94.13,
           "median_estimated_tokens": 2575.0,
-          "minimum_reduction_percent": 93.96
+          "minimum_reduction_percent": 94.13
         },
         {
           "domain": "operations",
           "cases": 6,
-          "median_reduction_percent": 93.4,
+          "median_reduction_percent": 93.58,
           "median_estimated_tokens": 2814.0,
-          "minimum_reduction_percent": 93.4
+          "minimum_reduction_percent": 93.58
         },
         {
           "domain": "book-writing",
           "cases": 4,
-          "median_reduction_percent": 29.73,
-          "median_estimated_tokens": 29958.5,
-          "minimum_reduction_percent": 27.01
+          "median_reduction_percent": 28.92,
+          "median_estimated_tokens": 31170.0,
+          "minimum_reduction_percent": 26.27
         }
       ],
       "safety_checks": [
@@ -398,12 +398,12 @@
         "description": "Reads the benchmark headline metrics loaded from latest.json.",
         "engine": "Python sqlite3",
         "language": "SQL",
-        "executed_at": "2026-08-14T02:17:18.918858+00:00",
+        "executed_at": "2026-08-14T02:23:14.853608+00:00",
         "tables_used": [
           "benchmark_summary"
         ],
         "filters": [
-          "package_version=7.4.0-transactional-update-canary",
+          "package_version=7.5.0-book-writing-framework-canary",
           "fixture_cases=29"
         ],
         "metric_definitions": [
@@ -422,12 +422,12 @@
         "description": "Reads domain-level context reductions derived from disclosed fixture rows.",
         "engine": "Python sqlite3",
         "language": "SQL",
-        "executed_at": "2026-08-14T02:17:18.918858+00:00",
+        "executed_at": "2026-08-14T02:23:14.853608+00:00",
         "tables_used": [
           "domain_context"
         ],
         "filters": [
-          "package_version=7.4.0-transactional-update-canary",
+          "package_version=7.5.0-book-writing-framework-canary",
           "fixture_cases=29"
         ],
         "metric_definitions": [
@@ -446,12 +446,12 @@
         "description": "Reads behaviors exercised by the benchmarked acceptance suites.",
         "engine": "Python sqlite3",
         "language": "SQL",
-        "executed_at": "2026-08-14T02:17:18.918858+00:00",
+        "executed_at": "2026-08-14T02:23:14.853608+00:00",
         "tables_used": [
           "safety_checks"
         ],
         "filters": [
-          "package_version=7.4.0-transactional-update-canary",
+          "package_version=7.5.0-book-writing-framework-canary",
           "fixture_cases=29"
         ],
         "metric_definitions": [

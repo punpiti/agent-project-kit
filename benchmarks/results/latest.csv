@@ -1,6 +1,6 @@
 metric,value,unit,denominator,claim_scope
 Controlled routing fixture pass rate,100.0,%,29,Bundled bilingual fixture only
-Median selective-context reduction,95.2,%,29,Versus documented eager prompt-loading reference
+Median selective-context reduction,95.34,%,29,Versus documented eager prompt-loading reference
 Maximum secondary workflows loaded,2,modules,29,Controlled fixture
 Repeated cadence actions avoided,90.0,%,10,Ten starts inside one 14-day TTL window
 Transactional safety suites,1,pass,1,Local WSL host; native Windows excluded
