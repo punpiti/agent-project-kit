@@ -94,6 +94,7 @@
 - `templates/DOCUMENT_QA.md`
 - `templates/DOCUMENT_STYLE.md`
 - `templates/BOOK_WRITING_PROFILE.md`
+- `templates/NEW_BOOK_START_GUIDE.md`
 - `templates/ENVIRONMENT_VARIABLES.md`
 - `templates/EVALS.md`
 - `templates/FEEDBACK_SYNTHESIS.md`
