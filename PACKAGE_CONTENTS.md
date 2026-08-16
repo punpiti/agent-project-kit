@@ -107,6 +107,7 @@
 - `templates/MARKDOWN_INVENTORY.md`
 - `templates/PROJECT_SPEC.md`
 - `templates/PROJECT_STATE.md`
+- `templates/PORTFOLIO_COORDINATION.md`
 - `templates/PRESENTATION_PIPELINE.md`
 - `templates/PRESENTATION_QA.md`
 - `templates/PRESENTATION_STYLE.md`
@@ -116,6 +117,7 @@
 - `templates/SLIDE_STORYBOARD.md`
 - `templates/TASK_SPEC.md`
 - `templates/TOKEN_BUDGET.md`
+- `templates/WORK_HUB_README.md`
 - `templates/project.json`
 - `templates/apk.json`
 - `templates/state.json`
