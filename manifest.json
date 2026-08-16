@@ -8,9 +8,9 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "7.5.0-book-writing-framework-canary",
-  "git_ref": "v7.5.0-book-writing-framework-canary",
-  "updated": "2026-08-14T00:00:00+07:00",
+  "version": "7.5.1-project-radar-canary",
+  "git_ref": "v7.5.1-project-radar-canary",
+  "updated": "2026-08-16T00:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
   "purpose": "Agent Project Kit: a portable starter kit that installs AI-agent instruction files and project-local .ai templates. New installs use .ai/agent-project-kit; computing-environment remains a legacy name/path for migration only.",
@@ -82,6 +82,7 @@
     "private certificate/key material; see SECURITY_EXCLUSIONS.md"
   ],
   "release_notes": [
+    "Added an optional minimal Project Radar: a single cross-project status board that flags projects not reviewed for 14+ days without duplicating project task lists or logs.",
     "Added reusable Book Writing profile contracts, visible profile resolution reporting, and PDF reference extraction tools for text, raster, and vector figures.",
     "Made snapshot updates transactional with per-file staged SHA-256 validation, one-version backup retention, and automatic rollback of the snapshot and control files on failure.",
     "Added a disclosed benchmark and clean evidence report for selective context, cadence avoidance, and covered update/state safety behavior.",

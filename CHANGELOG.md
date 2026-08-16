@@ -2,6 +2,15 @@
 
 All notable changes to Agent Project Kit are summarized here.
 
+## 7.5.1-project-radar-canary — 2026-08-16
+
+- Added an optional minimal Project Radar for cross-project status: one short
+  row per active, waiting, blocked, or parked project, with a review date, one
+  open loop, and one next action.
+- Weekly review flags rows not reviewed for 14+ days so intentionally parked,
+  blocked, and forgotten work are distinguished without duplicating project
+  task lists, journals, calendars, time logs, or AI-use records.
+
 ## 7.5.0-book-writing-framework-canary — 2026-08-14
 
 - Added reusable Book Writing profile contracts for book architecture, research
