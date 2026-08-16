@@ -4,8 +4,10 @@ SOURCE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TEST_ROOT="$(mktemp -d)"; trap 'rm -rf "$TEST_ROOT"' EXIT
 PROJECT="$TEST_ROOT/project"; mkdir -p "$PROJECT"
 printf '# User rules\n\nkeep-me\n' > "$PROJECT/AGENTS.md"
+printf 'do-not-overwrite-this-user-file\n' > "$PROJECT/legacy-notes.md"
 bash "$SOURCE_PATH/scripts/install-to-project.sh" "$PROJECT" "$SOURCE_PATH" >/dev/null
 grep -q 'keep-me' "$PROJECT/AGENTS.md"
+grep -qx 'do-not-overwrite-this-user-file' "$PROJECT/legacy-notes.md"
 test "$(grep -c '<!-- BEGIN COMPUTING-ENVIRONMENT -->' "$PROJECT/AGENTS.md")" -eq 1
 grep -q 'Classify the task' "$PROJECT/AGENTS.md"
 test -f "$PROJECT/.ai/agent-project-kit/STARTUP.md"
@@ -80,10 +82,13 @@ sed -i -e 's/^- Project name:$/- Project name: Fixture/' \
   -e "s/^- Last updated:$/- Last updated: $(date +%F)/" "$PROJECT/.ai/PROJECT_STATE.md"
 python3 "$SOURCE_PATH/scripts/apk_doctor.py" "$PROJECT" --quick >/dev/null
 count="$(grep -c 'Agent Project Kit installation first recorded' "$PROJECT/.ai/SESSION_LOG.md" || true)"
+printf '\nUser-authored project state sentinel: preserve-me\n' >> "$PROJECT/.ai/PROJECT_STATE.md"
 cp "$PROJECT/AGENTS.md" "$TEST_ROOT/agents-before-repeat.md"
 bash "$SOURCE_PATH/scripts/install-to-project.sh" "$PROJECT" "$SOURCE_PATH" >/dev/null
 test "$(grep -c 'Agent Project Kit installation first recorded' "$PROJECT/.ai/SESSION_LOG.md" || true)" -eq "$count"
 grep -q 'keep-me' "$PROJECT/AGENTS.md"
 test "$(grep -c '<!-- BEGIN COMPUTING-ENVIRONMENT -->' "$PROJECT/AGENTS.md")" -eq 1
 cmp "$TEST_ROOT/agents-before-repeat.md" "$PROJECT/AGENTS.md"
+grep -q 'User-authored project state sentinel: preserve-me' "$PROJECT/.ai/PROJECT_STATE.md"
+grep -qx 'do-not-overwrite-this-user-file' "$PROJECT/legacy-notes.md"
 echo "fast-start acceptance tests: PASS"
