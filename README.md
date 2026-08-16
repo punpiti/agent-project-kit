@@ -25,6 +25,9 @@ Use it when you want a project to keep simple notes about:
 It helps an AI assistant resume a real project without starting from scratch:
 what happened last time, which machine and local resources matter, which parent
 or child context applies, and what should happen next by priority or deadline.
+For people coordinating several projects, the optional Project Radar template
+keeps one short status row per project so work that has not been reviewed for a
+while is visible without duplicating each project's task list.
 For research projects, it also includes prompt templates for literature review,
 source checking, counter-arguments, data interpretation, and research briefs.
 For document-heavy projects, it includes a Markdown-first document production

@@ -21,6 +21,10 @@ clone แล้วเริ่มใช้ได้โดยไม่ต้อ�
 ต้องใช้ parent/child context แค่ไหน และงานต่อไปควรทำอะไรก่อนตาม
 priority/deadline
 
+ถ้าต้องดูหลายโปรเจคพร้อมกัน มี Project Radar template แบบ optional ที่เก็บ
+สถานะสั้น ๆ หนึ่งแถวต่อโปรเจค เพื่อให้เห็นงานที่ไม่ได้ทบทวนนานโดยไม่ต้อง copy
+task list ของแต่ละโปรเจคมาไว้ซ้ำ
+
 ถ้าเป็นโปรเจควิจัย จะมี prompt สำหรับ literature review, source check,
 counter-argument, data interpretation และ research brief เพิ่มให้ใช้เป็นฐาน
 
