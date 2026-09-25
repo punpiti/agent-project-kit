@@ -470,6 +470,13 @@ Minimal startup (read other files only when STARTUP.md triggers them):
 EOF2
 
 PROJECT_AGENTS="$PROJECT_PATH/AGENTS.md"
+# Installing the kit into its own source tree must not edit the canonical,
+# distributed AGENTS.md/CLAUDE.md/ANTIGRAVITY.md.
+SELF_HOSTED_SOURCE="no"
+if [ "$(cd "$SOURCE_PATH" && pwd -P)" = "$(cd "$PROJECT_PATH" && pwd -P)" ]; then
+  SELF_HOSTED_SOURCE="yes"
+fi
+if [ "$SELF_HOSTED_SOURCE" = "no" ]; then
 MANAGED_BLOCK='<!-- BEGIN COMPUTING-ENVIRONMENT -->'
 MANAGED_END='<!-- END COMPUTING-ENVIRONMENT -->'
 AGENTS_TEMP="$(mktemp "$PROJECT_PATH/.AGENTS.md.tmp.XXXXXX")"
@@ -506,6 +513,7 @@ if [ -f "$PROJECT_AGENTS" ]; then
 fi
 mv -- "$tmp_agents" "$PROJECT_AGENTS"
 AGENTS_TEMP=""
+fi
 
 create_adapter_file() {
   local target_file="$1"
@@ -546,8 +554,10 @@ EOF2
   fi
 }
 
-create_adapter_file "$PROJECT_PATH/CLAUDE.md" "CLAUDE.md"
-create_adapter_file "$PROJECT_PATH/ANTIGRAVITY.md" "ANTIGRAVITY.md"
+if [ "$SELF_HOSTED_SOURCE" = "no" ]; then
+  create_adapter_file "$PROJECT_PATH/CLAUDE.md" "CLAUDE.md"
+  create_adapter_file "$PROJECT_PATH/ANTIGRAVITY.md" "ANTIGRAVITY.md"
+fi
 
 INSTALL_LOG_MARKER="Agent Project Kit installation first recorded"
 if [ -f "$AI_DIR/SESSION_LOG.md" ] && ! grep -q "$INSTALL_LOG_MARKER" "$AI_DIR/SESSION_LOG.md"; then
@@ -568,7 +578,11 @@ EOF2
 fi
 
 echo "Installed Agent Project Kit into: $TARGET"
-echo "Created/updated project AGENTS.md: $PROJECT_AGENTS"
+if [ "$SELF_HOSTED_SOURCE" = "yes" ]; then
+  echo "Self-hosted kit source: left canonical AGENTS.md and adapter files unchanged"
+else
+  echo "Created/updated project AGENTS.md: $PROJECT_AGENTS"
+fi
 echo "Project AI state directory: $AI_DIR"
 echo "Detected machine: $MACHINE"
 echo "WSL2 detected: $IS_WSL2"

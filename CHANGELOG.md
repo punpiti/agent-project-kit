@@ -4,6 +4,12 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Installing the kit into its own source tree no longer appends the managed
+  block to the canonical `AGENTS.md` or touches `CLAUDE.md`/`ANTIGRAVITY.md`.
+  The check compares physical paths, so a symlinked path is also recognized.
+  Bash and PowerShell behave the same, and normal project installs are
+  unchanged.
+
 ## 7.7.1-windows-runtime-canary — 2026-09-25
 
 - Fixed a shared-runtime defect found by the first native-Windows run. Without

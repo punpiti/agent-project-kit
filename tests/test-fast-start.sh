@@ -98,4 +98,17 @@ test "$(grep -c '<!-- BEGIN COMPUTING-ENVIRONMENT -->' "$PROJECT/AGENTS.md")" -e
 cmp "$TEST_ROOT/agents-before-repeat.md" "$PROJECT/AGENTS.md"
 grep -q 'User-authored project state sentinel: preserve-me' "$PROJECT/.ai/PROJECT_STATE.md"
 grep -qx 'do-not-overwrite-this-user-file' "$PROJECT/legacy-notes.md"
+# Self-hosting: installing the kit into its own source tree (also through a
+# symlinked path) must leave the canonical, distributed instruction files alone.
+KIT_COPY="$TEST_ROOT/kit-source"; mkdir -p "$KIT_COPY"
+(cd "$SOURCE_PATH" && git ls-files -z | tar --null -T - -cf -) | tar -xf - -C "$KIT_COPY"
+ln -s "$KIT_COPY" "$TEST_ROOT/kit-link"
+for target in "$KIT_COPY" "$TEST_ROOT/kit-link"; do
+  bash "$KIT_COPY/scripts/install-to-project.sh" "$target" "$KIT_COPY" >/dev/null
+  for name in AGENTS.md CLAUDE.md ANTIGRAVITY.md; do
+    cmp "$SOURCE_PATH/$name" "$KIT_COPY/$name"
+  done
+  test -f "$KIT_COPY/.ai/agent-project-kit/STARTUP.md"
+done
+
 echo "fast-start acceptance tests: PASS"

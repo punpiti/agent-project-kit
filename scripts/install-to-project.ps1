@@ -463,7 +463,12 @@ human judgment and L3 external evidence.
 <!-- END COMPUTING-ENVIRONMENT -->
 "@
 
-if (-not (Test-Path -LiteralPath $projectAgents)) {
+# Installing the kit into its own source tree must not edit the canonical,
+# distributed AGENTS.md/CLAUDE.md/ANTIGRAVITY.md.
+$selfHostedSource = (Get-Item -LiteralPath $SourcePath).FullName.TrimEnd('\', '/') -eq (Get-Item -LiteralPath $project).FullName.TrimEnd('\', '/')
+if ($selfHostedSource) {
+    $updated = $null
+} elseif (-not (Test-Path -LiteralPath $projectAgents)) {
     $updated = "# AGENTS.md`n`n$agentsBlock`n"
     $agentsAcl = $null
 } else {
@@ -476,11 +481,13 @@ if (-not (Test-Path -LiteralPath $projectAgents)) {
         $updated = $existing.TrimEnd("`r", "`n") + "`n`n$agentsBlock`n"
     }
 }
-$agentsTemp = Join-Path $project (".AGENTS.md.tmp." + [guid]::NewGuid().ToString("N"))
-[IO.File]::WriteAllText($agentsTemp, $updated, [Text.UTF8Encoding]::new($false))
-if ($agentsAcl) { Set-Acl -LiteralPath $agentsTemp -AclObject $agentsAcl }
-Move-Item -LiteralPath $agentsTemp -Destination $projectAgents -Force
-$agentsTemp = ""
+if (-not $selfHostedSource) {
+    $agentsTemp = Join-Path $project (".AGENTS.md.tmp." + [guid]::NewGuid().ToString("N"))
+    [IO.File]::WriteAllText($agentsTemp, $updated, [Text.UTF8Encoding]::new($false))
+    if ($agentsAcl) { Set-Acl -LiteralPath $agentsTemp -AclObject $agentsAcl }
+    Move-Item -LiteralPath $agentsTemp -Destination $projectAgents -Force
+    $agentsTemp = ""
+}
 
 function Update-AdapterFile($FileName) {
     $path = Join-Path $project $FileName
@@ -518,8 +525,10 @@ kit.
     }
 }
 
-Update-AdapterFile "CLAUDE.md"
-Update-AdapterFile "ANTIGRAVITY.md"
+if (-not $selfHostedSource) {
+    Update-AdapterFile "CLAUDE.md"
+    Update-AdapterFile "ANTIGRAVITY.md"
+}
 
 $sessionLog = Join-Path $aiDir "SESSION_LOG.md"
 $installLogMarker = "Agent Project Kit installation first recorded"
@@ -541,7 +550,11 @@ if ((Test-Path $sessionLog) -and -not (Select-String -Path $sessionLog -SimpleMa
 }
 
 Write-Host "Installed Agent Project Kit into: $target"
-Write-Host "Created/updated project AGENTS.md: $projectAgents"
+if ($selfHostedSource) {
+    Write-Host "Self-hosted kit source: left canonical AGENTS.md and adapter files unchanged"
+} else {
+    Write-Host "Created/updated project AGENTS.md: $projectAgents"
+}
 Write-Host "Project AI state directory: $aiDir"
 Write-Host "Detected machine: $machine"
 
