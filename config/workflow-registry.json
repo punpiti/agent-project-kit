@@ -125,6 +125,16 @@
     "confidentiality-boundary": "Keep project-local state, private product intelligence, credentials, and restricted source material outside public package and trace surfaces unless explicitly approved."
   },
   "always_policies": ["evidence-boundary", "loop-boundary", "context-minimization", "idempotent-checks", "user-file-safety", "dependency-remediation", "confidentiality-boundary"],
+  "policy_sources": {
+    "evidence-boundary": ["AGENTS.md#Output Style"],
+    "loop-boundary": ["AGENTS.md#Core Loop Model"],
+    "context-minimization": ["STARTUP.md#Read Only When Triggered", "TOKEN_DISCIPLINE.md#Default Principle"],
+    "idempotent-checks": ["STARTUP.md#Check Cadence"],
+    "user-file-safety": ["README.md#Safety Model"],
+    "resource-portability": ["AGENTS.md#Machine / Portability Protocol"],
+    "dependency-remediation": ["AGENTS.md#Conda-Family Environment Routing", "ENVIRONMENT_POLICY.md#Demand-Driven Installation and Network Cost"],
+    "confidentiality-boundary": ["config/SECURITY_BOUNDARY.md#Classification", "SECURITY_EXCLUSIONS.md#Private product intelligence"]
+  },
   "prompt_inventory": [
     {"path":"00_DEFAULT_PROJECT_PROMPT.md","legacy_type":"reference","role":"reference","cadence":"never-by-default","trigger":"legacy entry point; redirect to STARTUP.md"},
     {"path":"01_NEW_PROJECT_BOOTSTRAP.md","legacy_type":"one-time","role":"state-action","cadence":"once-per-project","trigger":"new project without initialized state"},

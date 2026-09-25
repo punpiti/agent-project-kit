@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://punpiti.github.io/agent-project-kit/schemas/legacy-state.schema.json",
+  "title": "Agent Project Kit legacy structured state",
+  "description": "Structure of a legacy .ai/state.json. It is read only when PROJECT_STATE.md is absent; migrate it with scripts/migrate_state.py (see config/STATE_MIGRATION.md). Extra keys are preserved during migration.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "active_task": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "last_completed": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "blockers": {
+      "type": "array"
+    },
+    "next_actions": {
+      "type": "array"
+    },
+    "open_decisions": {
+      "type": "array"
+    },
+    "updated": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "status"
+  ],
+  "additionalProperties": true
+}

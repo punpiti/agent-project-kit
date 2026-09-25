@@ -13,6 +13,8 @@
 - `config/schemas/routing-rules.schema.json`
 - `config/schemas/apk-binding.schema.json`
 - `config/schemas/project.schema.json`
+- `config/schemas/legacy-state.schema.json`
+- `config/STATE_MIGRATION.md`
 - `config/WORKFLOW_ARCHITECTURE.md`
 - `config/SECURITY_BOUNDARY.md`
 - `config/release-boundary.json`
@@ -102,6 +104,7 @@
 - `scripts/run-once.py`
 - `scripts/validate_prompt_catalog.py`
 - `scripts/validate_schemas.py`
+- `scripts/migrate_state.py`
 - `scripts/scan_machine_resources.sh`
 - `scripts/update-from-pages.ps1`
 - `scripts/update-from-pages.sh`

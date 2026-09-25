@@ -22,9 +22,11 @@ KIT_FILES = (
     ("config/routing-rules.json", "routing-rules"),
     ("templates/apk.json", "apk-binding"),
     ("templates/project.json", "project"),
+    ("templates/state.json", "legacy-state"),
 )
 # Project-local files checked with --project, when present.
-PROJECT_FILES = ((".ai/apk.json", "apk-binding"), (".ai/project.json", "project"))
+PROJECT_FILES = ((".ai/apk.json", "apk-binding"), (".ai/project.json", "project"),
+                 (".ai/state.json", "legacy-state"))
 
 ANNOTATIONS = {"$schema", "$id", "$defs", "title", "description"}
 TYPES = {

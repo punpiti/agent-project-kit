@@ -92,6 +92,22 @@ estimated tokens. Exit status 2 means the outcome is materially ambiguous and
 one concise clarifying question is appropriate. Markdown routing remains the
 compatibility fallback when the structured tool is unavailable.
 
+## Always-On Policies
+
+These apply to every task. Follow the linked section only when a policy is in
+play and the one-line rule is not enough.
+
+<!-- BEGIN GENERATED: always-on policies from config/workflow-registry.json -->
+<!-- Edit config/workflow-registry.json, then run scripts/sync_workflow_registry.py --write. -->
+- `evidence-boundary`: Do not make claims stronger than available evidence; distinguish observation, inference, judgment, and external validation. Details: `AGENTS.md` › Output Style.
+- `loop-boundary`: Do not present L1 execution as resolution of L2 human judgment or L3 external feedback. Details: `AGENTS.md` › Core Loop Model.
+- `context-minimization`: Load only context required by the current deliverable; do not scan files merely because they exist. Details: `STARTUP.md` › Read Only When Triggered; `TOKEN_DISCIPLINE.md` › Default Principle.
+- `idempotent-checks`: Reuse successful valid discovery/check results; rerun only after expiry, relevant change, failure, or explicit request. Details: `STARTUP.md` › Check Cadence.
+- `user-file-safety`: Preserve user-authored files and project-local state; do not overwrite or delete them implicitly. Details: `README.md` › Safety Model.
+- `dependency-remediation`: When a task-required library is missing, select the project-declared environment or the narrowest text/image/ml environment, install and verify the smallest compatible direct dependency, and avoid cross-project conflicts. Honor explicit isolation or pinning contracts outside synced trees when practical. Announce ordinary repairs and proceed only at or below 250 MB without removal, replacement, or downgrade; otherwise inspect a supported dry run and obtain approval. Details: `AGENTS.md` › Conda-Family Environment Routing; `ENVIRONMENT_POLICY.md` › Demand-Driven Installation and Network Cost.
+- `confidentiality-boundary`: Keep project-local state, private product intelligence, credentials, and restricted source material outside public package and trace surfaces unless explicitly approved. Details: `config/SECURITY_BOUNDARY.md` › Classification; `SECURITY_EXCLUSIONS.md` › Private product intelligence.
+<!-- END GENERATED: always-on policies -->
+
 ## Read Only When Triggered
 
 | Trigger | Read / run |

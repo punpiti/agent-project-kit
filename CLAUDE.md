@@ -55,6 +55,14 @@ The kit has three cooperating layers:
      `scripts/validate_schemas.py` checks them with the stdlib only and fails
      closed on unsupported keywords. `validate_prompt_catalog.py` runs it, and
      `apk_doctor.py` reports schema errors in a project's binding/metadata.
+   - Always-on policy text lives only in the registry (`policies`,
+     `always_policies`, `policy_sources`). `sync_workflow_registry.py --write`
+     regenerates the marked block in `STARTUP.md`; check mode fails when it is
+     stale or a `policy_sources` heading does not exist.
+   - `config/STATE_MIGRATION.md` defines state authority (`PROJECT_STATE.md` >
+     `project.json` > legacy `state.json`) and `scripts/migrate_state.py`
+     (dry run by default; `--write` appends a marked section and renames
+     `state.json` to a dated backup; never deletes).
 
 `templates/` holds the files an install stamps into a downstream project's
 `.ai/` (e.g. `PROJECT_STATE.md`, `MACHINE_PROFILE.md`, `RUNBOOK.md`,
@@ -121,7 +129,9 @@ python3 scripts/release_check.py --tagged      # after tagging, before push/publ
 During development, run the specific test file relevant to what changed (e.g.
 touching `config/routing-rules.json` → `test-routing-rules.py` and
 `test-v7-context.py`; touching `config/schemas/` or `validate_schemas.py` →
-`test-schemas.py`; touching `config/workflow-registry.json` or
+`test-schemas.py`; touching policies or `STARTUP.md`'s generated block →
+`test-policy-registry.py`; touching `migrate_state.py` or state handling →
+`test-state-migration.py`; touching `config/workflow-registry.json` or
 `scripts/route_task.py`/`scripts/context.py` → `test-v7-context.py`; touching
 `scripts/install-to-project.sh` or `prompts/` → `test-fast-start.sh`; touching
 `scripts/install-shared.py`/`scripts/apk.py` → the `test-shared-runtime*.sh`

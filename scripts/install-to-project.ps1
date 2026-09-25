@@ -329,7 +329,11 @@ Copy-TemplateIfMissing "RUNBOOK.md" "RUNBOOK.md"
 Copy-TemplateIfMissing "TOKEN_BUDGET.md" "TOKEN_BUDGET.md"
 Copy-TemplateIfMissing "SESSION_LOG.md" "SESSION_LOG.md"
 Copy-TemplateIfMissing "project.json" "project.json"
-Copy-TemplateIfMissing "state.json" "state.json"
+# A migrated project keeps its state in PROJECT_STATE.md; do not recreate the
+# legacy file (see config/STATE_MIGRATION.md).
+if (-not (Get-ChildItem -LiteralPath $aiDir -Filter "state.json.migrated-*" -ErrorAction SilentlyContinue)) {
+    Copy-TemplateIfMissing "state.json" "state.json"
+}
 Copy-TemplateIfMissing "local-resources.json" "local-resources.json"
 Copy-TemplateIfMissing "ENVIRONMENT_VARIABLES.md" "ENVIRONMENT_VARIABLES.md"
 Copy-TemplateIfMissing "DOCUMENT_PIPELINE.md" "DOCUMENT_PIPELINE.md"

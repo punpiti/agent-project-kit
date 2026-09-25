@@ -34,6 +34,8 @@ TEST_COMMANDS = (
     ("release-check", ("python3", "tests/test-release-check.py")),
     ("routing-rules", ("python3", "tests/test-routing-rules.py")),
     ("schemas", ("python3", "tests/test-schemas.py")),
+    ("policy-registry", ("python3", "tests/test-policy-registry.py")),
+    ("state-migration", ("python3", "tests/test-state-migration.py")),
     ("fast-start", ("bash", "tests/test-fast-start.sh")),
     ("transactional-update", ("bash", "tests/test-transactional-update.sh")),
     ("shared-runtime", ("bash", "tests/test-shared-runtime.sh")),
@@ -97,6 +99,22 @@ def tag_errors(root: Path, version: str) -> list[str]:
     return errors
 
 
+def windows_test_command() -> tuple[str, ...] | None:
+    """Return the native-Windows test command when this host can run it (WSL)."""
+    import shutil
+    powershell = shutil.which("powershell.exe")
+    wslpath = shutil.which("wslpath")
+    if not powershell or not wslpath:
+        return None
+    probe = subprocess.run([powershell, "-NoProfile", "-Command", "py -3 --version"],
+                           capture_output=True, text=True)
+    if probe.returncode != 0:
+        return None
+    script = subprocess.run([wslpath, "-w", str(ROOT / "tests" / "test-shared-runtime-v2-windows.ps1")],
+                            capture_output=True, text=True, check=True).stdout.strip()
+    return (powershell, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", script)
+
+
 def run_command(name: str, command: tuple[str, ...]) -> tuple[str, int, str, float]:
     started = time.monotonic()
     result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True)
@@ -114,6 +132,8 @@ def main() -> int:
                         help="skip the acceptance suite (result is never release-ready)")
     parser.add_argument("--skip-history", action="store_true",
                         help="skip the Git-history secret scan (result is never release-ready)")
+    parser.add_argument("--skip-windows", action="store_true",
+                        help="skip the native-Windows test (result is never release-ready)")
     parser.add_argument("--jobs", type=int, default=6, help="parallel test workers (default 6)")
     parser.add_argument("--artifact-out", type=Path,
                         help="write the shared-runtime content manifest JSON to this path")
@@ -169,6 +189,18 @@ def main() -> int:
             tail = [line for line in output.splitlines() if line][-8:]
             report(gate, [] if code == 0 else tail or [f"exit {code}"])
 
+    # Owner policy: every release runs the native-Windows test (WSL host with py).
+    if args.skip_tests or args.skip_windows:
+        skipped.append("native-Windows test (" + ("--skip-tests" if args.skip_tests else "--skip-windows") + ")")
+    else:
+        command = windows_test_command()
+        if command is None:
+            skipped.append("native-Windows test (needs WSL with powershell.exe and the Windows py launcher)")
+        else:
+            name, code, output, seconds = run_command("native-windows", command)
+            tail = [line for line in output.splitlines() if line.strip()][-8:]
+            report(f"test {name} ({seconds:.0f}s)", [] if code == 0 else tail or [f"exit {code}"])
+
     installer = load_module("apk_install_shared", ROOT / "scripts" / "install-shared.py")
     artifact = installer.source_content_manifest(ROOT)
     artifact = {"package": "agent-project-kit", "version": version, "commit": head, **artifact}
@@ -178,8 +210,7 @@ def main() -> int:
         args.artifact_out.write_text(json.dumps(artifact, indent=2) + "\n", encoding="utf-8")
         print(f"[INFO] artifact manifest written to {args.artifact_out}")
 
-    print("[INFO] not covered here: native-Windows tests/test-shared-runtime-v2-windows.ps1, "
-          "Pages build, GitHub Release, and post-publish updater dry-run")
+    print("[INFO] not covered here: Pages build, GitHub Release, and post-publish updater dry-run")
     for item in skipped:
         print(f"[SKIP] {item}")
     if failures:

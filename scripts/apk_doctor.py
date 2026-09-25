@@ -57,6 +57,12 @@ def main() -> int:
                 data=json.loads(path.read_text(encoding="utf-8")); structured.append(data.get("status"))
                 if data.get("schema_version") != 1: issues.append(f"{name} has unsupported schema_version")
             except (OSError,json.JSONDecodeError) as exc: issues.append(f"invalid {name}: {exc}")
+    legacy=root/".ai"/"state.json"
+    if legacy.is_file() and project_state.is_file():
+        try: legacy_status=json.loads(legacy.read_text(encoding="utf-8")).get("status")
+        except (OSError,json.JSONDecodeError): legacy_status=None
+        if legacy_status not in (None,"placeholder"):
+            issues.append("legacy .ai/state.json holds state that PROJECT_STATE.md overrides; review with scripts/migrate_state.py --project .")
     if structured and structured[:2] == ["placeholder","placeholder"]:
         print("Agent Project Kit doctor: structured state is placeholder; Markdown compatibility state remains active")
     kit, canonical = select_kit_root(root)

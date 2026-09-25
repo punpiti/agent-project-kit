@@ -4,6 +4,21 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- `release_check.py` now runs the native-Windows shared-runtime test itself on
+  a WSL host with the Windows `py` launcher. Without that host, or with
+  `--skip-windows`, the result is never release-ready. Owner policy: every
+  release runs it.
+- The registry is now the only source of always-on policy text. New
+  `policy_sources` point each policy to the heading that holds its full rule.
+  `sync_workflow_registry.py` generates the "Always-On Policies" block in
+  `STARTUP.md` and fails when that block is stale or a heading is missing.
+- Added the legacy state migration contract (`config/STATE_MIGRATION.md`) and
+  `scripts/migrate_state.py`. It runs as a dry run by default. `--write`
+  appends a marked section to `PROJECT_STATE.md` and renames `state.json` to a
+  dated backup, and a second run is a no-op. Installers no longer recreate
+  `state.json` after migration. `apk_doctor.py` warns when a configured
+  `state.json` is hidden by `PROJECT_STATE.md`. Added a legacy-state schema.
+
 ## 7.8.0-routing-schemas-canary — 2026-09-25
 
 - Added JSON Schemas (draft 2020-12) in `config/schemas/` for the workflow

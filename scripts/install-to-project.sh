@@ -390,7 +390,11 @@ create_from_template DOCUMENT_STYLE.md "$AI_DIR/DOCUMENT_STYLE.md"
 create_from_template DOCUMENT_QA.md "$AI_DIR/DOCUMENT_QA.md"
 create_from_template MARKDOWN_INVENTORY.md "$AI_DIR/MARKDOWN_INVENTORY.md"
 create_from_template project.json "$AI_DIR/project.json"
-create_from_template state.json "$AI_DIR/state.json"
+# A migrated project keeps its state in PROJECT_STATE.md; do not recreate the
+# legacy file (see config/STATE_MIGRATION.md).
+if ! compgen -G "$AI_DIR/state.json.migrated-*" >/dev/null; then
+  create_from_template state.json "$AI_DIR/state.json"
+fi
 create_from_template local-resources.json "$AI_DIR/local-resources.json"
 
 PREVIOUS_PACKAGE_VERSION=""

@@ -297,6 +297,22 @@
         ],
         "additionalProperties": false
       }
+    },
+    "policy_sources": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/id"
+      },
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "pattern": "^[^#\\s][^#]*\\.md#\\S.*$"
+        }
+      }
     }
   },
   "required": [
@@ -307,6 +323,7 @@
     "modules",
     "policies",
     "always_policies",
+    "policy_sources",
     "prompt_inventory"
   ],
   "additionalProperties": false
