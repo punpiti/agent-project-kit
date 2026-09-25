@@ -45,6 +45,8 @@ def main() -> None:
         install(fresh)
         assert "placeholder" in migrate(fresh).stdout
         assert (fresh / ".ai" / "state.json").is_file()
+        doctor = run(*PY, str(ROOT / "scripts" / "apk_doctor.py"), str(fresh), "--quick", check=False)
+        assert "status=placeholder" in doctor.stdout and "invalid Last updated" not in doctor.stdout, doctor.stdout
         migrate(fresh, "--write", "--retire-placeholder")
         assert not (fresh / ".ai" / "state.json").exists()
         assert list((fresh / ".ai").glob("state.json.migrated-*"))

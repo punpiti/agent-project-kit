@@ -4,6 +4,11 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- `apk_doctor.py` no longer reads the next line as a field value when a field is
+  empty. On an unfilled `PROJECT_STATE.md` template, it had reported the
+  `Updated by` line as an invalid `Last updated` date. This affected 20 of 65
+  local projects.
+
 ## 7.9.0-state-migration-canary — 2026-09-25
 
 - Fixes from a read-only trial on real downstream projects (book, research

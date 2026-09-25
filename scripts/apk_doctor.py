@@ -6,7 +6,8 @@ from pathlib import Path
 import datetime as dt
 
 def field(text: str, name: str) -> str | None:
-    m = re.search(rf"^- {re.escape(name)}:\s*(.+)$", text, re.MULTILINE); return m.group(1).strip() if m else None
+    # [ \t]* keeps an empty field from capturing the next line's value.
+    m = re.search(rf"^- {re.escape(name)}:[ \t]*(\S.*)$", text, re.MULTILINE); return m.group(1).strip() if m else None
 
 def select_kit_root(root: Path) -> tuple[Path | None, bool]:
     """Prefer the canonical source tree over an installed downstream snapshot."""
