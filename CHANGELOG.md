@@ -4,6 +4,14 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Fixed an intermittent CI failure (`tar: ./scripts/__pycache__: file changed
+  as we read it`). The gate runs suites in parallel, and three tests, through
+  `check_release_boundary.py` and `release_check.py` importing sibling
+  scripts, wrote `__pycache__` into the source tree while other suites copied
+  it. Those scripts and tests no longer write bytecode, `release_check.py`
+  runs every suite with `PYTHONDONTWRITEBYTECODE=1`, and source copies in the
+  tests exclude caches. A full gate run now leaves no `__pycache__` in the tree.
+
 - Rewrote README.md, README.th.md, and the GitHub Pages landing page
   (`index.md`). Changes: a requirements section (Git and Python 3.9+
   everywhere), a what-it-does summary with example requests per task type, and

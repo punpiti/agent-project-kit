@@ -2,6 +2,8 @@
 """Version-consistency and tag invariants of scripts/release_check.py."""
 from __future__ import annotations
 
+import sys
+sys.dont_write_bytecode = True  # never add caches to the source tree
 import importlib.util
 import json
 import shutil

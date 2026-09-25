@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Regression checks for Thai/Latin Word run metadata."""
 
+import sys
+sys.dont_write_bytecode = True  # never add caches to the source tree
 import importlib.util
 from pathlib import Path
 

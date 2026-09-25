@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import os
 import re
 import subprocess
 import sys
@@ -46,6 +47,7 @@ TEST_COMMANDS = (
 
 
 def load_module(name: str, path: Path):
+    sys.dont_write_bytecode = True  # importing a sibling must not add __pycache__ to the tree
     spec = importlib.util.spec_from_file_location(name, path)
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
@@ -118,7 +120,10 @@ def windows_test_command() -> tuple[str, ...] | None:
 
 def run_command(name: str, command: tuple[str, ...]) -> tuple[str, int, str, float]:
     started = time.monotonic()
-    result = subprocess.run(command, cwd=ROOT, capture_output=True, encoding="utf-8")
+    # Suites run in parallel; a test that writes __pycache__ into the source
+    # tree would race with suites that copy that tree.
+    env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
+    result = subprocess.run(command, cwd=ROOT, capture_output=True, encoding="utf-8", env=env)
     output = (result.stdout + result.stderr).strip()
     return name, result.returncode, output, time.monotonic() - started
 

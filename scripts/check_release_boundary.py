@@ -7,6 +7,7 @@ import importlib.util
 import json
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -38,6 +39,7 @@ def has_tracked_changes(root: Path = ROOT, *, staged: bool = False) -> bool:
 
 
 def runtime_items() -> tuple[str, ...]:
+    sys.dont_write_bytecode = True  # importing a sibling must not add __pycache__ to the tree
     path = ROOT / "scripts" / "install-shared.py"
     spec = importlib.util.spec_from_file_location("apk_install_shared", path)
     assert spec and spec.loader

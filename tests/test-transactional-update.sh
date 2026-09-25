@@ -12,7 +12,7 @@ printf '# User rules\n\nkeep-me\n' > "$PROJECT/AGENTS.md"
 copy_package_source() {
   local destination="$1"
   mkdir -p "$destination"
-  tar -C "$SOURCE" --exclude=.git --exclude=.ai -cf - . | tar -C "$destination" -xf -
+  tar -C "$SOURCE" --exclude=.git --exclude=.ai --exclude=__pycache__ --exclude='*.pyc' -cf - . | tar -C "$destination" -xf -
 }
 
 bash "$SOURCE/scripts/install-to-project.sh" "$PROJECT" "$SOURCE" >/dev/null

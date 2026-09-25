@@ -7,6 +7,7 @@ import json
 import re
 import subprocess
 import sys
+sys.dont_write_bytecode = True  # never add caches to the source tree
 import tempfile
 from pathlib import Path
 

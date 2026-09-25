@@ -14,7 +14,7 @@ test -z "$(find "$HOME_DIR/versions/$VERSION" -type f \( -name '*.pyc' -o -name 
 # An immutable version cannot be rebound from different source content.
 ALTERED_SOURCE="$ROOT/altered-source"
 mkdir -p "$ALTERED_SOURCE"
-tar -C "$SOURCE" --exclude=.git --exclude=.ai -cf - . | tar -C "$ALTERED_SOURCE" -xf -
+tar -C "$SOURCE" --exclude=.git --exclude=.ai --exclude=__pycache__ --exclude='*.pyc' -cf - . | tar -C "$ALTERED_SOURCE" -xf -
 printf '\n# same-version source drift\n' >> "$ALTERED_SOURCE/STARTUP.md"
 if python3 "$SOURCE/scripts/install-shared.py" --source "$ALTERED_SOURCE" --home "$HOME_DIR" --bind-project "$PROJECT" >/dev/null 2>&1; then
   echo 'same-version source drift unexpectedly reused the installed runtime' >&2
