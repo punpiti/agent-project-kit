@@ -4,6 +4,8 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+## 7.8.0-routing-schemas-canary — 2026-09-25
+
 - Added JSON Schemas (draft 2020-12) in `config/schemas/` for the workflow
   registry, routing rules, the `.ai/apk.json` binding, and `.ai/project.json`.
   Kit-owned files reject unknown keys; `project.json` allows project keys.
