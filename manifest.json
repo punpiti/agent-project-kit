@@ -8,9 +8,9 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "7.7.0-workflow-architecture-canary",
-  "git_ref": "v7.7.0-workflow-architecture-canary",
-  "updated": "2026-09-25T14:47:18+07:00",
+  "version": "7.7.1-windows-runtime-canary",
+  "git_ref": "v7.7.1-windows-runtime-canary",
+  "updated": "2026-09-25T18:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
   "purpose": "Agent Project Kit: a portable starter kit that installs AI-agent instruction files and project-local .ai templates. New installs use .ai/agent-project-kit; computing-environment remains a legacy name/path for migration only.",
@@ -82,6 +82,9 @@
     "private certificate/key material; see SECURITY_EXCLUSIONS.md"
   ],
   "release_notes": [
+    "Fixed shared-runtime resolution breaking after apk context on machines that write Python bytecode, including native Windows; verified on native Windows.",
+    "Added scripts/release_check.py, one read-only gate for version consistency, projections, boundary, history, and the full test suite.",
+    "Corrected software-routing gaps found by a self-hosted trial and a stale benchmark fixture for official letters.",
     "Introduced Workflow Architecture v2 with one primary owner and separate method, lifecycle, quality-gate, and state-action dimensions.",
     "Hardened transactional installers, shared-runtime identity, binding confinement, downgrade prevention, and non-mutating Git dry-runs.",
     "Added fail-closed public release boundaries for private paths, secret signatures, dirty or omitted files, and unscanned release candidates.",

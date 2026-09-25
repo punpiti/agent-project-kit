@@ -4,6 +4,8 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+## 7.7.1-windows-runtime-canary — 2026-09-25
+
 - Fixed a shared-runtime defect found by the first native-Windows run. Without
   `PYTHONDONTWRITEBYTECODE`, `apk context` wrote `__pycache__` into the
   checksum-verified runtime, so every later `apk resolve` failed.
