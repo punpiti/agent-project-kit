@@ -2,6 +2,20 @@
 .ai/
 local-profiles/
 
+# Private product intelligence and secrets
+private/
+internal/
+*.private.md
+*.private.json
+.env
+.env.*
+!.env.example
+*.p12
+*.pfx
+*.pem
+*.key
+*.kdbx
+
 # Python/cache/editor noise
 __pycache__/
 *.py[cod]

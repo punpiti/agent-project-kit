@@ -8,6 +8,15 @@ import datetime as dt
 def field(text: str, name: str) -> str | None:
     m = re.search(rf"^- {re.escape(name)}:\s*(.+)$", text, re.MULTILINE); return m.group(1).strip() if m else None
 
+def select_kit_root(root: Path) -> tuple[Path | None, bool]:
+    """Prefer the canonical source tree over an installed downstream snapshot."""
+    if (root/"manifest.json").is_file() and (root/"START_HERE.md").is_file():
+        return root, True
+    snapshot = root/".ai"/"agent-project-kit"
+    if (snapshot/"manifest.json").is_file():
+        return snapshot, False
+    return None, False
+
 def main() -> int:
     p=argparse.ArgumentParser(description=__doc__); p.add_argument("project",nargs="?",default="."); p.add_argument("--quick",action="store_true"); a=p.parse_args()
     root=Path(a.project).resolve(); issues=[]
@@ -35,13 +44,15 @@ def main() -> int:
             except (OSError,json.JSONDecodeError) as exc: issues.append(f"invalid {name}: {exc}")
     if structured and structured[:2] == ["placeholder","placeholder"]:
         print("Agent Project Kit doctor: structured state is placeholder; Markdown compatibility state remains active")
-    kit=next((x for x in (root/".ai"/"agent-project-kit",root) if (x/"manifest.json").is_file()),None)
+    kit, canonical = select_kit_root(root)
     if kit is None: issues.append("cannot find Agent Project Kit manifest")
     else:
         try: manifest=json.loads((kit/"manifest.json").read_text(encoding="utf-8"))
         except (OSError,json.JSONDecodeError) as exc: issues.append(f"invalid manifest: {exc}"); manifest={}
         vf=root/".ai"/"COMPUTING_ENVIRONMENT_VERSION.md"
-        if not vf.is_file(): issues.append("missing .ai/COMPUTING_ENVIRONMENT_VERSION.md")
+        if canonical:
+            pass  # Source checkout is authoritative; installed-version metadata is downstream-only.
+        elif not vf.is_file(): issues.append("missing .ai/COMPUTING_ENVIRONMENT_VERSION.md")
         else:
             text=vf.read_text(encoding="utf-8"); installed=field(text,"Package version"); machine=field(text,"Machine")
             if installed and manifest.get("version") and installed != manifest["version"]: issues.append(f"version drift: metadata={installed}, snapshot={manifest['version']}")

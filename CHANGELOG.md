@@ -2,6 +2,37 @@
 
 All notable changes to Agent Project Kit are summarized here.
 
+## Unreleased
+
+## 7.7.0-workflow-architecture-canary — 2026-09-25
+
+- Replaced the flat primary/secondary model with Workflow Architecture v2:
+  one outcome owner plus bounded methods, lifecycle stages, quality gates, and
+  state actions. The canonical registry now generates compatibility views.
+- Corrected adversarial English/Thai routing, stage priority, ambiguity,
+  project-state actions, Markdown state authority, and exact UTF-8 byte caps.
+- Hardened shared runtime identity, binding path confinement, source-content
+  drift detection, downgrade prevention, and transactional snapshot rollback.
+- Made Bash installer updates same-filesystem atomic and permission-preserving;
+  malformed markers, source symlinks, and transient caches now fail or stay out.
+  Added equivalent PowerShell guards and the missing document-state templates.
+- Added a public/private release boundary with dirty/untracked release gates,
+  personal-path checks, forced `.env` blocking, broader token signatures, and
+  fail-closed handling for large or non-UTF-8 release candidates.
+- Reconciled dependency remediation: use the narrowest compatible shared or
+  project-declared environment, respect explicit isolation/pinning contracts,
+  inspect risky transactions, and require approval above 250 MB or for
+  metered, GPU/CUDA, privileged, destructive, or uncertain changes.
+- Corrected environment manifests: removed the non-standard `microconda` command,
+  separated `ml-cuda118`, declared its PyTorch wheel index, and added PyMuPDF to
+  the text baseline used by the book workflow.
+- Made Git dry-runs use disposable clones, rejected failed fast-forward pulls,
+  and replaced line-oriented JSON parsing with a real JSON parser.
+- Reworked Markdown separator detection in the prose checker to avoid
+  catastrophic backtracking and cover `***`, `___`, and spaced rules.
+- Removed self-recursion from canonical `AGENTS.md`; APK doctor now treats the
+  source root as authoritative over its downstream-package test snapshot.
+
 ## 7.6.0-prose-style-canary — 2026-09-25
 
 - Added the Prose Style secondary workflow (`prompts/24_PROSE_STYLE.md`): write

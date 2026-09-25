@@ -50,17 +50,19 @@ $controlBackup = ""
 $controlBackupReady = $false
 $controlPaths = @()
 $snapshotSwapped = $false
+$targetMoved = $false
 $hadTarget = $false
 $previousRotated = $false
+$agentsTemp = ""
 
 function Restore-SnapshotTransaction {
-    if ($script:snapshotSwapped) {
-        if (Test-Path -LiteralPath $script:target) {
-            Remove-Item -LiteralPath $script:target -Recurse -Force
-        }
-        if ($script:hadTarget -and (Test-Path -LiteralPath $script:previousTarget)) {
-            Move-Item -LiteralPath $script:previousTarget -Destination $script:target
-        }
+    if ($script:snapshotSwapped -and (Test-Path -LiteralPath $script:target)) {
+        Remove-Item -LiteralPath $script:target -Recurse -Force
+    }
+    if ($script:targetMoved -and $script:hadTarget -and (Test-Path -LiteralPath $script:previousTarget)) {
+        Move-Item -LiteralPath $script:previousTarget -Destination $script:target
+    }
+    if ($script:snapshotSwapped -or $script:targetMoved) {
         Write-Warning "Install failed; restored the previous Agent Project Kit snapshot."
     }
     if ($script:previousRotated -and (Test-Path -LiteralPath $script:olderPreviousTarget)) {
@@ -86,6 +88,9 @@ function Restore-SnapshotTransaction {
             }
         }
     }
+    if ($script:agentsTemp -and (Test-Path -LiteralPath $script:agentsTemp)) {
+        Remove-Item -LiteralPath $script:agentsTemp -Force
+    }
     if ($script:controlBackup -and (Test-Path -LiteralPath $script:controlBackup)) {
         Remove-Item -LiteralPath $script:controlBackup -Recurse -Force
     }
@@ -100,7 +105,7 @@ trap {
 $firstInstall = if (Test-Path $target) { "no" } else { "yes" }
 $machine = if ($env:COMPUTERNAME) { $env:COMPUTERNAME.ToLower() } else { "unknown" }
 $environmentManager = "none (deferred; install user-local micromamba only when an environment is needed)"
-foreach ($managerName in @("micromamba", "mamba", "microconda", "conda")) {
+foreach ($managerName in @("micromamba", "mamba", "conda")) {
     $managerCommand = Get-Command $managerName -ErrorAction SilentlyContinue | Select-Object -First 1
     if ($managerCommand) {
         $environmentManager = "$managerName ($($managerCommand.Source))"
@@ -110,6 +115,23 @@ foreach ($managerName in @("micromamba", "mamba", "microconda", "conda")) {
 if ($firstInstall -eq "yes") {
     Write-Host "Environment-manager preflight: $environmentManager"
 }
+
+function Assert-ManagedBlockWellFormed {
+    param([string]$Path)
+    if (-not (Test-Path -LiteralPath $Path)) { return }
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
+        throw "Refusing to edit non-file AGENTS.md path: $Path"
+    }
+    $content = [IO.File]::ReadAllText($Path)
+    $beginCount = ([regex]::Matches($content, "(?m)^<!-- BEGIN COMPUTING-ENVIRONMENT -->\r?$")).Count
+    $endCount = ([regex]::Matches($content, "(?m)^<!-- END COMPUTING-ENVIRONMENT -->\r?$")).Count
+    if ($beginCount -ne $endCount -or $beginCount -gt 1) {
+        throw "Refusing to edit malformed Agent Project Kit managed block: $Path"
+    }
+}
+
+$projectAgents = Join-Path $project "AGENTS.md"
+Assert-ManagedBlockWellFormed $projectAgents
 New-Item -ItemType Directory -Force -Path $aiDir | Out-Null
 
 if ((Resolve-Path $SourcePath).Path -eq (Resolve-Path -LiteralPath $target -ErrorAction SilentlyContinue).Path) {
@@ -161,7 +183,7 @@ function Assert-StagedItemIntegrity {
     $sourceItem = Join-Path $SourceRoot $Item
     $stageItem = Join-Path $StageRoot $Item
     $sourceFiles = if ((Get-Item -LiteralPath $sourceItem).PSIsContainer) {
-        @(Get-ChildItem -LiteralPath $sourceItem -File -Recurse)
+        @(Get-ChildItem -LiteralPath $sourceItem -File -Recurse | Where-Object { $_.FullName -notmatch '[\\/]__pycache__[\\/]' -and $_.Name -notmatch '\.(pyc|pyo)$' -and $_.Name -notin @('.DS_Store', 'Thumbs.db') })
     } else {
         @(Get-Item -LiteralPath $sourceItem)
     }
@@ -249,7 +271,15 @@ foreach ($item in $items) {
     if (-not (Test-Path -LiteralPath $src)) {
         throw "Missing required package item: $src"
     }
+    $sourceNodes = @(Get-Item -LiteralPath $src -Force) + @(Get-ChildItem -LiteralPath $src -Force -Recurse -ErrorAction SilentlyContinue)
+    if ($sourceNodes | Where-Object { $_.LinkType -or ($_.Target -and $_.Target.Count -gt 0) }) {
+        throw "Refusing to package symbolic link or reparse point: $src"
+    }
     Copy-Item -LiteralPath $src -Destination $dst -Recurse -Force
+    if (Test-Path -LiteralPath $dst -PathType Container) {
+        Get-ChildItem -LiteralPath $dst -Directory -Filter "__pycache__" -Recurse -Force | Remove-Item -Recurse -Force
+        Get-ChildItem -LiteralPath $dst -File -Recurse -Force | Where-Object { $_.Name -match '\.(pyc|pyo)$' -or $_.Name -in @('.DS_Store', 'Thumbs.db') } | Remove-Item -Force
+    }
     Assert-StagedItemIntegrity -SourceRoot $SourcePath -StageRoot $stage -Item $item
 }
 
@@ -269,6 +299,7 @@ if (Test-Path -LiteralPath $previousTarget) {
 if (Test-Path -LiteralPath $target) {
     $hadTarget = $true
     Move-Item -LiteralPath $target -Destination $previousTarget
+    $targetMoved = $true
 }
 Move-Item -LiteralPath $stage -Destination $target
 $stage = ""
@@ -301,6 +332,10 @@ Copy-TemplateIfMissing "project.json" "project.json"
 Copy-TemplateIfMissing "state.json" "state.json"
 Copy-TemplateIfMissing "local-resources.json" "local-resources.json"
 Copy-TemplateIfMissing "ENVIRONMENT_VARIABLES.md" "ENVIRONMENT_VARIABLES.md"
+Copy-TemplateIfMissing "DOCUMENT_PIPELINE.md" "DOCUMENT_PIPELINE.md"
+Copy-TemplateIfMissing "DOCUMENT_STYLE.md" "DOCUMENT_STYLE.md"
+Copy-TemplateIfMissing "DOCUMENT_QA.md" "DOCUMENT_QA.md"
+Copy-TemplateIfMissing "MARKDOWN_INVENTORY.md" "MARKDOWN_INVENTORY.md"
 
 $manifestPath = Join-Path $SourcePath "manifest.json"
 $packageName = "agent-project-kit"
@@ -428,18 +463,24 @@ human judgment and L3 external evidence.
 <!-- END COMPUTING-ENVIRONMENT -->
 "@
 
-if (-not (Test-Path $projectAgents)) {
-    Set-Content -Path $projectAgents -Value "# AGENTS.md`n`n$agentsBlock" -Encoding UTF8
+if (-not (Test-Path -LiteralPath $projectAgents)) {
+    $updated = "# AGENTS.md`n`n$agentsBlock`n"
+    $agentsAcl = $null
 } else {
-    $existing = Get-Content $projectAgents -Raw
+    $existing = [IO.File]::ReadAllText($projectAgents)
+    $agentsAcl = Get-Acl -LiteralPath $projectAgents
     if ($existing -match [regex]::Escape($managedBlock)) {
         $pattern = "(?s)" + [regex]::Escape($managedBlock) + ".*?" + [regex]::Escape("<!-- END COMPUTING-ENVIRONMENT -->")
         $updated = [regex]::Replace($existing, $pattern, $agentsBlock)
-        Set-Content -Path $projectAgents -Value $updated -Encoding UTF8
     } else {
-        Add-Content -Path $projectAgents -Value "`n$agentsBlock" -Encoding UTF8
+        $updated = $existing.TrimEnd("`r", "`n") + "`n`n$agentsBlock`n"
     }
 }
+$agentsTemp = Join-Path $project (".AGENTS.md.tmp." + [guid]::NewGuid().ToString("N"))
+[IO.File]::WriteAllText($agentsTemp, $updated, [Text.UTF8Encoding]::new($false))
+if ($agentsAcl) { Set-Acl -LiteralPath $agentsTemp -AclObject $agentsAcl }
+Move-Item -LiteralPath $agentsTemp -Destination $projectAgents -Force
+$agentsTemp = ""
 
 function Update-AdapterFile($FileName) {
     $path = Join-Path $project $FileName

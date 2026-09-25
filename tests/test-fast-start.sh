@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+unset APK_HOME APK_SHARED_ROOT APK_MACHINE_HOME
 SOURCE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TEST_ROOT="$(mktemp -d)"; trap 'rm -rf "$TEST_ROOT"' EXIT
 PROJECT="$TEST_ROOT/project"; mkdir -p "$PROJECT"
@@ -44,11 +45,17 @@ test -f "$PROJECT/.ai/local-resources.json"
 test -f "$PROJECT/.ai/agent-project-kit/templates/PORTFOLIO_COORDINATION.md"
 grep -q 'Project Radar' "$PROJECT/.ai/agent-project-kit/templates/PORTFOLIO_COORDINATION.md"
 test -f "$PROJECT/.ai/agent-project-kit/config/routes.json"
+test -f "$PROJECT/.ai/agent-project-kit/config/workflow-registry.json"
+test -f "$PROJECT/.ai/agent-project-kit/config/WORKFLOW_ARCHITECTURE.md"
+test -f "$PROJECT/.ai/agent-project-kit/config/SECURITY_BOUNDARY.md"
+test -f "$PROJECT/.ai/agent-project-kit/scripts/check_release_boundary.py"
+test -f "$PROJECT/.ai/agent-project-kit/scripts/sync_workflow_registry.py"
 test -f "$PROJECT/.ai/agent-project-kit/scripts/check-update-notice.py"
 test -f "$PROJECT/.ai/agent-project-kit/scripts/repair_thai_wordbreak_docx.py"
 grep -q 'Mandatory Thai DOCX gate' "$PROJECT/.ai/agent-project-kit/AGENTS.md"
 grep -q 'repair_thai_wordbreak_docx.py' "$PROJECT/.ai/agent-project-kit/prompts/10_DOCUMENT_PRODUCTION.md"
 python3 "$SOURCE_PATH/tests/test-v7-context.py" >/dev/null
+python3 "$SOURCE_PATH/tests/test-workflow-architecture.py" >/dev/null
 python3 "$SOURCE_PATH/scripts/context.py" --project "$SOURCE_PATH" "resume package release" --output "$TEST_ROOT/root-context.json" || test "$?" -eq 2
 python3 - "$TEST_ROOT/root-context.json" "$SOURCE_PATH" <<'PY'
 import json,sys

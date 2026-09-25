@@ -9,6 +9,7 @@ dependencies:
   - openpyxl
   - pandas
   - pypdf
+  - pymupdf
   - python-docx
   - pyyaml
   - requests

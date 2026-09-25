@@ -36,17 +36,26 @@ stakeholder-facing recommendation—even when research supplies its evidence.
 Choose Research Activities when the deliverable is primarily a study, evidence
 synthesis, analysis, or research output rather than an institutional decision.
 
-Quick answers need no route file. Web development is a subtype of Software
-Development & Automation and may load `14_WEB_DEVELOPMENT.md` secondarily.
-Project resume, onboarding, reviewer response, publication production,
-presentation production, external feedback, Markdown cleanup, package release, Strategy & Advisory
-(`21_STRATEGY_ADVISORY.md`) and Prose Style (`24_PROSE_STYLE.md`) are secondary
-workflows: load one only when that activity is explicitly needed inside a
-primary route.
+Quick answers need no route file. For other work, use Workflow Architecture v2:
 
-Use Prose Style (`prompts/24_PROSE_STYLE.md`) whenever reader-facing prose is
-drafted, revised, edited, or polished, in any route. It lists formulaic
-AI-style patterns to avoid and `scripts/check_prose_style.py` counts them.
+1. Select exactly one **primary pipeline** that owns the requested outcome.
+2. Add bounded **method modules** such as Web Development, Data Analytics,
+   Content Analysis, Research Synthesis, or Strategy only when needed.
+3. Add the current **lifecycle stage** such as implementation, reviewer
+   response, production, external feedback, Markdown cleanup, or package release.
+4. Apply every triggered **quality gate**; gates do not compete with methods.
+5. Run **state actions** such as resume, onboarding, or machine discovery only
+   when project state requires them.
+
+One orchestrator remains responsible for the final result. A module should be
+separate only when its instructions, tools, evidence contract, or approval
+boundary materially differs from the primary pipeline. Never drop a triggered
+module silently; report any omitted module and the composition limit that caused
+the omission.
+
+Use Prose Style (`prompts/24_PROSE_STYLE.md`) as a quality gate whenever
+reader-facing prose is drafted, revised, edited, or polished. It does not own
+the deliverable and must not replace evidence, publication, or domain checks.
 
 Use Publication Production (`prompts/10_DOCUMENT_PRODUCTION.md`) only when a
 written/reflowable artifact must be built, converted, exported, or final-QA'd.
@@ -59,14 +68,17 @@ Personal finance should use its project-local finance workflow rather than a
 generic core route. Rare technical/DIY work uses a `Technical / Other Project`
 fallback: identify the concrete outcome and load no broad prompt pack by default.
 
-For mixed requests, choose one primary route based on the requested deliverable
-and add only one secondary workflow when necessary. Never load every prompt pack
-“just in case.” Classification itself is per request; onboarding and discovery
-actions inside a route must still obey the check cadence below.
+For mixed requests, choose one primary pipeline by requested deliverable. A
+specialist method can become primary only when the deliverable itself is that
+method's analysis. For example, survey analysis supports a policy pipeline;
+dashboard analysis selects Data Analytics. Never load every prompt “just in
+case.” Onboarding and discovery still obey the cadence below.
 
-The machine-readable source of truth for prompt role, trigger, and cadence is
-`prompts/catalog.json`. Normal task startup does not need to read the catalog;
-it exists for validation, maintenance, and ambiguous routing audits.
+The machine-readable source of truth is `config/workflow-registry.json`.
+`prompts/catalog.json`, `config/routes.json`, `config/workflows.json`, and
+`config/policies.json` are generated compatibility views. Do not edit those
+views directly; use `scripts/sync_workflow_registry.py --write`. Normal task
+startup does not need to read the registry.
 
 When deterministic routing is useful, run:
 
@@ -74,11 +86,11 @@ When deterministic routing is useful, run:
 python3 .ai/agent-project-kit/scripts/context.py --project . "<request>"
 ```
 
-The compiled bundle reports four independent axes (`domain`, `deliverable`,
-`methods`, `lifecycle`), selected modules/policies, sources, bytes, and estimated
-tokens. Exit status 2 means the outcome is materially ambiguous and one concise
-clarifying question is appropriate. Markdown routing remains the compatibility
-fallback when the structured tool is unavailable.
+The compiled bundle reports classification axes plus the primary pipeline,
+methods, stages, gates, state actions, omissions, policies, sources, bytes, and
+estimated tokens. Exit status 2 means the outcome is materially ambiguous and
+one concise clarifying question is appropriate. Markdown routing remains the
+compatibility fallback when the structured tool is unavailable.
 
 ## Read Only When Triggered
 
@@ -86,8 +98,12 @@ fallback when the structured tool is unavailable.
 |---|---|
 | Project boundary or parent/child scope is unclear | `.ai/PROJECT_HIERARCHY.md` |
 | New/stale machine, heavy command, or missing local data | `.ai/MACHINE_PROFILE.md`, then `.ai/LOCAL_RESOURCES.md` |
+| Required library/command is missing | select the project-declared shared environment or `text`/`image`/`ml`, install the smallest direct dependency there, then verify; do not create `.venv` |
 | A command, setup step, or failure needs project knowledge | `.ai/RUNBOOK.md` |
 | Package install, update, release, or schema work | `.ai/COMPUTING_ENVIRONMENT_VERSION.md` |
+| Workflow architecture or routing changes | `config/WORKFLOW_ARCHITECTURE.md`, then the registry and scenario tests |
+| Commit or package | run `scripts/check_release_boundary.py`; keep private product intelligence outside public paths |
+| Tag or public release | run `scripts/check_release_boundary.py --release --history`; stop on untracked release candidates |
 | Explicit token/cost concern or high-cost work | `.ai/TOKEN_BUDGET.md` |
 | Document, slide, research, or Markdown-maintenance task | the relevant prompt/checklist only |
 | Last state summary is insufficient | the newest relevant `.ai/SESSION_LOG.md` entry |

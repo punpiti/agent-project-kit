@@ -202,7 +202,7 @@ afterward that:
 
 The script requires Python plus `lxml`; use the shared machine-local `text`
 environment through the preferred available manager (`micromamba`, `mamba`,
-`microconda`, then `conda`), not a project-local virtual environment.
+`conda`), not a project-local virtual environment.
 
 ## Final PDF QA
 

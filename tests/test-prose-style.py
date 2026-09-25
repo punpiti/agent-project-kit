@@ -25,6 +25,7 @@ def run_checker(text: str, *args: str) -> subprocess.CompletedProcess[str]:
             text=True,
             capture_output=True,
             check=False,
+            timeout=5,
         )
     finally:
         path.unlink()
@@ -47,6 +48,18 @@ expect_exit(
     0,
     "# **Results**\n\n**Term:** definition\n\n```text\nnot noise, but signal?\n```\n",
 )
+
+# Markdown table separators and horizontal rules are markup, not em dashes.
+expect_exit(
+    0,
+    "| Measure | Result |\n|---|---:|\n| Accuracy | 95% |\n\n---\n***\n___\n- - -\n",
+    "--strict",
+)
+
+# A prose triple dash must remain visible, and a long malformed separator must
+# complete within the subprocess timeout instead of triggering regex blow-up.
+expect_exit(1, "Words --- more words.\n", "--strict")
+expect_exit(0, "|" + "-" * 100_000 + "x\n")
 
 dense_semicolons = "One clause; another clause; a third clause.\n"
 expect_exit(0, dense_semicolons)

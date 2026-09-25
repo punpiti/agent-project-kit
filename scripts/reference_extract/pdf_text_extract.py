@@ -14,8 +14,8 @@ Design goals (per project convention, see 00_project_admin/PROSE_WRITING_METHOD.
     output looks empty or too short to be real, it says so and stops, leaving the
     decision to fall back to AI-vision reading to the operator.
 
-Requires the `text` conda/mamba environment (has pymupdf + PIL). Run with:
-  /home/punpiti/.local/share/mamba/envs/text/bin/python tools/pdf_text_extract.py ...
+Requires the shared `text` conda/mamba environment (has pymupdf + PIL). Run with:
+  micromamba run -n text python scripts/reference_extract/pdf_text_extract.py ...
 
 Usage:
   pdf_text_extract.py PDF START END [--out FILE] [--ocr] [--lang eng+tha] [--dpi 300]
@@ -56,7 +56,7 @@ try:
 except ImportError:
     sys.exit(
         "pymupdf not importable. Run this script with the 'text' env's python, e.g.\n"
-        "  /home/punpiti/.local/share/mamba/envs/text/bin/python tools/pdf_text_extract.py ..."
+        "  micromamba run -n text python scripts/reference_extract/pdf_text_extract.py ..."
     )
 
 SCANNED_TEXT_THRESHOLD = 20  # chars; below this + has images => treat as scanned
@@ -65,7 +65,7 @@ SCANNED_TEXT_THRESHOLD = 20  # chars; below this + has images => treat as scanne
 def find_tesseract() -> str | None:
     candidates = [
         shutil.which("tesseract"),
-        "/home/punpiti/.local/share/mamba/envs/text/bin/tesseract",
+        str(Path(sys.executable).resolve().parent / "tesseract"),
     ]
     for c in candidates:
         if c and Path(c).exists():

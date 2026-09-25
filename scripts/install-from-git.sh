@@ -44,8 +44,19 @@ default_clone_dir() {
 }
 
 CLONE_DIR="${CLONE_DIR:-$(default_clone_dir)}"
-
-mkdir -p "$AI_DIR"
+DRY_CLONE_ROOT=""
+cleanup_dry_clone() {
+  if [ -n "$DRY_CLONE_ROOT" ] && [ -d "$DRY_CLONE_ROOT" ]; then
+    rm -rf -- "$DRY_CLONE_ROOT"
+  fi
+}
+if [ "$DRY_RUN" = "yes" ]; then
+  DRY_CLONE_ROOT="$(mktemp -d)"
+  CLONE_DIR="$DRY_CLONE_ROOT/repository"
+  trap cleanup_dry_clone EXIT INT TERM HUP
+else
+  mkdir -p "$AI_DIR"
+fi
 
 if [ -d "$CLONE_DIR/.git" ]; then
   git -C "$CLONE_DIR" remote set-url origin "$REPO_URL"
@@ -64,7 +75,10 @@ if git -C "$CLONE_DIR" rev-parse -q --verify "refs/tags/$REF" >/dev/null; then
   git -C "$CLONE_DIR" checkout -q "tags/$REF"
 else
   git -C "$CLONE_DIR" checkout -q "$REF"
-  git -C "$CLONE_DIR" pull --ff-only origin "$REF" 2>/dev/null || true
+  if ! git -C "$CLONE_DIR" pull --ff-only origin "$REF"; then
+    echo "Could not fast-forward ref $REF from origin; refusing a stale or divergent checkout." >&2
+    exit 1
+  fi
 fi
 
 COMMIT="$(git -C "$CLONE_DIR" rev-parse --short=12 HEAD)"
@@ -72,7 +86,7 @@ COMMIT="$(git -C "$CLONE_DIR" rev-parse --short=12 HEAD)"
 manifest_value() {
   local key="$1"
   if [ -f "$CLONE_DIR/manifest.json" ]; then
-    sed -n "s/^[[:space:]]*\"$key\"[[:space:]]*:[[:space:]]*\"\\([^\"]*\\)\".*/\\1/p" "$CLONE_DIR/manifest.json" | head -n 1
+    python3 -c 'import json, sys; value=json.load(open(sys.argv[1], encoding="utf-8")).get(sys.argv[2], ""); print(value if not isinstance(value, (dict, list)) else "")' "$CLONE_DIR/manifest.json" "$key"
   fi
 }
 

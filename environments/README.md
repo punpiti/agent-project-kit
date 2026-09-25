@@ -16,7 +16,7 @@ environments, not instructions to create a `venv` inside each project.
 | `image-observed-20260807.yml` | Uncurated audit snapshot of the current `image` environment |
 
 Choose the first available manager in this order: `micromamba`, `mamba`,
-`microconda`, then `conda`. For example:
+`conda`. For example:
 
 ```bash
 micromamba env create -f environments/text.yml
@@ -32,6 +32,28 @@ is uncertain, use `ml.yml` and keep the environment non-CUDA.
 Use `env update` rather than `env create` when an environment already exists.
 Do not automatically add `--prune`; removing packages is a destructive change
 and requires an explicit review of the current environment.
+
+## Missing Dependency Repair
+
+Do not stop after reporting a missing task-required Python library or command.
+Select the project-declared shared environment, or route by role to `text`,
+`image`, or `ml`. Reproduce the failure with `micromamba run -n <env> ...`, then
+install the smallest compatible direct dependency into that environment:
+
+```bash
+micromamba install -n <env> <conda-package>
+# Only when unavailable/incompatible through configured Conda channels:
+micromamba run -n <env> python -m pip install <pip-distribution>
+```
+
+If the standard environment is absent, create it from the matching undated
+manifest. Verify the import/command and focused task check afterward. Announce ordinary scoped repairs before running them. Proceed without another
+gate only when the estimated download is at most 250 MB and no package will be
+removed, replaced, or downgraded. Obtain explicit approval above that threshold,
+on a metered connection, for GPU/CUDA or privilege escalation, or for an
+uncertain/destructive transaction. Use a supported dry run first in those cases.
+Honor an explicit project isolation/pinning contract, but keep its environment
+outside a synced project tree when practical.
 
 Do not create or update these environments until a task needs them. Before
 running a solve or installation, warn the user that the download may be large.

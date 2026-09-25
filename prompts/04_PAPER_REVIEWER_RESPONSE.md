@@ -1,4 +1,4 @@
-# 04 — Paper / Reviewer Response Prompt
+# 04 — Paper / Reviewer Response Stage
 
 ใช้กับ paper, manuscript, reviewer response, proposal, report, academic document
 

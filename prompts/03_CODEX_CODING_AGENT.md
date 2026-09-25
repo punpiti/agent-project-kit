@@ -1,4 +1,4 @@
-# 03 — Codex / Coding Agent Prompt
+# 03 — Implementation Stage
 
 ใช้กับ Codex, IDE agent, coding agent, หรือ project ที่ต้องแก้โค้ด
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+unset APK_HOME APK_SHARED_ROOT APK_MACHINE_HOME
 
 SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TEST_ROOT="$(mktemp -d)"

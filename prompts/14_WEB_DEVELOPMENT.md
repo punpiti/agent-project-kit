@@ -1,4 +1,4 @@
-# 14 — Web Development
+# 14 — Web Development Method
 
 Use for websites, web applications, APIs serving web clients, frontend work,
 backend integration, accessibility, performance, and deployment-related code.
@@ -16,5 +16,6 @@ backend integration, accessibility, performance, and deployment-related code.
    browser suites if a valid prior setup/result exists and the task does not
    require revalidation.
 
-Use `03_CODEX_CODING_AGENT.md` as a secondary workflow for substantial code
-changes. Use product/design context only when the requested outcome needs it.
+Attach the implementation stage in `03_CODEX_CODING_AGENT.md` for substantial
+code changes. Use product/design context only when the requested outcome needs
+it.

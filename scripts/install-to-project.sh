@@ -58,18 +58,22 @@ STAGE=""
 CONTROL_BACKUP=""
 CONTROL_BACKUP_READY="no"
 SNAPSHOT_SWAPPED="no"
+TARGET_MOVED="no"
 HAD_TARGET="no"
 PREVIOUS_ROTATED="no"
+AGENTS_TEMP=""
 
 finish_install() {
   local status="$?"
   trap - EXIT INT TERM HUP
   if [ "$status" -ne 0 ]; then
-    if [ "$SNAPSHOT_SWAPPED" = "yes" ]; then
+    if [ "$SNAPSHOT_SWAPPED" = "yes" ] && [ -e "$TARGET" ]; then
       rm -rf -- "$TARGET"
-      if [ "$HAD_TARGET" = "yes" ] && [ -e "$PREVIOUS_TARGET" ]; then
-        mv -- "$PREVIOUS_TARGET" "$TARGET"
-      fi
+    fi
+    if [ "$TARGET_MOVED" = "yes" ] && [ "$HAD_TARGET" = "yes" ] && [ -e "$PREVIOUS_TARGET" ]; then
+      mv -- "$PREVIOUS_TARGET" "$TARGET"
+    fi
+    if [ "$SNAPSHOT_SWAPPED" = "yes" ] || [ "$TARGET_MOVED" = "yes" ]; then
       echo "Install failed; restored the previous Agent Project Kit snapshot." >&2
     fi
     if [ "$PREVIOUS_ROTATED" = "yes" ] && [ -e "$OLDER_PREVIOUS_TARGET" ]; then
@@ -93,6 +97,9 @@ finish_install() {
   if [ -n "$STAGE" ] && [ -e "$STAGE" ]; then
     rm -rf -- "$STAGE"
   fi
+  if [ -n "$AGENTS_TEMP" ] && [ -e "$AGENTS_TEMP" ]; then
+    rm -f -- "$AGENTS_TEMP"
+  fi
   if [ -n "$CONTROL_BACKUP" ] && [ -e "$CONTROL_BACKUP" ]; then
     rm -rf -- "$CONTROL_BACKUP" || echo "Warning: could not remove installer control backup: $CONTROL_BACKUP" >&2
   fi
@@ -115,7 +122,7 @@ else
 fi
 
 ENV_MANAGER="none (deferred; install user-local micromamba only when an environment is needed)"
-for manager_name in micromamba mamba microconda conda; do
+for manager_name in micromamba mamba conda; do
   if command -v "$manager_name" >/dev/null 2>&1; then
     ENV_MANAGER="$manager_name ($(command -v "$manager_name"))"
     break
@@ -212,9 +219,27 @@ verify_staged_item() {
       echo "Staged SHA-256 mismatch: $relative" >&2
       return 1
     fi
-  done < <(find "$source_item" -type f -print0)
+  done < <(find "$source_item" -type f \
+    ! -path '*/__pycache__/*' ! -name '*.pyc' ! -name '*.pyo' \
+    ! -name '.DS_Store' ! -name 'Thumbs.db' -print0)
 }
 
+validate_managed_block() {
+  local path="$1" begin_count end_count
+  if [ -e "$path" ] && [ ! -f "$path" ]; then
+    echo "Refusing to edit non-file AGENTS.md path: $path" >&2
+    exit 1
+  fi
+  [ -f "$path" ] || return 0
+  begin_count="$(awk '{ line=$0; sub(/\r$/, "", line); if (line == "<!-- BEGIN COMPUTING-ENVIRONMENT -->") count++ } END { print count+0 }' "$path")"
+  end_count="$(awk '{ line=$0; sub(/\r$/, "", line); if (line == "<!-- END COMPUTING-ENVIRONMENT -->") count++ } END { print count+0 }' "$path")"
+  if [ "$begin_count" -ne "$end_count" ] || [ "$begin_count" -gt 1 ]; then
+    echo "Refusing to edit malformed Agent Project Kit managed block: $path" >&2
+    exit 1
+  fi
+}
+
+validate_managed_block "$PROJECT_PATH/AGENTS.md"
 mkdir -p "$AI_DIR"
 if [ "$(cd "$SOURCE_PATH" && pwd)" = "$TARGET" ]; then
   echo "Source path equals install target: $TARGET" >&2
@@ -282,7 +307,7 @@ items=(
 manifest_value() {
   local key="$1"
   if [ -f "$SOURCE_PATH/manifest.json" ]; then
-    sed -n "s/^[[:space:]]*\"$key\"[[:space:]]*:[[:space:]]*\"\\([^\"]*\\)\".*/\\1/p" "$SOURCE_PATH/manifest.json" | head -n 1
+    python3 -c 'import json, sys; value=json.load(open(sys.argv[1], encoding="utf-8")).get(sys.argv[2], ""); print(value if not isinstance(value, (dict, list)) else "")' "$SOURCE_PATH/manifest.json" "$key"
   fi
 }
 
@@ -307,7 +332,15 @@ for item in "${items[@]}"; do
     echo "Missing required package item: $src" >&2
     exit 1
   fi
+  if [ -L "$src" ] || [ -d "$src" ] && find "$src" -type l -print -quit | grep -q .; then
+    echo "Refusing to package symbolic link: $src" >&2
+    exit 1
+  fi
   cp -R "$src" "$dst"
+  if [ -d "$dst" ]; then
+    find "$dst" -type d -name __pycache__ -prune -exec rm -rf -- {} +
+    find "$dst" -type f \( -name '*.pyc' -o -name '*.pyo' -o -name '.DS_Store' -o -name 'Thumbs.db' \) -delete
+  fi
   verify_staged_item "$item"
 done
 
@@ -324,6 +357,7 @@ fi
 if [ -e "$TARGET" ]; then
   HAD_TARGET="yes"
   mv -- "$TARGET" "$PREVIOUS_TARGET"
+  TARGET_MOVED="yes"
 fi
 mv -- "$STAGE" "$TARGET"
 STAGE=""
@@ -438,17 +472,19 @@ EOF2
 PROJECT_AGENTS="$PROJECT_PATH/AGENTS.md"
 MANAGED_BLOCK='<!-- BEGIN COMPUTING-ENVIRONMENT -->'
 MANAGED_END='<!-- END COMPUTING-ENVIRONMENT -->'
-if [ ! -f "$PROJECT_AGENTS" ]; then printf '# AGENTS.md\n' > "$PROJECT_AGENTS"; fi
-if grep -q "$MANAGED_BLOCK" "$PROJECT_AGENTS"; then
-  tmp_agents="$(mktemp)"
+AGENTS_TEMP="$(mktemp "$PROJECT_PATH/.AGENTS.md.tmp.XXXXXX")"
+tmp_agents="$AGENTS_TEMP"
+if [ -f "$PROJECT_AGENTS" ]; then
   awk -v begin="$MANAGED_BLOCK" -v end="$MANAGED_END" '
-    $0 == begin { skip=1; next }
-    $0 == end { skip=0; next }
+    { line=$0; sub(/\r$/, "", line) }
+    line == begin { skip=1; next }
+    line == end { skip=0; next }
     !skip { print }
   ' "$PROJECT_AGENTS" > "$tmp_agents"
-  mv "$tmp_agents" "$PROJECT_AGENTS"
+else
+  printf '# AGENTS.md\n\n' > "$tmp_agents"
 fi
-cat >> "$PROJECT_AGENTS" <<'EOF2'
+cat >> "$tmp_agents" <<'EOF2'
 <!-- BEGIN COMPUTING-ENVIRONMENT -->
 This project uses Agent Project Kit. On each request:
 
@@ -462,6 +498,14 @@ cadence and `run-once.py` guidance in `STARTUP.md`. Keep L1 execution distinct
 from L2 human judgment and L3 external evidence.
 <!-- END COMPUTING-ENVIRONMENT -->
 EOF2
+if [ -f "$PROJECT_AGENTS" ]; then
+  chmod --reference="$PROJECT_AGENTS" "$tmp_agents" 2>/dev/null || {
+    agents_mode="$(stat -f '%Lp' "$PROJECT_AGENTS" 2>/dev/null || true)"
+    [ -n "$agents_mode" ] && chmod "$agents_mode" "$tmp_agents"
+  }
+fi
+mv -- "$tmp_agents" "$PROJECT_AGENTS"
+AGENTS_TEMP=""
 
 create_adapter_file() {
   local target_file="$1"

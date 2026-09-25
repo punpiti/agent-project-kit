@@ -89,7 +89,7 @@ only if missing; otherwise the installer appends a managed block. If
 look like Agent Project Kit files, the installer stops instead of
 overwriting them.
 
-The first install also checks for `micromamba`, `mamba`, `microconda`, then
+The first install also checks for `micromamba`, `mamba`, then
 `conda`, and records the selected manager in `.ai/INSTALLATION_INFO.md`. It does
 not install a missing user-local manager until an environment is actually
 needed. A prerequisite that truly needs root/admin access must be handled in an

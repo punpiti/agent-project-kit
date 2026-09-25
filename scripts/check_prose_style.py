@@ -52,6 +52,21 @@ def clean(text: str, suffix: str) -> str:
         text = re.sub(r"`[^`\n]*`", blank, text)
         text = re.sub(r"\]\([^)]*\)", blank, text)
         text = re.sub(r"https?://\S+", blank, text)
+        # Parse separator lines one at a time. This avoids a nested quantified
+        # regex whose backtracking can grow catastrophically on long malformed rows.
+        def separator_line(line: str) -> bool:
+            stripped = line.strip()
+            if re.fullmatch(r"(?:(?:-\s*){3,}|(?:\*\s*){3,}|(?:_\s*){3,})", stripped):
+                return True
+            cells = stripped.strip("|").split("|")
+            return bool(stripped) and all(
+                re.fullmatch(r"[ \t]*:?-{3,}:?[ \t]*", cell) for cell in cells
+            )
+
+        text = "".join(
+            re.sub(r"[^\n]", " ", line) if separator_line(line) else line
+            for line in text.splitlines(keepends=True)
+        )
     return text
 
 

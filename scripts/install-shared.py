@@ -6,6 +6,7 @@ from pathlib import Path
 
 INCLUDE=("config","prompts","scripts","checklists","templates","STARTUP.md","SHARED_RUNTIME_EXPERIMENT.md","manifest.json","PACKAGE_CONTENTS.md")
 CHECKSUM_FILE="PACKAGE_CHECKSUMS.json"
+RUNTIME_MARKER=b"immutable versioned canary\n"
 SHELL_BEGIN="# BEGIN AGENT PROJECT KIT SHARED RUNTIME"
 SHELL_END="# END AGENT PROJECT KIT SHARED RUNTIME"
 
@@ -20,6 +21,27 @@ def content_manifest(root: Path) -> dict:
         files[relative]=hashlib.sha256(path.read_bytes()).hexdigest()
     aggregate=aggregate_digest(files)
     return {"algorithm":"sha256","content_sha256":aggregate,"files":files}
+
+def ignored_package_path(path: Path) -> bool:
+    return (
+        "__pycache__" in path.parts
+        or path.name in {".DS_Store", "Thumbs.db"}
+        or path.suffix in {".pyc", ".pyo"}
+    )
+
+def source_content_manifest(source: Path) -> dict:
+    """Hash exactly what a fresh shared-runtime install would contain."""
+    files={}
+    for name in INCLUDE:
+        item=source/name
+        if not item.exists(): raise SystemExit(f"Missing package item: {item}")
+        candidates=(p for p in item.rglob("*") if p.is_file()) if item.is_dir() else (item,)
+        for path in candidates:
+            relative=path.relative_to(source)
+            if ignored_package_path(relative): continue
+            files[relative.as_posix()]=hashlib.sha256(path.read_bytes()).hexdigest()
+    files["SHARED_RUNTIME"]=hashlib.sha256(RUNTIME_MARKER).hexdigest()
+    return {"algorithm":"sha256","content_sha256":aggregate_digest(files),"files":files}
 
 def legacy_home() -> Path:
     return Path(os.environ.get("APK_HOME", Path.home()/".local/share/agent-project-kit"))
@@ -72,9 +94,21 @@ def main() -> int:
     if version != manifest["version"]: raise SystemExit(f"Requested version {version} does not match source manifest {manifest['version']}")
     target=package_root/"versions"/version
     reuse=False
+    expected_source=source_content_manifest(source)
     if target.exists() and not a.force:
         installed=json.loads((target/"manifest.json").read_text(encoding="utf-8")) if (target/"manifest.json").exists() else {}
-        if installed.get("version")==version: reuse=True
+        if installed.get("version")==version:
+            checksum_path=target/CHECKSUM_FILE
+            if not checksum_path.exists(): raise SystemExit(f"Shared runtime has no checksum manifest: {target}")
+            installed_checksums=json.loads(checksum_path.read_text(encoding="utf-8"))
+            if content_manifest(target) != installed_checksums:
+                raise SystemExit(f"Shared runtime content verification failed: {target}")
+            if installed_checksums != expected_source:
+                raise SystemExit(
+                    f"Refusing to reuse Agent Project Kit {version}: source content differs; "
+                    "bump the package version before installing"
+                )
+            reuse=True
         else: raise SystemExit(f"Refusing to overwrite non-matching shared runtime: {target}")
     if not reuse:
         target.parent.mkdir(parents=True,exist_ok=True)
@@ -83,9 +117,15 @@ def main() -> int:
             for name in INCLUDE:
                 src=source/name
                 if not src.exists(): raise SystemExit(f"Missing package item: {src}")
-                shutil.copytree(src,stage/name) if src.is_dir() else shutil.copy2(src,stage/name)
-            (stage/"SHARED_RUNTIME").write_text("immutable versioned canary\n",encoding="utf-8")
+                if src.is_dir():
+                    shutil.copytree(
+                        src, stage/name,
+                        ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo", ".DS_Store", "Thumbs.db"),
+                    )
+                else: shutil.copy2(src,stage/name)
+            (stage/"SHARED_RUNTIME").write_bytes(RUNTIME_MARKER)
             checksums=content_manifest(stage)
+            if checksums != expected_source: raise SystemExit("Staged shared runtime differs from source package manifest")
             (stage/CHECKSUM_FILE).write_text(json.dumps(checksums,indent=2)+"\n",encoding="utf-8")
             if target.exists(): shutil.rmtree(target)
             stage.rename(target)

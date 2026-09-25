@@ -1,4 +1,4 @@
-# Prompt 12 — Markdown Classification and Pipeline Migration
+# 12 — Markdown Maintenance Stage
 
 Use this when an old project has many Markdown files.
 

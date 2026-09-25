@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "private_prefixes": [".ai/", "local-profiles/", "private/", "internal/"],
+  "private_names": [".env"],
+  "private_name_prefixes": [".env."],
+  "private_suffixes": [".private.md", ".private.json", ".p12", ".pfx", ".pem", ".key", ".kdbx"],
+  "required_ignore_rules": [".ai/", "local-profiles/", "private/", "internal/", "*.private.md", "*.private.json", ".env", ".env.*", "*.p12", "*.pfx", "*.pem", "*.key", "*.kdbx"],
+  "shared_runtime_items": ["config", "prompts", "scripts", "checklists", "templates", "STARTUP.md", "SHARED_RUNTIME_EXPERIMENT.md", "manifest.json", "PACKAGE_CONTENTS.md"],
+  "secret_patterns": [
+    {"id": "private-key", "regex": "-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"},
+    {"id": "github-token", "regex": "gh[pousr]_[A-Za-z0-9_]{20,}"},
+    {"id": "github-fine-grained-token", "regex": "github_pat_[A-Za-z0-9_]{20,}"},
+    {"id": "gitlab-token", "regex": "glpat-[A-Za-z0-9_-]{20,}"},
+    {"id": "google-api-key", "regex": "AIza[0-9A-Za-z_-]{35}"},
+    {"id": "huggingface-token", "regex": "hf_[A-Za-z0-9]{30,}"},
+    {"id": "anthropic-api-key", "regex": "sk-ant-[A-Za-z0-9_-]{20,}"},
+    {"id": "openai-api-key", "regex": "sk-[A-Za-z0-9_-]{20,}"},
+    {"id": "aws-access-key", "regex": "AKIA[0-9A-Z]{16}"},
+    {"id": "slack-token", "regex": "xox[baprs]-[A-Za-z0-9-]{20,}"}
+  ],
+  "public_content_patterns": [
+    {"id": "personal-home-path-unix", "regex": "/(?:home/[A-Za-z0-9._-]+|mnt/[A-Za-z]/Users/[A-Za-z0-9._ -]+)/"},
+    {"id": "personal-home-path-windows", "regex": "[A-Za-z]:\\\\Users\\\\[A-Za-z0-9._ -]+\\\\"}
+  ]
+}

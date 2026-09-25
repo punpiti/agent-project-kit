@@ -1,12 +1,12 @@
-# 10 — Publication Production Workflow
+# 10 — Publication Production Stage
 
-Use this secondary workflow when producing, typesetting, converting, exporting,
+Use this lifecycle stage when producing, typesetting, converting, exporting,
 or final-QA checking a written or reflowable artifact: formal document, report,
 book/textbook, handout, PDF, DOCX, EPUB, HTML publication, or equivalent output.
 Content-domain routes remain responsible for what the artifact says; this
 workflow is responsible for faithful production of the project-approved source.
 
-When loaded as a secondary workflow for a book/textbook, use it only for the
+When loaded as a production stage for a book/textbook, use it only for the
 output formats and QA gates selected by the book project's resolved production
 contract. It must not impose A4/16:9, Markdown-first, PDF, DOCX, fonts,
 directories, or a build toolchain over explicit project requirements. If the

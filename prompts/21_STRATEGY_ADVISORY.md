@@ -1,4 +1,4 @@
-# 21 — Strategy & Advisory (Secondary Workflow)
+# 21 — Strategy & Advisory Method
 
 Use secondarily when a primary-route deliverable requires choosing direction,
 comparing options, advising a person/team, or developing an implementation strategy.

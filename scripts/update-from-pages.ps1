@@ -60,10 +60,11 @@ function Test-NewerOrDifferent {
     $currentKey = Get-VersionKey $Current
     $latestKey = Get-VersionKey $Latest
     if ($latestKey -gt $currentKey) { return $true }
+    if ($latestKey -lt $currentKey) { return $false }
     if ($latestKey -eq $currentKey -and $LatestUpdated -and $CurrentUpdated -and $LatestUpdated.CompareTo($CurrentUpdated) -gt 0) {
         return $true
     }
-    return ($Current -ne $Latest)
+    return $false
 }
 
 New-Item -ItemType Directory -Force -Path $aiDir | Out-Null

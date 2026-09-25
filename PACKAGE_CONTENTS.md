@@ -7,6 +7,10 @@
 - `config/routes.json`
 - `config/workflows.json`
 - `config/policies.json`
+- `config/workflow-registry.json`
+- `config/WORKFLOW_ARCHITECTURE.md`
+- `config/SECURITY_BOUNDARY.md`
+- `config/release-boundary.json`
 - `CLAUDE.md`
 - `DOCUMENT_PRODUCTION_POLICY.md`
 - `environments/README.md`
@@ -78,6 +82,8 @@
 - `scripts/check-update-notice.py`
 - `scripts/check_book_writing_split.py`
 - `scripts/check_prose_style.py`
+- `scripts/check_release_boundary.py`
+- `scripts/sync_workflow_registry.py`
 - shared installs generate `PACKAGE_CHECKSUMS.json`; project bindings pin its
   aggregate SHA-256 outside the shared runtime
 - `scripts/install-from-git.sh`
@@ -131,3 +137,4 @@
 - `tests/test-fast-start.sh`
 - `tests/test-shared-runtime.sh`
 - `tests/test-shared-runtime-v2.sh`
+- `tests/test-workflow-architecture.py`

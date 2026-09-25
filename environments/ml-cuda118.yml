@@ -1,10 +1,11 @@
-name: ml
+name: ml-cuda118
 channels:
   - conda-forge
 dependencies:
   - pip
   - python=3.10
   - pip:
+    - --extra-index-url https://download.pytorch.org/whl/cu118
     - Jinja2==3.1.6
     - MarkupSafe==3.0.3
     - filelock==3.29.0

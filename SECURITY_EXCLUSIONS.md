@@ -11,3 +11,22 @@ This unified package intentionally **does not include** that file.
 Reason: `.p12` files can contain private keys/certificates. They should not be stored in a general prompt/config folder, synced broadly, or redistributed inside AI workflow packages unless there is a specific, documented need and secret-handling policy.
 
 If this certificate is still needed, keep it in a secure local/secret store and document only its existence and purpose in a private note, not the file itself.
+
+## Private product intelligence
+
+Public source and installed runtime files must contain only redistributable
+behavior, contracts, and documentation. Keep unpublished product strategy,
+pricing logic, customer information, private roadmap detail, holdout evaluation
+design/results, and proprietary rationale under an ignored `private/`,
+`internal/`, `*.private.md`, or `*.private.json` path. Keep credentials and key
+material in a machine-local secret store, not merely an ignored project file.
+
+The enforceable boundary is documented in `config/SECURITY_BOUNDARY.md` and
+`config/release-boundary.json`. Run `python3 scripts/check_release_boundary.py`
+before commit, packaging, tag, or release. The checker examines tracked and
+unignored candidate files, verifies private ignore rules and the shared-runtime
+allowlist, and reports only path/rule identifiers—not matched secret values.
+
+If confidential material was previously committed, stop publication and assess
+Git history before changing or deleting anything. Rotate exposed credentials;
+removing a working-tree file does not remove it from existing history or clones.

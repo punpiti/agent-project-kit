@@ -1,8 +1,8 @@
-# 08 — Project Resume Prompt
+# 08 — Project Resume State Action
 
 ใช้เมื่อกลับมาเปิด project เดิมหลังจากสลับไปทำงานอื่นหลายวัน/หลายชั่วโมง
 
-This is a secondary workflow. Load it only for an explicit resume/status request
+This is a state action. Load it only for an explicit resume/status request
 or when `PROJECT_STATE.md` is insufficient—not on every normal task.
 
 ```text

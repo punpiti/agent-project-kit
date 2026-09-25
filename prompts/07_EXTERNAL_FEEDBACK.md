@@ -1,4 +1,4 @@
-# 07 — External Feedback Prompt
+# 07 — External Feedback Stage
 
 ใช้เมื่อโปรเจกต์ต้องเอาไปลองกับคนจริง ข้อมูลจริง หรือ stakeholder จริง
 

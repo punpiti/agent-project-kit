@@ -24,9 +24,15 @@ if (-not $CloneDir) {
     $CloneDir = Join-Path $aiDir "agent-project-kit-source"
 }
 
-New-Item -ItemType Directory -Force -Path $aiDir | Out-Null
+$dryCloneRoot = ""
+if ($DryRun) {
+    $dryCloneRoot = Join-Path ([IO.Path]::GetTempPath()) ("agent-project-kit-dry-run-" + [guid]::NewGuid().ToString("N"))
+    $CloneDir = Join-Path $dryCloneRoot "repository"
+} else {
+    New-Item -ItemType Directory -Force -Path $aiDir | Out-Null
+}
 
-if (Test-Path (Join-Path $CloneDir ".git")) {
+if (Test-Path -LiteralPath (Join-Path $CloneDir ".git")) {
     git -C $CloneDir remote set-url origin $RepoUrl
     if ($LASTEXITCODE -ne 0) { throw "Could not set git remote for $CloneDir" }
     git -C $CloneDir fetch --tags --prune origin
@@ -50,7 +56,8 @@ if ($tagExists) {
 } else {
     git -C $CloneDir checkout -q $Ref
     if ($LASTEXITCODE -ne 0) { throw "Could not check out ref $Ref" }
-    try { git -C $CloneDir pull --ff-only origin $Ref | Out-Null } catch {}
+    git -C $CloneDir pull --ff-only origin $Ref | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "Could not fast-forward ref $Ref from origin; refusing a stale or divergent checkout." }
 }
 
 $commit = (git -C $CloneDir rev-parse --short=12 HEAD).Trim()
@@ -106,6 +113,7 @@ if ($DryRun) {
     Write-Host "Target machine profile schema: $targetMachineSchema"
     Write-Host "Project-local state files would be preserved."
     Write-Host "No project files were updated."
+    if ($dryCloneRoot -and (Test-Path -LiteralPath $dryCloneRoot)) { Remove-Item -LiteralPath $dryCloneRoot -Recurse -Force }
     exit 0
 }
 

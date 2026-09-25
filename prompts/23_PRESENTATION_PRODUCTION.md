@@ -1,6 +1,6 @@
-# 23 — Presentation Production Workflow
+# 23 — Presentation Production Stage
 
-Use this secondary workflow when the task must create, edit, render, export, or
+Use this lifecycle stage when the task must create, edit, render, export, or
 final-QA a real slide/deck artifact. `05_SLIDES_TEACHING.md` remains the primary
 route for audience, objective, core message, storyline, slide jobs, and delivery
 logic. This workflow turns that approved presentation design into a trustworthy

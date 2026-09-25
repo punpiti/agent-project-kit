@@ -8,7 +8,10 @@ data-pipeline, and general software work.
 1. Identify the user/system outcome, runtime, entry point, and affected behavior.
 2. Inspect only relevant code, configuration, tests, and runbook sections.
 3. Reuse valid setup and dependency state; do not reinstall, rescan, or restart
-   services unless the change requires it.
+   services unless the change requires it. If a required library is missing,
+   select the project-declared shared Conda-family environment or the narrowest
+   `text`/`image`/`ml` environment, install the smallest compatible direct
+   dependency there, and rerun the failed check. Do not create `.venv`.
 4. Define behavioral acceptance criteria and the smallest meaningful test.
 5. Preserve existing architecture and interfaces unless change is justified.
 6. Check error handling, portability, observability, security, and data safety

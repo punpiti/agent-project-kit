@@ -5,11 +5,21 @@
 ## Setup
 
 ```bash
-# Example
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+# Example: select the shared environment for this project/task.
+micromamba run -n <text|image|ml|project-declared-env> <command>
+
+# If a required direct library is missing, install it into that environment.
+micromamba install -n <env> <conda-package>
+# Pip fallback only when required:
+micromamba run -n <env> python -m pip install <pip-distribution>
 ```
+
+- Selected shared environment:
+- Dependency manifest/source:
+- Last dependency verification:
+
+Do not create a project `.venv`. Announce ordinary scoped repairs and proceed;
+ask before large/metered, GPU/CUDA, privileged, or package-replacing changes.
 
 ## Environment Variables
 

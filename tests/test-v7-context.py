@@ -38,9 +38,10 @@ cases += [
 for request,domain,deliverable,methods in cases:
     out=subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],text=True)
     data=json.loads(out); assert data["domain"]==domain,(request,data); assert data["deliverable"]==deliverable,(request,data); assert methods.issubset(set(data["methods"])),(request,data)
+    assert data["schema_version"]==2 and data["primary_pipeline"],(request,data)
     if deliverable == "book" and not request.startswith("build "): assert "publication-production" not in data["secondary_workflows"],(request,data)
     if request.startswith("build หนังสือ"): assert "publication-production" in data["secondary_workflows"],(request,data)
-    if request == "จัดทำหนังสือราชการถึงคณะ": assert "publication-production" in data["secondary_workflows"],(request,data)
+    if request == "จัดทำหนังสือราชการถึงคณะ": assert "publication-production" not in data["secondary_workflows"],(request,data)
     if request == "วาง storyline สำหรับ presentation ผู้บริหาร": assert "presentation-production" not in data["secondary_workflows"],(request,data)
 
 production_cases=[
@@ -53,14 +54,62 @@ for request,workflow in production_cases:
     out=subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],text=True)
     data=json.loads(out); assert workflow in data["secondary_workflows"],(request,data)
 
+adversarial_cases = [
+ ("fix the presentation mode bug in the slide viewer app","software","code","software-development-automation"),
+ ("write the paper based on my seminar talk","research","paper","research-activities"),
+ ("ช่วยหาข้อมูลร้านอาหารใกล้บ้าน","general","analysis","general"),
+ ("วิเคราะห์สภาพแวดล้อมของตลาด","general","analysis","general"),
+ ("สมัครใจเข้าร่วมกิจกรรม","general","analysis","general"),
+ ("เขียนหนังสือราชการถึงคณะ","operations","document","administrative-professional-operations"),
+]
+for request,domain,deliverable,primary in adversarial_cases:
+    data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],text=True))
+    assert (data["domain"],data["deliverable"],data["primary_pipeline"])==(domain,deliverable,primary),(request,data)
+
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"export the revised paper to pdf, convert the policy draft to docx"],text=True))
+assert "publication-production" in data["workflow"]["stages"],data
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"draft a formal letter to the dean"],text=True))
+assert "publication-production" not in data["workflow"]["stages"],data
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"preview the thesis draft"],text=True))
+assert "reviewer-response" not in data["workflow"]["stages"],data
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"fix the bug using user feedback then bump version"],text=True))
+assert "package-release" in data["workflow"]["stages"],data
+assert not any(item["id"]=="package-release" for item in data["omitted"]),data
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"write a research paper or a policy brief"],text=True))
+assert data["needs_clarification"],data
+
 with tempfile.TemporaryDirectory() as tmp:
     project=Path(tmp); (project/".ai").mkdir();
     (project/".ai/project.json").write_text(json.dumps({"schema_version":1,"status":"configured","name":"Fixture","objective":"Test compact context"}),encoding="utf-8")
     (project/".ai/state.json").write_text(json.dumps({"schema_version":1,"status":"configured","active_task":"route test","next_actions":[]}),encoding="utf-8")
     out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"fix the website login bug","--project",str(project)],text=True)
-    bundle=json.loads(out); assert bundle["routing"]["domain"]=="software"; assert bundle["metrics"]["secondary_modules"]<=2; assert bundle["metrics"]["bytes"]<=12000; assert len(bundle["sources"])==2
+    bundle=json.loads(out); assert bundle["routing"]["domain"]=="software"; assert bundle["schema_version"]==2; assert bundle["metrics"]["bytes"]<=12000; assert len(bundle["sources"])==2
     out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"สร้างสไลด์สำหรับสอน machine learning","--project",str(project)],text=True)
     bundle=json.loads(out); assert bundle["primary"]["prompt"]=="prompts/05_SLIDES_TEACHING.md"; assert any(item["id"]=="presentation-production" and item["prompt"]=="prompts/23_PRESENTATION_PRODUCTION.md" for item in bundle["secondary"])
     out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"build หนังสือเป็น EPUB และ PDF","--project",str(project)],text=True)
     bundle=json.loads(out); assert bundle["primary"]["prompt"]=="prompts/22_BOOK_WRITING.md"; assert any(item["id"]=="publication-production" and item["prompt"]=="prompts/10_DOCUMENT_PRODUCTION.md" for item in bundle["secondary"])
+    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"วิเคราะห์ข้อมูลผลสอบและทำกราฟ","--project",str(project)],text=True)
+    bundle=json.loads(out); assert bundle["primary"]["id"]=="data-analytics",bundle
+    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"conduct thematic content analysis of interviews","--project",str(project)],text=True)
+    bundle=json.loads(out); assert bundle["primary"]["id"]=="content-analysis",bundle
+
+with tempfile.TemporaryDirectory() as tmp:
+    project=Path(tmp); (project/".ai").mkdir()
+    (project/".ai/project.json").write_text(json.dumps({"schema_version":1,"status":"configured","objective":"OLD objective"}),encoding="utf-8")
+    (project/".ai/state.json").write_text(json.dumps({"schema_version":1,"status":"configured","active_task":"OLD task"}),encoding="utf-8")
+    (project/".ai/PROJECT_STATE.md").write_text("# State\n\nNEW authoritative objective\n"+("ภาษาไทย"*3000),encoding="utf-8")
+    result=subprocess.run([sys.executable,str(ROOT/"scripts/context.py"),"fix the website login bug","--project",str(project),"--max-bytes","12000"],capture_output=True)
+    assert result.returncode==0,result.stderr.decode()
+    assert len(result.stdout)<=12000,len(result.stdout)
+    bundle=json.loads(result.stdout)
+    assert bundle["metrics"]["bytes"]==len(result.stdout),bundle["metrics"]
+    assert "NEW authoritative objective" in bundle["project_context"]
+    assert "OLD task" not in bundle["project_context"]
+    assert str(project/".ai/PROJECT_STATE.md") in bundle["sources"]
+
+with tempfile.TemporaryDirectory() as tmp:
+    project=Path(tmp); (project/"existing.txt").write_text("existing\n",encoding="utf-8")
+    data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"install a missing document library","--project",str(project)],text=True))
+    assert "existing-project-onboarding" in data["workflow"]["state_actions"],data
+    assert "machine-discovery" in data["workflow"]["state_actions"],data
 print("v7 structured context tests: PASS")

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Resolve and invoke a version-pinned shared Agent Project Kit runtime."""
 from __future__ import annotations
-import argparse,hashlib,json,os,subprocess,sys
+import argparse,hashlib,json,os,re,subprocess,sys
 from pathlib import Path
 
 def aggregate_digest(files: dict) -> str:
@@ -13,7 +13,9 @@ def binding(project: Path) -> dict:
     if not path.exists(): raise SystemExit(f"No project binding: {path}")
     data=json.loads(path.read_text(encoding="utf-8"))
     if data.get("schema_version",1) not in (1,2): raise SystemExit(f"Unsupported project binding schema: {path}")
-    if data.get("package")!="agent-project-kit" or not data.get("version"): raise SystemExit(f"Invalid project binding: {path}")
+    version=data.get("version")
+    if data.get("package")!="agent-project-kit" or not isinstance(version,str): raise SystemExit(f"Invalid project binding: {path}")
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*",version): raise SystemExit(f"Invalid project binding version: {path}")
     return data
 
 def legacy_home() -> Path:
@@ -42,7 +44,8 @@ def verify_content(runtime: Path, expected: str) -> None:
         raise SystemExit(f"Shared runtime content checksum mismatch: {runtime}")
 
 def resolve(project: Path) -> tuple[Path,dict]:
-    data=binding(project);runtime=runtime_home()/"versions"/data["version"]
+    data=binding(project);versions=(runtime_home()/"versions").resolve();runtime=(versions/data["version"]).resolve()
+    if not runtime.is_relative_to(versions): raise SystemExit("Project binding resolves outside the shared-runtime versions directory")
     manifest=runtime/"manifest.json"
     if not manifest.exists(): raise SystemExit(f"Required Agent Project Kit {data['version']} is not installed at {runtime}")
     installed=json.loads(manifest.read_text(encoding="utf-8"))

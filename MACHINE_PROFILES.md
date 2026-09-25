@@ -76,7 +76,7 @@ Record the result in `.ai/MACHINE_PROFILE.md`:
 - project path style: `C:\...`, `/mnt/c/...`, `/Users/...`, `/home/...`, or other
 - sync/storage assumption: local disk, shared/synced project storage, iCloud, Dropbox, network drive,
   external drive, remote server, unknown
-- available interpreters/package managers: Python, micromamba/mamba/microconda/conda, Node,
+- available interpreters/package managers: Python, micromamba/mamba/conda, Node,
   PowerShell, shell
 - GPU/accelerator summary when relevant
 - parallel execution readiness: CPU core count, usable GPU/accelerator,
@@ -97,7 +97,7 @@ command -v lscpu >/dev/null 2>&1 && lscpu | sed -n '1,20p' || true
 free -h 2>/dev/null || true
 df -h . /
 command -v python3 || command -v python || true
-command -v micromamba || command -v mamba || command -v microconda || command -v conda || true
+command -v micromamba || command -v mamba || command -v conda || true
 command -v pwsh || command -v powershell || true
 command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi || true
 ```
@@ -170,7 +170,7 @@ Prefer this split:
 ## Conda-Family Environment Policy
 
 Use the first available manager in this order: `micromamba`, `mamba`,
-`microconda`, then `conda`. Use it to access shared machine-local environments
+`conda`. Use it to access shared machine-local environments
 and route work to the smallest suitable environment:
 
 | Environment | Intended work |
@@ -187,15 +187,20 @@ not install GPU runtime packages.
 Prefer `<available-manager> run -n <environment> <command>` in scripts and
 agent-run commands. Do not create `venv`, `.venv`, or equivalent per-project
 environment copies because they duplicate dependencies and consume unnecessary
-disk space. Record missing shared environments or task-critical packages in
-`.ai/LOCAL_RESOURCES.md`; do not treat their absence on one machine as a broken
-project.
+disk space. If a task-required library is absent, select the project-declared
+shared environment or the narrowest of `text`, `image`, and `ml`; reproduce the
+failure there; install the smallest compatible direct dependency into that
+environment; and verify the import/command plus focused task check. Prefer
+Conda, with pip inside the selected environment only when needed. If the
+standard environment is absent, create it from the matching undated manifest.
+Record meaningful machine changes in `.ai/LOCAL_RESOURCES.md`; do not treat
+their absence on one machine as a broken project or silently create `.venv`.
 
 Environment installation is demand-driven, not part of routine startup. Create
-or update an environment only when the current task requires it. Warn the user
-before potentially large downloads and identify metered-network risk. When the
-connection may be metered, estimate download size if practical and obtain user
-approval before downloading packages.
+or update an environment only when the current task requires it. Announce and
+proceed with ordinary scoped repairs. Warn and obtain approval before
+potentially large downloads, metered-network transfers, GPU/CUDA changes,
+root/admin operations, or transactions that may remove/replace packages.
 
 ## Environment Variable Convention
 

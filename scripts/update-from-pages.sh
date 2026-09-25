@@ -46,7 +46,7 @@ read_version_line() {
 
 json_value() {
   local key="$1"
-  sed -n "s/^[[:space:]]*\"$key\"[[:space:]]*:[[:space:]]*\"\\([^\"]*\\)\".*/\\1/p" | head -n 1
+  python3 -c 'import json, sys; value=json.load(sys.stdin).get(sys.argv[1], ""); print(value if not isinstance(value, (dict, list)) else "")' "$key"
 }
 
 version_key() {
@@ -79,13 +79,18 @@ is_newer_or_different() {
     return 0
   fi
 
+  # A numerically older version is a downgrade even when its label differs.
+  if [ "$latest_key" -lt "$current_key" ]; then
+    return 1
+  fi
+
   if [ "$latest_key" -eq "$current_key" ] && [ -n "$latest_updated" ] && [ -n "$current_updated" ] && [ "$latest_updated" \> "$current_updated" ]; then
     return 0
   fi
 
-  # Keep non-semver package labels useful: a changed manifest version means a
-  # package update is available even when the numeric prefix is unchanged.
-  [ "$current" != "$latest" ]
+  # Same numeric version with a different label is accepted only when both
+  # timestamps prove that the manifest is newer. Ambiguous cases fail closed.
+  return 1
 }
 
 mkdir -p "$AI_DIR"

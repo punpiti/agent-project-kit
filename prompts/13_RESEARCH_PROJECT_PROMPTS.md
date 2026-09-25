@@ -8,8 +8,9 @@ synthesis, policy research, product/market research, หรือ decision brief
 ## Routing Rule
 
 This file is a mode library. Select one numbered mode from the request and read
-that section; do not load or execute every mode. Add a secondary workflow only
-when its trigger is present (for example reviewer response or data analytics).
+that section; do not load or execute every mode. Attach a method, lifecycle
+stage, quality gate, or state action only when its trigger is present (for
+example reviewer response or data analytics).
 
 ให้ใช้ร่วมกับ Spec-Eval-Loop:
 

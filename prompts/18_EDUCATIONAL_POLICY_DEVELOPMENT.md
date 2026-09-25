@@ -16,8 +16,9 @@ to organizations such as university councils, IPST, or IOI governance.
    object, and must be consulted.
 5. Compare options, including status quo, using feasibility, cost, capacity,
    equity, legitimacy, enforceability, and unintended consequences.
-6. Make claims no stronger than the evidence. Load Research Activities as a
-   secondary workflow when external evidence or comparative practice is needed.
+6. Make claims no stronger than the evidence. Attach the Research Activities
+   research-synthesis method when external evidence or comparative practice is
+   needed.
 7. Specify implementation ownership, resources, timeline, exceptions, review
    mechanism, success indicators, and conditions for revision or withdrawal.
 8. Review wording for ambiguity, unnecessary attack surfaces, conflicts of

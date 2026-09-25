@@ -73,7 +73,7 @@ At the start of non-trivial coding/data sessions:
 ### Conda-Family Environment Routing
 
 Use shared Conda-family environments. Choose the first available manager in
-this order: `micromamba`, `mamba`, `microconda`, then `conda`. The three primary
+this order: `micromamba`, `mamba`, then `conda`. The three primary
 environments are:
 
 - `text`: document processing and document generation, including PDF-to-text,
@@ -97,9 +97,36 @@ GPU availability or compatibility is uncertain, use the non-CUDA `ml` baseline.
 Use the narrowest matching environment. For reproducible non-interactive
 commands, use the available manager's `run -n <environment> <command>` form.
 Do not create `venv`, `.venv`, or another per-project copy of these environments;
-duplicating dependencies wastes disk space. If a required shared environment or
-dependency is missing, report it as a local-resource gap rather than silently
-creating a project-local environment or substituting another one.
+duplicating dependencies wastes disk space.
+
+When a required library or command is missing, remediate it instead of stopping
+at the first import/command failure:
+
+1. Read the project runbook or dependency manifest for an explicitly selected
+   shared environment; otherwise route document/text work to `text`, image/OCR/
+   video work to `image`, and ML/inference/training work to `ml`.
+2. Verify the failure inside that environment with `<manager> run -n <env> ...`.
+3. If the environment exists but the direct dependency is absent, install the
+   smallest compatible direct package into that environment. Prefer its Conda
+   package; use pip inside the selected environment only when the package is not
+   available from the configured Conda channels or the project requires a pip
+   distribution.
+4. If the selected standard environment does not exist, create it from the
+   matching undated manifest under `environments/`, then install any additional
+   task-required direct dependency.
+5. Rerun the failed import/command and the smallest relevant task check. Record
+   a meaningful machine-level change in `.ai/LOCAL_RESOURCES.md` or the session
+   log; do not automatically promote a task-specific package into a shared
+   baseline manifest.
+
+For ordinary, scoped dependency repairs, announce the selected environment and
+package before installation, then proceed when the estimated download is at
+most 250 MB and the transaction does not remove, replace, or downgrade existing
+packages. Stop for explicit approval when the estimate exceeds 250 MB, the
+connection may be metered, GPU/CUDA packages are involved, root/admin privileges
+are required, or the transaction is uncertain or could remove, replace, or
+downgrade packages. Inspect a supported dry-run transaction first in those
+cases when the environment manager provides one.
 
 Use the undated manifests under `environments/` as the common defaults. Treat
 dated `*-observed-YYYYMMDD.yml` files as audit evidence only; do not install
@@ -107,7 +134,8 @@ them by default or promote their task-specific/transitive packages without
 review.
 
 Install or update an environment only when the current task actually needs it.
-Before any environment solve, create, update, or large package installation,
+Ordinary scoped repairs may proceed after the announcement above. Before a
+potentially large environment solve, create, update, or package installation,
 warn the user that downloads may be substantial, especially for ML/CUDA,
 OpenCV/video, OCR, LaTeX, and document toolchains. If the connection may be
 metered, state the expected download size when it can be estimated and wait for
@@ -353,32 +381,3 @@ text, valid ZIP structure, preserved images/hyperlinks, explicit `th-TH` markup
 on Thai runs and `en-US` on Latin runs, then sample Thai wrapping and bilingual
 spell checking in Microsoft Word when available. Record the repair command and
 QA result in `.ai/DOCUMENT_PIPELINE.md` or `.ai/DOCUMENT_QA.md`.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- BEGIN COMPUTING-ENVIRONMENT -->
-This project uses Agent Project Kit. On each request:
-
-1. Read `.ai/PROJECT_STATE.md` and `.ai/agent-project-kit/STARTUP.md`.
-2. Classify the task and load only the routed prompt/state files.
-3. If the task is clear, proceed; ask one outcome question only when materially ambiguous.
-
-Do not scan the managed snapshot or rerun onboarding, machine discovery, update
-checks, or repository scans merely because a new session started. Follow the
-cadence and `run-once.py` guidance in `STARTUP.md`. Keep L1 execution distinct
-from L2 human judgment and L3 external evidence.
-<!-- END COMPUTING-ENVIRONMENT -->

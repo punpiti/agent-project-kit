@@ -43,7 +43,7 @@ try:
     import pymupdf as fitz  # PyMuPDF — import ผ่านชื่อใหม่ตัดคำเตือน deprecation ของชื่อ 'fitz'
 except ImportError:
     print("ต้องใช้ python ของ conda env 'text' (มี pymupdf) เช่น "
-          "/home/punpiti/.local/share/mamba/envs/text/bin/python3", file=sys.stderr)
+          "micromamba run -n text python scripts/reference_extract/pdf_render_pages.py ...", file=sys.stderr)
     sys.exit(1)
 
 

@@ -8,9 +8,9 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "7.6.0-prose-style-canary",
-  "git_ref": "v7.6.0-prose-style-canary",
-  "updated": "2026-09-25T00:00:00+07:00",
+  "version": "7.7.0-workflow-architecture-canary",
+  "git_ref": "v7.7.0-workflow-architecture-canary",
+  "updated": "2026-09-25T14:47:18+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
   "purpose": "Agent Project Kit: a portable starter kit that installs AI-agent instruction files and project-local .ai templates. New installs use .ai/agent-project-kit; computing-environment remains a legacy name/path for migration only.",
@@ -82,6 +82,11 @@
     "private certificate/key material; see SECURITY_EXCLUSIONS.md"
   ],
   "release_notes": [
+    "Introduced Workflow Architecture v2 with one primary owner and separate method, lifecycle, quality-gate, and state-action dimensions.",
+    "Hardened transactional installers, shared-runtime identity, binding confinement, downgrade prevention, and non-mutating Git dry-runs.",
+    "Added fail-closed public release boundaries for private paths, secret signatures, dirty or omitted files, and unscanned release candidates.",
+    "Made Markdown project state authoritative, enforced exact UTF-8 context budgets, and added adversarial English and Thai routing coverage.",
+    "Reconciled shared-environment dependency repair with explicit isolation contracts, transaction previews, and a 250 MB approval threshold.",
     "Added a Prose Style secondary workflow and checker for direct, evidence-matched reader-facing prose in English and Thai.",
     "Added an optional minimal Project Radar: a single cross-project status board that flags projects not reviewed for 14+ days without duplicating project task lists or logs.",
     "Added reusable Book Writing profile contracts, visible profile resolution reporting, and PDF reference extraction tools for text, raster, and vector figures.",

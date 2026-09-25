@@ -20,9 +20,13 @@ across Windows, WSL, macOS, Linux, and remote machines.
 ## Environment Strategy
 
 Prefer the shared Conda-family environments `text`, `image`, and `ml`. Select
-the first available manager in this order: `micromamba`, `mamba`, `microconda`,
+the first available manager in this order: `micromamba`, `mamba`,
 then `conda`. Do not create a per-project `venv` or `.venv` when these shared
 environments cover the task; duplicated environments consume unnecessary disk.
+Honor a project that explicitly requires an isolated or tightly pinned runtime,
+but place that environment in machine-local storage outside a synced project
+tree when practical. Do not mutate a shared environment when doing so would
+create cross-project version conflicts.
 
 The package's current rebuild requirements are stored under `environments/`:
 
@@ -52,19 +56,41 @@ cannot be completed or no compatible GPU exists, use the non-CUDA `ml.yml`.
 Do not create, solve, update, or preload an environment merely because its
 manifest exists or a session has started. First confirm that the current task
 needs that environment and check whether the required tools are already
-available.
+available. A missing task-required library is a repair trigger, not a reason to
+create a project-local virtual environment or abandon the task.
 
-Before installing or updating packages, warn the user that dependency downloads
-may consume substantial bandwidth. ML/CUDA stacks, OpenCV/video packages, OCR,
-LaTeX, and document toolchains can be especially large. If the connection may
-be metered, estimate the download size when practical and obtain explicit user
-approval before starting the download. If approval is unavailable, use an
-existing environment, a smaller smoke path, or report the missing dependency.
+Use this remediation order:
+
+1. Honor a shared environment named by the project runbook or dependency
+   manifest. Otherwise select `text`, `image`, or `ml` by the work type.
+2. Reproduce the missing import or command inside that environment.
+3. Install the smallest compatible direct dependency there, preferring Conda
+   and falling back to pip inside the same environment only when necessary.
+4. If a standard environment itself is absent, create it from its undated
+   manifest, without `--prune`, then add the task-required direct dependency.
+5. Verify the import/command and focused task check after installation. Record
+   the environment, package, reason, and verification when the change is
+   meaningful; do not promote task-specific packages to the baseline silently.
+
+For ordinary scoped repairs, announce the selected environment and package,
+then proceed when the estimated download is at most 250 MB and the transaction
+does not remove, replace, or downgrade existing packages. Ask for explicit
+approval when the estimate exceeds 250 MB, the connection may be metered,
+GPU/CUDA or root/admin operations are involved, or the transaction is uncertain
+or may remove, replace, or downgrade packages. Use the manager's supported
+dry-run mode first for uncertain or high-impact transactions and inspect the
+proposed plan before asking for approval.
+
+ML/CUDA stacks, OpenCV/video packages, OCR, LaTeX, and document toolchains can
+be especially large. If the connection may be metered, estimate the download
+size when practical and obtain explicit user approval before starting the
+download. If approval is unavailable, use an existing environment, a smaller
+smoke path, or report the missing dependency.
 
 ## First-Install Privilege Gate
 
 On the first Agent Project Kit installation on a project/machine, check for an
-environment manager in priority order: `micromamba`, `mamba`, `microconda`, then
+environment manager in priority order: `micromamba`, `mamba`, then
 `conda`, and record the result in `.ai/INSTALLATION_INFO.md`.
 
 If no manager exists and the preferred manager can be installed user-locally

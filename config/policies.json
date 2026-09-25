@@ -1,12 +1,23 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
+  "generated_from": "config/workflow-registry.json",
   "policies": {
-    "evidence-boundary":"Do not make claims stronger than available evidence; distinguish observation, inference, judgment, and external validation.",
-    "loop-boundary":"Do not present L1 execution as resolution of L2 human judgment or L3 external feedback.",
-    "context-minimization":"Load only context required by the current deliverable; do not scan files merely because they exist.",
-    "idempotent-checks":"Reuse successful valid discovery/check results; rerun only after expiry, relevant change, failure, or explicit request.",
-    "user-file-safety":"Preserve user-authored files and project-local state; do not overwrite or delete them implicitly.",
-    "resource-portability":"Do not assume machine-local data, cache, runtime, or accelerator resources exist on another machine."
+    "evidence-boundary": "Do not make claims stronger than available evidence; distinguish observation, inference, judgment, and external validation.",
+    "loop-boundary": "Do not present L1 execution as resolution of L2 human judgment or L3 external feedback.",
+    "context-minimization": "Load only context required by the current deliverable; do not scan files merely because they exist.",
+    "idempotent-checks": "Reuse successful valid discovery/check results; rerun only after expiry, relevant change, failure, or explicit request.",
+    "user-file-safety": "Preserve user-authored files and project-local state; do not overwrite or delete them implicitly.",
+    "resource-portability": "Do not assume machine-local data, cache, runtime, or accelerator resources exist on another machine.",
+    "dependency-remediation": "When a task-required library is missing, select the project-declared environment or the narrowest text/image/ml environment, install and verify the smallest compatible direct dependency, and avoid cross-project conflicts. Honor explicit isolation or pinning contracts outside synced trees when practical. Announce ordinary repairs and proceed only at or below 250 MB without removal, replacement, or downgrade; otherwise inspect a supported dry run and obtain approval.",
+    "confidentiality-boundary": "Keep project-local state, private product intelligence, credentials, and restricted source material outside public package and trace surfaces unless explicitly approved."
   },
-  "always": ["evidence-boundary","loop-boundary","context-minimization","idempotent-checks","user-file-safety"]
+  "always": [
+    "evidence-boundary",
+    "loop-boundary",
+    "context-minimization",
+    "idempotent-checks",
+    "user-file-safety",
+    "dependency-remediation",
+    "confidentiality-boundary"
+  ]
 }
