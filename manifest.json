@@ -8,9 +8,9 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "7.8.0-routing-schemas-canary",
-  "git_ref": "v7.8.0-routing-schemas-canary",
-  "updated": "2026-09-25T21:00:00+07:00",
+  "version": "7.9.0-state-migration-canary",
+  "git_ref": "v7.9.0-state-migration-canary",
+  "updated": "2026-09-25T23:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
   "purpose": "Agent Project Kit: a portable starter kit that installs AI-agent instruction files and project-local .ai templates. New installs use .ai/agent-project-kit; computing-environment remains a legacy name/path for migration only.",
@@ -82,6 +82,9 @@
     "private certificate/key material; see SECURITY_EXCLUSIONS.md"
   ],
   "release_notes": [
+    "Onboarding now follows an initialized PROJECT_STATE.md instead of a placeholder project.json, so maintained projects are no longer told to onboard again.",
+    "Added the legacy state migration contract and scripts/migrate_state.py (dry run by default, append-only, dated backup); apk_doctor warns about hidden state.json content.",
+    "The registry is the single source of always-on policies, and STARTUP.md shows a generated summary; release_check.py now runs the native-Windows test.",
     "Moved router vocabulary into config/routing-rules.json with a validator; routing output unchanged across a 4,998-request golden corpus.",
     "Added JSON Schemas for the registry, routing rules, apk.json binding, and project.json; apk_doctor reports schema errors in projects.",
     "Fixed Thai routing output crashing when piped on native Windows, and stopped self-installs from editing the canonical AGENTS.md.",

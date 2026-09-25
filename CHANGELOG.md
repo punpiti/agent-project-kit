@@ -4,6 +4,8 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+## 7.9.0-state-migration-canary — 2026-09-25
+
 - Fixes from a read-only trial on real downstream projects (book, research
   data, policy). An initialized `PROJECT_STATE.md` now counts as onboarded
   even when `project.json` is still the placeholder template. Before, 38 of 40
