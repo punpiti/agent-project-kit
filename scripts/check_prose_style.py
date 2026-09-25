@@ -23,12 +23,17 @@ ZERO = {
     '"more than just"': (r"\bmore than (just|merely|simply)\b", re.I),
     '"ไม่ใช่ … แต่เป็น"': (r"ไม่ใช่[^.\n]{0,80}แต่(เป็น)?", 0),
     '"มากกว่าแค่"': (r"มากกว่าแค่", 0),
+    '"ไม่ใช่แค่" / "ไม่ใช่เพียง"': (r"ไม่ใช่(แค่|เพียง)", 0),
+    '"not just" / "not merely"': (r"\bnot (just|merely|simply)\b", re.I),
     "question mark in running text": (r"[A-Za-zก-๙)]\?(\s|$)", 0),
 }
 # pattern name -> (regex, flags, review threshold per 1,000 words)
 RATES = {
     '"rather than" / "instead of"': (r"\b(rather than|instead of)\b", re.I, 1.0),
     '", not …" contrast': (r",\s+not\s+\w", 0, 0.7),
+    # "X is not A; it is B" is usually a rhetorical reframe, but a factual
+    # "was not run; it was skipped" matches too, so this is a review signal.
+    '"is not X; it is Y"': (r"\b(?:(?:is|are|was|were)\s+not|isn't|aren't|wasn't|weren't)\b[^.!?;:\u2014\n]{1,80}[;:\u2014]\s*(?:it|this|that|they)\s*(?:is|are|was|were|'s|'re)\b", re.I, 0.7),
     "semicolon": (r";", 0, 3.0),
     "em dash": (r"—|(?<!-)---(?!-)", 0, 1.5),
     "colon introducing a clause": (r"[a-z)\]}]:\s+[a-z]", 0, 2.5),

@@ -40,6 +40,27 @@ def expect_exit(expected: int, text: str, *args: str) -> str:
 expect_exit(0, "The measurements support the stated conclusion.\n")
 expect_exit(1, "This is not a defect, but a feature.\n")
 
+# Contrast framing that the first release missed (found in real reader copy).
+for framing in (
+    "AI เปิดตรวจสไลด์ที่ได้จริง ไม่ใช่แค่บอกว่าทำเสร็จแล้ว\n",
+    "งานนี้ไม่ใช่เพียงเอกสารฉบับหนึ่ง\n",
+    "This is not just a checker.\n",
+    "It works, not merely compiles.\n",
+):
+    expect_exit(1, framing)
+# Plain negation is not framing and must pass.
+for plain in (
+    "ไฟล์นี้ไม่ใช่ UTF-8 จึงต้องแปลงก่อน\n",
+    "The value is not zero.\n",
+    "The file is ready: it is in the folder.\n",
+    "It is not available; see the runbook.\n",
+):
+    out = expect_exit(0, plain)
+    assert "[FIX]" not in out, out
+# "is not X; it is Y" is a review signal, never an automatic failure on its own.
+reframe = expect_exit(0, "It is not about speed; it is about trust.\n")
+assert '[chk] "is not X; it is Y": 1' in reframe, reframe
+
 bold_output = expect_exit(1, "This is **the key finding** in the paper.\n")
 assert "[FIX] bold inside running text: 1" in bold_output, bold_output
 

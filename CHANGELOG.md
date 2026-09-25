@@ -4,6 +4,14 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- The prose checker missed trailing contrast framing in real reader copy. It
+  now treats "…ไม่ใช่แค่…", "ไม่ใช่เพียง…", and "not just/merely/simply" as
+  zero-tolerance. "is not X; it is Y" with `;`, `:`, or an em dash is a review
+  signal, because factual sentences share that shape. Tests cover both the
+  framing that must fail and plain negation that must pass; the kit's own
+  reports still pass `--strict`. `prompts/24_PROSE_STYLE.md` lists the new
+  patterns.
+
 ## 8.0.1-python-core-canary — 2026-09-26
 
 Fixes found by the first GitHub Actions run of 8.0.0:
