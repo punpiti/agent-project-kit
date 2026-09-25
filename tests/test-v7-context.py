@@ -61,6 +61,13 @@ adversarial_cases = [
  ("วิเคราะห์สภาพแวดล้อมของตลาด","general","analysis","general"),
  ("สมัครใจเข้าร่วมกิจกรรม","general","analysis","general"),
  ("เขียนหนังสือราชการถึงคณะ","operations","document","administrative-professional-operations"),
+ # Engineering requests from this kit's own roadmap (self-hosted v2 trial).
+ ("สร้าง JSON Schema สำหรับ workflow registry และ apk.json binding","software","code","software-development-automation"),
+ ("ย้าย router rules ออกจาก route_task.py ไปเป็น data ที่ test ได้","software","code","software-development-automation"),
+ ("ย้าย transaction logic ของ installer ไป Python แล้วให้ bash กับ powershell เป็น wrapper","software","code","software-development-automation"),
+ ("add a GitHub Actions CI matrix for Linux and Windows running release_check.py","software","code","software-development-automation"),
+ ("release 7.8.0 canary: bump version, tag, push, publish GitHub Release and Pages","software","code","software-development-automation"),
+ ("prepare a course on python for first-year students","education","course-material","course-material-development"),
 ]
 for request,domain,deliverable,primary in adversarial_cases:
     data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],text=True))
@@ -75,6 +82,14 @@ assert "reviewer-response" not in data["workflow"]["stages"],data
 data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"fix the bug using user feedback then bump version"],text=True))
 assert "package-release" in data["workflow"]["stages"],data
 assert not any(item["id"]=="package-release" for item in data["omitted"]),data
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"ย้าย router rules ออกจาก route_task.py ไปเป็น data ที่ test ได้"],text=True))
+assert "data-analytics" not in data["methods"],data
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"migrate legacy state.json to the new project.json schema"],text=True))
+assert data["lifecycle"]!="bootstrap" and "new-project-bootstrap" not in data["workflow"]["state_actions"],data
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"start a new project"],text=True))
+assert data["lifecycle"]=="bootstrap",data
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"ตรวจ secret และ private path ก่อน release"],text=True))
+assert "release-boundary" in data["workflow"]["gates"],data
 data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"write a research paper or a policy brief"],text=True))
 assert data["needs_clarification"],data
 

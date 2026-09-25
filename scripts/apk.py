@@ -41,6 +41,10 @@ def verify_content(runtime: Path, expected: str) -> None:
         name=path.relative_to(runtime).as_posix();actual_files[name]=hashlib.sha256(path.read_bytes()).hexdigest()
     aggregate=aggregate_digest(actual_files)
     if actual_files != checksums.get("files") or aggregate != checksums.get("content_sha256") or aggregate != expected:
+        # Cache files are never ignored: a planted .pyc would bypass verification.
+        extra=sorted(set(actual_files)-set(checksums.get("files",{})))
+        if extra and all("__pycache__" in name.split("/") or name.endswith((".pyc",".pyo")) for name in extra) and set(checksums.get("files",{})).issubset(actual_files):
+            raise SystemExit(f"Shared runtime content checksum mismatch: {runtime}\nUnexpected bytecode cache files ({len(extra)}), e.g. {extra[0]}; delete the __pycache__ directories in that runtime and resolve again.")
         raise SystemExit(f"Shared runtime content checksum mismatch: {runtime}")
 
 def resolve(project: Path) -> tuple[Path,dict]:
@@ -66,8 +70,8 @@ def main() -> int:
     runtime,data=resolve(project)
     if a.command=="resolve": print(json.dumps({"runtime":str(runtime),"binding":data},indent=2));return 0
     if a.command=="context":
-        cmd=[sys.executable,str(runtime/"scripts/context.py"),"--project",str(project)];
+        cmd=[sys.executable,"-B",str(runtime/"scripts/context.py"),"--project",str(project)];
         if a.output:cmd.extend(["--output",a.output])
         cmd.extend(a.request);return subprocess.run(cmd,check=False).returncode
-    return subprocess.run([sys.executable,str(runtime/"scripts/apk_doctor.py"),str(project),"--quick"],check=False).returncode
+    return subprocess.run([sys.executable,"-B",str(runtime/"scripts/apk_doctor.py"),str(project),"--quick"],check=False).returncode
 if __name__=="__main__":raise SystemExit(main())

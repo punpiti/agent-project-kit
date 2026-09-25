@@ -9,7 +9,7 @@ REGISTRY = json.loads((ROOT / "config" / "workflow-registry.json").read_text(enc
 
 RULES = {
  "domain": {
-  "software":["code","bug","debug","api","website","web app","script","software","automation","configuration","router","prompt","โปรแกรม","โค้ด","เว็บ","ระบบอัตโนมัติ"],
+  "software":["code","bug","debug","api","website","web app","script","software","automation","configuration","router","prompt","ci","github actions","json schema","installer","powershell","wrapper","โปรแกรม","โค้ด","เว็บ","ระบบอัตโนมัติ"],
   "research":["research","paper","manuscript","thesis","literature","experiment","วิจัย","บทความ","วิทยานิพนธ์","หลักฐาน"],
   "book-writing":["book","textbook","book writing","write a book","write the book","ตำรา","เขียนหนังสือ","เขียนตำรา","ต้นฉบับหนังสือ","ต้นฉบับตำรา"],
   "education":["course","lesson","syllabus","student","teaching","rubric","curriculum","workshop","seminar","หลักสูตร","บทเรียน","รายวิชา","เอกสารคำสอน","สอน","สัมมนา","แบบฝึก","กิจกรรมการเรียน"],
@@ -45,7 +45,9 @@ def matches(text: str, terms: list[str]) -> int:
     for term in terms:
         needle=term.casefold()
         if needle.isascii():
-            score += bool(re.search(rf"(?<![a-z0-9_]){re.escape(needle)}(?![a-z0-9_])", folded))
+            # A dot followed by a word character continues a token, so the file
+            # name "project.json" does not match the phrase "new project".
+            score += bool(re.search(rf"(?<![a-z0-9_.]){re.escape(needle)}(?![a-z0-9_]|\.[a-z0-9])", folded))
         else:
             score += needle in folded
     return score
@@ -55,6 +57,8 @@ def best(text: str, group: str, default: str) -> tuple[str,float]:
     if scores[top]==0: return default,0.25
     ordered=sorted(scores.values(),reverse=True); confidence=0.9 if len(ordered)<2 or ordered[0]>ordered[1] else 0.6
     return top,confidence
+
+SOURCE_FILE=re.compile(r"(?<![\w.])[\w-]+\.(?:py|sh|ps1|js|ts)(?![\w.])", re.IGNORECASE)
 
 def contains_any(text: str, phrases: list[str]) -> bool:
     return any(matches(text,[phrase]) for phrase in phrases)
@@ -105,6 +109,12 @@ def classify(request: str, project: Path | None = None) -> dict:
       ("governance",["policy proposal","master plan","university council","institutional transformation","IOI / POSN","แผนแม่บท","เสนอสภา"])]
     for candidate,hints in strong_domains:
         if contains_any(request,hints): domain,dc=candidate,0.95; break
+    package_release=contains_any(request,[
+      "package release","release the package","release the kit","bump version",
+      "create a release","tag and release","publish the package","ออก release",
+      "ออกเวอร์ชัน","เพิ่มเวอร์ชัน","สร้าง tag","ปล่อยเวอร์ชัน"])
+    if domain=="general" and (package_release or SOURCE_FILE.search(request)):
+        domain,dc="software",0.8
     # Strong output phrases outrank subject-matter mentions. Merely mentioning a
     # thesis, policy, test, or document does not select that output by itself.
     strong_outputs=[
@@ -122,9 +132,14 @@ def classify(request: str, project: Path | None = None) -> dict:
     if not strong_output:
         preferred={"software":"code","research":"paper","book-writing":"book","education":"course-material","governance":"policy","operations":"document"}.get(domain)
         if preferred and matches(request,RULES["deliverable"][preferred]): deliverable,oc=preferred,0.8
+        # Engineering work in a software domain produces code unless the
+        # request names some other output.
+        elif domain=="software" and oc<0.5: deliverable,oc="code",0.8
     methods=[key for key,terms in RULES["method"].items() if matches(request,terms)]
-    if "data-analytics" in methods and not contains_any(request,[
-        "data","data analysis","analyze data","analyse data","dataset","metric","dashboard",
+    # In software work "data" usually means configuration or fixtures.
+    bare_data=[] if domain=="software" else ["data"]
+    if "data-analytics" in methods and not contains_any(request,bare_data+[
+        "data analysis","analyze data","analyse data","dataset","metric","dashboard",
         "statistics","statistical","chart","วิเคราะห์ข้อมูล","ข้อมูลสถิติ","ชุดข้อมูล",
         "ฐานข้อมูล","ตัวชี้วัด","สถิติ","กราฟ"]):
         methods.remove("data-analytics")
@@ -179,10 +194,6 @@ def classify(request: str, project: Path | None = None) -> dict:
       and contains_any(request,["clean up","cleanup","migrate","inventory","recover","จัดระเบียบ","ย้าย","กู้"]))
     if markdown_cleanup:
         stages.append("markdown-cleanup")
-    package_release=contains_any(request,[
-      "package release","release the package","release the kit","bump version",
-      "create a release","tag and release","publish the package","ออก release",
-      "ออกเวอร์ชัน","เพิ่มเวอร์ชัน","สร้าง tag","ปล่อยเวอร์ชัน"])
     if package_release:
         # Integrity and privacy gates must survive the stage limit.
         stages.insert(0,"package-release")
@@ -195,7 +206,9 @@ def classify(request: str, project: Path | None = None) -> dict:
     gates=[]
     if deliverable in {"paper","book","document","course-material","policy"} and prose_writing:
         gates.append("prose-style")
-    if package_release:
+    if package_release or contains_any(request,[
+      "secret","secrets","credential","credentials","api key","private path",
+      "leak","ความลับ","รหัสผ่าน","ข้อมูลลับ"]):
         gates.append("release-boundary")
     state_actions=[]
     if lifecycle=="resume": state_actions.append("resume")

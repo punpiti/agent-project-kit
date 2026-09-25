@@ -49,6 +49,9 @@ try {
         "fix the media importer Python code" --output $contextPath
     $context = Get-Content $contextPath -Raw | ConvertFrom-Json
     if ($context.routing.domain -ne "software") { throw "Unexpected shared route" }
+    if (Get-ChildItem -Directory -Recurse -Force $runtime -Filter "__pycache__") {
+        throw "Running the shared runtime wrote bytecode into it"
+    }
 
     Invoke-Python $launcher --project $project rollback
     $disabled = Join-Path $project ".ai\apk.json.disabled"

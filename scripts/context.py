@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """Compile a minimal, auditable context bundle for one request."""
 from __future__ import annotations
-import argparse, json
+import argparse, json, sys
 from pathlib import Path
+# A shared runtime is checksum-verified; importing route_task must not add
+# __pycache__ files to it.
+sys.dont_write_bytecode=True
 from route_task import classify
 
 ROOT=Path(__file__).resolve().parent.parent

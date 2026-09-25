@@ -61,6 +61,26 @@ fi
 APK_MACHINE_HOME="$MACHINE_ONE" "$MACHINE_ONE/bin/apk" \
   --project "$PROJECT" resolve >/dev/null
 
+# Running the runtime must not write bytecode into it, even when the caller's
+# environment allows bytecode (native Windows has no PYTHONDONTWRITEBYTECODE).
+env -u PYTHONDONTWRITEBYTECODE APK_MACHINE_HOME="$MACHINE_ONE" "$MACHINE_ONE/bin/apk" \
+  --project "$PROJECT" context "fix the media importer Python code" --output "$TEST_ROOT/bytecode-context.json" >/dev/null
+env -u PYTHONDONTWRITEBYTECODE APK_MACHINE_HOME="$MACHINE_ONE" "$MACHINE_ONE/bin/apk" \
+  --project "$PROJECT" doctor >/dev/null 2>&1 || true
+env -u PYTHONDONTWRITEBYTECODE python3 "$SHARED_ROOT/versions/$VERSION/scripts/context.py" \
+  --project "$PROJECT" "fix the bug" --output "$TEST_ROOT/direct-context.json" >/dev/null
+test -z "$(find "$SHARED_ROOT/versions/$VERSION" -name __pycache__ -print -quit)"
+APK_MACHINE_HOME="$MACHINE_ONE" "$MACHINE_ONE/bin/apk" \
+  --project "$PROJECT" resolve >/dev/null
+# Cache files are still verified: a planted .pyc must be rejected.
+mkdir "$SHARED_ROOT/versions/$VERSION/scripts/__pycache__"
+printf 'planted' > "$SHARED_ROOT/versions/$VERSION/scripts/__pycache__/route_task.cpython-3.pyc"
+if planted="$(APK_MACHINE_HOME="$MACHINE_ONE" "$MACHINE_ONE/bin/apk" --project "$PROJECT" resolve 2>&1)"; then
+  echo 'planted bytecode unexpectedly resolved' >&2; exit 1
+fi
+printf '%s\n' "$planted" | grep -q 'Unexpected bytecode cache files'
+rm -rf "$SHARED_ROOT/versions/$VERSION/scripts/__pycache__"
+
 python3 "$SOURCE/scripts/install-shared.py" \
   --source "$SOURCE" --shared-root "$SHARED_ROOT" \
   --machine-home "$MACHINE_TWO" >/dev/null

@@ -4,6 +4,23 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Fixed a shared-runtime defect found by the first native-Windows run. Without
+  `PYTHONDONTWRITEBYTECODE`, `apk context` wrote `__pycache__` into the
+  checksum-verified runtime, so every later `apk resolve` failed.
+  `context.py` and the launcher now keep bytecode out of the runtime.
+  Verification still rejects cache files, since a planted `.pyc` could
+  bypass it, and the error now names the cache files and the fix.
+- Native Windows shared-runtime v2 test passes with the Python install manager
+  (`py`, Python 3.14).
+
+- Routing fixes from a self-hosted v2 trial on this kit's own roadmap. File
+  names such as `project.json` no longer match phrases like "new project".
+  CI, GitHub Actions, JSON Schema, installer, PowerShell, wrapper, and source
+  file names now signal software work. Software requests without a named
+  output default to code. Bare "data" no longer selects data analytics in
+  software work. Package releases count as software. Secret and credential
+  checks attach the release-boundary gate.
+
 - Corrected the benchmark fixture for official letters: drafting one must not
   select publication production, matching the routing contract test.
 - Added `scripts/release_check.py`, one read-only release gate that checks
