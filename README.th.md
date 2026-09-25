@@ -2,78 +2,68 @@
 
 [English](README.md)
 
-Agent Project Kit เป็นชุดไฟล์เริ่มต้นสำหรับใช้ AI coding agents กับ project
-folder ให้เป็นระเบียบขึ้น
-
-เมื่อติดตั้งแล้ว โปรเจคจะมีไฟล์คำสั่งและ template ใต้ `.ai/` เพื่อให้ Codex,
-Claude Code, Antigravity หรือ agent อื่นรู้ว่าควรเริ่มอ่านจากตรงไหน
-ตัว kit ตั้งใจให้เล็กและแยกชั้น: code ของโปรเจคยังเป็นของโปรเจค, note เฉพาะ
-โปรเจคอยู่ใต้ `.ai/`, ส่วน snapshot ของ kit refresh ทีหลังได้
+Agent Project Kit (APK) ติดตั้งไฟล์คำสั่งชุดเล็กและบันทึกโปรเจกต์ใต้ `.ai/`
+เพื่อให้ AI coding agent อย่าง Claude Code, Codex และ Antigravity ทำงานต่อจาก
+session ก่อนได้ เลือกวิธีทำงานให้ตรงกับงาน และตรวจผลงานก่อนส่ง
+code และเอกสารยังเป็นของคุณ ตัว kit อยู่ใน `.ai/agent-project-kit/` และอัปเดตได้
+โดยบันทึกของคุณไม่ถูกแตะ
 
 release ปัจจุบัน: `8.0.1-python-core-canary`
 
-เหมาะกับโปรเจคที่คุณจะเปิดใช้กับ AI มากกว่าหนึ่งครั้ง หรืออยากให้คนในบ้านลอง
-clone แล้วเริ่มใช้ได้โดยไม่ต้องตั้งโครงสร้างเองทุกครั้ง
+## ช่วยอะไรคุณได้
 
-ประโยชน์หลักคือช่วยให้ AI กลับมาเริ่มงานในโปรเจคเดิมได้โดยไม่ต้องเริ่มใหม่:
-รู้ว่าครั้งก่อนทำถึงไหน เครื่องนี้เหมาะกับงานแค่ไหน มี resource เฉพาะเครื่อง
-อะไร ถ้างานควรรัน parallel ควรใช้ CPU/GPU/RAM/storage ของเครื่องนี้แค่ไหน
-ต้องใช้ parent/child context แค่ไหน และงานต่อไปควรทำอะไรก่อนตาม
-priority/deadline
+- ทำงานต่อด้วยประโยคเดียว บอก agent ว่า "อ่าน md แล้วทำต่อ" แล้ว agent เริ่มจาก
+  `.ai/PROJECT_STATE.md` ว่าทำอะไรไปแล้ว ตัดสินอะไรไปแล้ว และขั้นต่อไปคืออะไร
+- เลือกวิธีทำงานตามประเภทงาน การเขียนบทของตำรา ตรวจวิทยานิพนธ์ ตอบผู้ทรงคุณวุฒิ
+  ร่างนโยบาย เขียนหนังสือราชการ ทำสไลด์สอน และวิเคราะห์ข้อมูล แต่ละงานมีขั้นตอน
+  ของตัวเองพร้อมจุดตรวจคุณภาพที่เกี่ยวข้อง
+- ตรวจผลงาน ตัวเลขอ่านจากไฟล์ผล เอกสารและสไลด์ถูกเปิดตรวจหลัง build
+  ร้อยแก้วที่ผู้อ่านเห็นผ่านตัวตรวจภาษา และไฟล์ Word ภาษาไทยผ่านขั้นซ่อมฟอนต์กับ
+  การตัดคำ
+- ไฟล์ของคุณปลอดภัย การติดตั้งและอัปเดตไม่เปลี่ยนบันทึกโปรเจกต์และคำสั่งที่คุณ
+  เขียนเอง ถ้าอัปเดตล้มเหลว ระบบคืนชุดเดิมให้
+- ใช้ได้หลายเครื่อง Linux, macOS, WSL2 และ Windows ใช้ตัวติดตั้งเดียวกัน
 
-ถ้าต้องดูหลายโปรเจคพร้อมกัน มี Project Radar template แบบ optional ที่เก็บ
-สถานะสั้น ๆ หนึ่งแถวต่อโปรเจค เพื่อให้เห็นงานที่ไม่ได้ทบทวนนานโดยไม่ต้อง copy
-task list ของแต่ละโปรเจคมาไว้ซ้ำ
+รุ่นนี้เป็น canary ทดสอบแล้วบน Linux, WSL2 และ Windows ยังไม่ได้ทดสอบบนเครื่อง
+macOS จริง
 
-ถ้าเป็นโปรเจควิจัย จะมี prompt สำหรับ literature review, source check,
-counter-argument, data interpretation และ research brief เพิ่มให้ใช้เป็นฐาน
+## สิ่งที่ต้องมี
 
-ถ้าเป็นโปรเจคที่ต้องผลิตเอกสาร จะมี Document Production Workflow แบบ
-Markdown-first ให้ใช้ รวมถึงแนวทางแกะข้อความ/รูปจาก PDF อ้างอิง (แยก raster
-กับ vector figure, reading cache, และการยืนยัน offset เลขหน้า) ก่อนเริ่มเขียน
-เอกสารทางการ
+- Git
+- Python 3.9 ขึ้นไป
+  - macOS / Linux / WSL2 ส่วนใหญ่มี `python3` อยู่แล้ว
+  - Windows ให้ติดตั้ง Python install manager จาก <https://www.python.org/downloads/>
+    ซึ่งมีคำสั่ง `py` มาให้ ส่วน `python` ของ Microsoft Store เป็นแค่ทางลัดไปหน้า
+    Store ตัวติดตั้งจึงข้ามตัวนี้
+- Bash (macOS / Linux / WSL2) หรือ PowerShell 5.1 / 7 (Windows)
 
-## ได้อะไรจากการติดตั้ง
+หลังติดตั้ง Git หรือ Python ให้เปิด terminal ใหม่ WSL2 จำ `PATH` ของ Windows
+ตั้งแต่ตอนเริ่ม ถ้าจะเรียกโปรแกรม Windows ที่เพิ่งติดตั้งจาก WSL2 ให้รีสตาร์ต
+WSL2 ก่อน (`wsl --shutdown`)
 
-- มีไฟล์ `AGENTS.md`, `CLAUDE.md`, `ANTIGRAVITY.md` ให้ AI แต่ละตัวรู้จุดเริ่ม
-- มี `.ai/` สำหรับจด state และ note ของโปรเจค
-- มีที่จดว่าเครื่องนี้เหมาะกับงานแบบไหน และควรรัน parallel ได้ระดับไหน
-- มีที่ประกาศ prompt pack, local resource และข้อจำกัดเฉพาะโปรเจค
-- มีคำสั่ง install/update สำหรับ macOS, Linux, WSL2 และ Windows PowerShell
+## เริ่มใช้งาน
 
-ถ้าเป็นงานเล็กครั้งเดียว ไม่ต้องติดตั้งก็ได้
-
-## path ที่ใช้ตอนนี้
-
-```text
-.ai/agent-project-kit/        # managed snapshot ของ kit, update แล้ว refresh ได้
-.ai/agent-project-kit-source/ # git clone/source copy สำหรับติดตั้ง
-.ai/PROJECT_STATE.md          # state เฉพาะโปรเจค, ต้อง preserve ตอน update
-```
-
-อย่าเก็บ note หรือ prompt pack เฉพาะโปรเจคไว้ใน `.ai/agent-project-kit/`
-เพราะ folder นี้เป็นของ kit และ updater มีสิทธิ์ refresh ได้ ให้เก็บ prompt
-ของโปรเจคไว้เช่น `.ai/prompts/`, `.ai/prompt-packs/`, `.ai/custom-prompts/`
-หรือ path อื่นที่ระบุใน `.ai/PROJECT_STATE.md` หรือ `.ai/RUNBOOK.md`
-
-## เริ่มใช้กับโปรเจคใหม่
-
-macOS / Linux:
+สร้างหรือเข้าไปที่ folder ของโปรเจกต์ก่อน
 
 ```bash
 mkdir my-project
 cd my-project
+```
+
+### macOS / Linux
+
+```bash
 mkdir -p .ai
 git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit-source
 bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-project-kit-source
-code .
 ```
 
-WSL2 ที่โปรเจคอยู่ในโฟลเดอร์ฝั่ง Windows เช่น OneDrive:
+### WSL2 กับ folder ที่ sync กับ Windows (OneDrive)
+
+เก็บ git clone ไว้ใน cache ฝั่ง WSL แล้วติดตั้งเฉพาะ snapshot ลงโปรเจกต์ เพราะ
+ข้อมูล git ใน folder ที่ sync อยู่ทำงานช้าและเสียหายได้
 
 ```bash
-mkdir my-project
-cd my-project
 KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
 if [ -d "$KIT/.git" ]; then
   git -C "$KIT" pull --ff-only
@@ -81,234 +71,75 @@ else
   git clone https://github.com/punpiti/agent-project-kit.git "$KIT"
 fi
 bash "$KIT/scripts/install-to-project.sh" . "$KIT"
-code .
 ```
 
-Windows PowerShell (ต้องมี Python 3.9 ขึ้นไป ติดตั้ง Python install manager จาก <https://www.python.org/downloads/> ซึ่งมีคำสั่ง `py` มาให้):
+### Windows PowerShell
 
 ```powershell
-New-Item -ItemType Directory -Force -Path "my-project" | Out-Null
-Set-Location "my-project"
 New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
 git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit-source"
 powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
-code .
 ```
 
-## ใช้กับโปรเจคที่มีอยู่แล้ว
+PowerShell 7 ใช้ได้เหมือนกัน โดยเปลี่ยน `powershell` เป็น `pwsh`
 
-เข้าไปที่ root ของโปรเจคก่อน แล้วรัน:
+## เริ่มงานกับ agent
 
-```bash
-KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
-if [ -d "$KIT/.git" ]; then
-  git -C "$KIT" pull --ff-only
-else
-  git clone https://github.com/punpiti/agent-project-kit.git "$KIT"
-fi
-bash "$KIT/scripts/install-to-project.sh" . "$KIT"
-```
-
-## ใช้ shared runtime กับหลายโปรเจคบน WSL2 (Canary)
-
-ถ้าโปรเจคส่วนใหญ่รันด้วย Ubuntu/WSL2 สามารถติดตั้งส่วน generic และ versioned
-ของ kit ไว้ใต้ OneDrive root เพียงชุดเดียวได้ ส่วน content และ state เฉพาะ
-โปรเจคยังอยู่ใน workspace ของแต่ละโปรเจค ขณะที่ launcher/config เฉพาะเครื่อง
-อยู่ใต้ WSL home
-
-กำหนด path ของเครื่องและโปรเจคก่อน:
-
-```bash
-PROJECT="/home/<user>/OneDrive/path/to/project"
-KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
-APK_SHARED_ROOT="/home/<user>/OneDrive/.agent-project-kit"
-APK_MACHINE_HOME="$HOME/.local/share/agent-project-kit"
-```
-
-ติดตั้งหรืออัปเดต immutable shared version ก่อน:
-
-```bash
-python3 "$KIT/scripts/install-shared.py" \
-  --source "$KIT" \
-  --shared-root "$APK_SHARED_ROOT" \
-  --machine-home "$APK_MACHINE_HOME" \
-  --configure-shell
-```
-
-`--configure-shell` จะเขียน managed block หนึ่งชุดแบบ idempotent ลง `~/.bashrc`
-เพื่อกำหนด `APK_SHARED_ROOT`, `APK_MACHINE_HOME` และเพิ่ม launcher ใน `PATH`
-จากนั้นเปิด shell ใหม่หรือรัน `source ~/.bashrc` ถ้า Bash ของเครื่องอ่าน rc file
-อื่น ให้ระบุ `--shell-rc /path/to/rc` รอบอัปเดตครั้งต่อไปไม่ต้องใส่
-`--configure-shell` เว้นแต่ตำแหน่ง path เปลี่ยน
-
-สำหรับโปรเจคใหม่ ให้ติดตั้ง snapshot สำหรับ fallback แล้วสร้าง binding:
-
-```bash
-bash "$KIT/scripts/install-to-project.sh" "$PROJECT" "$KIT"
-python3 "$KIT/scripts/install-shared.py" \
-  --source "$KIT" \
-  --bind-project "$PROJECT"
-```
-
-หลังตั้งค่า shell ครั้งแรก รอบอัปเกรดปกติจะอ่าน `APK_SHARED_ROOT` และ
-`APK_MACHINE_HOME` เอง ถ้าเป็น non-interactive shell ที่ยังไม่ได้โหลด env
-installer จะ fallback ไปอ่าน shared root จาก `config.json` เฉพาะเครื่องที่
-สร้างไว้ตอนติดตั้งครั้งแรก
-
-ถ้าโปรเจคมี binding เดิม ให้สำรองแบบระบุ version ก่อนอัปเกรด:
-
-```bash
-cp -p "$PROJECT/.ai/apk.json" \
-  "$PROJECT/.ai/apk.json.before-7.2.1"
-bash "$KIT/scripts/install-to-project.sh" "$PROJECT" "$KIT"
-python3 "$KIT/scripts/install-shared.py" \
-  --source "$KIT" \
-  --bind-project "$PROJECT"
-```
-
-ตรวจ resolve และคำขอตัวอย่างที่ตรงกับงานของโปรเจค:
-
-```bash
-APK_MACHINE_HOME="$APK_MACHINE_HOME" \
-  "$APK_MACHINE_HOME/bin/apk" --project "$PROJECT" resolve
-APK_MACHINE_HOME="$APK_MACHINE_HOME" \
-  "$APK_MACHINE_HOME/bin/apk" --project "$PROJECT" context \
-  "<คำขอที่ชัดเจนและตรงกับโปรเจคนี้>"
-```
-
-ถ้าต้อง rollback คำสั่งนี้จะปิดเฉพาะ shared binding โดย snapshot ใต้
-`.ai/agent-project-kit/` ยังอยู่:
-
-```bash
-APK_MACHINE_HOME="$APK_MACHINE_HOME" \
-  python3 "$KIT/scripts/apk.py" --project "$PROJECT" rollback
-```
-
-ถ้าตรวจแล้วต้องการเปิด binding เดิมกลับ:
-
-```bash
-mv "$PROJECT/.ai/apk.json.disabled" "$PROJECT/.ai/apk.json"
-```
-
-อย่า migrate ทุกโปรเจคพร้อมกัน ให้เริ่มจาก canary batch เล็กและทดสอบ rollback
-ก่อน ช่วง canary ให้เก็บ shared version เก่าและ snapshot ของโปรเจคไว้
-
-ถ้า path หรือชื่อไฟล์ใน OneDrive ฝั่ง Windows ยาวเกินจน WSL2 รายงาน I/O error
-ให้หยุด retry จาก Linux ก่อน ตรวจว่าไม่มี process เปิดไฟล์อยู่ แล้วใช้ Windows
-PowerShell กับ Windows path ที่แน่นอนและ `-LiteralPath` เพื่อ rename หรือ move
-ไป path ที่สั้นกว่า จากนั้นกลับมาเปิด WSL2 และตรวจผลอีกครั้ง
-
-## หลังติดตั้งแล้วจะได้อะไร
+เปิด folder ใน coding agent แล้วพิมพ์
 
 ```text
-AGENTS.md
-CLAUDE.md
-ANTIGRAVITY.md
-.ai/agent-project-kit/
-.ai/PROJECT_STATE.md
-.ai/MACHINE_PROFILE.md
-.ai/LOCAL_RESOURCES.md
-.ai/RUNBOOK.md
-.ai/TOKEN_BUDGET.md
-.ai/SESSION_LOG.md
+อ่าน AGENTS.md และ .ai/PROJECT_STATE.md แล้วทำขั้นต่อไป
 ```
 
-ไฟล์ root เช่น `AGENTS.md`, `CLAUDE.md`, `ANTIGRAVITY.md` จะบอก AI แต่ละตัวให้ไปอ่านกติกาและ note ใน `.ai/` ถ้ามีไฟล์เหล่านี้อยู่แล้ว installer จะเติม managed block เฉพาะที่จำเป็น ไม่แทนที่ไฟล์เดิม และถ้าเจอ `.ai/agent-project-kit/` หรือ metadata ชื่อเดียวกันที่ไม่ใช่ของ Agent Project Kit จะหยุดแทนการเขียนทับ
+โปรเจกต์ใหม่ agent จะกรอก `.ai/PROJECT_STATE.md` ให้ก่อน session ต่อ ๆ ไปใช้
+ประโยคนี้ประโยคเดียว หรือสั่งงานตรง ๆ เช่น "เขียนบทที่ 3 จากโครงบท" หรือ
+"ตอบ reviewer ทีละประเด็น"
 
-source clone กับ installed snapshot ใช้คนละ path กัน เพื่อไม่ให้ `git clone`
-ไปชนกับ directory ที่ installer ต้อง refresh
-
-## Prompt pack
-
-prompt ที่มากับ kit อยู่ที่:
+## ติดตั้งแล้วได้อะไร
 
 ```text
-.ai/agent-project-kit/prompts/
+AGENTS.md, CLAUDE.md, ANTIGRAVITY.md  # จุดเริ่มของ agent แต่ละตัว ข้อความของคุณยังอยู่
+.ai/PROJECT_STATE.md                  # สถานะปัจจุบันของโปรเจกต์ (ของคุณ)
+.ai/SESSION_LOG.md, .ai/RUNBOOK.md    # ประวัติและคำสั่งของโปรเจกต์ (ของคุณ)
+.ai/MACHINE_PROFILE.md                # เครื่องนี้รันงานแบบไหนได้ (ของคุณ)
+.ai/agent-project-kit/                # ตัว kit ถูกแทนที่เมื่ออัปเดต
 ```
 
-prompt pack เฉพาะโปรเจคควรอยู่ข้างนอก managed snapshot เช่น:
+prompt pack ของโปรเจกต์ให้เก็บใน `.ai/prompts/` หรือ folder อื่นที่ระบุไว้ใน
+`.ai/PROJECT_STATE.md` ของที่อยู่ใน `.ai/agent-project-kit/` จะถูกแทนที่เมื่ออัปเดต
 
-```text
-.ai/prompts/
-.ai/prompt-packs/
-.ai/custom-prompts/
+## ดูแลโปรเจกต์
+
+ตรวจการติดตั้งและบันทึกโปรเจกต์
+
+```bash
+python3 .ai/agent-project-kit/scripts/apk_doctor.py . --quick
 ```
 
-ให้จด path ของ prompt pack เฉพาะโปรเจคไว้ใน `.ai/PROJECT_STATE.md` หรือ
-`.ai/RUNBOOK.md` เพื่อให้ session ถัดไปรู้ว่าต้องอ่านตรงไหน
+doctor รายงาน `PROJECT_STATE.md` ที่ยังไม่ได้กรอกหรือเก่าเกินไป เวอร์ชันที่ไม่ตรงกัน
+`.ai/project.json` หรือ `.ai/apk.json` ที่ผิดรูปแบบ และข้อมูลรุ่นเก่าที่ agent มองไม่เห็น
 
-ถ้าเป็นงานวิจัย ให้ดู prompt ชุดนี้:
+โปรเจกต์รุ่นเก่าอาจมีบันทึกอยู่ใน `.ai/state.json` ซึ่ง agent ไม่อ่านแล้ว ให้ดูก่อน
+แล้วค่อยย้ายเข้า `PROJECT_STATE.md`
 
-```text
-.ai/agent-project-kit/prompts/13_RESEARCH_PROJECT_PROMPTS.md
+```bash
+python3 .ai/agent-project-kit/scripts/migrate_state.py --project .          # ดูอย่างเดียว
+python3 .ai/agent-project-kit/scripts/migrate_state.py --project . --write  # ย้ายและสำรอง
 ```
 
-ถ้าเป็นงานผลิตเอกสาร (เอกสารทางการ, รายงาน, PDF ที่ build จาก Markdown,
-รวมถึงการแกะข้อความ/รูปจาก PDF อ้างอิง) ให้ดู prompt ชุดนี้:
+การย้ายจะต่อท้ายหนึ่งส่วนที่มีเครื่องหมายกำกับ แล้วเปลี่ยนชื่อ `state.json` เป็นไฟล์
+สำรองที่มีวันที่ ไม่มีการลบไฟล์ใด บน Windows ใช้ `py -3` แทน `python3`
 
-```text
-.ai/agent-project-kit/prompts/10_DOCUMENT_PRODUCTION.md
-```
+## อัปเดตโปรเจกต์ที่ติดตั้งแล้ว
 
-## Changelog
-
-ดูการเปลี่ยนแปลงของ package ได้ที่ [CHANGELOG.md](CHANGELOG.md)
-
-## Prompt แรกที่ควรบอก AI
-
-```text
-อ่าน AGENTS.md และ .ai/agent-project-kit ก่อน
-จากนั้นอ่าน note ที่เกี่ยวข้องใน .ai/
-สรุปว่าโปรเจคนี้คืออะไร เครื่องนี้คือเครื่องอะไร และต้องรู้อะไรก่อนเริ่มงาน
-รายงาน Agent Project Kit version ที่ติดตั้งจาก .ai/COMPUTING_ENVIRONMENT_VERSION.md
-ถ้าโปรเจคนี้อยู่ใต้ parent/upper folder ที่เคย scan แล้ว ให้ reuse parent
-summary และ machine profile ได้ ไม่ต้อง scan parent ซ้ำกว้าง ๆ แต่ให้ถือ parent
-เป็น broad context เท่านั้น ส่วนโปรเจคลูกต้องสรุป state ของตัวเองให้ลึกและคมกว่า
-ถ้าโปรเจคมี status หรือ deadline ให้เริ่มจากครั้งสุดท้ายทำอะไร และควรทำอะไรต่อ
-โดยเรียงตาม priority และ deadline
-ถ้างานไหนควรรัน parallel ให้ตัดสินใจก่อนว่าเครื่องนี้มี CPU กี่ core, มี GPU
-หรือ accelerator แบบไหน, RAM/storage พอหรือไม่ และมี resource limit ของโปรเจค
-หรือไม่ จากนั้นเลือกระดับ parallelism แบบ conservative แล้วรายงานก่อนรันงานหนัก
-ถ้ายังไม่ได้เช็ก update ของ kit มาสักพัก ให้บอกก่อนทำงานระดับ package
-```
-
-## อัปเดตโปรเจคที่เคยติดตั้งแล้ว
-
-ดู checklist เต็มได้ที่ [UPDATE_EXISTING_PROJECT.md](UPDATE_EXISTING_PROJECT.md)
-
-หลักคืออ่าน version เดิม, เช็ก `manifest.json` บน GitHub Pages แบบ dry-run
-ก่อน, แล้วค่อย apply update โดยไม่ลบ project-local state ใต้ `.ai/` ส่วน
-แนวคิด/ไฟล์ package ใหม่จะถูก refresh ใต้ `.ai/agent-project-kit/`
-ตัว updater จะสร้างและตรวจ snapshot ใน staging ก่อนสลับใช้งาน เก็บรุ่นก่อนหน้า
-ไว้ที่ `.ai/agent-project-kit.previous` และคืนทั้ง snapshot กับไฟล์ควบคุมเดิม
-อัตโนมัติถ้าขั้นตอนหลังสลับล้ม การอัปเดตผ่าน Pages จะใช้ `git_ref` ตรงตาม
-manifest และปฏิเสธ package ที่ version ไม่ตรงกับที่ประกาศ
-
-การเริ่มงานตามปกติจะตรวจเฉพาะ manifest ทุก 14 วันและแจ้งเมื่อมีเวอร์ชันใหม่
-โดยไม่ clone, pull หรือติดตั้งให้อัตโนมัติ การเปิดซ้ำภายในช่วง 14 วันจะไม่ยิง
-network ซ้ำ
-
-รุ่นล่าสุดยังเพิ่ม `environments/` (ไฟล์ manifest ของ Conda-family สำหรับ
-environment `text`/`image`/`ml` และ requirement ของฟอนต์) กับ
-`scripts/install-thai-fonts.py` เข้าไปใน package snapshot ที่ติดตั้งด้วย ทั้งสอง
-จะถูก refresh ไปพร้อมกับ `.ai/agent-project-kit/` ตอน update ตามขั้นตอนด้านล่าง
-โดยไม่ต้องมีขั้นตอนติดตั้งเพิ่ม ส่วนบรรทัด `Environment-manager preflight: ...`
-จะขึ้นเฉพาะตอนติดตั้งครั้งแรก (ตอนที่ยังไม่มี `.ai/agent-project-kit/`) เท่านั้น
-จึงจะไม่ขึ้นซ้ำตอน update โปรเจคที่ติดตั้งไว้แล้ว
-
-dry-run:
+ดูก่อน แล้วค่อยอัปเดตจริง
 
 ```bash
 bash .ai/agent-project-kit/scripts/update-from-pages.sh --dry-run .
-```
-
-macOS / Linux:
-
-```bash
 bash .ai/agent-project-kit/scripts/update-from-pages.sh .
 ```
 
-WSL2 ที่โปรเจคอยู่ในโฟลเดอร์ฝั่ง Windows เช่น OneDrive:
+WSL2 กับ folder ที่ sync กับ Windows
 
 ```bash
 KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
@@ -316,9 +147,95 @@ bash "$KIT/scripts/update-from-pages.sh" --dry-run .
 bash "$KIT/scripts/update-from-pages.sh" .
 ```
 
-Windows PowerShell:
+Windows PowerShell (ต้องมี Git และ Python 3.9 ขึ้นไป)
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\update-from-pages.ps1" -ProjectPath . -DryRun
 powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit\scripts\update-from-pages.ps1" -ProjectPath .
 ```
+
+updater อ่าน manifest ที่เผยแพร่ checkout tag ของ release นั้นตรงตัว และไม่ยอม
+downgrade หรือติดตั้งรุ่นที่เวอร์ชันไม่ตรง agent เช็กรุ่นใหม่อย่างมากทุก 14 วัน
+และแจ้งเท่านั้น ไม่อัปเดตเอง รายละเอียดทั้งหมดอยู่ใน
+[UPDATE_EXISTING_PROJECT.md](UPDATE_EXISTING_PROJECT.md)
+
+## ความปลอดภัยของไฟล์
+
+- บันทึกโปรเจกต์ใต้ `.ai/` ถูกสร้างเฉพาะเมื่อยังไม่มี และไม่ถูกเขียนทับ
+- `AGENTS.md`, `CLAUDE.md` และ `ANTIGRAVITY.md` เก็บข้อความของคุณไว้ kit ดูแล
+  block ที่มีเครื่องหมายกำกับหนึ่ง block ใน `AGENTS.md` และเพิ่มข้อความสั้น ๆ ในอีก
+  สองไฟล์
+- snapshot ใหม่ถูกเตรียมและตรวจ SHA-256 ก่อนแทนที่ของเดิม ของเดิมเก็บไว้เป็น
+  `.ai/agent-project-kit.previous` ถ้าขั้นใดล้มเหลว ระบบคืน snapshot เดิมและทุกไฟล์
+  ที่ตัวติดตั้งแตะ
+- ถ้าเจอ folder หรือไฟล์ชื่อซ้ำที่ไม่ใช่ของ kit ตัวติดตั้งหยุดก่อนเขียนอะไร
+- git clone และ snapshot ที่ติดตั้งใช้ path คนละที่
+
+## ขั้นตอนการทำงานและ prompt pack
+
+คุณไม่ต้องเลือก prompt pack เอง agent อ่าน `.ai/agent-project-kit/STARTUP.md`
+จัดประเภทคำขอ แล้วโหลดขั้นตอนหลักหนึ่งชุดพร้อมจุดตรวจที่จำเป็น ถ้าอยากดูว่าคำขอ
+หนึ่งถูกจัดเป็นงานแบบไหน
+
+```bash
+python3 .ai/agent-project-kit/scripts/route_task.py "เขียนบทที่ 3 ของตำรา"
+```
+
+ขั้นตอนครอบคลุมงานซอฟต์แวร์ งานวิจัย การเขียนหนังสือ สไลด์ การวิเคราะห์เนื้อหา
+การวิเคราะห์ข้อมูล เอกสารประกอบการสอน นโยบายการศึกษา และงานธุรการ แต่ละขั้นตอน
+มี prompt pack อยู่ใน `.ai/agent-project-kit/prompts/`
+
+## Shared runtime สำหรับหลายโปรเจกต์บน WSL2 (Canary)
+
+หลายโปรเจกต์บน WSL2 ใช้ kit ชุดเดียวที่ตรวจแล้วและระบุเวอร์ชันตายตัวร่วมกันได้
+โดยเก็บไว้ที่ OneDrive root แต่ละโปรเจกต์ยังมีบันทึกของตัวเองและ snapshot สำรอง
+
+```bash
+PROJECT="/home/<user>/OneDrive/path/to/project"
+KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
+APK_SHARED_ROOT="/home/<user>/OneDrive/.agent-project-kit"
+APK_MACHINE_HOME="$HOME/.local/share/agent-project-kit"
+
+# ครั้งเดียวต่อเครื่อง: ติดตั้งชุดกลางและตั้งค่า shell
+python3 "$KIT/scripts/install-shared.py" --source "$KIT" \
+  --shared-root "$APK_SHARED_ROOT" --machine-home "$APK_MACHINE_HOME" --configure-shell
+
+# ต่อโปรเจกต์: ติดตั้ง snapshot สำรอง สำรอง binding เดิม แล้วผูก
+bash "$KIT/scripts/install-to-project.sh" "$PROJECT" "$KIT"
+[ -f "$PROJECT/.ai/apk.json" ] && cp -p "$PROJECT/.ai/apk.json" "$PROJECT/.ai/apk.json.backup-$(date +%Y%m%d)"
+python3 "$KIT/scripts/install-shared.py" --source "$KIT" --bind-project "$PROJECT"
+
+# ตรวจ
+"$APK_MACHINE_HOME/bin/apk" --project "$PROJECT" resolve
+```
+
+`--configure-shell` เขียน block ที่มีเครื่องหมายกำกับหนึ่ง block ลง `~/.bashrc`
+แล้วให้เปิด shell ใหม่ `resolve` ตรวจชุดกลางกับ SHA-256 ที่ผูกไว้ และปฏิเสธชุดที่ถูก
+แก้ไข ถ้าจะกลับไปใช้ snapshot ของโปรเจกต์ ให้รัน
+`python3 "$KIT/scripts/apk.py" --project "$PROJECT" rollback` และถ้าจะย้อนกลับ
+ให้เปลี่ยนชื่อ `.ai/apk.json.disabled` กลับเป็น `.ai/apk.json` ควรลองกับไม่กี่
+โปรเจกต์ก่อนผูกหลายโปรเจกต์
+
+## แก้ปัญหาที่พบบ่อย
+
+- `Agent Project Kit needs Python 3.9 or newer` ให้ติดตั้ง Python ตามหัวข้อ
+  สิ่งที่ต้องมี แล้วเปิด terminal ใหม่
+- `git not found` บน Windows ให้ติดตั้ง Git for Windows แล้วเปิด terminal ใหม่
+  ถ้าเรียกจาก WSL2 ให้รีสตาร์ต WSL2 ก่อน
+- `Input/output error` จาก WSL2 ใน OneDrive ส่วนใหญ่เป็นไฟล์ที่อยู่บน cloud อย่างเดียว
+  ให้เปิดไฟล์นั้นจาก Windows หนึ่งครั้ง หรือตั้ง folder เป็น "Always keep on this
+  device" แล้วลองใหม่ path ของ Windows ที่ยาวเกิน 260 ตัวอักษรก็ทำให้เกิด error นี้
+  ให้ย่อหรือย้ายจาก PowerShell ด้วย `-LiteralPath`
+- `Refusing to overwrite existing ...` มี folder หรือไฟล์ชื่อเดียวกับของ kit ที่เก็บ
+  เนื้อหาของคุณอยู่ ให้เปลี่ยนชื่อแล้วรันตัวติดตั้งใหม่
+
+## อ่านต่อ
+
+- [CHANGELOG.md](CHANGELOG.md)
+- [INSTALL_IN_PROJECT.md](INSTALL_IN_PROJECT.md)
+- [UPDATE_EXISTING_PROJECT.md](UPDATE_EXISTING_PROJECT.md)
+- [GIT_DISTRIBUTION.md](GIT_DISTRIBUTION.md)
+
+repository นี้ไม่เก็บ `.ai/` เพราะเป็นสถานะเฉพาะเครื่องและ snapshot ที่ติดตั้ง
+ชื่อเดิม `computing-environment` และ path `.ai/computing-environment/` เก็บไว้เพื่อ
+ย้ายข้อมูลเท่านั้น

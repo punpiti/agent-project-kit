@@ -4,23 +4,47 @@ title: Agent Project Kit
 
 # Agent Project Kit
 
-Agent Project Kit is a portable starter kit for projects that are worked on
-with AI coding agents. It gives Codex, Claude Code, Antigravity, and similar
-tools a consistent way to start: read project state, understand the current
-machine, preserve local notes, and update the kit without overwriting the
-user's work.
+Agent Project Kit (APK) helps AI coding agents such as Claude Code, Codex, and
+Antigravity work on the same project across many sessions. The agent resumes
+from the project's own notes, picks a workflow that fits the request, and
+checks its output before handing it over. Your files stay yours.
 
-[ภาษาไทย](README.th.md) | [GitHub repository](https://github.com/punpiti/agent-project-kit) | [Manifest](manifest.json)
+[README](README.md) | [ภาษาไทย](README.th.md) | [GitHub repository](https://github.com/punpiti/agent-project-kit) | [Changelog](CHANGELOG.md) | [Manifest](manifest.json)
 
 ## Current Release
 
-- Package name: `agent-project-kit`
 - Current package version: `8.0.1-python-core-canary`
-- Installed snapshot path: `.ai/agent-project-kit/`
-- Source clone path for new installs: `.ai/agent-project-kit-source/`
-- Legacy path: `.ai/computing-environment/` is migration-only
+- Requires Git and Python 3.9 or newer on every platform
+- Tested on Linux, WSL2, and Windows (canary; macOS hardware not yet tested)
+
+## What It Does For You
+
+- Resume in one line: "Read AGENTS.md and .ai/PROJECT_STATE.md, then continue
+  with the next action."
+- One request, one fitting workflow. Textbook chapters, thesis reviews, reviewer
+  responses, policy drafts, official letters, teaching slides, and data
+  analysis each get their own workflow and checks.
+- Output is checked. Numbers come from result files, built documents and decks
+  are opened, reader-facing prose goes through a style checker, and Thai Word
+  files get their font and word breaking repaired.
+- Install and update keep your notes and instructions unchanged. A failed
+  update restores the previous copy.
+
+| Task | Example request | Workflow the agent uses |
+|---|---|---|
+| Write a textbook | Write chapter 3 from the outline and evidence | Book writing with prose check |
+| Build a book preview | Build the textbook as a PDF preview | Book writing with publication build and file check |
+| Review a thesis | Review this thesis as an external examiner | Research with reviewer-style findings |
+| Answer reviewers | Answer the journal reviewers point by point | Research with a response mapped to each change |
+| Draft a policy | Draft an AI-in-teaching policy for the university council | Educational policy with prose check |
+| Official letter | Write an official letter to the faculty | Administrative work with prose check |
+| Teaching slides | Create slides to teach machine learning | Presentation with render and file check |
+| Data analysis | Analyse rainfall from 130 stations and plot it | Data analytics |
 
 ## Install
+
+Git and Python 3.9+ are required. On Windows, install the Python install manager
+from <https://www.python.org/downloads/> (it provides `py`).
 
 macOS / Linux:
 
@@ -50,89 +74,37 @@ git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-ki
 powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
 ```
 
-## What It Adds
-
-- Root agent adapter files: `AGENTS.md`, `CLAUDE.md`, and `ANTIGRAVITY.md`
-- Managed kit snapshot: `.ai/agent-project-kit/`
-- Project-local state files: `.ai/PROJECT_STATE.md`, `.ai/MACHINE_PROFILE.md`,
-  `.ai/LOCAL_RESOURCES.md`, `.ai/RUNBOOK.md`, `.ai/TOKEN_BUDGET.md`, and
-  related templates
-- Prompt packs for coding, project resume, machine-aware work, document
-  production, markdown cleanup, and research projects
-- Update scripts that check the GitHub Pages manifest before refreshing the
-  local snapshot
-
-## Safety Model
-
-The installer is designed to preserve user work.
-
-- It refreshes only the managed package snapshot under `.ai/agent-project-kit/`.
-- It creates project-local `.ai/` state files only when they are missing.
-- It appends managed blocks to existing root agent files instead of replacing
-  them.
-- If a first install finds a same-name directory or metadata file that does not
-  look like Agent Project Kit content, it stops instead of overwriting or moving
-  the user's file.
-- The source clone and installed snapshot use different paths so a git clone
-  does not collide with the managed snapshot.
-
-## Project Prompt Packs
-
-Kit prompts live in:
+Then open the folder in your agent and say:
 
 ```text
-.ai/agent-project-kit/prompts/
+Read AGENTS.md and .ai/PROJECT_STATE.md, then continue with the next action.
 ```
-
-Project-specific or user prompt packs should live outside the managed snapshot,
-for example:
-
-```text
-.ai/prompts/
-.ai/prompt-packs/
-.ai/custom-prompts/
-```
-
-Agents should treat `.ai/agent-project-kit/` as kit-owned and refreshable.
-Project-owned prompts should be documented in `.ai/PROJECT_STATE.md` or
-`.ai/RUNBOOK.md` so future sessions can find them without putting custom files
-inside the managed snapshot.
 
 ## Update
 
-Preview the GitHub Pages manifest first:
-
 ```bash
 bash .ai/agent-project-kit/scripts/update-from-pages.sh --dry-run .
-```
-
-Apply the update:
-
-```bash
 bash .ai/agent-project-kit/scripts/update-from-pages.sh .
 ```
 
-The update path reports current and upstream package/schema versions, then
-refreshes the managed snapshot only when the GitHub Pages manifest shows a
-newer or different package version.
+On Windows, run `.ai\agent-project-kit\scripts\update-from-pages.ps1 -ProjectPath .`
+with `-DryRun` first. The updater checks out the exact release named in this
+site's manifest and refuses downgrades.
 
-## Start An Agent
+## Check A Project
 
-After installing, open the project folder and tell the agent:
-
-```text
-Read AGENTS.md and .ai/agent-project-kit first.
-Then read .ai/PROJECT_STATE.md, .ai/PROJECT_HIERARCHY.md,
-.ai/COMPUTING_ENVIRONMENT_VERSION.md, .ai/MACHINE_PROFILE.md,
-.ai/LOCAL_RESOURCES.md, .ai/RUNBOOK.md, and .ai/TOKEN_BUDGET.md.
-Report the installed Agent Project Kit version before starting work.
+```bash
+python3 .ai/agent-project-kit/scripts/apk_doctor.py . --quick
+python3 .ai/agent-project-kit/scripts/migrate_state.py --project .
 ```
+
+The doctor reports stale or uninitialized project notes and malformed settings.
+The migration command previews legacy `.ai/state.json` notes that agents no
+longer read. Add `--write` to move them into `PROJECT_STATE.md` with a backup.
 
 ## More Docs
 
-- [README](README.md)
-- [Thai README](README.th.md)
+- [README](README.md) with requirements, troubleshooting, and the shared runtime
 - [Install details](INSTALL_IN_PROJECT.md)
-- [Update existing project](UPDATE_EXISTING_PROJECT.md)
+- [Update an existing project](UPDATE_EXISTING_PROJECT.md)
 - [Git distribution](GIT_DISTRIBUTION.md)
-- [Changelog](CHANGELOG.md)

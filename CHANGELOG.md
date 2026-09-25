@@ -4,6 +4,16 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Rewrote README.md, README.th.md, and the GitHub Pages landing page
+  (`index.md`). Changes: a requirements section (Git and Python 3.9+
+  everywhere), a what-it-does summary with example requests per task type, and
+  a one-line start prompt that matches STARTUP.md. The old prompt asked agents
+  to read the whole snapshot. New sections cover doctor and legacy-state
+  migration, Windows update needs, and troubleshooting for Python/Git discovery
+  and OneDrive online-only I/O errors. The stale `environments/` paragraph and
+  the version-specific backup example are gone. Every documented command was
+  run in a fresh project.
+
 - The prose checker missed trailing contrast framing in real reader copy. It
   now treats "…ไม่ใช่แค่…", "ไม่ใช่เพียง…", and "not just/merely/simply" as
   zero-tolerance. "is not X; it is Y" with `;`, `:`, or an em dash is a review
