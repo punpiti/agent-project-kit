@@ -27,7 +27,7 @@
     {"request": "เขียนหนังสือวิศวกรรมจาก PDF DOCX และ PPTX ขนาดใหญ่", "domain": "book-writing", "deliverable": "book", "required_methods": [], "forbidden_workflows": ["publication-production"]},
     {"request": "build หนังสือเป็น EPUB และ PDF", "domain": "book-writing", "deliverable": "book", "required_methods": [], "required_workflows": ["publication-production"]},
     {"request": "วาง storyline สำหรับ presentation ผู้บริหาร", "domain": "general", "deliverable": "presentation", "required_methods": [], "forbidden_workflows": ["presentation-production"]},
-    {"request": "จัดทำหนังสือราชการถึงคณะ", "domain": "operations", "deliverable": "document", "required_methods": [], "required_workflows": ["publication-production"]},
+    {"request": "จัดทำหนังสือราชการถึงคณะ", "domain": "operations", "deliverable": "document", "required_methods": [], "forbidden_workflows": ["publication-production"]},
     {"request": "create slides for the council briefing", "domain": "governance", "deliverable": "presentation", "required_methods": [], "required_workflows": ["presentation-production"]},
     {"request": "export the book manuscript to EPUB", "domain": "book-writing", "deliverable": "book", "required_methods": [], "required_workflows": ["publication-production"]},
     {"request": "build a KPI dashboard from validated product data", "domain": "general", "deliverable": "analysis", "required_methods": ["data-analytics"]}

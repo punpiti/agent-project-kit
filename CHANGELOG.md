@@ -4,6 +4,14 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Corrected the benchmark fixture for official letters: drafting one must not
+  select publication production, matching the routing contract test.
+- Added `scripts/release_check.py`, one read-only release gate that checks
+  version consistency across manifest/README/index/template/changelog, registry
+  projections, the prompt catalog, the clean-tree and Git-history boundary, the
+  full acceptance suite in parallel, and prints the shared-runtime content
+  digest. `--tagged` also requires an annotated tag on HEAD.
+
 ## 7.7.0-workflow-architecture-canary — 2026-09-25
 
 - Replaced the flat primary/secondary model with Workflow Architecture v2:

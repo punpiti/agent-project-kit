@@ -83,6 +83,7 @@
 - `scripts/check_book_writing_split.py`
 - `scripts/check_prose_style.py`
 - `scripts/check_release_boundary.py`
+- `scripts/release_check.py`
 - `scripts/sync_workflow_registry.py`
 - shared installs generate `PACKAGE_CHECKSUMS.json`; project bindings pin its
   aggregate SHA-256 outside the shared runtime

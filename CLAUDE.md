@@ -101,8 +101,16 @@ bash tests/test-shared-runtime.sh
 bash tests/test-shared-runtime-v2.sh
 ```
 
-There's no single "run everything" entry point — run the specific test file
-relevant to what changed (e.g. touching `config/workflow-registry.json` or
+Before any release, run the single read-only gate (never bumps, tags, or
+publishes):
+
+```bash
+python3 scripts/release_check.py               # clean tree required
+python3 scripts/release_check.py --allow-dirty # while developing; never release-ready
+python3 scripts/release_check.py --tagged      # after tagging, before push/publish
+```
+
+During development, run the specific test file relevant to what changed (e.g. touching `config/workflow-registry.json` or
 `scripts/route_task.py`/`scripts/context.py` → `test-v7-context.py`; touching
 `scripts/install-to-project.sh` or `prompts/` → `test-fast-start.sh`; touching
 `scripts/install-shared.py`/`scripts/apk.py` → the `test-shared-runtime*.sh`
