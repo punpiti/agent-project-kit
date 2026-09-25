@@ -107,6 +107,10 @@ Antigravity, or another coding agent.
 
 ### Windows PowerShell
 
+The installer needs Python 3.8 or newer. On Windows, install the Python install
+manager from <https://www.python.org/downloads/>, which provides `py`. The
+Microsoft Store `python` alias is only a shortcut to the Store and is not used.
+
 ```powershell
 New-Item -ItemType Directory -Force -Path "my-project" | Out-Null
 Set-Location "my-project"

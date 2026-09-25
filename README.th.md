@@ -84,7 +84,7 @@ bash "$KIT/scripts/install-to-project.sh" . "$KIT"
 code .
 ```
 
-Windows PowerShell:
+Windows PowerShell (ต้องมี Python 3.8 ขึ้นไป ติดตั้ง Python install manager จาก <https://www.python.org/downloads/> ซึ่งมีคำสั่ง `py` มาให้):
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "my-project" | Out-Null

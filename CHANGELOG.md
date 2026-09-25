@@ -4,6 +4,26 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- One installer core: `scripts/apk_install.py`. `install-to-project.sh` and
+  `install-to-project.ps1` are now thin wrappers (12 and about 30 lines,
+  replacing about 1,160 duplicated lines). A parity harness against the
+  previous Bash installer matched byte-for-byte, including file modes, output,
+  and exit codes, across 16 scenarios (fresh, user files, CRLF, managed block
+  in the middle, malformed block, foreign snapshot/metadata/previous, migrated
+  state, self-host, reinstall rotation, symlinked source, missing item). The
+  only differences were test-folder paths in the error messages. Windows now
+  gets the Bash behavior; the old PowerShell installer had drifted in five
+  places.
+- Python 3.8+ is now required to install on Windows (owner decision). The
+  wrapper uses `py -3`, then `python3`, then `python`, and skips the Microsoft
+  Store stub.
+- Found on native Windows and fixed: renaming a just-renamed snapshot folder
+  back during rollback could fail with `Access is denied`, leaving no active
+  snapshot. Renames now retry sharing violations. Rollback continues past a
+  failed step, never deletes `.previous` while it holds the only good copy,
+  and prints manual recovery steps. The PowerShell wrapper no longer turns
+  Python's stderr into a terminating error.
+
 - `apk_doctor.py` no longer reads the next line as a field value when a field is
   empty. On an unfilled `PROJECT_STATE.md` template, it had reported the
   `Updated by` line as an invalid `Last updated` date. This affected 20 of 65

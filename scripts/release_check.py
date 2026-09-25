@@ -36,6 +36,7 @@ TEST_COMMANDS = (
     ("schemas", ("python3", "tests/test-schemas.py")),
     ("policy-registry", ("python3", "tests/test-policy-registry.py")),
     ("state-migration", ("python3", "tests/test-state-migration.py")),
+    ("installer-core", ("python3", "tests/test-installer-core.py")),
     ("fast-start", ("bash", "tests/test-fast-start.sh")),
     ("transactional-update", ("bash", "tests/test-transactional-update.sh")),
     ("shared-runtime", ("bash", "tests/test-shared-runtime.sh")),

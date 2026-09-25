@@ -82,6 +82,7 @@
 - `scripts/bootstrap_ai_project.py`
 - `scripts/apk_doctor.py`
 - `scripts/apk.py`
+- `scripts/apk_install.py`
 - `scripts/context.py`
 - `scripts/install-from-git.ps1`
 - `scripts/install-shared.py`

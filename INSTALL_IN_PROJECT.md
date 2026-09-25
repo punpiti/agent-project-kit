@@ -24,7 +24,7 @@ git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit
 bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-project-kit-source
 ```
 
-Windows PowerShell:
+Windows PowerShell (requires Python 3.8+; the python.org install manager provides `py`):
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "my-project" | Out-Null

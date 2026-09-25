@@ -21,6 +21,28 @@ try {
     & (Join-Path $SourcePath "scripts\install-to-project.ps1") `
         -ProjectPath $project -SourcePath $SourcePath
 
+    # An injected failure while activating the stage must restore the active
+    # snapshot (Windows holds handles on just-renamed folders; see apk_install.py).
+    $startup = Join-Path $project ".ai\agent-project-kit\STARTUP.md"
+    $before = (Get-FileHash -LiteralPath $startup -Algorithm SHA256).Hash
+    $env:APK_INSTALL_TEST_FAULT = "activate"
+    # PowerShell 5.1 turns native stderr into a terminating error under Stop.
+    $ErrorActionPreference = "Continue"
+    try {
+        & (Join-Path $SourcePath "scripts\install-to-project.ps1") -ProjectPath $project -SourcePath $SourcePath 2>&1 | Out-Null
+        $faultExit = $LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = "Stop"
+        Remove-Item Env:APK_INSTALL_TEST_FAULT -ErrorAction SilentlyContinue
+    }
+    if ($faultExit -eq 0) { throw "Injected install failure unexpectedly succeeded" }
+    if (-not (Test-Path -LiteralPath $startup) -or (Get-FileHash -LiteralPath $startup -Algorithm SHA256).Hash -ne $before) {
+        throw "Rollback did not restore the active snapshot"
+    }
+    if (Get-ChildItem -LiteralPath (Join-Path $project ".ai") -Force -Filter ".agent-project-kit.*") {
+        throw "Rollback left staging or control-backup folders"
+    }
+
     $statePath = Join-Path $project ".ai\PROJECT_STATE.md"
     Add-Content -Path $statePath -Value "`nAPK_WINDOWS_PROJECT_SECRET_81d7a4"
 

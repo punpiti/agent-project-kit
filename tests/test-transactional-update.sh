@@ -48,19 +48,7 @@ FAIL_ACTIVATE_SOURCE="$TEST_ROOT/fail-activate-source"
 copy_package_source "$FAIL_ACTIVATE_SOURCE"
 sed -i 's/"version": "[^"]*"/"version": "99.1.1-activate-failure"/' "$FAIL_ACTIVATE_SOURCE/manifest.json"
 printf '\nactivate-failure-marker\n' >> "$FAIL_ACTIVATE_SOURCE/STARTUP.md"
-SHIM_DIR="$TEST_ROOT/fail-activate-bin"
-mkdir -p "$SHIM_DIR"
-printf '%s\n' \
-  '#!/usr/bin/env bash' \
-  'previous=""' \
-  'last=""' \
-  'for argument in "$@"; do previous="$last"; last="$argument"; done' \
-  'case "$previous:$last" in' \
-  '  *".agent-project-kit.stage."*:*"/.ai/agent-project-kit") exit 73 ;;' \
-  'esac' \
-  'exec /usr/bin/mv "$@"' > "$SHIM_DIR/mv"
-chmod +x "$SHIM_DIR/mv"
-if PATH="$SHIM_DIR:$PATH" bash "$SOURCE/scripts/install-to-project.sh" "$PROJECT" "$FAIL_ACTIVATE_SOURCE" >/dev/null 2>&1; then
+if APK_INSTALL_TEST_FAULT=activate bash "$SOURCE/scripts/install-to-project.sh" "$PROJECT" "$FAIL_ACTIVATE_SOURCE" >/dev/null 2>&1; then
   echo 'snapshot activation failure unexpectedly succeeded' >&2
   exit 1
 fi
