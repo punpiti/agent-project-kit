@@ -14,7 +14,8 @@ function Find-ApkPython {
 
 function Invoke-ApkPython {
     param([string[]]$Arguments)
-    $python = Find-ApkPython
+    # @() keeps a single-element result (e.g. /usr/bin/python3) an array.
+    $python = @(Find-ApkPython)
     $prefix = @($python | Select-Object -Skip 1)
     # Python reports progress and failures on stderr; Windows PowerShell 5.1
     # would turn that into a terminating error under "Stop".

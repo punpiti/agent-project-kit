@@ -36,7 +36,7 @@ cases += [
  ("วาง storyline สำหรับ presentation ผู้บริหาร","general","presentation",set()),
  ("จัดทำหนังสือราชการถึงคณะ","operations","document",set())]
 for request,domain,deliverable,methods in cases:
-    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],text=True)
+    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],encoding="utf-8")
     data=json.loads(out); assert data["domain"]==domain,(request,data); assert data["deliverable"]==deliverable,(request,data); assert methods.issubset(set(data["methods"])),(request,data)
     assert data["schema_version"]==2 and data["primary_pipeline"],(request,data)
     if deliverable == "book" and not request.startswith("build "): assert "publication-production" not in data["secondary_workflows"],(request,data)
@@ -51,7 +51,7 @@ production_cases=[
  ("เกลาภาษาบทความวิจัยให้กระชับ","prose-style"),
  ("revise the manuscript prose before submission","prose-style")]
 for request,workflow in production_cases:
-    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],text=True)
+    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],encoding="utf-8")
     data=json.loads(out); assert workflow in data["secondary_workflows"],(request,data)
 
 adversarial_cases = [
@@ -70,27 +70,27 @@ adversarial_cases = [
  ("prepare a course on python for first-year students","education","course-material","course-material-development"),
 ]
 for request,domain,deliverable,primary in adversarial_cases:
-    data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],text=True))
+    data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],encoding="utf-8"))
     assert (data["domain"],data["deliverable"],data["primary_pipeline"])==(domain,deliverable,primary),(request,data)
 
-data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"export the revised paper to pdf, convert the policy draft to docx"],text=True))
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"export the revised paper to pdf, convert the policy draft to docx"],encoding="utf-8"))
 assert "publication-production" in data["workflow"]["stages"],data
-data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"draft a formal letter to the dean"],text=True))
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"draft a formal letter to the dean"],encoding="utf-8"))
 assert "publication-production" not in data["workflow"]["stages"],data
-data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"preview the thesis draft"],text=True))
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"preview the thesis draft"],encoding="utf-8"))
 assert "reviewer-response" not in data["workflow"]["stages"],data
-data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"fix the bug using user feedback then bump version"],text=True))
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"fix the bug using user feedback then bump version"],encoding="utf-8"))
 assert "package-release" in data["workflow"]["stages"],data
 assert not any(item["id"]=="package-release" for item in data["omitted"]),data
-data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"ย้าย router rules ออกจาก route_task.py ไปเป็น data ที่ test ได้"],text=True))
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"ย้าย router rules ออกจาก route_task.py ไปเป็น data ที่ test ได้"],encoding="utf-8"))
 assert "data-analytics" not in data["methods"],data
-data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"migrate legacy state.json to the new project.json schema"],text=True))
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"migrate legacy state.json to the new project.json schema"],encoding="utf-8"))
 assert data["lifecycle"]!="bootstrap" and "new-project-bootstrap" not in data["workflow"]["state_actions"],data
-data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"start a new project"],text=True))
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"start a new project"],encoding="utf-8"))
 assert data["lifecycle"]=="bootstrap",data
-data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"ตรวจ secret และ private path ก่อน release"],text=True))
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"ตรวจ secret และ private path ก่อน release"],encoding="utf-8"))
 assert "release-boundary" in data["workflow"]["gates"],data
-data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"วิเคราะห์ผลสำรวจความคิดเห็นอาจารย์เพื่อประกอบข้อเสนอนโยบาย"],text=True))
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"วิเคราะห์ผลสำรวจความคิดเห็นอาจารย์เพื่อประกอบข้อเสนอนโยบาย"],encoding="utf-8"))
 assert data["primary_pipeline"]=="educational-policy-development" and "data-analytics" in data["workflow"]["methods"],data
 
 # Onboarding follows the authoritative Markdown state, not a placeholder project.json.
@@ -98,28 +98,28 @@ with tempfile.TemporaryDirectory() as tmp:
     project=Path(tmp); (project/".ai").mkdir(); (project/"notes.md").write_text("x",encoding="utf-8")
     (project/".ai/project.json").write_text(json.dumps({"schema_version":1,"status":"placeholder"}),encoding="utf-8")
     template=(ROOT/"templates/PROJECT_STATE.md").read_text(encoding="utf-8")
-    route=lambda: json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"--project",str(project),"fix the bug"],text=True))
+    route=lambda: json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"--project",str(project),"fix the bug"],encoding="utf-8"))
     (project/".ai/PROJECT_STATE.md").write_text(template,encoding="utf-8")
     assert "existing-project-onboarding" in route()["workflow"]["state_actions"]
     (project/".ai/PROJECT_STATE.md").write_text("# PROJECT_STATE\n\n- Project name: Real project\n",encoding="utf-8")
     assert "existing-project-onboarding" not in route()["workflow"]["state_actions"]
 
-data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"write a research paper or a policy brief"],text=True))
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"write a research paper or a policy brief"],encoding="utf-8"))
 assert data["needs_clarification"],data
 
 with tempfile.TemporaryDirectory() as tmp:
     project=Path(tmp); (project/".ai").mkdir();
     (project/".ai/project.json").write_text(json.dumps({"schema_version":1,"status":"configured","name":"Fixture","objective":"Test compact context"}),encoding="utf-8")
     (project/".ai/state.json").write_text(json.dumps({"schema_version":1,"status":"configured","active_task":"route test","next_actions":[]}),encoding="utf-8")
-    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"fix the website login bug","--project",str(project)],text=True)
+    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"fix the website login bug","--project",str(project)],encoding="utf-8")
     bundle=json.loads(out); assert bundle["routing"]["domain"]=="software"; assert bundle["schema_version"]==2; assert bundle["metrics"]["bytes"]<=12000; assert len(bundle["sources"])==2
-    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"สร้างสไลด์สำหรับสอน machine learning","--project",str(project)],text=True)
+    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"สร้างสไลด์สำหรับสอน machine learning","--project",str(project)],encoding="utf-8")
     bundle=json.loads(out); assert bundle["primary"]["prompt"]=="prompts/05_SLIDES_TEACHING.md"; assert any(item["id"]=="presentation-production" and item["prompt"]=="prompts/23_PRESENTATION_PRODUCTION.md" for item in bundle["secondary"])
-    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"build หนังสือเป็น EPUB และ PDF","--project",str(project)],text=True)
+    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"build หนังสือเป็น EPUB และ PDF","--project",str(project)],encoding="utf-8")
     bundle=json.loads(out); assert bundle["primary"]["prompt"]=="prompts/22_BOOK_WRITING.md"; assert any(item["id"]=="publication-production" and item["prompt"]=="prompts/10_DOCUMENT_PRODUCTION.md" for item in bundle["secondary"])
-    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"วิเคราะห์ข้อมูลผลสอบและทำกราฟ","--project",str(project)],text=True)
+    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"วิเคราะห์ข้อมูลผลสอบและทำกราฟ","--project",str(project)],encoding="utf-8")
     bundle=json.loads(out); assert bundle["primary"]["id"]=="data-analytics",bundle
-    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"conduct thematic content analysis of interviews","--project",str(project)],text=True)
+    out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"conduct thematic content analysis of interviews","--project",str(project)],encoding="utf-8")
     bundle=json.loads(out); assert bundle["primary"]["id"]=="content-analysis",bundle
 
 with tempfile.TemporaryDirectory() as tmp:
@@ -138,7 +138,7 @@ with tempfile.TemporaryDirectory() as tmp:
 
 with tempfile.TemporaryDirectory() as tmp:
     project=Path(tmp); (project/"existing.txt").write_text("existing\n",encoding="utf-8")
-    data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"install a missing document library","--project",str(project)],text=True))
+    data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"install a missing document library","--project",str(project)],encoding="utf-8"))
     assert "existing-project-onboarding" in data["workflow"]["state_actions"],data
     assert "machine-discovery" in data["workflow"]["state_actions"],data
 print("v7 structured context tests: PASS")

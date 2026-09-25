@@ -15,7 +15,7 @@ user's work.
 ## Current Release
 
 - Package name: `agent-project-kit`
-- Current package version: `8.0.0-python-core-canary`
+- Current package version: `8.0.1-python-core-canary`
 - Installed snapshot path: `.ai/agent-project-kit/`
 - Source clone path for new installs: `.ai/agent-project-kit-source/`
 - Legacy path: `.ai/computing-environment/` is migration-only

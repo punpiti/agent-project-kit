@@ -15,7 +15,7 @@ PY = [sys.executable, "-B"]
 
 
 def run(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
-    result = subprocess.run(list(args), capture_output=True, text=True)
+    result = subprocess.run(list(args), capture_output=True, encoding="utf-8")
     if check and result.returncode != 0:
         raise AssertionError(result.stdout + result.stderr)
     return result

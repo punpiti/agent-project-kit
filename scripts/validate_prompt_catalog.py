@@ -35,17 +35,17 @@ def main() -> int:
     if data.get("composition") != registry.get("composition"): errors.append("catalog composition differs from registry")
     rules=subprocess.run(
       [sys.executable,"-B",str(ROOT/"scripts"/"route_task.py"),"--validate"],
-      text=True,capture_output=True,check=False)
+      encoding="utf-8",capture_output=True,check=False)
     if rules.returncode:
         errors.extend(line for line in rules.stdout.splitlines() if not line.endswith(("PASS","FAIL")))
     schema_check=subprocess.run(
       [sys.executable,"-B",str(ROOT/"scripts"/"validate_schemas.py")],
-      text=True,capture_output=True,check=False)
+      encoding="utf-8",capture_output=True,check=False)
     if schema_check.returncode:
         errors.extend(line for line in schema_check.stdout.splitlines() if not line.startswith("schemas:"))
     projection=subprocess.run(
       [sys.executable,str(ROOT/"scripts"/"sync_workflow_registry.py")],
-      text=True,capture_output=True,check=False)
+      encoding="utf-8",capture_output=True,check=False)
     if projection.returncode: errors.append("generated workflow projections are stale")
     if errors:
         print("prompt catalog: FAIL"); [print(f"- {e}") for e in errors]; return 1

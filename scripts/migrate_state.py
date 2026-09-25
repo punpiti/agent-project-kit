@@ -136,7 +136,7 @@ def main() -> int:
     separator = "" if existing.endswith("\n\n") else ("\n" if existing.endswith("\n") else "\n\n")
     state_md: Path = details["state_md"]
     temp = state_md.with_name(f".{state_md.name}.migrate.tmp")
-    temp.write_text(existing + separator + details["section"], encoding="utf-8", newline="\n")
+    temp.write_bytes((existing + separator + details["section"]).encode("utf-8"))
     temp.replace(state_md)
     details["legacy"].rename(details["backup"])
     print(f"state migration: appended legacy state to {state_md.relative_to(project)}; "

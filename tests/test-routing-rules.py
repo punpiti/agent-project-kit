@@ -57,7 +57,7 @@ def main() -> None:
 
         def route() -> dict:
             out = subprocess.check_output(
-                [sys.executable, "-B", str(kit / "scripts" / "route_task.py"), request], text=True)
+                [sys.executable, "-B", str(kit / "scripts" / "route_task.py"), request], encoding="utf-8")
             return json.loads(out)
 
         assert route()["domain"] == "general"

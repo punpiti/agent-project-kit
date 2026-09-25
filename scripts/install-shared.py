@@ -80,7 +80,7 @@ def configure_shell_rc(path: Path, package_root: Path, local_home: Path) -> None
         updated=original+separator+("\n" if original else "")+block+"\n"
     path.parent.mkdir(parents=True,exist_ok=True)
     temp=path.with_name(f".{path.name}.apk.tmp")
-    temp.write_text(updated,encoding="utf-8",newline="\n")
+    temp.write_bytes(updated.encode("utf-8"))
     if path.exists(): os.chmod(temp,path.stat().st_mode)
     temp.replace(path)
 

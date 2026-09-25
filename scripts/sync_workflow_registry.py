@@ -142,13 +142,13 @@ def main() -> int:
     startup = STARTUP_PATH.read_text(encoding="utf-8")
     expected_startup = with_startup_block(startup, startup_policy_block(registry))
     if args.write:
-        STARTUP_PATH.write_text(expected_startup, encoding="utf-8", newline="\n")
+        STARTUP_PATH.write_bytes(expected_startup.encode("utf-8"))
     elif startup != expected_startup:
         errors.append("stale generated file: STARTUP.md (always-on policy block)")
     for path, data in projections(registry).items():
         expected = dump(data)
         if args.write:
-            path.write_text(expected, encoding="utf-8", newline="\n")
+            path.write_bytes(expected.encode("utf-8"))
         elif not path.exists() or path.read_text(encoding="utf-8") != expected:
             errors.append(f"stale generated file: {path.relative_to(ROOT).as_posix()}")
     if errors:

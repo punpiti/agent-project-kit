@@ -4,6 +4,21 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+## 8.0.1-python-core-canary — 2026-09-26
+
+Fixes found by the first GitHub Actions run of 8.0.0:
+
+- Python 3.9: `migrate_state.py`, `install-shared.py`, and
+  `sync_workflow_registry.py` used `Path.write_text(newline=)`, which is
+  Python 3.10+. They now write bytes.
+- PowerShell on Linux/macOS (`pwsh`): when the Python finder found a single
+  command such as `/usr/bin/python3`, PowerShell unrolled the one-element array
+  and the wrappers tried to run `/`. The result is now always an array.
+- Windows: `context.py` wrote through text-mode stdout, which turned every
+  `\n` into `\r\n` and could exceed the byte budget it had just enforced. It
+  now writes the measured UTF-8 bytes. Tests and validators decode child
+  output as UTF-8 instead of the Windows code page.
+
 ## 8.0.0-python-core-canary — 2026-09-26
 
 Breaking: installing requires Python 3.9 or newer on every platform.

@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def route(request: str) -> dict:
     output = subprocess.check_output(
-        [sys.executable, str(ROOT / "scripts" / "route_task.py"), request], text=True
+        [sys.executable, str(ROOT / "scripts" / "route_task.py"), request], encoding="utf-8"
     )
     return json.loads(output)
 
@@ -30,7 +30,7 @@ def bundle(request: str) -> dict:
         )
         output = subprocess.run(
             [sys.executable, str(ROOT / "scripts" / "context.py"), request, "--project", str(project)],
-            text=True,
+            encoding="utf-8",
             capture_output=True,
             check=False,
         )

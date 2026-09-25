@@ -22,7 +22,7 @@ def run_checker(text: str, *args: str) -> subprocess.CompletedProcess[str]:
     try:
         return subprocess.run(
             [sys.executable, str(CHECKER), str(path), *args],
-            text=True,
+            encoding="utf-8",
             capture_output=True,
             check=False,
             timeout=5,

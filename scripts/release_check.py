@@ -54,7 +54,7 @@ def load_module(name: str, path: Path):
 
 
 def git(root: Path, *args: str) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(["git", *args], cwd=root, capture_output=True, text=True)
+    return subprocess.run(["git", *args], cwd=root, capture_output=True, encoding="utf-8")
 
 
 def version_errors(root: Path) -> list[str]:
@@ -108,17 +108,17 @@ def windows_test_command() -> tuple[str, ...] | None:
     if not powershell or not wslpath:
         return None
     probe = subprocess.run([powershell, "-NoProfile", "-Command", "py -3 --version"],
-                           capture_output=True, text=True)
+                           capture_output=True, encoding="utf-8")
     if probe.returncode != 0:
         return None
     script = subprocess.run([wslpath, "-w", str(ROOT / "tests" / "test-shared-runtime-v2-windows.ps1")],
-                            capture_output=True, text=True, check=True).stdout.strip()
+                            capture_output=True, encoding="utf-8", check=True).stdout.strip()
     return (powershell, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", script)
 
 
 def run_command(name: str, command: tuple[str, ...]) -> tuple[str, int, str, float]:
     started = time.monotonic()
-    result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True)
+    result = subprocess.run(command, cwd=ROOT, capture_output=True, encoding="utf-8")
     output = (result.stdout + result.stderr).strip()
     return name, result.returncode, output, time.monotonic() - started
 
