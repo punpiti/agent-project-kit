@@ -2,6 +2,8 @@
 set -euo pipefail
 
 SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+VERSION="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["version"])' "$SOURCE/manifest.json")"
+unset APK_HOME APK_SHARED_ROOT APK_MACHINE_HOME
 TEST_ROOT="$(mktemp -d)"
 trap 'chmod -R u+w "$TEST_ROOT" 2>/dev/null || true; rm -rf "$TEST_ROOT"' EXIT
 
@@ -37,7 +39,7 @@ python3 "$SOURCE/scripts/install-shared.py" \
 # Normal upgrades can omit the shared root; the installer reads machine config.
 env -u APK_SHARED_ROOT -u APK_HOME APK_MACHINE_HOME="$MACHINE_ONE" \
   python3 "$SOURCE/scripts/install-shared.py" --source "$SOURCE" >/dev/null
-test -d "$SHARED_ROOT/versions/7.5.0-book-writing-framework-canary"
+test -d "$SHARED_ROOT/versions/$VERSION"
 test "$(grep -c '^# BEGIN AGENT PROJECT KIT SHARED RUNTIME$' "$TEST_ROOT/bashrc")" -eq 1
 test "$(grep -c '^# END AGENT PROJECT KIT SHARED RUNTIME$' "$TEST_ROOT/bashrc")" -eq 1
 grep -q '^export KEEP_ME=yes$' "$TEST_ROOT/bashrc"
@@ -76,7 +78,7 @@ APK_MACHINE_HOME="$MACHINE_ONE" python3 "$SOURCE/scripts/apk.py" \
 sed -i 's/"schema_version": 1/"schema_version": 2/' "$PROJECT/.ai/apk.json"
 
 # Normal resolution is read-only against an immutable installed version.
-RUNTIME="$SHARED_ROOT/versions/7.5.0-book-writing-framework-canary"
+RUNTIME="$SHARED_ROOT/versions/$VERSION"
 chmod -R a-w "$RUNTIME"
 APK_MACHINE_HOME="$MACHINE_ONE" python3 "$SOURCE/scripts/apk.py" \
   --project "$PROJECT" resolve >/dev/null

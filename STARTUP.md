@@ -39,9 +39,14 @@ synthesis, analysis, or research output rather than an institutional decision.
 Quick answers need no route file. Web development is a subtype of Software
 Development & Automation and may load `14_WEB_DEVELOPMENT.md` secondarily.
 Project resume, onboarding, reviewer response, publication production,
-presentation production, external feedback, Markdown cleanup, package release, and Strategy & Advisory
-(`21_STRATEGY_ADVISORY.md`) are secondary workflows: load one only when that
-activity is explicitly needed inside a primary route.
+presentation production, external feedback, Markdown cleanup, package release, Strategy & Advisory
+(`21_STRATEGY_ADVISORY.md`) and Prose Style (`24_PROSE_STYLE.md`) are secondary
+workflows: load one only when that activity is explicitly needed inside a
+primary route.
+
+Use Prose Style (`prompts/24_PROSE_STYLE.md`) whenever reader-facing prose is
+drafted, revised, edited, or polished, in any route. It lists formulaic
+AI-style patterns to avoid and `scripts/check_prose_style.py` counts them.
 
 Use Publication Production (`prompts/10_DOCUMENT_PRODUCTION.md`) only when a
 written/reflowable artifact must be built, converted, exported, or final-QA'd.

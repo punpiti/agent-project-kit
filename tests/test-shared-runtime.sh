@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+VERSION="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["version"])' "$SOURCE/manifest.json")"
+unset APK_HOME APK_SHARED_ROOT APK_MACHINE_HOME
 ROOT="$(mktemp -d)";trap 'rm -rf "$ROOT"' EXIT
 HOME_DIR="$ROOT/shared";PROJECT="$ROOT/project";mkdir -p "$PROJECT/.ai"
 bash "$SOURCE/scripts/install-to-project.sh" "$PROJECT" "$SOURCE" >/dev/null
@@ -14,7 +16,7 @@ python3 - "$ROOT/context.json" <<'PY'
 import json,sys
 d=json.load(open(sys.argv[1]));assert d['routing']['domain']=='software';assert d['metrics']['secondary_modules']<=2
 PY
-RUNTIME="$HOME_DIR/versions/7.5.0-book-writing-framework-canary"
+RUNTIME="$HOME_DIR/versions/$VERSION"
 printf '\n# tampered\n' >> "$RUNTIME/scripts/context.py"
 if APK_HOME="$HOME_DIR" python3 "$SOURCE/scripts/apk.py" --project "$PROJECT" resolve >/dev/null 2>&1;then echo 'tampered runtime unexpectedly resolved' >&2;exit 1;fi
 python3 "$SOURCE/scripts/install-shared.py" --source "$SOURCE" --home "$HOME_DIR" --force --bind-project "$PROJECT" >/dev/null
@@ -25,7 +27,13 @@ import json,sys
 assert json.load(open(sys.argv[1]))['routing']['domain']=='software'
 PY
 python3 "$SOURCE/scripts/install-shared.py" --source "$SOURCE" --home "$HOME_DIR" --bind-project "$PROJECT" >/dev/null
-sed -i 's/7.5.0-book-writing-framework-canary/0.0-missing/' "$PROJECT/.ai/apk.json"
+python3 - "$PROJECT/.ai/apk.json" <<'PY'
+import json,sys
+path=sys.argv[1]
+data=json.load(open(path,encoding="utf-8"))
+data["version"]="0.0-missing"
+open(path,"w",encoding="utf-8").write(json.dumps(data,indent=2)+"\n")
+PY
 if APK_HOME="$HOME_DIR" python3 "$SOURCE/scripts/apk.py" --project "$PROJECT" resolve >/dev/null 2>&1;then echo 'missing version unexpectedly resolved' >&2;exit 1;fi
 test -d "$RUNTIME"
 echo 'shared runtime canary tests: PASS'

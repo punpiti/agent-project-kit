@@ -109,6 +109,11 @@ def classify(request: str) -> dict:
         workflows.append("publication-production")
     if deliverable == "presentation" and presentation_production:
         workflows.append("presentation-production")
+    prose_writing=contains_any(request,[
+      "write","draft","revise","rewrite","edit the prose","polish","proofread","wording",
+      "prose","writing style","เขียน","ร่าง","แก้ภาษา","เกลา","ร้อยแก้ว","ปรับภาษา","สำนวน"])
+    if deliverable in {"paper","book","document","course-material","policy"} and prose_writing:
+        workflows.append("prose-style")
     if "web-development" in methods: workflows.append("web")
     if "strategy-advisory" in methods: workflows.append("strategy")
     if lifecycle=="resume": workflows.append("resume")

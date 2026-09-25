@@ -9,6 +9,7 @@
     "presentation-production":{"prompt":"prompts/23_PRESENTATION_PRODUCTION.md","instruction":"Build, render, inspect, and behavior-test the real deck outputs against the project presentation contract.","cadence":"per deck build, render, export, or final QA"},
     "web":{"prompt":"prompts/14_WEB_DEVELOPMENT.md","instruction":"Check user-visible behavior, responsive states, accessibility, and relevant web tests.","cadence":"per web task"},
     "strategy":{"prompt":"prompts/21_STRATEGY_ADVISORY.md","instruction":"Compare status quo and credible options with explicit criteria and uncertainty.","cadence":"per decision task"},
+    "prose-style":{"prompt":"prompts/24_PROSE_STYLE.md","instruction":"Write direct, evidence-backed prose; avoid formulaic AI-style patterns and check with scripts/check_prose_style.py before calling prose final.","cadence":"per prose draft or revision"},
     "machine-discovery":{"prompt":"prompts/09_MACHINE_AWARE_CODEX.md","instruction":"Revalidate only missing, stale, changed, or task-required machine facts.","cadence":"once per machine or 30 days"}
   },
   "one_time": ["prompts/01_NEW_PROJECT_BOOTSTRAP.md","prompts/02_EXISTING_PROJECT_ONBOARDING.md","prompts/09_MACHINE_AWARE_CODEX.md","prompts/11_DOCUMENT_STYLE_BOOTSTRAP.md"]

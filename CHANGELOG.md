@@ -2,6 +2,18 @@
 
 All notable changes to Agent Project Kit are summarized here.
 
+## 7.6.0-prose-style-canary — 2026-09-25
+
+- Added the Prose Style secondary workflow (`prompts/24_PROSE_STYLE.md`): write
+  direct, evidence-backed prose and avoid formulaic AI-style patterns such as
+  "not X, but Y", question-and-answer framing, slogan endings, signposting
+  topic sentences, rhetorical bold, and dense semicolons, colons and dashes.
+- Added `scripts/check_prose_style.py`, which counts those patterns in LaTeX,
+  Markdown or text files, lists zero-tolerance hits by line, and flags rates
+  above review thresholds.
+- The router adds `prose-style` when a paper, book, document, course-material
+  or policy request asks for writing, drafting, revising or polishing prose.
+
 ## 7.5.1-project-radar-canary — 2026-08-16
 
 - Added an optional minimal Project Radar for cross-project status: one short

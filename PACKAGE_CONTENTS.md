@@ -66,6 +66,7 @@
 - `prompts/21_STRATEGY_ADVISORY.md`
 - `prompts/22_BOOK_WRITING.md`
 - `prompts/23_PRESENTATION_PRODUCTION.md`
+- `prompts/24_PROSE_STYLE.md`
 - `prompts/catalog.json`
 - `scripts/bootstrap_ai_project.py`
 - `scripts/apk_doctor.py`
@@ -76,6 +77,7 @@
 - `scripts/install-thai-fonts.py`
 - `scripts/check-update-notice.py`
 - `scripts/check_book_writing_split.py`
+- `scripts/check_prose_style.py`
 - shared installs generate `PACKAGE_CHECKSUMS.json`; project bindings pin its
   aggregate SHA-256 outside the shared runtime
 - `scripts/install-from-git.sh`

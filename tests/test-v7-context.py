@@ -46,7 +46,9 @@ for request,domain,deliverable,methods in cases:
 production_cases=[
  ("สร้างสไลด์สำหรับสอน machine learning","presentation-production"),
  ("create slides for the council briefing","presentation-production"),
- ("export the book manuscript to EPUB","publication-production")]
+ ("export the book manuscript to EPUB","publication-production"),
+ ("เกลาภาษาบทความวิจัยให้กระชับ","prose-style"),
+ ("revise the manuscript prose before submission","prose-style")]
 for request,workflow in production_cases:
     out=subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],text=True)
     data=json.loads(out); assert workflow in data["secondary_workflows"],(request,data)

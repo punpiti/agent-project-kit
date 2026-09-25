@@ -30,6 +30,7 @@
     {"path":"18_EDUCATIONAL_POLICY_DEVELOPMENT.md","type":"primary","route":"educational-policy-development","cadence":"per-task","trigger":"education policy, governance, standard, regulation, or institutional proposal"},
     {"path":"19_SOFTWARE_DEVELOPMENT_AUTOMATION.md","type":"primary","route":"software-development-automation","cadence":"per-task","trigger":"web, API, CLI, desktop, automation, integration, vision, or pipeline software"},
     {"path":"20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md","type":"primary","route":"administrative-professional-operations","cadence":"per-task","trigger":"deadline, compliance, correspondence, dossier, submission, or follow-up"},
-    {"path":"21_STRATEGY_ADVISORY.md","type":"secondary","cadence":"per-decision-task","trigger":"option comparison, direction choice, advising, or implementation strategy"}
+    {"path":"21_STRATEGY_ADVISORY.md","type":"secondary","cadence":"per-decision-task","trigger":"option comparison, direction choice, advising, or implementation strategy"},
+    {"path":"24_PROSE_STYLE.md","type":"secondary","cadence":"per-prose-draft-or-revision","trigger":"draft, revise, edit, or polish reader-facing prose such as a paper, report, book chapter, proposal, letter, or reviewer response"}
   ]
 }
