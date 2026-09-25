@@ -133,6 +133,9 @@ def main() -> int:
                         help="skip the acceptance suite (result is never release-ready)")
     parser.add_argument("--skip-history", action="store_true",
                         help="skip the Git-history secret scan (result is never release-ready)")
+    parser.add_argument("--allow-unreleased", action="store_true",
+                        help="for CI on development commits: a non-empty Unreleased changelog is reported, "
+                             "not failed (result is never release-ready)")
     parser.add_argument("--skip-windows", action="store_true",
                         help="skip the native-Windows test (result is never release-ready)")
     parser.add_argument("--jobs", type=int, default=6, help="parallel test workers (default 6)")
@@ -153,7 +156,11 @@ def main() -> int:
     head = git(ROOT, "rev-parse", "--short", "HEAD").stdout.strip()
     print(f"Agent Project Kit release check — {version} at {head}")
 
-    report("version consistency", version_errors(ROOT))
+    consistency = version_errors(ROOT)
+    if args.allow_unreleased and any("Unreleased section is not empty" in e for e in consistency):
+        consistency = [e for e in consistency if "Unreleased section is not empty" not in e]
+        skipped.append("empty-Unreleased changelog requirement (--allow-unreleased)")
+    report("version consistency", consistency)
     if args.tagged:
         report("release tag", tag_errors(ROOT, version))
     else:

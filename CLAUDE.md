@@ -73,7 +73,7 @@ pipeline template (`templates/pandoc-thai-a4/`).
 
 Two install paths exist, both driven by `scripts/install-to-project.sh` /
 `.ps1`. Both are thin wrappers around the single Python installer core
-`scripts/apk_install.py` (Python 3.8+ is required on every platform, owner
+`scripts/apk_install.py` (Python 3.9+ is required on every platform, owner
 decision 2026-09-26); change install behavior only there. Its staging, SHA-256
 verification, snapshot swap, rollback, and cp-compatible file modes are covered
 by `tests/test-installer-core.py`, `test-fast-start.sh`,

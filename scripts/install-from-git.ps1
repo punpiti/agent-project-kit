@@ -1,5 +1,5 @@
 # Install Agent Project Kit into a project from a Git ref.
-# Thin wrapper: the core is scripts/apk_update.py (Python 3.8+).
+# Thin wrapper: the core is scripts/apk_update.py (Python 3.9+).
 param(
     [switch]$DryRun,
     [Parameter(Position = 0)]

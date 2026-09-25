@@ -4,6 +4,16 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Added GitHub Actions CI (`.github/workflows/ci.yml`). Linux runs the full
+  release gate on Python 3.9 and 3.13. Windows runs the platform-neutral
+  suites plus the native Windows PowerShell 5.1 install, shared-runtime, and
+  rollback test. CI never tags, releases, or deploys. `release_check.py
+  --allow-unreleased` lets development commits pass without an empty
+  Unreleased section; that result is never release-ready.
+- `test-shared-runtime-v2.sh` uses `grep` instead of ripgrep, so a stock
+  runner can run it.
+- The wrappers report the version they found when Python is too old.
+
 - One updater core: `scripts/apk_update.py` (`from-git`, `from-pages`).
   `install-from-git` and `update-from-pages` in Bash and PowerShell are now thin
   wrappers, sharing `scripts/apk-python.{sh,ps1}` to find Python. A parity
@@ -24,7 +34,7 @@ All notable changes to Agent Project Kit are summarized here.
   only differences were test-folder paths in the error messages. Windows now
   gets the Bash behavior; the old PowerShell installer had drifted in five
   places.
-- Python 3.8+ is now required to install on Windows (owner decision). The
+- Python 3.9+ is now required to install on every platform, Windows included (owner decision; 3.8 is end-of-life and the scripts already used 3.9 APIs). The
   wrapper uses `py -3`, then `python3`, then `python`, and skips the Microsoft
   Store stub.
 - Found on native Windows and fixed: renaming a just-renamed snapshot folder

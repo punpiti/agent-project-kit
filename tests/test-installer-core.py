@@ -71,13 +71,14 @@ def main() -> None:
             raise PermissionError(32, "in use")
     core.os.replace = flaky
     real_name, real_sleep = core.os.name, core.time.sleep
+    src, dst = Path("a"), Path("b")  # create before faking os.name (Python < 3.12 checks it)
     try:
         core.os.name = "nt"; core.time.sleep = lambda _s: None
-        core.replace(Path("a"), Path("b"))
+        core.replace(src, dst)
         assert len(calls) == 3
         calls.clear(); core.os.name = "posix"
         try:
-            core.replace(Path("a"), Path("b"))
+            core.replace(src, dst)
         except PermissionError:
             assert len(calls) == 1
         else:

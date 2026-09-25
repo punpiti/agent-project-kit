@@ -53,7 +53,7 @@ assert data["runtime_mode"] == "shared-with-snapshot-fallback"
 assert "shared_root" not in data
 PY
 
-if rg -l 'APK_PROJECT_SECRET_6f62d5|APK_PROJECT_PROMPT_90c2af|self host project' "$SHARED_ROOT" >/dev/null; then
+if grep -rlE 'APK_PROJECT_SECRET_6f62d5|APK_PROJECT_PROMPT_90c2af|self host project' "$SHARED_ROOT" >/dev/null; then
   echo 'project content leaked into shared runtime' >&2
   exit 1
 fi

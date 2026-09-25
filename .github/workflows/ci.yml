@@ -1,0 +1,55 @@
+# Continuous checks for Agent Project Kit. Publishing stays manual: this
+# workflow never tags, releases, or deploys.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    name: Linux (Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: "3.9"
+          - os: ubuntu-latest
+            python: "3.13"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install --quiet lxml jsonschema
+      - name: Release gate (all suites; history scan and native Windows run elsewhere)
+        run: python scripts/release_check.py --allow-unreleased --skip-history --skip-windows
+
+  windows:
+    name: Windows (native)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install --quiet jsonschema
+      - name: Platform-neutral Python suites
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          foreach ($test in @("tests/test-v7-context.py", "tests/test-routing-rules.py", "tests/test-schemas.py",
+                              "tests/test-policy-registry.py", "tests/test-installer-core.py",
+                              "scripts/validate_prompt_catalog.py")) {
+            python $test
+            if ($LASTEXITCODE -ne 0) { throw "$test failed" }
+          }
+      - name: Native install, shared runtime, rollback (Windows PowerShell 5.1)
+        shell: powershell
+        run: .\tests\test-shared-runtime-v2-windows.ps1

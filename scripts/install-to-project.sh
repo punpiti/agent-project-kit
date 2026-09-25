@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Install or update Agent Project Kit in a project.
-# Thin wrapper: the installer core is scripts/apk_install.py (Python 3.8+).
+# Thin wrapper: the installer core is scripts/apk_install.py (Python 3.9+).
 #   bash install-to-project.sh /path/to/project /path/to/agent-project-kit
 set -euo pipefail
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
