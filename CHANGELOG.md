@@ -4,6 +4,16 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Added JSON Schemas (draft 2020-12) in `config/schemas/` for the workflow
+  registry, routing rules, the `.ai/apk.json` binding, and `.ai/project.json`.
+  Kit-owned files reject unknown keys; `project.json` allows project keys.
+  `scripts/validate_schemas.py` validates with the stdlib only, so native
+  Windows needs no extra package, and it fails closed on unsupported keywords.
+  It runs from `validate_prompt_catalog.py`. `apk_doctor.py` now reports schema
+  errors in a project's binding and metadata. `tests/test-schemas.py` checks
+  that 1,098 random mutations get the same verdict as the `jsonschema` library
+  when it is installed.
+
 - `route_task.py` and `context.py` write stdout as UTF-8. On native Windows,
   piping Thai routing output failed with a cp1252 `UnicodeEncodeError`. The
   Windows shared-runtime test now checks a Thai route through a pipe.

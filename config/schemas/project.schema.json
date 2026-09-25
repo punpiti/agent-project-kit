@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://punpiti.github.io/agent-project-kit/schemas/project.schema.json",
+  "title": "Agent Project Kit project metadata",
+  "description": "Structure of a project's .ai/project.json (identity and configuration). Markdown PROJECT_STATE.md remains the authoritative current narrative. Projects may add their own keys.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string"
+    },
+    "domain": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "owner": {
+      "type": "string"
+    },
+    "objective": {
+      "type": "string"
+    },
+    "project_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parent": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "status"
+  ],
+  "additionalProperties": true
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://punpiti.github.io/agent-project-kit/schemas/apk-binding.schema.json",
+  "title": "Agent Project Kit shared-runtime binding",
+  "description": "Structure of a project's .ai/apk.json. An empty content_sha256 is allowed only in the unbound template; scripts/apk.py refuses to resolve it.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        1,
+        2
+      ]
+    },
+    "package": {
+      "const": "agent-project-kit"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "version_policy": {
+      "enum": [
+        "exact"
+      ]
+    },
+    "content_sha256": {
+      "type": "string",
+      "pattern": "^([0-9a-f]{64})?$"
+    },
+    "profile": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "local_prompt_dirs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "runtime_mode": {
+      "enum": [
+        "shared-with-snapshot-fallback"
+      ]
+    }
+  },
+  "required": [
+    "package",
+    "version"
+  ],
+  "additionalProperties": false
+}

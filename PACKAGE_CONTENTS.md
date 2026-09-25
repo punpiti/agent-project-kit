@@ -9,6 +9,10 @@
 - `config/policies.json`
 - `config/workflow-registry.json`
 - `config/routing-rules.json`
+- `config/schemas/workflow-registry.schema.json`
+- `config/schemas/routing-rules.schema.json`
+- `config/schemas/apk-binding.schema.json`
+- `config/schemas/project.schema.json`
 - `config/WORKFLOW_ARCHITECTURE.md`
 - `config/SECURITY_BOUNDARY.md`
 - `config/release-boundary.json`
@@ -97,6 +101,7 @@
 - `scripts/route_task.py`
 - `scripts/run-once.py`
 - `scripts/validate_prompt_catalog.py`
+- `scripts/validate_schemas.py`
 - `scripts/scan_machine_resources.sh`
 - `scripts/update-from-pages.ps1`
 - `scripts/update-from-pages.sh`

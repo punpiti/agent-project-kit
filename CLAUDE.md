@@ -50,6 +50,11 @@ The kit has three cooperating layers:
      composition registry. `routes.json`, `workflows.json`, `policies.json`, and
      `prompts/catalog.json` are generated compatibility views; they do not own the
      classifier vocabulary, which is `config/routing-rules.json`.
+   - `config/schemas/*.schema.json` are standard JSON Schema (draft 2020-12)
+     for the registry, routing rules, `.ai/apk.json`, and `.ai/project.json`.
+     `scripts/validate_schemas.py` checks them with the stdlib only and fails
+     closed on unsupported keywords. `validate_prompt_catalog.py` runs it, and
+     `apk_doctor.py` reports schema errors in a project's binding/metadata.
 
 `templates/` holds the files an install stamps into a downstream project's
 `.ai/` (e.g. `PROJECT_STATE.md`, `MACHINE_PROFILE.md`, `RUNBOOK.md`,
@@ -115,7 +120,8 @@ python3 scripts/release_check.py --tagged      # after tagging, before push/publ
 
 During development, run the specific test file relevant to what changed (e.g.
 touching `config/routing-rules.json` → `test-routing-rules.py` and
-`test-v7-context.py`; touching `config/workflow-registry.json` or
+`test-v7-context.py`; touching `config/schemas/` or `validate_schemas.py` →
+`test-schemas.py`; touching `config/workflow-registry.json` or
 `scripts/route_task.py`/`scripts/context.py` → `test-v7-context.py`; touching
 `scripts/install-to-project.sh` or `prompts/` → `test-fast-start.sh`; touching
 `scripts/install-shared.py`/`scripts/apk.py` → the `test-shared-runtime*.sh`

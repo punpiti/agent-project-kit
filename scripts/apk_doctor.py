@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Read-only consistency checks for an Agent Project Kit installation."""
 from __future__ import annotations
-import argparse, json, platform, re
+import argparse, importlib.util, json, platform, re, sys
 from pathlib import Path
 import datetime as dt
 
@@ -16,6 +16,21 @@ def select_kit_root(root: Path) -> tuple[Path | None, bool]:
     if (snapshot/"manifest.json").is_file():
         return snapshot, False
     return None, False
+
+def schema_issues(kit: Path, root: Path) -> list[str]:
+    """Check project binding/metadata with the kit's own schemas (newer kits only)."""
+    script = kit/"scripts"/"validate_schemas.py"
+    if not script.is_file(): return []
+    sys.dont_write_bytecode = True  # never add caches to a verified runtime
+    spec = importlib.util.spec_from_file_location("apk_validate_schemas", script)
+    if not spec or not spec.loader: return []
+    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    issues = []
+    for name, schema in module.PROJECT_FILES:
+        path = root/name
+        if path.is_file():
+            issues.extend(f"{name} schema: {error}" for error in module.validate_file(path, schema)[:5])
+    return issues
 
 def main() -> int:
     p=argparse.ArgumentParser(description=__doc__); p.add_argument("project",nargs="?",default="."); p.add_argument("--quick",action="store_true"); a=p.parse_args()
@@ -49,6 +64,7 @@ def main() -> int:
     else:
         try: manifest=json.loads((kit/"manifest.json").read_text(encoding="utf-8"))
         except (OSError,json.JSONDecodeError) as exc: issues.append(f"invalid manifest: {exc}"); manifest={}
+        issues.extend(schema_issues(kit, root))
         vf=root/".ai"/"COMPUTING_ENVIRONMENT_VERSION.md"
         if canonical:
             pass  # Source checkout is authoritative; installed-version metadata is downstream-only.

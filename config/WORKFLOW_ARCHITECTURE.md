@@ -20,6 +20,9 @@ rules file does not try to be a complete rule engine.
 `python3 scripts/route_task.py --validate` rejects malformed lists, duplicate
 phrases, a phrase owned by two keys of one axis, ids missing from the axes or
 registry, methods without a module, and phrase lists the router does not use.
+Both files also have JSON Schemas in `config/schemas/`, checked by
+`python3 scripts/validate_schemas.py`. The schemas cover structure;
+cross-references stay with the validators named above.
 `config/routes.json`, `config/workflows.json`, `config/policies.json`, and
 `prompts/catalog.json` are generated compatibility projections. Update them with:
 

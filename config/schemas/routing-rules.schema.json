@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://punpiti.github.io/agent-project-kit/schemas/routing-rules.schema.json",
+  "title": "Agent Project Kit routing vocabulary",
+  "description": "Structure of config/routing-rules.json. Collisions and registry references are checked by scripts/route_task.py --validate.",
+  "$defs": {
+    "phrases": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^\\S(.*\\S)?$"
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "defaults": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+        },
+        "deliverable": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+        },
+        "lifecycle": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+        }
+      },
+      "required": [
+        "domain",
+        "deliverable",
+        "lifecycle"
+      ],
+      "additionalProperties": false
+    },
+    "axes": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/$defs/phrases"
+          }
+        },
+        "deliverable": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/$defs/phrases"
+          }
+        },
+        "method": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/$defs/phrases"
+          }
+        },
+        "lifecycle": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/$defs/phrases"
+          }
+        }
+      },
+      "required": [
+        "domain",
+        "deliverable",
+        "method",
+        "lifecycle"
+      ],
+      "additionalProperties": false
+    },
+    "strong_domains": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "phrases": {
+            "$ref": "#/$defs/phrases"
+          }
+        },
+        "required": [
+          "id",
+          "phrases"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "strong_outputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "phrases": {
+            "$ref": "#/$defs/phrases"
+          }
+        },
+        "required": [
+          "id",
+          "phrases"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "preferred_deliverable": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "method_modules": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "source_file_pattern": {
+      "type": "string",
+      "minLength": 1
+    },
+    "phrases": {
+      "type": "object",
+      "properties": {
+        "package_release": {
+          "$ref": "#/$defs/phrases"
+        },
+        "data_analytics_confirm": {
+          "$ref": "#/$defs/phrases"
+        },
+        "data_analytics_bare_terms": {
+          "$ref": "#/$defs/phrases"
+        },
+        "reviewer_response": {
+          "$ref": "#/$defs/phrases"
+        },
+        "publication_production": {
+          "$ref": "#/$defs/phrases"
+        },
+        "publication_verbs": {
+          "$ref": "#/$defs/phrases"
+        },
+        "publication_formats": {
+          "$ref": "#/$defs/phrases"
+        },
+        "presentation_production": {
+          "$ref": "#/$defs/phrases"
+        },
+        "external_feedback": {
+          "$ref": "#/$defs/phrases"
+        },
+        "markdown_cleanup": {
+          "$ref": "#/$defs/phrases"
+        },
+        "markdown_topic": {
+          "$ref": "#/$defs/phrases"
+        },
+        "markdown_verbs": {
+          "$ref": "#/$defs/phrases"
+        },
+        "prose_writing": {
+          "$ref": "#/$defs/phrases"
+        },
+        "secret_check": {
+          "$ref": "#/$defs/phrases"
+        },
+        "machine_needed": {
+          "$ref": "#/$defs/phrases"
+        },
+        "alternative_markers": {
+          "$ref": "#/$defs/phrases"
+        }
+      },
+      "required": [
+        "package_release",
+        "data_analytics_confirm",
+        "data_analytics_bare_terms",
+        "reviewer_response",
+        "publication_production",
+        "publication_verbs",
+        "publication_formats",
+        "presentation_production",
+        "external_feedback",
+        "markdown_cleanup",
+        "markdown_topic",
+        "markdown_verbs",
+        "prose_writing",
+        "secret_check",
+        "machine_needed",
+        "alternative_markers"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "description",
+    "defaults",
+    "axes",
+    "strong_domains",
+    "strong_outputs",
+    "preferred_deliverable",
+    "method_modules",
+    "source_file_pattern",
+    "phrases"
+  ],
+  "additionalProperties": false
+}

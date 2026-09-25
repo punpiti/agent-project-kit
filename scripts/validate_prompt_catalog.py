@@ -38,6 +38,11 @@ def main() -> int:
       text=True,capture_output=True,check=False)
     if rules.returncode:
         errors.extend(line for line in rules.stdout.splitlines() if not line.endswith(("PASS","FAIL")))
+    schema_check=subprocess.run(
+      [sys.executable,"-B",str(ROOT/"scripts"/"validate_schemas.py")],
+      text=True,capture_output=True,check=False)
+    if schema_check.returncode:
+        errors.extend(line for line in schema_check.stdout.splitlines() if not line.startswith("schemas:"))
     projection=subprocess.run(
       [sys.executable,str(ROOT/"scripts"/"sync_workflow_registry.py")],
       text=True,capture_output=True,check=False)

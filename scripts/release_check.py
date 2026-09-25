@@ -33,6 +33,7 @@ TEST_COMMANDS = (
     ("thai-docx-repair", ("python3", "tests/test-thai-docx-repair.py")),
     ("release-check", ("python3", "tests/test-release-check.py")),
     ("routing-rules", ("python3", "tests/test-routing-rules.py")),
+    ("schemas", ("python3", "tests/test-schemas.py")),
     ("fast-start", ("bash", "tests/test-fast-start.sh")),
     ("transactional-update", ("bash", "tests/test-transactional-update.sh")),
     ("shared-runtime", ("bash", "tests/test-shared-runtime.sh")),
