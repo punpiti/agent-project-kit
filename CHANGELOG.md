@@ -18,6 +18,8 @@ Fixes found by the first GitHub Actions run of 8.0.0:
   `\n` into `\r\n` and could exceed the byte budget it had just enforced. It
   now writes the measured UTF-8 bytes. Tests and validators decode child
   output as UTF-8 instead of the Windows code page.
+- The context test resolves its temporary project path, so Windows 8.3 short
+  names (as on GitHub's runners) do not break the source-path comparison.
 
 ## 8.0.0-python-core-canary — 2026-09-26
 

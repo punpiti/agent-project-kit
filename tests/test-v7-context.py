@@ -95,7 +95,7 @@ assert data["primary_pipeline"]=="educational-policy-development" and "data-anal
 
 # Onboarding follows the authoritative Markdown state, not a placeholder project.json.
 with tempfile.TemporaryDirectory() as tmp:
-    project=Path(tmp); (project/".ai").mkdir(); (project/"notes.md").write_text("x",encoding="utf-8")
+    project=Path(tmp).resolve(); (project/".ai").mkdir(); (project/"notes.md").write_text("x",encoding="utf-8")
     (project/".ai/project.json").write_text(json.dumps({"schema_version":1,"status":"placeholder"}),encoding="utf-8")
     template=(ROOT/"templates/PROJECT_STATE.md").read_text(encoding="utf-8")
     route=lambda: json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"--project",str(project),"fix the bug"],encoding="utf-8"))
@@ -108,7 +108,7 @@ data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_
 assert data["needs_clarification"],data
 
 with tempfile.TemporaryDirectory() as tmp:
-    project=Path(tmp); (project/".ai").mkdir();
+    project=Path(tmp).resolve(); (project/".ai").mkdir();
     (project/".ai/project.json").write_text(json.dumps({"schema_version":1,"status":"configured","name":"Fixture","objective":"Test compact context"}),encoding="utf-8")
     (project/".ai/state.json").write_text(json.dumps({"schema_version":1,"status":"configured","active_task":"route test","next_actions":[]}),encoding="utf-8")
     out=subprocess.check_output([sys.executable,str(ROOT/"scripts/context.py"),"fix the website login bug","--project",str(project)],encoding="utf-8")
@@ -123,7 +123,7 @@ with tempfile.TemporaryDirectory() as tmp:
     bundle=json.loads(out); assert bundle["primary"]["id"]=="content-analysis",bundle
 
 with tempfile.TemporaryDirectory() as tmp:
-    project=Path(tmp); (project/".ai").mkdir()
+    project=Path(tmp).resolve(); (project/".ai").mkdir()
     (project/".ai/project.json").write_text(json.dumps({"schema_version":1,"status":"configured","objective":"OLD objective"}),encoding="utf-8")
     (project/".ai/state.json").write_text(json.dumps({"schema_version":1,"status":"configured","active_task":"OLD task"}),encoding="utf-8")
     (project/".ai/PROJECT_STATE.md").write_text("# State\n\nNEW authoritative objective\n"+("ภาษาไทย"*3000),encoding="utf-8")
@@ -137,7 +137,7 @@ with tempfile.TemporaryDirectory() as tmp:
     assert str(project/".ai/PROJECT_STATE.md") in bundle["sources"]
 
 with tempfile.TemporaryDirectory() as tmp:
-    project=Path(tmp); (project/"existing.txt").write_text("existing\n",encoding="utf-8")
+    project=Path(tmp).resolve(); (project/"existing.txt").write_text("existing\n",encoding="utf-8")
     data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"install a missing document library","--project",str(project)],encoding="utf-8"))
     assert "existing-project-onboarding" in data["workflow"]["state_actions"],data
     assert "machine-discovery" in data["workflow"]["state_actions"],data
