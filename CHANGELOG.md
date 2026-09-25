@@ -4,6 +4,10 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+## 8.0.0-python-core-canary — 2026-09-26
+
+Breaking: installing requires Python 3.9 or newer on every platform.
+
 - Added GitHub Actions CI (`.github/workflows/ci.yml`). Linux runs the full
   release gate on Python 3.9 and 3.13. Windows runs the platform-neutral
   suites plus the native Windows PowerShell 5.1 install, shared-runtime, and

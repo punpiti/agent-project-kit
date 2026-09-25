@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "package": "agent-project-kit",
-  "version": "7.9.0-state-migration-canary",
+  "version": "8.0.0-python-core-canary",
   "version_policy": "exact",
   "content_sha256": "",
   "profile": "standard",
