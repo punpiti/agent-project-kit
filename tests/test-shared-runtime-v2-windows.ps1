@@ -53,6 +53,21 @@ try {
         throw "Running the shared runtime wrote bytecode into it"
     }
 
+    # Thai output through a pipe must not fail on the Windows console codepage.
+    # Build the request from code points: this file has no BOM, so Windows
+    # PowerShell 5.1 would misread a literal Thai string.
+    $thaiRequest = -join ([char[]]@(0x0E40,0x0E02,0x0E35,0x0E22,0x0E19,0x0E2B,0x0E19,0x0E31,0x0E07,0x0E2A,0x0E37,0x0E2D,0x0E23,0x0E32,0x0E0A,0x0E01,0x0E32,0x0E23,0x0E16,0x0E36,0x0E07,0x0E04,0x0E13,0x0E30))
+    $savedEncoding = [Console]::OutputEncoding
+    try {
+        [Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
+        $thaiRoute = (Invoke-Python -B (Join-Path $runtime "scripts\route_task.py") $thaiRequest) -join "`n"
+    } finally {
+        [Console]::OutputEncoding = $savedEncoding
+    }
+    if (($thaiRoute | ConvertFrom-Json).primary_pipeline -ne "administrative-professional-operations") {
+        throw "Unexpected Thai route on Windows"
+    }
+
     Invoke-Python $launcher --project $project rollback
     $disabled = Join-Path $project ".ai\apk.json.disabled"
     if ((Test-Path $bindingPath) -or -not (Test-Path $disabled)) {

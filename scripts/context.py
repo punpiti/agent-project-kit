@@ -116,6 +116,8 @@ def main() -> int:
     except ValueError as error: p.error(str(error))
     text=json.dumps(bundle,ensure_ascii=False,indent=2)+"\n"
     if a.output: Path(a.output).write_text(text,encoding="utf-8")
-    else: print(text,end="")
+    else:
+        # Thai output must survive a redirected stdout on Windows (cp1252 default).
+        sys.stdout.reconfigure(encoding="utf-8"); print(text,end="")
     return 2 if bundle["routing"]["needs_clarification"] else 0
 if __name__=="__main__": raise SystemExit(main())

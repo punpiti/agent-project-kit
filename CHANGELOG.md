@@ -4,6 +4,17 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- `route_task.py` and `context.py` write stdout as UTF-8. On native Windows,
+  piping Thai routing output failed with a cp1252 `UnicodeEncodeError`. The
+  Windows shared-runtime test now checks a Thai route through a pipe.
+
+- Moved the router's bilingual vocabulary out of `scripts/route_task.py` into
+  `config/routing-rules.json`. Priority, word boundaries, and combination logic
+  stay in Python. Routing is unchanged: 4,998 requests in 3 project contexts
+  gave output identical to before. `route_task.py --validate` (also run by
+  `validate_prompt_catalog.py`) rejects malformed, duplicate, colliding,
+  unregistered, or unused vocabulary. New `tests/test-routing-rules.py`.
+
 - Installing the kit into its own source tree no longer appends the managed
   block to the canonical `AGENTS.md` or touches `CLAUDE.md`/`ANTIGRAVITY.md`.
   The check compares physical paths, so a symlinked path is also recognized.

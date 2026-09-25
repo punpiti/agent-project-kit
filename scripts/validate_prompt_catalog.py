@@ -33,6 +33,11 @@ def main() -> int:
     catalog_paths={f"prompts/{path}" for path in catalog}
     for path in sorted(registered-catalog_paths): errors.append(f"registered prompt absent from catalog: {path}")
     if data.get("composition") != registry.get("composition"): errors.append("catalog composition differs from registry")
+    rules=subprocess.run(
+      [sys.executable,"-B",str(ROOT/"scripts"/"route_task.py"),"--validate"],
+      text=True,capture_output=True,check=False)
+    if rules.returncode:
+        errors.extend(line for line in rules.stdout.splitlines() if not line.endswith(("PASS","FAIL")))
     projection=subprocess.run(
       [sys.executable,str(ROOT/"scripts"/"sync_workflow_registry.py")],
       text=True,capture_output=True,check=False)

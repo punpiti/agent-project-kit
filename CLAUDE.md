@@ -35,8 +35,11 @@ The kit has three cooperating layers:
 3. **`config/` + `scripts/`** — a v7 structured routing/context layer that is
    the machine-readable counterpart to the Markdown routing table:
    - `scripts/route_task.py` classifies a free-text request with deterministic
-     bilingual heuristics implemented in that script, then resolves module metadata
-     and composition limits from `config/workflow-registry.json`.
+     bilingual heuristics. The phrases live in `config/routing-rules.json`;
+     priority, word boundaries, and combination logic stay in the script, which
+     then resolves module metadata and composition limits from
+     `config/workflow-registry.json`. `route_task.py --validate` checks the
+     vocabulary (also run by `validate_prompt_catalog.py`).
    - `scripts/context.py` calls `route_task.classify()` and compiles a compact
      JSON context bundle (routed prompt + project state, capped in size —
      `secondary_modules <= 2`, `bytes <= 12000` in tests) for a target project.
@@ -46,7 +49,7 @@ The kit has three cooperating layers:
    - `config/workflow-registry.json` is the canonical module, prompt, policy, and
      composition registry. `routes.json`, `workflows.json`, `policies.json`, and
      `prompts/catalog.json` are generated compatibility views; they do not own the
-     classifier vocabulary.
+     classifier vocabulary, which is `config/routing-rules.json`.
 
 `templates/` holds the files an install stamps into a downstream project's
 `.ai/` (e.g. `PROJECT_STATE.md`, `MACHINE_PROFILE.md`, `RUNBOOK.md`,
@@ -110,7 +113,9 @@ python3 scripts/release_check.py --allow-dirty # while developing; never release
 python3 scripts/release_check.py --tagged      # after tagging, before push/publish
 ```
 
-During development, run the specific test file relevant to what changed (e.g. touching `config/workflow-registry.json` or
+During development, run the specific test file relevant to what changed (e.g.
+touching `config/routing-rules.json` → `test-routing-rules.py` and
+`test-v7-context.py`; touching `config/workflow-registry.json` or
 `scripts/route_task.py`/`scripts/context.py` → `test-v7-context.py`; touching
 `scripts/install-to-project.sh` or `prompts/` → `test-fast-start.sh`; touching
 `scripts/install-shared.py`/`scripts/apk.py` → the `test-shared-runtime*.sh`

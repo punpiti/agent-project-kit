@@ -8,6 +8,7 @@
 - `config/workflows.json`
 - `config/policies.json`
 - `config/workflow-registry.json`
+- `config/routing-rules.json`
 - `config/WORKFLOW_ARCHITECTURE.md`
 - `config/SECURITY_BOUNDARY.md`
 - `config/release-boundary.json`

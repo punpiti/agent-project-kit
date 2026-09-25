@@ -12,10 +12,14 @@ Adding a prompt does not automatically create another peer workflow.
 5. **State actions** run only when project or machine state requires them.
 
 `config/workflow-registry.json` is the canonical module, prompt, policy, and
-composition registry. The deterministic bilingual classifier vocabulary remains
-in `scripts/route_task.py`; keeping that executable logic in Python makes word
-boundaries, priority, and ambiguity handling testable instead of pretending the
-compatibility views are a complete rule engine.
+composition registry. The deterministic bilingual classifier vocabulary lives
+in `config/routing-rules.json`, so adding or moving a phrase needs no code edit.
+Priority order, word boundaries, and combination and ambiguity logic stay in
+`scripts/route_task.py`. Keeping that logic in Python keeps it testable, so the
+rules file does not try to be a complete rule engine.
+`python3 scripts/route_task.py --validate` rejects malformed lists, duplicate
+phrases, a phrase owned by two keys of one axis, ids missing from the axes or
+registry, methods without a module, and phrase lists the router does not use.
 `config/routes.json`, `config/workflows.json`, `config/policies.json`, and
 `prompts/catalog.json` are generated compatibility projections. Update them with:
 
