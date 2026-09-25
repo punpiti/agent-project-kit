@@ -83,6 +83,9 @@
 - `scripts/apk_doctor.py`
 - `scripts/apk.py`
 - `scripts/apk_install.py`
+- `scripts/apk_update.py`
+- `scripts/apk-python.sh`
+- `scripts/apk-python.ps1`
 - `scripts/context.py`
 - `scripts/install-from-git.ps1`
 - `scripts/install-shared.py`

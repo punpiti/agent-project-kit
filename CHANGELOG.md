@@ -4,6 +4,16 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- One updater core: `scripts/apk_update.py` (`from-git`, `from-pages`).
+  `install-from-git` and `update-from-pages` in Bash and PowerShell are now thin
+  wrappers, sharing `scripts/apk-python.{sh,ps1}` to find Python. A parity
+  harness against the previous Bash updater matched output, exit codes, and
+  project files across 9 scenarios: dry run, apply, no newer, downgrade,
+  git_ref/version mismatch, non-git clone path, branch ref, and missing repo URL.
+  The one change is that an unreadable manifest now reports the kit's message
+  first instead of curl's. The checked-out release still installs with its own
+  installer, and manifests are read with urllib (https and file URLs).
+
 - One installer core: `scripts/apk_install.py`. `install-to-project.sh` and
   `install-to-project.ps1` are now thin wrappers (12 and about 30 lines,
   replacing about 1,160 duplicated lines). A parity harness against the

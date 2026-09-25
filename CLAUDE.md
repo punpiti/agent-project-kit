@@ -79,6 +79,9 @@ verification, snapshot swap, rollback, and cp-compatible file modes are covered
 by `tests/test-installer-core.py`, `test-fast-start.sh`,
 `test-transactional-update.sh`, and the native-Windows test.
 `APK_INSTALL_TEST_FAULT=activate` is a test-only fault hook.
+Updating is likewise one core, `scripts/apk_update.py` (`from-git`,
+`from-pages`), behind `install-from-git.*` and `update-from-pages.*`; all six
+wrappers find Python through `scripts/apk-python.{sh,ps1}`.
 
 - **Per-project snapshot install** — copies the kit into the target project's
   `.ai/agent-project-kit/` and appends managed blocks to the project's
