@@ -99,6 +99,18 @@ def validate_rules(routing: dict = ROUTING, registry: dict = REGISTRY) -> list[s
     return errors
 
 
+# Same markers as apk_doctor.py: both present means the template was never filled in.
+STATE_PLACEHOLDER_MARKERS = ("- Project name:\n", "สรุปเป้าหมายปัจจุบัน 3–7 บรรทัด")
+
+
+def markdown_state_initialized(ai_dir: Path) -> bool:
+    path = ai_dir / "PROJECT_STATE.md"
+    if not path.is_file():
+        return False
+    text = path.read_text(encoding="utf-8", errors="ignore")
+    return bool(text.strip()) and not all(marker in text for marker in STATE_PLACEHOLDER_MARKERS)
+
+
 def contains_any(text: str, phrases: list[str]) -> bool:
     return any(matches(text,[phrase]) for phrase in phrases)
 
@@ -210,7 +222,10 @@ def classify(request: str, project: Path | None = None) -> dict:
         try: project_data=json.loads(project_file.read_text(encoding="utf-8"))
         except (OSError,json.JSONDecodeError): project_data=None
         visible_entries=any(item.name != ".ai" for item in project.iterdir()) if project.exists() else False
-        if not project_data or project_data.get("status")=="placeholder":
+        # PROJECT_STATE.md is authoritative (config/STATE_MIGRATION.md): an
+        # initialized Markdown state means the project is already onboarded
+        # even when project.json is still the placeholder template.
+        if (not project_data or project_data.get("status")=="placeholder") and not markdown_state_initialized(ai_dir):
             state_actions.append("existing-project-onboarding" if visible_entries else "new-project-bootstrap")
         machine_needed=contains_any(request,PHRASES["machine_needed"])
         if machine_needed and not (ai_dir/"MACHINE_PROFILE.md").exists():

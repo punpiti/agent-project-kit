@@ -4,6 +4,13 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Fixes from a read-only trial on real downstream projects (book, research
+  data, policy). An initialized `PROJECT_STATE.md` now counts as onboarded
+  even when `project.json` is still the placeholder template. Before, 38 of 40
+  local projects were told to onboard again on every routed request. Survey
+  analysis ("survey", "ผลสำรวจ", "แบบสอบถาม") now attaches the data-analytics
+  method, matching the STARTUP example.
+
 - `release_check.py` now runs the native-Windows shared-runtime test itself on
   a WSL host with the Windows `py` launcher. Without that host, or with
   `--skip-windows`, the result is never release-ready. Owner policy: every

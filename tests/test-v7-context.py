@@ -90,6 +90,20 @@ data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_
 assert data["lifecycle"]=="bootstrap",data
 data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"ตรวจ secret และ private path ก่อน release"],text=True))
 assert "release-boundary" in data["workflow"]["gates"],data
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"วิเคราะห์ผลสำรวจความคิดเห็นอาจารย์เพื่อประกอบข้อเสนอนโยบาย"],text=True))
+assert data["primary_pipeline"]=="educational-policy-development" and "data-analytics" in data["workflow"]["methods"],data
+
+# Onboarding follows the authoritative Markdown state, not a placeholder project.json.
+with tempfile.TemporaryDirectory() as tmp:
+    project=Path(tmp); (project/".ai").mkdir(); (project/"notes.md").write_text("x",encoding="utf-8")
+    (project/".ai/project.json").write_text(json.dumps({"schema_version":1,"status":"placeholder"}),encoding="utf-8")
+    template=(ROOT/"templates/PROJECT_STATE.md").read_text(encoding="utf-8")
+    route=lambda: json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"--project",str(project),"fix the bug"],text=True))
+    (project/".ai/PROJECT_STATE.md").write_text(template,encoding="utf-8")
+    assert "existing-project-onboarding" in route()["workflow"]["state_actions"]
+    (project/".ai/PROJECT_STATE.md").write_text("# PROJECT_STATE\n\n- Project name: Real project\n",encoding="utf-8")
+    assert "existing-project-onboarding" not in route()["workflow"]["state_actions"]
+
 data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"write a research paper or a policy brief"],text=True))
 assert data["needs_clarification"],data
 
