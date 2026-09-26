@@ -2,7 +2,13 @@
   "schema_version": 2,
   "architecture": {
     "owner": "one orchestrator remains responsible for the final user-facing result",
-    "selection_order": ["primary_pipeline", "method_modules", "lifecycle_stages", "quality_gates", "state_actions"],
+    "selection_order": [
+      "primary_pipeline",
+      "method_modules",
+      "lifecycle_stages",
+      "quality_gates",
+      "state_actions"
+    ],
     "split_rule": "Add a module only when its instructions, tools, evidence contract, or approval boundary materially differs from the primary pipeline.",
     "privacy_rule": "Route with metadata only. Project content and private rationale stay project-local unless the user explicitly places them in scope."
   },
@@ -18,100 +24,281 @@
       "label": "Software Development & Automation",
       "prompt": "prompts/19_SOFTWARE_DEVELOPMENT_AUTOMATION.md",
       "instruction": "Define behavior, inspect targeted code, make a focused change, and run the smallest relevant test.",
-      "selectors": {"deliverables": ["code"], "domains": ["software"], "methods": []},
-      "compatibility_keys": ["software"]
+      "selectors": {
+        "deliverables": [
+          "code"
+        ],
+        "domains": [
+          "software"
+        ],
+        "methods": []
+      },
+      "compatibility_keys": [
+        "software"
+      ]
     },
     "research-activities": {
       "label": "Research Activities",
       "prompt": "prompts/13_RESEARCH_PROJECT_PROMPTS.md",
       "instruction": "Define the research question, evidence standard, uncertainty, and one appropriate research mode.",
-      "selectors": {"deliverables": ["paper"], "domains": ["research"], "methods": ["research-synthesis"]},
-      "compatibility_keys": ["research"]
+      "selectors": {
+        "deliverables": [
+          "paper"
+        ],
+        "domains": [
+          "research"
+        ],
+        "methods": [
+          "research-synthesis"
+        ]
+      },
+      "compatibility_keys": [
+        "research"
+      ]
     },
     "book-writing": {
       "label": "Book Writing",
       "prompt": "prompts/22_BOOK_WRITING.md",
       "instruction": "Resolve the book contract, evidence, reader-facing manuscript, and handoff boundaries without treating established knowledge as a new research contribution.",
-      "selectors": {"deliverables": ["book"], "domains": ["book-writing"], "methods": []},
-      "compatibility_keys": ["book-writing"]
+      "selectors": {
+        "deliverables": [
+          "book"
+        ],
+        "domains": [
+          "book-writing"
+        ],
+        "methods": []
+      },
+      "compatibility_keys": [
+        "book-writing"
+      ]
     },
     "presentation": {
       "label": "Presentation",
       "prompt": "prompts/05_SLIDES_TEACHING.md",
       "instruction": "Define audience, occasion, duration, delivery mode, intended action, core message, and storyline before production.",
-      "selectors": {"deliverables": ["presentation"], "domains": [], "methods": []},
-      "compatibility_keys": ["presentation"]
+      "selectors": {
+        "deliverables": [
+          "presentation"
+        ],
+        "domains": [],
+        "methods": []
+      },
+      "compatibility_keys": [
+        "presentation"
+      ]
     },
     "content-analysis": {
       "label": "Content Analysis",
       "prompt": "prompts/15_CONTENT_ANALYSIS.md",
       "instruction": "Define the corpus, unit of analysis, coding frame, evidence trail, and interpretation boundary.",
-      "selectors": {"deliverables": ["analysis"], "domains": [], "methods": ["content-analysis"], "requires_method": true},
-      "compatibility_keys": ["content-analysis"]
+      "selectors": {
+        "deliverables": [
+          "analysis"
+        ],
+        "domains": [],
+        "methods": [
+          "content-analysis"
+        ],
+        "requires_method": true
+      },
+      "compatibility_keys": [
+        "content-analysis"
+      ]
     },
     "data-analytics": {
       "label": "Data Analytics",
       "prompt": "prompts/16_DATA_ANALYTICS.md",
       "instruction": "Validate the data and metric definitions before analysis, visualization, and decision implications.",
-      "selectors": {"deliverables": ["analysis"], "domains": [], "methods": ["data-analytics"], "requires_method": true},
-      "compatibility_keys": ["data-analytics"]
+      "selectors": {
+        "deliverables": [
+          "analysis"
+        ],
+        "domains": [],
+        "methods": [
+          "data-analytics"
+        ],
+        "requires_method": true
+      },
+      "compatibility_keys": [
+        "data-analytics"
+      ]
     },
     "course-material-development": {
       "label": "Course Material Development",
       "prompt": "prompts/17_COURSE_MATERIAL_DEVELOPMENT.md",
       "instruction": "Align learner context, observable outcomes, activity, feedback, and assessment.",
-      "selectors": {"deliverables": ["course-material"], "domains": ["education"], "methods": []},
-      "compatibility_keys": ["education"]
+      "selectors": {
+        "deliverables": [
+          "course-material"
+        ],
+        "domains": [
+          "education"
+        ],
+        "methods": []
+      },
+      "compatibility_keys": [
+        "education"
+      ]
     },
     "educational-policy-development": {
       "label": "Educational Policy Development",
       "prompt": "prompts/18_EDUCATIONAL_POLICY_DEVELOPMENT.md",
       "instruction": "Identify authority, stakeholders, evidence, options, feasibility, implementation, and review gate.",
-      "selectors": {"deliverables": ["policy"], "domains": ["governance"], "methods": []},
-      "compatibility_keys": ["governance"]
+      "selectors": {
+        "deliverables": [
+          "policy"
+        ],
+        "domains": [
+          "governance"
+        ],
+        "methods": []
+      },
+      "compatibility_keys": [
+        "governance"
+      ]
     },
     "administrative-professional-operations": {
       "label": "Administrative & Professional Operations",
       "prompt": "prompts/20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md",
       "instruction": "Verify requirement, deadline, status, evidence, owner, next action, and proof of completion.",
-      "selectors": {"deliverables": ["document"], "domains": ["operations"], "methods": []},
-      "compatibility_keys": ["operations"]
+      "selectors": {
+        "deliverables": [
+          "document"
+        ],
+        "domains": [
+          "operations"
+        ],
+        "methods": []
+      },
+      "compatibility_keys": [
+        "operations"
+      ]
     },
     "general": {
       "label": "General / Technical Other",
       "prompt": null,
       "instruction": "Clarify the concrete requested outcome and apply only task-relevant constraints.",
-      "selectors": {"deliverables": [], "domains": ["general"], "methods": []},
-      "compatibility_keys": ["general"]
+      "selectors": {
+        "deliverables": [],
+        "domains": [
+          "general"
+        ],
+        "methods": []
+      },
+      "compatibility_keys": [
+        "general"
+      ]
     }
   },
   "modules": {
     "methods": {
-      "web": {"prompt": "prompts/14_WEB_DEVELOPMENT.md", "instruction": "Check user-visible behavior, responsive states, accessibility, and relevant web tests.", "cadence": "per web task"},
-      "strategy": {"prompt": "prompts/21_STRATEGY_ADVISORY.md", "instruction": "Compare status quo and credible options with explicit criteria and uncertainty.", "cadence": "per decision task"},
-      "data-analytics": {"prompt": "prompts/16_DATA_ANALYTICS.md", "instruction": "Apply validated data and metric methods without replacing the owning primary pipeline.", "cadence": "per data-backed task"},
-      "content-analysis": {"prompt": "prompts/15_CONTENT_ANALYSIS.md", "instruction": "Apply a traceable coding and interpretation method without replacing the owning primary pipeline.", "cadence": "per corpus-analysis task"},
-      "research-synthesis": {"prompt": "prompts/13_RESEARCH_PROJECT_PROMPTS.md", "instruction": "Select the narrow research mode and evidence standard needed by the owning pipeline.", "cadence": "per evidence-synthesis task"}
+      "web": {
+        "prompt": "prompts/14_WEB_DEVELOPMENT.md",
+        "instruction": "Check user-visible behavior, responsive states, accessibility, and relevant web tests.",
+        "cadence": "per web task"
+      },
+      "strategy": {
+        "prompt": "prompts/21_STRATEGY_ADVISORY.md",
+        "instruction": "Compare status quo and credible options with explicit criteria and uncertainty.",
+        "cadence": "per decision task"
+      },
+      "data-analytics": {
+        "prompt": "prompts/16_DATA_ANALYTICS.md",
+        "instruction": "Apply validated data and metric methods without replacing the owning primary pipeline.",
+        "cadence": "per data-backed task"
+      },
+      "content-analysis": {
+        "prompt": "prompts/15_CONTENT_ANALYSIS.md",
+        "instruction": "Apply a traceable coding and interpretation method without replacing the owning primary pipeline.",
+        "cadence": "per corpus-analysis task"
+      },
+      "research-synthesis": {
+        "prompt": "prompts/13_RESEARCH_PROJECT_PROMPTS.md",
+        "instruction": "Select the narrow research mode and evidence standard needed by the owning pipeline.",
+        "cadence": "per evidence-synthesis task"
+      }
     },
     "stages": {
-      "implementation": {"prompt": "prompts/03_CODEX_CODING_AGENT.md", "instruction": "Use a spec-test-review implementation loop.", "cadence": "per substantial code task"},
-      "reviewer-response": {"prompt": "prompts/04_PAPER_REVIEWER_RESPONSE.md", "instruction": "Map concern to actual problem, change, location, and evidence.", "cadence": "per review round"},
-      "external-feedback": {"prompt": "prompts/07_EXTERNAL_FEEDBACK.md", "instruction": "Define hypothesis, source, method, and decision rule for real feedback.", "cadence": "per feedback cycle"},
-      "publication-production": {"prompt": "prompts/10_DOCUMENT_PRODUCTION.md", "instruction": "Build and verify the project-approved written or reflowable artifact.", "cadence": "per publication build, conversion, export, or final QA"},
-      "presentation-production": {"prompt": "prompts/23_PRESENTATION_PRODUCTION.md", "instruction": "Build, render, inspect, and behavior-test the real deck outputs.", "cadence": "per deck build, render, export, or final QA"},
-      "markdown-cleanup": {"prompt": "prompts/12_MARKDOWN_CLEANUP.md", "instruction": "Inventory and migrate Markdown without deleting recoverable source material.", "cadence": "on explicit cleanup or recovery request"},
-      "package-release": {"prompt": null, "instruction": "Run version, integrity, privacy-boundary, test, tag, publication, and public-manifest gates.", "cadence": "per package release"}
+      "implementation": {
+        "prompt": "prompts/03_CODEX_CODING_AGENT.md",
+        "instruction": "Use a spec-test-review implementation loop.",
+        "cadence": "per substantial code task"
+      },
+      "reviewer-response": {
+        "prompt": "prompts/04_PAPER_REVIEWER_RESPONSE.md",
+        "instruction": "Map concern to actual problem, change, location, and evidence.",
+        "cadence": "per review round"
+      },
+      "thesis-review": {
+        "prompt": "prompts/25_THESIS_REVIEW.md",
+        "instruction": "Gate intake and section maturity first, then review problem, literature, objectives, method, evidence, and references before language.",
+        "cadence": "per thesis review round"
+      },
+      "external-feedback": {
+        "prompt": "prompts/07_EXTERNAL_FEEDBACK.md",
+        "instruction": "Define hypothesis, source, method, and decision rule for real feedback.",
+        "cadence": "per feedback cycle"
+      },
+      "publication-production": {
+        "prompt": "prompts/10_DOCUMENT_PRODUCTION.md",
+        "instruction": "Build and verify the project-approved written or reflowable artifact.",
+        "cadence": "per publication build, conversion, export, or final QA"
+      },
+      "presentation-production": {
+        "prompt": "prompts/23_PRESENTATION_PRODUCTION.md",
+        "instruction": "Build, render, inspect, and behavior-test the real deck outputs.",
+        "cadence": "per deck build, render, export, or final QA"
+      },
+      "markdown-cleanup": {
+        "prompt": "prompts/12_MARKDOWN_CLEANUP.md",
+        "instruction": "Inventory and migrate Markdown without deleting recoverable source material.",
+        "cadence": "on explicit cleanup or recovery request"
+      },
+      "package-release": {
+        "prompt": null,
+        "instruction": "Run version, integrity, privacy-boundary, test, tag, publication, and public-manifest gates.",
+        "cadence": "per package release"
+      }
     },
     "gates": {
-      "prose-style": {"prompt": "prompts/24_PROSE_STYLE.md", "instruction": "Check reader-facing prose after content is stable; never alter facts or claim strength merely to satisfy style counts.", "cadence": "per prose draft or revision"},
-      "release-boundary": {"prompt": null, "instruction": "Verify that tracked and packaged files contain no blocked private paths, credentials, keys, or unapproved product intelligence.", "cadence": "before commit, tag, package, or public release"}
+      "prose-style": {
+        "prompt": "prompts/24_PROSE_STYLE.md",
+        "instruction": "Check reader-facing prose after content is stable; never alter facts or claim strength merely to satisfy style counts.",
+        "cadence": "per prose draft or revision"
+      },
+      "release-boundary": {
+        "prompt": null,
+        "instruction": "Verify that tracked and packaged files contain no blocked private paths, credentials, keys, or unapproved product intelligence.",
+        "cadence": "before commit, tag, package, or public release"
+      }
     },
     "state_actions": {
-      "resume": {"prompt": "prompts/08_PROJECT_RESUME.md", "instruction": "Use current state first and read history only if insufficient.", "cadence": "when state is insufficient"},
-      "new-project-bootstrap": {"prompt": "prompts/01_NEW_PROJECT_BOOTSTRAP.md", "instruction": "Initialize missing project state once.", "cadence": "once per project"},
-      "existing-project-onboarding": {"prompt": "prompts/02_EXISTING_PROJECT_ONBOARDING.md", "instruction": "Profile an existing project whose state is missing or placeholder.", "cadence": "once per project"},
-      "machine-discovery": {"prompt": "prompts/09_MACHINE_AWARE_CODEX.md", "instruction": "Revalidate only missing, stale, changed, or task-required machine facts.", "cadence": "once per machine or 30 days"},
-      "document-style-bootstrap": {"prompt": "prompts/11_DOCUMENT_STYLE_BOOTSTRAP.md", "instruction": "Establish a document style and production contract only when missing.", "cadence": "once per document project"}
+      "resume": {
+        "prompt": "prompts/08_PROJECT_RESUME.md",
+        "instruction": "Use current state first and read history only if insufficient.",
+        "cadence": "when state is insufficient"
+      },
+      "new-project-bootstrap": {
+        "prompt": "prompts/01_NEW_PROJECT_BOOTSTRAP.md",
+        "instruction": "Initialize missing project state once.",
+        "cadence": "once per project"
+      },
+      "existing-project-onboarding": {
+        "prompt": "prompts/02_EXISTING_PROJECT_ONBOARDING.md",
+        "instruction": "Profile an existing project whose state is missing or placeholder.",
+        "cadence": "once per project"
+      },
+      "machine-discovery": {
+        "prompt": "prompts/09_MACHINE_AWARE_CODEX.md",
+        "instruction": "Revalidate only missing, stale, changed, or task-required machine facts.",
+        "cadence": "once per machine or 30 days"
+      },
+      "document-style-bootstrap": {
+        "prompt": "prompts/11_DOCUMENT_STYLE_BOOTSTRAP.md",
+        "instruction": "Establish a document style and production contract only when missing.",
+        "cadence": "once per document project"
+      }
     }
   },
   "policies": {
@@ -124,42 +311,235 @@
     "dependency-remediation": "When a task-required library is missing, select the project-declared environment or the narrowest text/image/ml environment, install and verify the smallest compatible direct dependency, and avoid cross-project conflicts. Honor explicit isolation or pinning contracts outside synced trees when practical. Announce ordinary repairs and proceed only at or below 250 MB without removal, replacement, or downgrade; otherwise inspect a supported dry run and obtain approval.",
     "confidentiality-boundary": "Keep project-local state, private product intelligence, credentials, and restricted source material outside public package and trace surfaces unless explicitly approved."
   },
-  "always_policies": ["evidence-boundary", "loop-boundary", "context-minimization", "idempotent-checks", "user-file-safety", "dependency-remediation", "confidentiality-boundary"],
+  "always_policies": [
+    "evidence-boundary",
+    "loop-boundary",
+    "context-minimization",
+    "idempotent-checks",
+    "user-file-safety",
+    "dependency-remediation",
+    "confidentiality-boundary"
+  ],
   "policy_sources": {
-    "evidence-boundary": ["AGENTS.md#Output Style"],
-    "loop-boundary": ["AGENTS.md#Core Loop Model"],
-    "context-minimization": ["STARTUP.md#Read Only When Triggered", "TOKEN_DISCIPLINE.md#Default Principle"],
-    "idempotent-checks": ["STARTUP.md#Check Cadence"],
-    "user-file-safety": ["README.md#Safety Model"],
-    "resource-portability": ["AGENTS.md#Machine / Portability Protocol"],
-    "dependency-remediation": ["AGENTS.md#Conda-Family Environment Routing", "ENVIRONMENT_POLICY.md#Demand-Driven Installation and Network Cost"],
-    "confidentiality-boundary": ["config/SECURITY_BOUNDARY.md#Classification", "SECURITY_EXCLUSIONS.md#Private product intelligence"]
+    "evidence-boundary": [
+      "AGENTS.md#Output Style"
+    ],
+    "loop-boundary": [
+      "AGENTS.md#Core Loop Model"
+    ],
+    "context-minimization": [
+      "STARTUP.md#Read Only When Triggered",
+      "TOKEN_DISCIPLINE.md#Default Principle"
+    ],
+    "idempotent-checks": [
+      "STARTUP.md#Check Cadence"
+    ],
+    "user-file-safety": [
+      "README.md#Safety Model"
+    ],
+    "resource-portability": [
+      "AGENTS.md#Machine / Portability Protocol"
+    ],
+    "dependency-remediation": [
+      "AGENTS.md#Conda-Family Environment Routing",
+      "ENVIRONMENT_POLICY.md#Demand-Driven Installation and Network Cost"
+    ],
+    "confidentiality-boundary": [
+      "config/SECURITY_BOUNDARY.md#Classification",
+      "SECURITY_EXCLUSIONS.md#Private product intelligence"
+    ]
   },
   "prompt_inventory": [
-    {"path":"00_DEFAULT_PROJECT_PROMPT.md","legacy_type":"reference","role":"reference","cadence":"never-by-default","trigger":"legacy entry point; redirect to STARTUP.md"},
-    {"path":"01_NEW_PROJECT_BOOTSTRAP.md","legacy_type":"one-time","role":"state-action","cadence":"once-per-project","trigger":"new project without initialized state"},
-    {"path":"02_EXISTING_PROJECT_ONBOARDING.md","legacy_type":"one-time","role":"state-action","cadence":"once-per-project","trigger":"existing project with missing or placeholder state"},
-    {"path":"03_CODEX_CODING_AGENT.md","legacy_type":"secondary","role":"lifecycle-stage","cadence":"per-substantial-code-task","trigger":"implementation, debugging, or test loop"},
-    {"path":"04_PAPER_REVIEWER_RESPONSE.md","legacy_type":"secondary","role":"lifecycle-stage","cadence":"per-review-round","trigger":"paper, proposal, thesis, or reviewer response"},
-    {"path":"05_SLIDES_TEACHING.md","legacy_type":"primary","role":"primary-pipeline","route":"presentation","cadence":"per-task","trigger":"presentation or slide deliverable"},
-    {"path":"06_POLICY_GOVERNANCE.md","legacy_type":"reference","role":"reference","cadence":"never-by-default","trigger":"legacy redirect to educational policy route"},
-    {"path":"07_EXTERNAL_FEEDBACK.md","legacy_type":"secondary","role":"lifecycle-stage","cadence":"per-feedback-cycle","trigger":"real users, learners, reviewers, stakeholders, or observations"},
-    {"path":"08_PROJECT_RESUME.md","legacy_type":"secondary","role":"state-action","cadence":"when-state-summary-is-needed","trigger":"resume/status request or insufficient current state"},
-    {"path":"09_MACHINE_AWARE_CODEX.md","legacy_type":"one-time","role":"state-action","cadence":"once-per-machine-or-30-days","trigger":"new/stale/changed machine or resource-dependent heavy work"},
-    {"path":"10_DOCUMENT_PRODUCTION.md","legacy_type":"secondary","role":"lifecycle-stage","cadence":"per-publication-build-or-export","trigger":"typeset, build, convert, export, or final-QA a written or reflowable artifact"},
-    {"path":"11_DOCUMENT_STYLE_BOOTSTRAP.md","legacy_type":"one-time","role":"state-action","cadence":"once-per-document-project","trigger":"document-heavy project without style/pipeline state"},
-    {"path":"12_MARKDOWN_CLEANUP.md","legacy_type":"secondary","role":"lifecycle-stage","cadence":"on-explicit-cleanup-request","trigger":"Markdown inventory, migration, or recovery"},
-    {"path":"13_RESEARCH_PROJECT_PROMPTS.md","legacy_type":"primary","role":"primary-pipeline","route":"research-activities","cadence":"per-task-select-one-mode","trigger":"research, evidence synthesis, literature, or research brief"},
-    {"path":"14_WEB_DEVELOPMENT.md","legacy_type":"secondary","role":"method","cadence":"per-web-task","trigger":"browser UI, web API, accessibility, responsive behavior, or web performance"},
-    {"path":"15_CONTENT_ANALYSIS.md","legacy_type":"primary","role":"primary-pipeline","route":"content-analysis","cadence":"per-task","trigger":"systematic qualitative or quantitative content coding"},
-    {"path":"16_DATA_ANALYTICS.md","legacy_type":"primary","role":"primary-pipeline","route":"data-analytics","cadence":"per-task","trigger":"data quality, metrics, analysis, visualization, or dashboard"},
-    {"path":"17_COURSE_MATERIAL_DEVELOPMENT.md","legacy_type":"primary","role":"primary-pipeline","route":"course-material-development","cadence":"per-task","trigger":"course, lesson, exercise, assessment, rubric, or teaching material"},
-    {"path":"18_EDUCATIONAL_POLICY_DEVELOPMENT.md","legacy_type":"primary","role":"primary-pipeline","route":"educational-policy-development","cadence":"per-task","trigger":"education policy, governance, standard, regulation, or institutional proposal"},
-    {"path":"19_SOFTWARE_DEVELOPMENT_AUTOMATION.md","legacy_type":"primary","role":"primary-pipeline","route":"software-development-automation","cadence":"per-task","trigger":"web, API, CLI, desktop, automation, integration, vision, or pipeline software"},
-    {"path":"20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md","legacy_type":"primary","role":"primary-pipeline","route":"administrative-professional-operations","cadence":"per-task","trigger":"deadline, compliance, correspondence, dossier, submission, or follow-up"},
-    {"path":"21_STRATEGY_ADVISORY.md","legacy_type":"secondary","role":"method","cadence":"per-decision-task","trigger":"option comparison, direction choice, advising, or implementation strategy"},
-    {"path":"22_BOOK_WRITING.md","legacy_type":"primary","role":"primary-pipeline","route":"book-writing","cadence":"per-book-writing-task","trigger":"book, textbook, book manuscript, or prose-writing workflow"},
-    {"path":"23_PRESENTATION_PRODUCTION.md","legacy_type":"secondary","role":"lifecycle-stage","cadence":"per-deck-build-render-or-export","trigger":"create, edit, render, export, or final-QA an actual deck"},
-    {"path":"24_PROSE_STYLE.md","legacy_type":"secondary","role":"quality-gate","cadence":"per-prose-draft-or-revision","trigger":"draft, revise, edit, or polish reader-facing prose"}
+    {
+      "path": "00_DEFAULT_PROJECT_PROMPT.md",
+      "legacy_type": "reference",
+      "role": "reference",
+      "cadence": "never-by-default",
+      "trigger": "legacy entry point; redirect to STARTUP.md"
+    },
+    {
+      "path": "01_NEW_PROJECT_BOOTSTRAP.md",
+      "legacy_type": "one-time",
+      "role": "state-action",
+      "cadence": "once-per-project",
+      "trigger": "new project without initialized state"
+    },
+    {
+      "path": "02_EXISTING_PROJECT_ONBOARDING.md",
+      "legacy_type": "one-time",
+      "role": "state-action",
+      "cadence": "once-per-project",
+      "trigger": "existing project with missing or placeholder state"
+    },
+    {
+      "path": "03_CODEX_CODING_AGENT.md",
+      "legacy_type": "secondary",
+      "role": "lifecycle-stage",
+      "cadence": "per-substantial-code-task",
+      "trigger": "implementation, debugging, or test loop"
+    },
+    {
+      "path": "04_PAPER_REVIEWER_RESPONSE.md",
+      "legacy_type": "secondary",
+      "role": "lifecycle-stage",
+      "cadence": "per-review-round",
+      "trigger": "paper, proposal, thesis, or reviewer response"
+    },
+    {
+      "path": "05_SLIDES_TEACHING.md",
+      "legacy_type": "primary",
+      "role": "primary-pipeline",
+      "route": "presentation",
+      "cadence": "per-task",
+      "trigger": "presentation or slide deliverable"
+    },
+    {
+      "path": "06_POLICY_GOVERNANCE.md",
+      "legacy_type": "reference",
+      "role": "reference",
+      "cadence": "never-by-default",
+      "trigger": "legacy redirect to educational policy route"
+    },
+    {
+      "path": "07_EXTERNAL_FEEDBACK.md",
+      "legacy_type": "secondary",
+      "role": "lifecycle-stage",
+      "cadence": "per-feedback-cycle",
+      "trigger": "real users, learners, reviewers, stakeholders, or observations"
+    },
+    {
+      "path": "08_PROJECT_RESUME.md",
+      "legacy_type": "secondary",
+      "role": "state-action",
+      "cadence": "when-state-summary-is-needed",
+      "trigger": "resume/status request or insufficient current state"
+    },
+    {
+      "path": "09_MACHINE_AWARE_CODEX.md",
+      "legacy_type": "one-time",
+      "role": "state-action",
+      "cadence": "once-per-machine-or-30-days",
+      "trigger": "new/stale/changed machine or resource-dependent heavy work"
+    },
+    {
+      "path": "10_DOCUMENT_PRODUCTION.md",
+      "legacy_type": "secondary",
+      "role": "lifecycle-stage",
+      "cadence": "per-publication-build-or-export",
+      "trigger": "typeset, build, convert, export, or final-QA a written or reflowable artifact"
+    },
+    {
+      "path": "11_DOCUMENT_STYLE_BOOTSTRAP.md",
+      "legacy_type": "one-time",
+      "role": "state-action",
+      "cadence": "once-per-document-project",
+      "trigger": "document-heavy project without style/pipeline state"
+    },
+    {
+      "path": "12_MARKDOWN_CLEANUP.md",
+      "legacy_type": "secondary",
+      "role": "lifecycle-stage",
+      "cadence": "on-explicit-cleanup-request",
+      "trigger": "Markdown inventory, migration, or recovery"
+    },
+    {
+      "path": "13_RESEARCH_PROJECT_PROMPTS.md",
+      "legacy_type": "primary",
+      "role": "primary-pipeline",
+      "route": "research-activities",
+      "cadence": "per-task-select-one-mode",
+      "trigger": "research, evidence synthesis, literature, or research brief"
+    },
+    {
+      "path": "14_WEB_DEVELOPMENT.md",
+      "legacy_type": "secondary",
+      "role": "method",
+      "cadence": "per-web-task",
+      "trigger": "browser UI, web API, accessibility, responsive behavior, or web performance"
+    },
+    {
+      "path": "15_CONTENT_ANALYSIS.md",
+      "legacy_type": "primary",
+      "role": "primary-pipeline",
+      "route": "content-analysis",
+      "cadence": "per-task",
+      "trigger": "systematic qualitative or quantitative content coding"
+    },
+    {
+      "path": "16_DATA_ANALYTICS.md",
+      "legacy_type": "primary",
+      "role": "primary-pipeline",
+      "route": "data-analytics",
+      "cadence": "per-task",
+      "trigger": "data quality, metrics, analysis, visualization, or dashboard"
+    },
+    {
+      "path": "17_COURSE_MATERIAL_DEVELOPMENT.md",
+      "legacy_type": "primary",
+      "role": "primary-pipeline",
+      "route": "course-material-development",
+      "cadence": "per-task",
+      "trigger": "course, lesson, exercise, assessment, rubric, or teaching material"
+    },
+    {
+      "path": "18_EDUCATIONAL_POLICY_DEVELOPMENT.md",
+      "legacy_type": "primary",
+      "role": "primary-pipeline",
+      "route": "educational-policy-development",
+      "cadence": "per-task",
+      "trigger": "education policy, governance, standard, regulation, or institutional proposal"
+    },
+    {
+      "path": "19_SOFTWARE_DEVELOPMENT_AUTOMATION.md",
+      "legacy_type": "primary",
+      "role": "primary-pipeline",
+      "route": "software-development-automation",
+      "cadence": "per-task",
+      "trigger": "web, API, CLI, desktop, automation, integration, vision, or pipeline software"
+    },
+    {
+      "path": "20_ADMINISTRATIVE_PROFESSIONAL_OPERATIONS.md",
+      "legacy_type": "primary",
+      "role": "primary-pipeline",
+      "route": "administrative-professional-operations",
+      "cadence": "per-task",
+      "trigger": "deadline, compliance, correspondence, dossier, submission, or follow-up"
+    },
+    {
+      "path": "21_STRATEGY_ADVISORY.md",
+      "legacy_type": "secondary",
+      "role": "method",
+      "cadence": "per-decision-task",
+      "trigger": "option comparison, direction choice, advising, or implementation strategy"
+    },
+    {
+      "path": "22_BOOK_WRITING.md",
+      "legacy_type": "primary",
+      "role": "primary-pipeline",
+      "route": "book-writing",
+      "cadence": "per-book-writing-task",
+      "trigger": "book, textbook, book manuscript, or prose-writing workflow"
+    },
+    {
+      "path": "23_PRESENTATION_PRODUCTION.md",
+      "legacy_type": "secondary",
+      "role": "lifecycle-stage",
+      "cadence": "per-deck-build-render-or-export",
+      "trigger": "create, edit, render, export, or final-QA an actual deck"
+    },
+    {
+      "path": "24_PROSE_STYLE.md",
+      "legacy_type": "secondary",
+      "role": "quality-gate",
+      "cadence": "per-prose-draft-or-revision",
+      "trigger": "draft, revise, edit, or polish reader-facing prose"
+    },
+    {
+      "path": "25_THESIS_REVIEW.md",
+      "legacy_type": "secondary",
+      "role": "lifecycle-stage",
+      "cadence": "per-thesis-review-round",
+      "trigger": "thesis, dissertation, proposal, or defense draft under examination"
+    }
   ]
 }

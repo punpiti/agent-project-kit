@@ -46,8 +46,8 @@ def refresh_metrics(bundle: dict, counts: dict) -> int:
         metrics["bytes"]=size; metrics["estimated_tokens"]=tokens
     return len((json.dumps(bundle,ensure_ascii=False,indent=2)+"\n").encode("utf-8"))
 
-def compile_bundle(request: str, project: Path, max_bytes: int) -> dict:
-    route=classify(request,project)
+def compile_bundle(request: str, project: Path, max_bytes: int, files: list[Path]|None=None) -> dict:
+    route=classify(request,project,files)
     registry=read_json(ROOT/"config"/"workflow-registry.json") or {}
     primary={"id":route["primary_pipeline"],**registry["primary_pipelines"][route["primary_pipeline"]]}
 
@@ -111,8 +111,8 @@ def compile_bundle(request: str, project: Path, max_bytes: int) -> dict:
     return bundle
 
 def main() -> int:
-    p=argparse.ArgumentParser(description=__doc__); p.add_argument("request",nargs="+"); p.add_argument("--project",default="."); p.add_argument("--max-bytes",type=int,default=12000); p.add_argument("--output"); a=p.parse_args()
-    try: bundle=compile_bundle(" ".join(a.request),Path(a.project).resolve(),a.max_bytes)
+    p=argparse.ArgumentParser(description=__doc__); p.add_argument("request",nargs="+"); p.add_argument("--project",default="."); p.add_argument("--max-bytes",type=int,default=12000); p.add_argument("--output"); p.add_argument("--file",action="append",default=[],help="a document to inspect; repeatable"); a=p.parse_args()
+    try: bundle=compile_bundle(" ".join(a.request),Path(a.project).resolve(),a.max_bytes,[Path(name).resolve() for name in a.file])
     except ValueError as error: p.error(str(error))
     text=json.dumps(bundle,ensure_ascii=False,indent=2)+"\n"
     if a.output: Path(a.output).write_text(text,encoding="utf-8")

@@ -44,6 +44,12 @@
       "cadence": "per review round",
       "kind": "stages"
     },
+    "thesis-review": {
+      "prompt": "prompts/25_THESIS_REVIEW.md",
+      "instruction": "Gate intake and section maturity first, then review problem, literature, objectives, method, evidence, and references before language.",
+      "cadence": "per thesis review round",
+      "kind": "stages"
+    },
     "external-feedback": {
       "prompt": "prompts/07_EXTERNAL_FEEDBACK.md",
       "instruction": "Define hypothesis, source, method, and decision rule for real feedback.",

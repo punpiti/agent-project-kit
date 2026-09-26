@@ -192,6 +192,13 @@
       "role": "quality-gate",
       "cadence": "per-prose-draft-or-revision",
       "trigger": "draft, revise, edit, or polish reader-facing prose"
+    },
+    {
+      "path": "25_THESIS_REVIEW.md",
+      "type": "secondary",
+      "role": "lifecycle-stage",
+      "cadence": "per-thesis-review-round",
+      "trigger": "thesis, dissertation, proposal, or defense draft under examination"
     }
   ]
 }

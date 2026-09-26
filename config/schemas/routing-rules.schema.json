@@ -171,6 +171,40 @@
       "type": "string",
       "minLength": 1
     },
+    "document_signals": {
+      "type": "object",
+      "properties": {
+        "minimum_sections": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "research_report": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/$defs/phrases"
+          }
+        },
+        "reference_paths": {
+          "$ref": "#/$defs/phrases"
+        },
+        "published_markers": {
+          "$ref": "#/$defs/phrases"
+        },
+        "published_marker_limit": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "minimum_sections",
+        "research_report",
+        "reference_paths",
+        "published_markers",
+        "published_marker_limit"
+      ],
+      "additionalProperties": false
+    },
     "phrases": {
       "type": "object",
       "properties": {
@@ -184,6 +218,12 @@
           "$ref": "#/$defs/phrases"
         },
         "reviewer_response": {
+          "$ref": "#/$defs/phrases"
+        },
+        "thesis_documents": {
+          "$ref": "#/$defs/phrases"
+        },
+        "thesis_review_verbs": {
           "$ref": "#/$defs/phrases"
         },
         "publication_production": {
@@ -228,6 +268,8 @@
         "data_analytics_confirm",
         "data_analytics_bare_terms",
         "reviewer_response",
+        "thesis_documents",
+        "thesis_review_verbs",
         "publication_production",
         "publication_verbs",
         "publication_formats",
@@ -254,6 +296,7 @@
     "preferred_deliverable",
     "method_modules",
     "source_file_pattern",
+    "document_signals",
     "phrases"
   ],
   "additionalProperties": false

@@ -152,6 +152,11 @@ Other scripts worth knowing when working in this area:
 # Classify a single request the way STARTUP.md's routing table does
 python3 scripts/route_task.py "fix the responsive website login bug"
 
+# Classify with a document in hand. Reading a file never selects the review by
+# itself: a research document raises a clarification reason instead, because it
+# may be finished, already published, or someone else's.
+python3 scripts/route_task.py "ดูไฟล์นี้ให้หน่อย" --file path/to/report.md
+
 # Doctor check on an installed project (staleness/placeholder detection)
 python3 scripts/apk_doctor.py --project <path>
 

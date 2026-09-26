@@ -1,778 +1,904 @@
 {
- "schema_version": 1,
- "description": "Bilingual vocabulary for scripts/route_task.py. Priority, word boundaries, and combination logic stay in Python; this file owns only the phrases. Validate with python3 scripts/validate_prompt_catalog.py.",
- "defaults": {
-  "domain": "general",
-  "deliverable": "analysis",
-  "lifecycle": "create"
- },
- "axes": {
-  "domain": {
-   "software": [
-    "code",
-    "bug",
-    "debug",
-    "api",
-    "website",
-    "web app",
-    "script",
-    "software",
-    "automation",
-    "configuration",
-    "router",
-    "prompt",
-    "ci",
-    "github actions",
-    "json schema",
-    "installer",
-    "powershell",
-    "wrapper",
-    "โปรแกรม",
-    "โค้ด",
-    "เว็บ",
-    "ระบบอัตโนมัติ"
-   ],
-   "research": [
-    "research",
-    "paper",
-    "manuscript",
-    "thesis",
-    "literature",
-    "experiment",
-    "วิจัย",
-    "บทความ",
-    "วิทยานิพนธ์",
-    "หลักฐาน"
-   ],
-   "book-writing": [
-    "book",
-    "textbook",
-    "book writing",
-    "write a book",
-    "write the book",
-    "ตำรา",
-    "เขียนหนังสือ",
-    "เขียนตำรา",
-    "ต้นฉบับหนังสือ",
-    "ต้นฉบับตำรา"
-   ],
-   "education": [
-    "course",
-    "lesson",
-    "syllabus",
-    "student",
-    "teaching",
-    "rubric",
-    "curriculum",
-    "workshop",
-    "seminar",
-    "หลักสูตร",
-    "บทเรียน",
-    "รายวิชา",
-    "เอกสารคำสอน",
-    "สอน",
-    "สัมมนา",
-    "แบบฝึก",
-    "กิจกรรมการเรียน"
-   ],
-   "governance": [
-    "policy",
-    "governance",
-    "council",
-    "regulation",
-    "standard",
-    "master plan",
-    "institutional transformation",
-    "ipst",
-    "ioi",
-    "นโยบาย",
-    "สภามหาวิทยาลัย",
-    "ข้อบังคับ",
-    "สสวท",
-    "มาตรฐาน",
-    "แผนแม่บท"
-   ],
-   "operations": [
-    "deadline",
-    "submit",
-    "submission",
-    "compliance",
-    "dossier",
-    "correspondence",
-    "coordination",
-    "follow up",
-    "nomination",
-    "application",
-    "academic promotion",
-    "academic-rank",
-    "KU forms",
-    "meeting follow-up",
-    "กำหนดส่ง",
-    "ยื่น",
-    "เอกสารราชการ",
-    "ติดตาม",
-    "ประสานงาน",
-    "เสนอชื่อ",
-    "ใบสมัคร",
-    "สมัครงาน",
-    "สมัครเรียน",
-    "แฟ้ม",
-    "ตำแหน่งวิชาการ",
-    "ศาสตราจารย์"
-   ]
+  "schema_version": 1,
+  "description": "Bilingual vocabulary for scripts/route_task.py. Priority, word boundaries, and combination logic stay in Python; this file owns only the phrases. Validate with python3 scripts/validate_prompt_catalog.py.",
+  "defaults": {
+    "domain": "general",
+    "deliverable": "analysis",
+    "lifecycle": "create"
   },
-  "deliverable": {
-   "code": [
-    "code",
-    "implement",
-    "fix",
-    "debug",
-    "refactor",
-    "build app",
-    "โค้ด",
-    "แก้บั๊ก",
-    "รีแฟกเตอร์",
-    "พัฒนาโปรแกรม"
-   ],
-   "analysis": [
-    "analysis",
-    "analyze",
-    "finding",
-    "วิเคราะห์",
-    "ผลวิเคราะห์"
-   ],
-   "paper": [
-    "paper",
-    "manuscript",
-    "thesis",
-    "reviewer",
-    "บทความ",
-    "วิทยานิพนธ์",
-    "ผู้ทรงคุณวุฒิ"
-   ],
-   "book": [
-    "book",
-    "textbook",
-    "book writing",
-    "write a book",
-    "write the book",
-    "ตำรา",
-    "เขียนหนังสือ",
-    "เขียนตำรา",
-    "ต้นฉบับหนังสือ",
-    "ต้นฉบับตำรา"
-   ],
-   "policy": [
-    "policy",
-    "regulation",
-    "proposal to council",
-    "master plan",
-    "นโยบาย",
-    "ข้อบังคับ",
-    "เสนอสภา",
-    "แผนแม่บท"
-   ],
-   "presentation": [
-    "slide",
-    "slides",
-    "presentation",
-    "deck",
-    "talk",
-    "seminar",
-    "briefing",
-    "สไลด์",
-    "นำเสนอ",
-    "บรรยาย",
-    "สัมมนา"
-   ],
-   "course-material": [
-    "course",
-    "lesson",
-    "syllabus",
-    "exercise",
-    "rubric",
-    "course material",
-    "teaching document",
-    "workshop",
-    "บทเรียน",
-    "ประมวลรายวิชา",
-    "รายวิชา",
-    "แบบฝึก",
-    "เอกสารสอน",
-    "เอกสารคำสอน",
-    "กิจกรรมการเรียน"
-   ],
-   "document": [
-    "document",
-    "documents",
-    "form",
-    "forms",
-    "letter",
-    "report",
-    "dossier",
-    "correspondence",
-    "nomination",
-    "เอกสาร",
-    "แบบฟอร์ม",
-    "หนังสือ",
-    "รายงาน",
-    "จดหมาย",
-    "แฟ้ม",
-    "เสนอชื่อ"
-   ],
-   "decision": [
-    "recommend",
-    "strategy",
-    "choose",
-    "decision",
-    "แนะนำ",
-    "กลยุทธ์",
-    "ตัดสินใจ",
-    "เลือก"
-   ]
+  "axes": {
+    "domain": {
+      "software": [
+        "code",
+        "bug",
+        "debug",
+        "api",
+        "website",
+        "web app",
+        "script",
+        "software",
+        "automation",
+        "configuration",
+        "router",
+        "prompt",
+        "ci",
+        "github actions",
+        "json schema",
+        "installer",
+        "powershell",
+        "wrapper",
+        "โปรแกรม",
+        "โค้ด",
+        "เว็บ",
+        "ระบบอัตโนมัติ"
+      ],
+      "research": [
+        "research",
+        "paper",
+        "manuscript",
+        "thesis",
+        "literature",
+        "experiment",
+        "วิจัย",
+        "บทความ",
+        "วิทยานิพนธ์",
+        "หลักฐาน"
+      ],
+      "book-writing": [
+        "book",
+        "textbook",
+        "book writing",
+        "write a book",
+        "write the book",
+        "ตำรา",
+        "เขียนหนังสือ",
+        "เขียนตำรา",
+        "ต้นฉบับหนังสือ",
+        "ต้นฉบับตำรา"
+      ],
+      "education": [
+        "course",
+        "lesson",
+        "syllabus",
+        "student",
+        "teaching",
+        "rubric",
+        "curriculum",
+        "workshop",
+        "seminar",
+        "หลักสูตร",
+        "บทเรียน",
+        "รายวิชา",
+        "เอกสารคำสอน",
+        "สอน",
+        "สัมมนา",
+        "แบบฝึก",
+        "กิจกรรมการเรียน"
+      ],
+      "governance": [
+        "policy",
+        "governance",
+        "council",
+        "regulation",
+        "standard",
+        "master plan",
+        "institutional transformation",
+        "ipst",
+        "ioi",
+        "นโยบาย",
+        "สภามหาวิทยาลัย",
+        "ข้อบังคับ",
+        "สสวท",
+        "มาตรฐาน",
+        "แผนแม่บท"
+      ],
+      "operations": [
+        "deadline",
+        "submit",
+        "submission",
+        "compliance",
+        "dossier",
+        "correspondence",
+        "coordination",
+        "follow up",
+        "nomination",
+        "application",
+        "academic promotion",
+        "academic-rank",
+        "KU forms",
+        "meeting follow-up",
+        "กำหนดส่ง",
+        "ยื่น",
+        "เอกสารราชการ",
+        "ติดตาม",
+        "ประสานงาน",
+        "เสนอชื่อ",
+        "ใบสมัคร",
+        "สมัครงาน",
+        "สมัครเรียน",
+        "แฟ้ม",
+        "ตำแหน่งวิชาการ",
+        "ศาสตราจารย์"
+      ]
+    },
+    "deliverable": {
+      "code": [
+        "code",
+        "implement",
+        "fix",
+        "debug",
+        "refactor",
+        "build app",
+        "โค้ด",
+        "แก้บั๊ก",
+        "รีแฟกเตอร์",
+        "พัฒนาโปรแกรม"
+      ],
+      "analysis": [
+        "analysis",
+        "analyze",
+        "finding",
+        "วิเคราะห์",
+        "ผลวิเคราะห์"
+      ],
+      "paper": [
+        "paper",
+        "manuscript",
+        "thesis",
+        "dissertation",
+        "defense draft",
+        "ดุษฎีนิพนธ์",
+        "ปริญญานิพนธ์",
+        "สารนิพนธ์",
+        "reviewer",
+        "บทความ",
+        "วิทยานิพนธ์",
+        "ผู้ทรงคุณวุฒิ"
+      ],
+      "book": [
+        "book",
+        "textbook",
+        "book writing",
+        "write a book",
+        "write the book",
+        "ตำรา",
+        "เขียนหนังสือ",
+        "เขียนตำรา",
+        "ต้นฉบับหนังสือ",
+        "ต้นฉบับตำรา"
+      ],
+      "policy": [
+        "policy",
+        "regulation",
+        "proposal to council",
+        "master plan",
+        "นโยบาย",
+        "ข้อบังคับ",
+        "เสนอสภา",
+        "แผนแม่บท"
+      ],
+      "presentation": [
+        "slide",
+        "slides",
+        "presentation",
+        "deck",
+        "talk",
+        "seminar",
+        "briefing",
+        "สไลด์",
+        "นำเสนอ",
+        "บรรยาย",
+        "สัมมนา"
+      ],
+      "course-material": [
+        "course",
+        "lesson",
+        "syllabus",
+        "exercise",
+        "rubric",
+        "course material",
+        "teaching document",
+        "workshop",
+        "บทเรียน",
+        "ประมวลรายวิชา",
+        "รายวิชา",
+        "แบบฝึก",
+        "เอกสารสอน",
+        "เอกสารคำสอน",
+        "กิจกรรมการเรียน"
+      ],
+      "document": [
+        "document",
+        "documents",
+        "form",
+        "forms",
+        "letter",
+        "report",
+        "dossier",
+        "correspondence",
+        "nomination",
+        "เอกสาร",
+        "แบบฟอร์ม",
+        "หนังสือ",
+        "รายงาน",
+        "จดหมาย",
+        "แฟ้ม",
+        "เสนอชื่อ"
+      ],
+      "decision": [
+        "recommend",
+        "strategy",
+        "choose",
+        "decision",
+        "แนะนำ",
+        "กลยุทธ์",
+        "ตัดสินใจ",
+        "เลือก"
+      ]
+    },
+    "method": {
+      "content-analysis": [
+        "content analysis",
+        "codebook",
+        "corpus",
+        "thematic",
+        "วิเคราะห์เนื้อหา",
+        "กรอบรหัส"
+      ],
+      "data-analytics": [
+        "data",
+        "metric",
+        "dashboard",
+        "statistics",
+        "chart",
+        "ข้อมูล",
+        "ตัวชี้วัด",
+        "สถิติ",
+        "กราฟ",
+        "survey",
+        "ผลสำรวจ",
+        "แบบสอบถาม"
+      ],
+      "web-development": [
+        "website",
+        "web app",
+        "frontend",
+        "backend",
+        "responsive",
+        "accessibility",
+        "เว็บไซต์",
+        "เว็บแอป"
+      ],
+      "research-synthesis": [
+        "literature",
+        "evidence synthesis",
+        "sources",
+        "review papers",
+        "ทบทวนวรรณกรรม",
+        "สังเคราะห์หลักฐาน"
+      ],
+      "strategy-advisory": [
+        "strategy",
+        "options",
+        "recommend",
+        "recommendation",
+        "recommendations",
+        "advise",
+        "advisory",
+        "กลยุทธ์",
+        "ทางเลือก",
+        "คำแนะนำ"
+      ]
+    },
+    "lifecycle": {
+      "bootstrap": [
+        "bootstrap",
+        "new project",
+        "เริ่มโปรเจกต์",
+        "ตั้งโปรเจกต์"
+      ],
+      "resume": [
+        "resume",
+        "status",
+        "ค้างตรงไหน",
+        "ทำต่อ",
+        "สถานะ"
+      ],
+      "review": [
+        "review",
+        "critique",
+        "audit",
+        "ตรวจ",
+        "วิจารณ์",
+        "ประเมิน"
+      ],
+      "publish": [
+        "publish",
+        "release",
+        "submit",
+        "deploy",
+        "เผยแพร่",
+        "ส่งงาน",
+        "ขึ้นระบบ"
+      ],
+      "monitor": [
+        "monitor",
+        "track",
+        "watch",
+        "ติดตาม",
+        "เฝ้าดู"
+      ],
+      "implement": [
+        "implement",
+        "code",
+        "fix",
+        "refactor",
+        "build",
+        "แก้บั๊ก",
+        "รีแฟกเตอร์",
+        "พัฒนาซอฟต์แวร์"
+      ]
+    }
   },
-  "method": {
-   "content-analysis": [
-    "content analysis",
-    "codebook",
-    "corpus",
-    "thematic",
-    "วิเคราะห์เนื้อหา",
-    "กรอบรหัส"
-   ],
-   "data-analytics": [
-    "data",
-    "metric",
-    "dashboard",
-    "statistics",
-    "chart",
-    "ข้อมูล",
-    "ตัวชี้วัด",
-    "สถิติ",
-    "กราฟ",
-    "survey",
-    "ผลสำรวจ",
-    "แบบสอบถาม"
-   ],
-   "web-development": [
-    "website",
-    "web app",
-    "frontend",
-    "backend",
-    "responsive",
-    "accessibility",
-    "เว็บไซต์",
-    "เว็บแอป"
-   ],
-   "research-synthesis": [
-    "literature",
-    "evidence synthesis",
-    "sources",
-    "review papers",
-    "ทบทวนวรรณกรรม",
-    "สังเคราะห์หลักฐาน"
-   ],
-   "strategy-advisory": [
-    "strategy",
-    "options",
-    "recommend",
-    "recommendation",
-    "recommendations",
-    "advise",
-    "advisory",
-    "กลยุทธ์",
-    "ทางเลือก",
-    "คำแนะนำ"
-   ]
+  "strong_domains": [
+    {
+      "id": "software",
+      "phrases": [
+        "fix the",
+        "implement",
+        "refactor",
+        "software project",
+        "software package",
+        "task router",
+        "แก้บั๊ก",
+        "พัฒนาซอฟต์แวร์"
+      ]
+    },
+    {
+      "id": "operations",
+      "phrases": [
+        "compliance tracking",
+        "organize and preserve correspondence",
+        "nomination dossier",
+        "academic promotion",
+        "academic-rank",
+        "KU forms",
+        "check the deadline",
+        "official letter",
+        "ติดตามกำหนด",
+        "แฟ้มเสนอชื่อ",
+        "หนังสือราชการ",
+        "หนังสือภายนอก",
+        "หนังสือภายใน",
+        "ตำแหน่งวิชาการ",
+        "ศาสตราจารย์"
+      ]
+    },
+    {
+      "id": "research",
+      "phrases": [
+        "write the paper",
+        "write a paper",
+        "revise the paper",
+        "research manuscript",
+        "เขียนบทความ",
+        "แก้บทความ"
+      ]
+    },
+    {
+      "id": "education",
+      "phrases": [
+        "prepare the lesson",
+        "prepare the course",
+        "teaching document",
+        "course workspace",
+        "seminar",
+        "เตรียมการสอน",
+        "เอกสารคำสอน",
+        "พัฒนาการสอน",
+        "สัมมนา"
+      ]
+    },
+    {
+      "id": "book-writing",
+      "phrases": [
+        "write a book",
+        "write the book",
+        "book writing",
+        "textbook",
+        "build the book",
+        "export the book",
+        "เขียนหนังสือ",
+        "เขียนตำรา",
+        "ต้นฉบับหนังสือ",
+        "ต้นฉบับตำรา",
+        "build หนังสือ",
+        "export หนังสือ",
+        "จัดรูปเล่มหนังสือ",
+        "ผลิตหนังสือ"
+      ]
+    },
+    {
+      "id": "governance",
+      "phrases": [
+        "policy proposal",
+        "master plan",
+        "university council",
+        "institutional transformation",
+        "IOI / POSN",
+        "แผนแม่บท",
+        "เสนอสภา"
+      ]
+    }
+  ],
+  "strong_outputs": [
+    {
+      "id": "code",
+      "phrases": [
+        "implement",
+        "fix the",
+        "debug",
+        "refactor",
+        "code change",
+        "task router",
+        "แก้บั๊ก",
+        "รีแฟกเตอร์",
+        "พัฒนาซอฟต์แวร์"
+      ]
+    },
+    {
+      "id": "document",
+      "phrases": [
+        "prepare the document",
+        "submission document",
+        "selection documents",
+        "nomination dossier",
+        "correspondence",
+        "formal letter",
+        "official letter",
+        "จัดทำเอกสาร",
+        "แฟ้มเสนอชื่อ",
+        "หนังสือราชการ",
+        "หนังสือภายนอก",
+        "หนังสือภายใน",
+        "จดหมาย"
+      ]
+    },
+    {
+      "id": "presentation",
+      "phrases": [
+        "prepare a presentation",
+        "create slides",
+        "slide deck",
+        "slide decks",
+        "create a deck",
+        "สไลด์",
+        "เตรียมนำเสนอ",
+        "การบรรยาย"
+      ]
+    },
+    {
+      "id": "paper",
+      "phrases": [
+        "write the paper",
+        "write a paper",
+        "review the paper",
+        "revise the paper",
+        "review the manuscript",
+        "revise the manuscript",
+        "reviewer concerns",
+        "เขียนบทความ",
+        "แก้บทความ",
+        "ตรวจวิทยานิพนธ์",
+        "research report",
+        "term paper",
+        "รายงานวิจัย",
+        "รายงานการวิจัย"
+      ]
+    },
+    {
+      "id": "book",
+      "phrases": [
+        "write a book",
+        "write the book",
+        "book writing",
+        "textbook",
+        "build the book",
+        "export the book",
+        "เขียนหนังสือ",
+        "เขียนตำรา",
+        "ต้นฉบับหนังสือ",
+        "ต้นฉบับตำรา",
+        "build หนังสือ",
+        "export หนังสือ",
+        "จัดรูปเล่มหนังสือ",
+        "ผลิตหนังสือ"
+      ]
+    },
+    {
+      "id": "policy",
+      "phrases": [
+        "policy proposal",
+        "master plan",
+        "draft policy",
+        "แผนแม่บท",
+        "ร่างนโยบาย",
+        "เสนอสภา"
+      ]
+    },
+    {
+      "id": "course-material",
+      "phrases": [
+        "prepare the lesson",
+        "prepare the course",
+        "teaching document",
+        "course material",
+        "workshop activity",
+        "เตรียมการสอน",
+        "เอกสารคำสอน",
+        "แบบฝึก"
+      ]
+    },
+    {
+      "id": "decision",
+      "phrases": [
+        "assess how to",
+        "advise",
+        "supervise",
+        "recommend a direction",
+        "evidence set",
+        "academic-rank route",
+        "ประเมินแนวทาง",
+        "วางแนวทาง",
+        "ให้คำแนะนำ"
+      ]
+    }
+  ],
+  "preferred_deliverable": {
+    "software": "code",
+    "research": "paper",
+    "book-writing": "book",
+    "education": "course-material",
+    "governance": "policy",
+    "operations": "document"
   },
-  "lifecycle": {
-   "bootstrap": [
-    "bootstrap",
-    "new project",
-    "เริ่มโปรเจกต์",
-    "ตั้งโปรเจกต์"
-   ],
-   "resume": [
-    "resume",
-    "status",
-    "ค้างตรงไหน",
-    "ทำต่อ",
-    "สถานะ"
-   ],
-   "review": [
-    "review",
-    "critique",
-    "audit",
-    "ตรวจ",
-    "วิจารณ์",
-    "ประเมิน"
-   ],
-   "publish": [
-    "publish",
-    "release",
-    "submit",
-    "deploy",
-    "เผยแพร่",
-    "ส่งงาน",
-    "ขึ้นระบบ"
-   ],
-   "monitor": [
-    "monitor",
-    "track",
-    "watch",
-    "ติดตาม",
-    "เฝ้าดู"
-   ],
-   "implement": [
-    "implement",
-    "code",
-    "fix",
-    "refactor",
-    "build",
-    "แก้บั๊ก",
-    "รีแฟกเตอร์",
-    "พัฒนาซอฟต์แวร์"
-   ]
+  "method_modules": {
+    "web-development": "web",
+    "strategy-advisory": "strategy",
+    "data-analytics": "data-analytics",
+    "content-analysis": "content-analysis",
+    "research-synthesis": "research-synthesis"
+  },
+  "source_file_pattern": "(?<![\\w.])[\\w-]+\\.(?:py|sh|ps1|js|ts)(?![\\w.])",
+  "document_signals": {
+    "minimum_sections": 4,
+    "research_report": {
+      "abstract": [
+        "abstract",
+        "บทคัดย่อ"
+      ],
+      "introduction": [
+        "introduction",
+        "บทนำ"
+      ],
+      "related-work": [
+        "related work",
+        "literature review",
+        "background and related work",
+        "งานวิจัยที่เกี่ยวข้อง",
+        "ทบทวนวรรณกรรม",
+        "วรรณกรรมที่เกี่ยวข้อง"
+      ],
+      "method": [
+        "method",
+        "methods",
+        "methodology",
+        "materials and methods",
+        "experimental setup",
+        "วิธีดำเนินการวิจัย",
+        "วิธีการวิจัย",
+        "ระเบียบวิธีวิจัย"
+      ],
+      "results": [
+        "results",
+        "experimental results",
+        "evaluation",
+        "ผลการวิจัย",
+        "ผลการทดลอง",
+        "ผลการศึกษา"
+      ],
+      "discussion": [
+        "discussion",
+        "อภิปรายผล",
+        "อภิปราย"
+      ],
+      "conclusion": [
+        "conclusion",
+        "conclusions",
+        "สรุปผล",
+        "บทสรุป"
+      ],
+      "references": [
+        "references",
+        "bibliography",
+        "เอกสารอ้างอิง",
+        "บรรณานุกรม"
+      ]
+    },
+    "reference_paths": [
+      "references",
+      "reference",
+      "refs",
+      "literature",
+      "bibliography",
+      "papers",
+      "readings",
+      "related-work",
+      "related_work",
+      "อ้างอิง",
+      "เอกสารอ้างอิง",
+      "วรรณกรรม"
+    ],
+    "published_markers": [
+      "doi:",
+      "doi.org",
+      "issn",
+      "isbn",
+      "proceedings of",
+      "in proceedings",
+      "all rights reserved",
+      "copyright ©",
+      "©",
+      "arxiv:",
+      "preprint",
+      "received:",
+      "accepted:",
+      "published online",
+      "ieee",
+      "acm",
+      "springer",
+      "elsevier"
+    ],
+    "published_marker_limit": 2
+  },
+  "phrases": {
+    "package_release": [
+      "package release",
+      "release the package",
+      "release the kit",
+      "bump version",
+      "create a release",
+      "tag and release",
+      "publish the package",
+      "ออก release",
+      "ออกเวอร์ชัน",
+      "เพิ่มเวอร์ชัน",
+      "สร้าง tag",
+      "ปล่อยเวอร์ชัน"
+    ],
+    "data_analytics_confirm": [
+      "data analysis",
+      "analyze data",
+      "analyse data",
+      "dataset",
+      "metric",
+      "dashboard",
+      "statistics",
+      "statistical",
+      "chart",
+      "วิเคราะห์ข้อมูล",
+      "ข้อมูลสถิติ",
+      "ชุดข้อมูล",
+      "ฐานข้อมูล",
+      "ตัวชี้วัด",
+      "สถิติ",
+      "กราฟ",
+      "survey",
+      "survey results",
+      "ผลสำรวจ",
+      "แบบสอบถาม"
+    ],
+    "data_analytics_bare_terms": [
+      "data"
+    ],
+    "reviewer_response": [
+      "reviewer",
+      "review the",
+      "peer review",
+      "ผู้ทรง"
+    ],
+    "thesis_documents": [
+      "thesis",
+      "dissertation",
+      "defense draft",
+      "วิทยานิพนธ์",
+      "ดุษฎีนิพนธ์",
+      "ปริญญานิพนธ์",
+      "สารนิพนธ์",
+      "research report",
+      "term paper",
+      "รายงานวิจัย",
+      "รายงานการวิจัย"
+    ],
+    "thesis_review_verbs": [
+      "review",
+      "examine",
+      "critique",
+      "assess",
+      "evaluate",
+      "grade",
+      "defense",
+      "ตรวจ",
+      "สอบ",
+      "วิจารณ์",
+      "ประเมิน"
+    ],
+    "publication_production": [
+      "typeset",
+      "typesetting",
+      "build pdf",
+      "generate pdf",
+      "create pdf",
+      "export pdf",
+      "final pdf",
+      "build docx",
+      "generate docx",
+      "export docx",
+      "build epub",
+      "generate epub",
+      "export epub",
+      "html publication",
+      "page layout",
+      "final layout",
+      "convert to pdf",
+      "convert to docx",
+      "convert to epub",
+      "จัดรูปเล่ม",
+      "สร้าง pdf",
+      "สร้าง docx",
+      "สร้าง epub",
+      "ส่งออก pdf",
+      "ส่งออก docx",
+      "ส่งออก epub",
+      "เป็น epub",
+      "เป็น pdf",
+      "ตรวจไฟล์ final"
+    ],
+    "publication_verbs": [
+      "build",
+      "generate",
+      "export",
+      "convert",
+      "typeset",
+      "render",
+      "สร้าง",
+      "ส่งออก",
+      "แปลง",
+      "จัดรูปเล่ม"
+    ],
+    "publication_formats": [
+      "pdf",
+      "docx",
+      "word file",
+      "epub",
+      "html publication",
+      "print-ready",
+      "ไฟล์พิมพ์"
+    ],
+    "presentation_production": [
+      "create slides",
+      "build slides",
+      "make slides",
+      "create a deck",
+      "build a deck",
+      "make a deck",
+      "edit pptx",
+      "create pptx",
+      "build pptx",
+      "export pptx",
+      "render slides",
+      "render deck",
+      "export slides",
+      "export deck",
+      "final deck",
+      "google slides file",
+      "keynote file",
+      "html deck",
+      "สร้างสไลด์",
+      "ทำสไลด์",
+      "สร้าง pptx",
+      "แก้ pptx",
+      "ส่งออกสไลด์",
+      "เรนเดอร์สไลด์",
+      "ตรวจไฟล์สไลด์"
+    ],
+    "external_feedback": [
+      "user feedback",
+      "student feedback",
+      "stakeholder feedback",
+      "reviewer feedback",
+      "survey feedback",
+      "external feedback",
+      "ผลตอบรับ",
+      "ข้อเสนอแนะจากผู้ใช้",
+      "เสียงสะท้อน",
+      "ความคิดเห็นของนักเรียน",
+      "ความคิดเห็นของผู้มีส่วนได้ส่วนเสีย"
+    ],
+    "markdown_cleanup": [
+      "markdown cleanup",
+      "clean up markdown",
+      "migrate markdown",
+      "markdown inventory",
+      "recover markdown",
+      "จัดระเบียบ markdown",
+      "ย้ายไฟล์ markdown",
+      "กู้ markdown"
+    ],
+    "markdown_topic": [
+      "markdown"
+    ],
+    "markdown_verbs": [
+      "clean up",
+      "cleanup",
+      "migrate",
+      "inventory",
+      "recover",
+      "จัดระเบียบ",
+      "ย้าย",
+      "กู้"
+    ],
+    "prose_writing": [
+      "write",
+      "draft",
+      "revise",
+      "rewrite",
+      "edit the prose",
+      "polish",
+      "proofread",
+      "wording",
+      "prose",
+      "writing style",
+      "เขียน",
+      "ร่าง",
+      "แก้ภาษา",
+      "เกลา",
+      "ร้อยแก้ว",
+      "ปรับภาษา",
+      "สำนวน"
+    ],
+    "secret_check": [
+      "secret",
+      "secrets",
+      "credential",
+      "credentials",
+      "api key",
+      "private path",
+      "leak",
+      "ความลับ",
+      "รหัสผ่าน",
+      "ข้อมูลลับ"
+    ],
+    "machine_needed": [
+      "dependency",
+      "library",
+      "package",
+      "environment",
+      "gpu",
+      "cuda",
+      "ocr",
+      "build pdf",
+      "build docx",
+      "render",
+      "ติดตั้ง",
+      "ไลบรารี",
+      "แพ็กเกจ",
+      "สภาพแวดล้อม"
+    ],
+    "alternative_markers": [
+      "or",
+      "either",
+      "หรือ"
+    ]
   }
- },
- "strong_domains": [
-  {
-   "id": "software",
-   "phrases": [
-    "fix the",
-    "implement",
-    "refactor",
-    "software project",
-    "software package",
-    "task router",
-    "แก้บั๊ก",
-    "พัฒนาซอฟต์แวร์"
-   ]
-  },
-  {
-   "id": "operations",
-   "phrases": [
-    "compliance tracking",
-    "organize and preserve correspondence",
-    "nomination dossier",
-    "academic promotion",
-    "academic-rank",
-    "KU forms",
-    "check the deadline",
-    "official letter",
-    "ติดตามกำหนด",
-    "แฟ้มเสนอชื่อ",
-    "หนังสือราชการ",
-    "หนังสือภายนอก",
-    "หนังสือภายใน",
-    "ตำแหน่งวิชาการ",
-    "ศาสตราจารย์"
-   ]
-  },
-  {
-   "id": "research",
-   "phrases": [
-    "write the paper",
-    "write a paper",
-    "revise the paper",
-    "research manuscript",
-    "เขียนบทความ",
-    "แก้บทความ"
-   ]
-  },
-  {
-   "id": "education",
-   "phrases": [
-    "prepare the lesson",
-    "prepare the course",
-    "teaching document",
-    "course workspace",
-    "seminar",
-    "เตรียมการสอน",
-    "เอกสารคำสอน",
-    "พัฒนาการสอน",
-    "สัมมนา"
-   ]
-  },
-  {
-   "id": "book-writing",
-   "phrases": [
-    "write a book",
-    "write the book",
-    "book writing",
-    "textbook",
-    "build the book",
-    "export the book",
-    "เขียนหนังสือ",
-    "เขียนตำรา",
-    "ต้นฉบับหนังสือ",
-    "ต้นฉบับตำรา",
-    "build หนังสือ",
-    "export หนังสือ",
-    "จัดรูปเล่มหนังสือ",
-    "ผลิตหนังสือ"
-   ]
-  },
-  {
-   "id": "governance",
-   "phrases": [
-    "policy proposal",
-    "master plan",
-    "university council",
-    "institutional transformation",
-    "IOI / POSN",
-    "แผนแม่บท",
-    "เสนอสภา"
-   ]
-  }
- ],
- "strong_outputs": [
-  {
-   "id": "code",
-   "phrases": [
-    "implement",
-    "fix the",
-    "debug",
-    "refactor",
-    "code change",
-    "task router",
-    "แก้บั๊ก",
-    "รีแฟกเตอร์",
-    "พัฒนาซอฟต์แวร์"
-   ]
-  },
-  {
-   "id": "document",
-   "phrases": [
-    "prepare the document",
-    "submission document",
-    "selection documents",
-    "nomination dossier",
-    "correspondence",
-    "formal letter",
-    "official letter",
-    "จัดทำเอกสาร",
-    "แฟ้มเสนอชื่อ",
-    "หนังสือราชการ",
-    "หนังสือภายนอก",
-    "หนังสือภายใน",
-    "จดหมาย"
-   ]
-  },
-  {
-   "id": "presentation",
-   "phrases": [
-    "prepare a presentation",
-    "create slides",
-    "slide deck",
-    "slide decks",
-    "create a deck",
-    "สไลด์",
-    "เตรียมนำเสนอ",
-    "การบรรยาย"
-   ]
-  },
-  {
-   "id": "paper",
-   "phrases": [
-    "write the paper",
-    "write a paper",
-    "review the paper",
-    "revise the paper",
-    "review the manuscript",
-    "revise the manuscript",
-    "reviewer concerns",
-    "เขียนบทความ",
-    "แก้บทความ",
-    "ตรวจวิทยานิพนธ์"
-   ]
-  },
-  {
-   "id": "book",
-   "phrases": [
-    "write a book",
-    "write the book",
-    "book writing",
-    "textbook",
-    "build the book",
-    "export the book",
-    "เขียนหนังสือ",
-    "เขียนตำรา",
-    "ต้นฉบับหนังสือ",
-    "ต้นฉบับตำรา",
-    "build หนังสือ",
-    "export หนังสือ",
-    "จัดรูปเล่มหนังสือ",
-    "ผลิตหนังสือ"
-   ]
-  },
-  {
-   "id": "policy",
-   "phrases": [
-    "policy proposal",
-    "master plan",
-    "draft policy",
-    "แผนแม่บท",
-    "ร่างนโยบาย",
-    "เสนอสภา"
-   ]
-  },
-  {
-   "id": "course-material",
-   "phrases": [
-    "prepare the lesson",
-    "prepare the course",
-    "teaching document",
-    "course material",
-    "workshop activity",
-    "เตรียมการสอน",
-    "เอกสารคำสอน",
-    "แบบฝึก"
-   ]
-  },
-  {
-   "id": "decision",
-   "phrases": [
-    "assess how to",
-    "advise",
-    "supervise",
-    "recommend a direction",
-    "evidence set",
-    "academic-rank route",
-    "ประเมินแนวทาง",
-    "วางแนวทาง",
-    "ให้คำแนะนำ"
-   ]
-  }
- ],
- "preferred_deliverable": {
-  "software": "code",
-  "research": "paper",
-  "book-writing": "book",
-  "education": "course-material",
-  "governance": "policy",
-  "operations": "document"
- },
- "method_modules": {
-  "web-development": "web",
-  "strategy-advisory": "strategy",
-  "data-analytics": "data-analytics",
-  "content-analysis": "content-analysis",
-  "research-synthesis": "research-synthesis"
- },
- "source_file_pattern": "(?<![\\w.])[\\w-]+\\.(?:py|sh|ps1|js|ts)(?![\\w.])",
- "phrases": {
-  "package_release": [
-   "package release",
-   "release the package",
-   "release the kit",
-   "bump version",
-   "create a release",
-   "tag and release",
-   "publish the package",
-   "ออก release",
-   "ออกเวอร์ชัน",
-   "เพิ่มเวอร์ชัน",
-   "สร้าง tag",
-   "ปล่อยเวอร์ชัน"
-  ],
-  "data_analytics_confirm": [
-   "data analysis",
-   "analyze data",
-   "analyse data",
-   "dataset",
-   "metric",
-   "dashboard",
-   "statistics",
-   "statistical",
-   "chart",
-   "วิเคราะห์ข้อมูล",
-   "ข้อมูลสถิติ",
-   "ชุดข้อมูล",
-   "ฐานข้อมูล",
-   "ตัวชี้วัด",
-   "สถิติ",
-   "กราฟ",
-   "survey",
-   "survey results",
-   "ผลสำรวจ",
-   "แบบสอบถาม"
-  ],
-  "data_analytics_bare_terms": [
-   "data"
-  ],
-  "reviewer_response": [
-   "reviewer",
-   "review the",
-   "peer review",
-   "ผู้ทรง"
-  ],
-  "publication_production": [
-   "typeset",
-   "typesetting",
-   "build pdf",
-   "generate pdf",
-   "create pdf",
-   "export pdf",
-   "final pdf",
-   "build docx",
-   "generate docx",
-   "export docx",
-   "build epub",
-   "generate epub",
-   "export epub",
-   "html publication",
-   "page layout",
-   "final layout",
-   "convert to pdf",
-   "convert to docx",
-   "convert to epub",
-   "จัดรูปเล่ม",
-   "สร้าง pdf",
-   "สร้าง docx",
-   "สร้าง epub",
-   "ส่งออก pdf",
-   "ส่งออก docx",
-   "ส่งออก epub",
-   "เป็น epub",
-   "เป็น pdf",
-   "ตรวจไฟล์ final"
-  ],
-  "publication_verbs": [
-   "build",
-   "generate",
-   "export",
-   "convert",
-   "typeset",
-   "render",
-   "สร้าง",
-   "ส่งออก",
-   "แปลง",
-   "จัดรูปเล่ม"
-  ],
-  "publication_formats": [
-   "pdf",
-   "docx",
-   "word file",
-   "epub",
-   "html publication",
-   "print-ready",
-   "ไฟล์พิมพ์"
-  ],
-  "presentation_production": [
-   "create slides",
-   "build slides",
-   "make slides",
-   "create a deck",
-   "build a deck",
-   "make a deck",
-   "edit pptx",
-   "create pptx",
-   "build pptx",
-   "export pptx",
-   "render slides",
-   "render deck",
-   "export slides",
-   "export deck",
-   "final deck",
-   "google slides file",
-   "keynote file",
-   "html deck",
-   "สร้างสไลด์",
-   "ทำสไลด์",
-   "สร้าง pptx",
-   "แก้ pptx",
-   "ส่งออกสไลด์",
-   "เรนเดอร์สไลด์",
-   "ตรวจไฟล์สไลด์"
-  ],
-  "external_feedback": [
-   "user feedback",
-   "student feedback",
-   "stakeholder feedback",
-   "reviewer feedback",
-   "survey feedback",
-   "external feedback",
-   "ผลตอบรับ",
-   "ข้อเสนอแนะจากผู้ใช้",
-   "เสียงสะท้อน",
-   "ความคิดเห็นของนักเรียน",
-   "ความคิดเห็นของผู้มีส่วนได้ส่วนเสีย"
-  ],
-  "markdown_cleanup": [
-   "markdown cleanup",
-   "clean up markdown",
-   "migrate markdown",
-   "markdown inventory",
-   "recover markdown",
-   "จัดระเบียบ markdown",
-   "ย้ายไฟล์ markdown",
-   "กู้ markdown"
-  ],
-  "markdown_topic": [
-   "markdown"
-  ],
-  "markdown_verbs": [
-   "clean up",
-   "cleanup",
-   "migrate",
-   "inventory",
-   "recover",
-   "จัดระเบียบ",
-   "ย้าย",
-   "กู้"
-  ],
-  "prose_writing": [
-   "write",
-   "draft",
-   "revise",
-   "rewrite",
-   "edit the prose",
-   "polish",
-   "proofread",
-   "wording",
-   "prose",
-   "writing style",
-   "เขียน",
-   "ร่าง",
-   "แก้ภาษา",
-   "เกลา",
-   "ร้อยแก้ว",
-   "ปรับภาษา",
-   "สำนวน"
-  ],
-  "secret_check": [
-   "secret",
-   "secrets",
-   "credential",
-   "credentials",
-   "api key",
-   "private path",
-   "leak",
-   "ความลับ",
-   "รหัสผ่าน",
-   "ข้อมูลลับ"
-  ],
-  "machine_needed": [
-   "dependency",
-   "library",
-   "package",
-   "environment",
-   "gpu",
-   "cuda",
-   "ocr",
-   "build pdf",
-   "build docx",
-   "render",
-   "ติดตั้ง",
-   "ไลบรารี",
-   "แพ็กเกจ",
-   "สภาพแวดล้อม"
-  ],
-  "alternative_markers": [
-   "or",
-   "either",
-   "หรือ"
-  ]
- }
 }

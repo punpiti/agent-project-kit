@@ -79,6 +79,25 @@ data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_
 assert "publication-production" not in data["workflow"]["stages"],data
 data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"preview the thesis draft"],encoding="utf-8"))
 assert "reviewer-response" not in data["workflow"]["stages"],data
+# Naming a thesis is not reviewing one; the stage needs a review verb too.
+assert "thesis-review" not in data["workflow"]["stages"],data
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"ตรวจวิทยานิพนธ์ของนิสิตก่อนสอบป้องกัน"],encoding="utf-8"))
+assert "thesis-review" in data["workflow"]["stages"],data
+# Thesis synonyms must reach the paper deliverable, or the stage can never fire.
+for request in ("examine this dissertation chapter by chapter","review this defense draft","วิจารณ์ดุษฎีนิพนธ์ฉบับนี้"):
+    data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],encoding="utf-8"))
+    assert data["deliverable"]=="paper" and "thesis-review" in data["workflow"]["stages"],(request,data)
+# A course research report is reviewed like a thesis, not produced like course
+# material, and the bare words "report" and "course" must not claim it.
+for request in ("ตรวจรายงานวิจัยวิชา machine learning","review my research report for the machine learning course","grade this student research report"):
+    data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],encoding="utf-8"))
+    assert data["primary_pipeline"]=="research-activities" and "thesis-review" in data["workflow"]["stages"],(request,data)
+# Writing one is not reviewing one.
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"เขียนรายงานวิจัยส่งอาจารย์"],encoding="utf-8"))
+assert data["workflow"]["stages"]==[],data
+# Answering a journal reviewer stays on the reviewer-response stage.
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"review the manuscript and answer reviewer concerns"],encoding="utf-8"))
+assert data["workflow"]["stages"]==["reviewer-response"],data
 data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"fix the bug using user feedback then bump version"],encoding="utf-8"))
 assert "package-release" in data["workflow"]["stages"],data
 assert not any(item["id"]=="package-release" for item in data["omitted"]),data

@@ -30,8 +30,78 @@ def expect(fragment: str, mutate) -> None:
     assert any(fragment in error for error in errors), (fragment, errors)
 
 
+def write_document(directory: Path, name: str, body: str) -> Path:
+    """A document on disk, so the detector is exercised the way callers use it."""
+    directory.mkdir(parents=True, exist_ok=True)
+    path = directory / name
+    path.write_text(body, encoding="utf-8")
+    return path
+
+
+SECTIONS = """# {title}
+{header}
+## Abstract
+text
+## Introduction
+text
+## Related Work
+text
+## Method
+text
+## Results
+text
+## References
+text
+"""
+
+
+def check_documents() -> None:
+    """Structure says what a file is; nothing on disk says what to do with it."""
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        published_header = "Proceedings of IEEE ICRA. DOI: 10.1109/x\nCopyright © 2024 IEEE."
+        own = write_document(root / "01_working_text", "report.md",
+                             SECTIONS.format(title="My Course Report", header=""))
+        filed = write_document(root / "02_references", "smith.md",
+                               SECTIONS.format(title="Someone Else", header=""))
+        loose = write_document(root, "loose.md",
+                               SECTIONS.format(title="Someone Else", header=published_header))
+        notes = write_document(root, "notes.md", "# Notes\nResults show it is fast.\n")
+
+        vague, ask = "ดูไฟล์นี้ให้หน่อย", "ตรวจไฟล์นี้ให้หน่อย"
+
+        # No file selects the review by itself. The draft may be finished, the
+        # paper already published, the work someone else's: the agent asks.
+        for path in (own, filed, loose):
+            route = route_task.classify(vague, None, [path])
+            assert route["workflow"]["stages"] == [], (path, route)
+            assert route["needs_clarification"], (path, route)
+            assert route["clarification_reasons"], (path, route)
+            # Naming the file as the thing to review is the deliberate ask.
+            asked = route_task.classify(ask, None, [path])
+            assert asked["workflow"]["stages"] == ["thesis-review"], (path, asked)
+            assert asked["clarification_reasons"] == [], (path, asked)
+
+        # A numbered folder is still that folder, and publication marks travel
+        # with the file wherever it sits.
+        assert route_task.classify(vague, None, [filed])["documents"][0]["in_reference_dir"]
+        assert route_task.classify(vague, None, [loose])["documents"][0]["finished_or_external"]
+        assert not route_task.classify(vague, None, [own])["documents"][0]["finished_or_external"]
+
+        # Prose that merely starts with a section word is not a research report,
+        # and must not raise a question of its own.
+        quiet = route_task.classify(vague, None, [notes])
+        assert not quiet["documents"][0]["research_document"], quiet
+        assert quiet["clarification_reasons"] == [], quiet
+
+        # An unreadable path is reported, not guessed at.
+        missing = route_task.classify(vague, None, [root / "gone.md"])["documents"][0]
+        assert missing["readable"] is False and missing["research_document"] is False, missing
+
+
 def main() -> None:
     assert route_task.validate_rules() == [], route_task.validate_rules()
+    check_documents()
 
     expect("in both", lambda r: r["axes"]["domain"]["research"].append("website"))
     expect("duplicate phrase", lambda r: r["phrases"]["secret_check"].append("Secret"))
@@ -40,6 +110,12 @@ def main() -> None:
     expect("unknown domain", lambda r: r["strong_domains"].append({"id": "astrology", "phrases": ["x"]}))
     expect("unknown deliverable", lambda r: r["strong_outputs"][0].update(id="poem"))
     expect("not in axes", lambda r: r["preferred_deliverable"].update(software="poem"))
+    expect("document_signals.research_report.abstract",
+           lambda r: r["document_signals"]["research_report"].update(abstract=[]))
+    expect("document_signals.reference_paths",
+           lambda r: r["document_signals"].update(reference_paths=["  "]))
+    expect("minimum_sections", lambda r: r["document_signals"].update(minimum_sections=99))
+    expect("published_marker_limit", lambda r: r["document_signals"].update(published_marker_limit=0))
     expect("unregistered module", lambda r: r["method_modules"].update({"web-development": "webz"}))
     expect("no module for method", lambda r: r["method_modules"].pop("strategy-advisory"))
     expect("not used by route_task.py", lambda r: r["phrases"].update(unused_list=["x"]))

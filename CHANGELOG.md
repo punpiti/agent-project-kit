@@ -4,6 +4,41 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Added a thesis review stage. `prompts/25_THESIS_REVIEW.md` carries the review
+  process from the thesis-review-prompt-pack: an intake gate, L1-L4 calibration,
+  a section maturity gate, the ordered review sequence from title down to
+  references, research-logic stress tests, a traceability table, a reference
+  integrity gate, and a review state for the next round. The registry gains the
+  `thesis-review` stage and `config/routing-rules.json` gains `thesis_documents`
+  and `thesis_review_verbs`, combined with AND so that naming a thesis does not
+  select the stage without a review verb. Examining a thesis now outranks the
+  reviewer-response phrasing it shares, so answering a journal reviewer still
+  routes to `04_PAPER_REVIEWER_RESPONSE.md`. The pack stays the upstream source;
+  this is a distillation of its process, not a byte copy. The stage also covers
+  a research report written for a course: `research report`, `term paper`,
+  `รายงานวิจัย`, and `รายงานการวิจัย` are strong paper outputs, because the bare
+  words `report` and `course` otherwise sent those requests to the
+  administrative-operations and course-material routes. `dissertation`,
+  `defense draft`, `ดุษฎีนิพนธ์`, `ปริญญานิพนธ์`, and `สารนิพนธ์` join the paper
+  deliverable axis, which previously knew only `thesis` and `วิทยานิพนธ์`, so
+  those phrasings could never reach the stage. The prompt judges coursework
+  against the course brief instead of a venue.
+
+- `route_task.py` and `context.py` accept `--file`, and classify from what a
+  named document contains instead of from the request alone. A file is read
+  only when the caller names it; nothing is scanned. `config/routing-rules.json`
+  gains `document_signals`: the bilingual section headings that make a file a
+  research document, the folder names and publication marks that say it is a
+  reference or already published, and the two thresholds. A supplied document
+  settles the deliverable, but never selects the review stage by itself, because
+  structure cannot tell a draft from a finished paper, a published one, or
+  someone else's: abstract, method, results, and references appear in all four.
+  Instead the route carries `clarification_reasons`, so the agent asks what to
+  do with the file, and `context.py` already exits 2 when clarification is
+  needed. Reviewing then happens on a deliberate ask. The route also reports the
+  sections found, the folder verdict, and the publication marks, so the decision
+  can be audited.
+
 - Fixed an intermittent CI failure (`tar: ./scripts/__pycache__: file changed
   as we read it`). The gate runs suites in parallel, and three tests, through
   `check_release_boundary.py` and `release_check.py` importing sibling

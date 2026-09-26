@@ -78,6 +78,7 @@
 - `prompts/22_BOOK_WRITING.md`
 - `prompts/23_PRESENTATION_PRODUCTION.md`
 - `prompts/24_PROSE_STYLE.md`
+- `prompts/25_THESIS_REVIEW.md`
 - `prompts/catalog.json`
 - `scripts/bootstrap_ai_project.py`
 - `scripts/apk_doctor.py`

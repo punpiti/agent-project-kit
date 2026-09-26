@@ -37,7 +37,8 @@ SOURCE_FILE=re.compile(ROUTING["source_file_pattern"], re.IGNORECASE)
 
 REQUIRED_PHRASES = (
     "package_release", "data_analytics_confirm", "data_analytics_bare_terms",
-    "reviewer_response", "publication_production", "publication_verbs",
+    "reviewer_response", "thesis_documents", "thesis_review_verbs",
+    "publication_production", "publication_verbs",
     "publication_formats", "presentation_production", "external_feedback",
     "markdown_cleanup", "markdown_topic", "markdown_verbs", "prose_writing",
     "secret_check", "machine_needed", "alternative_markers",
@@ -69,6 +70,20 @@ def validate_rules(routing: dict = ROUTING, registry: dict = REGISTRY) -> list[s
                 other = owner.setdefault(term.casefold(), key)
                 if other != key:
                     errors.append(f"axes.{axis}: {term!r} in both {other} and {key}")
+    signals = routing.get("document_signals", {})
+    sections = signals.get("research_report", {})
+    if not isinstance(sections, dict) or not sections:
+        errors.append("document_signals.research_report: must be a non-empty object")
+    for name, headings in sections.items() if isinstance(sections, dict) else []:
+        check_terms(f"document_signals.research_report.{name}", headings)
+    for key in ("reference_paths", "published_markers"):
+        check_terms(f"document_signals.{key}", signals.get(key))
+    minimum = signals.get("minimum_sections")
+    if not isinstance(minimum, int) or not 1 <= minimum <= max(1, len(sections)):
+        errors.append("document_signals.minimum_sections: must be between 1 and the section count")
+    limit = signals.get("published_marker_limit")
+    if not isinstance(limit, int) or limit < 1:
+        errors.append("document_signals.published_marker_limit: must be a positive integer")
     if routing.get("defaults", {}).get("deliverable") not in axes.get("deliverable", {}):
         errors.append("defaults.deliverable: not a deliverable axis key")
     for name, axis in (("strong_domains", "domain"), ("strong_outputs", "deliverable")):
@@ -149,7 +164,67 @@ def bounded(items: list[str], limit: int, category: str) -> tuple[list[str], lis
     ]
     return selected, omitted
 
-def classify(request: str, project: Path | None = None) -> dict:
+SIGNALS = ROUTING["document_signals"]
+# A heading may carry Markdown marks, a chapter word, or section numbering.
+HEADING_PREFIX = re.compile(r"^[\s#*>|=\-]*(?:บทที่\s*\d+\s*)?(?:chapter\s*\d+\s*)?(?:\d+(?:\.\d+)*[.)]?\s*)?", re.IGNORECASE)
+HEADING_MAX = 80
+
+
+ORDERING_PREFIX = re.compile(r"^\d+[\s._-]*|[\s._-]*\d+$")
+
+
+def strip_ordering(part: str) -> str:
+    """"02_references" and "references" name the same folder."""
+    return ORDERING_PREFIX.sub("", part.casefold()).strip("._- ")
+
+
+def document_sections(text: str) -> list[str]:
+    """Names of the research-report sections that appear as headings."""
+    found = set()
+    for raw in text.splitlines():
+        line = raw.strip()
+        # A heading is short. Body prose starting with "Results show that..."
+        # is not a section, and treating it as one would flag reading notes.
+        if not line or len(line) > HEADING_MAX:
+            continue
+        rest = HEADING_PREFIX.sub("", line).strip().casefold()
+        for name, headings in SIGNALS["research_report"].items():
+            if name not in found and any(rest.startswith(h.casefold()) for h in headings):
+                found.add(name)
+    return sorted(found)
+
+
+def inspect_document(path: Path) -> dict:
+    """Structure and ownership signals for one document the caller named."""
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return {"path": str(path), "readable": False, "research_document": False,
+                "finished_or_external": False}
+    folded = text.casefold()
+    sections = document_sections(text)
+    markers = sorted({marker for marker in SIGNALS["published_markers"]
+                      if marker.casefold() in folded})
+    reference_dirs = {name.casefold() for name in SIGNALS["reference_paths"]}
+    in_reference_dir = any(strip_ordering(part) in reference_dirs for part in path.parts[:-1])
+    # Structure cannot tell a draft from a reference paper or from the reader's
+    # own published work: all three have abstract, method, results, references.
+    # Location and publication marks are what separate them.
+    finished_or_external = in_reference_dir or len(markers) >= SIGNALS["published_marker_limit"]
+    return {
+        "path": str(path),
+        "readable": True,
+        "sections": sections,
+        "research_document": len(sections) >= SIGNALS["minimum_sections"],
+        "finished_or_external": finished_or_external,
+        "in_reference_dir": in_reference_dir,
+        "published_markers": markers,
+    }
+
+
+def classify(request: str, project: Path | None = None, files: list[Path] | None = None) -> dict:
+    documents=[inspect_document(path) for path in files or []]
+    supplied_document=any(d["research_document"] for d in documents)
     domain,dc=best(request,"domain",DEFAULTS["domain"]); deliverable,oc=best(request,"deliverable",DEFAULTS["deliverable"])
     for candidate,hints in ((item["id"],item["phrases"]) for item in ROUTING["strong_domains"]):
         if contains_any(request,hints): domain,dc=candidate,0.95; break
@@ -167,6 +242,8 @@ def classify(request: str, project: Path | None = None) -> dict:
         # Engineering work in a software domain produces code unless the
         # request names some other output.
         elif domain=="software" and oc<0.5: deliverable,oc="code",0.8
+    # A supplied research document names the deliverable that the request left out.
+    if supplied_document and not strong_output: deliverable,oc="paper",0.9
     methods=[key for key,terms in RULES["method"].items() if matches(request,terms)]
     # In software work "data" usually means configuration or fixtures.
     bare_data=[] if domain=="software" else PHRASES["data_analytics_bare_terms"]
@@ -184,7 +261,15 @@ def classify(request: str, project: Path | None = None) -> dict:
       method_candidates,REGISTRY["composition"]["method_max"],"method")
     stages=[]
     if deliverable=="code": stages.append("implementation")
-    if deliverable=="paper" and contains_any(request,PHRASES["reviewer_response"]): stages.append("reviewer-response")
+    # Examining a thesis is a different stage from answering a journal reviewer,
+    # so a thesis under review outranks the reviewer-response phrasing it shares.
+    review_verb = contains_any(request,PHRASES["thesis_review_verbs"])
+    # Naming the document in the request, or naming it with --file, both count
+    # as asking for a review. Someone else's paper needs that explicit ask.
+    thesis_review = review_verb and (contains_any(request,PHRASES["thesis_documents"])
+                                     or supplied_document)
+    if deliverable=="paper" and thesis_review: stages.append("thesis-review")
+    elif deliverable=="paper" and contains_any(request,PHRASES["reviewer_response"]): stages.append("reviewer-response")
     publication_production=contains_any(request,PHRASES["publication_production"])
     publication_production = publication_production or (
       contains_any(request,PHRASES["publication_verbs"])
@@ -235,6 +320,13 @@ def classify(request: str, project: Path | None = None) -> dict:
     elif lifecycle=="bootstrap": state_actions.append("new-project-bootstrap")
     state_actions=list(dict.fromkeys(state_actions))
     compatibility=list(dict.fromkeys(lifecycle_stages+method_modules+gates+state_actions))
+    # A research document was handed over without a stated intent. It may be
+    # finished, already published, or someone else's, so ask before acting.
+    clarification_reasons=[]
+    if supplied_document and not thesis_review:
+        clarification_reasons.append(
+          "a supplied file looks like a research document; ask what to do with it "
+          "before reviewing, because it may be finished, already published, or someone else's")
     return {
       "schema_version":2,
       "request":request,
@@ -250,19 +342,22 @@ def classify(request: str, project: Path | None = None) -> dict:
         "gates":gates,
         "state_actions":state_actions},
       "secondary_workflows":compatibility,
+      "documents":documents,
+      "clarification_reasons":clarification_reasons,
       "omitted":omitted,
       "selection_trace":{"primary_candidates":primary_scores},
       "confidence":round(min(dc if domain!="general" else 0.7,oc,0.6 if len(primary_scores)>1 and primary_scores[0]["score"]==primary_scores[1]["score"] else 0.9),2),
-      "needs_clarification":oc<0.5 or (len(primary_scores)>1 and primary_scores[0]["score"]==primary_scores[1]["score"] and primary_scores[0]["score"]>1) or (contains_any(request,PHRASES["alternative_markers"]) and sum(bool(matches(request,terms)) for terms in RULES["deliverable"].values())>1)}
+      "needs_clarification":bool(clarification_reasons) or oc<0.5 or (len(primary_scores)>1 and primary_scores[0]["score"]==primary_scores[1]["score"] and primary_scores[0]["score"]>1) or (contains_any(request,PHRASES["alternative_markers"]) and sum(bool(matches(request,terms)) for terms in RULES["deliverable"].values())>1)}
 
 def main() -> int:
     if sys.argv[1:] == ["--validate"]:
         errors = validate_rules()
         for error in errors: print(f"routing rules: {error}")
         print("routing rules: " + ("FAIL" if errors else "PASS")); return 1 if errors else 0
-    p=argparse.ArgumentParser(description=__doc__); p.add_argument("request",nargs="+"); p.add_argument("--pretty",action="store_true"); p.add_argument("--project"); a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__); p.add_argument("request",nargs="+"); p.add_argument("--pretty",action="store_true"); p.add_argument("--project"); p.add_argument("--file",action="append",default=[],help="a document to inspect; repeatable"); a=p.parse_args()
     project=Path(a.project).resolve() if a.project else None
+    files=[Path(name).resolve() for name in a.file]
     # Thai output must survive a redirected stdout on Windows (cp1252 default).
     sys.stdout.reconfigure(encoding="utf-8")
-    print(json.dumps(classify(" ".join(a.request),project),ensure_ascii=False,indent=2 if a.pretty else None)); return 0
+    print(json.dumps(classify(" ".join(a.request),project,files),ensure_ascii=False,indent=2 if a.pretty else None)); return 0
 if __name__=="__main__": raise SystemExit(main())
