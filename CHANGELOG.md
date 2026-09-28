@@ -4,6 +4,8 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+## 8.1.0-workflow-architecture-canary — 2026-09-29
+
 - Fixed the installed `check_release_boundary.py` crashing because an APK
   snapshot does not contain the source repository's `.gitignore`. The checker
   now keeps APK config/runtime lookup anchored to its installed location while
