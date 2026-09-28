@@ -107,8 +107,15 @@ with tempfile.TemporaryDirectory() as tmp:
     (fixture / "tracked.txt").write_text("tracked\n", encoding="utf-8")
     subprocess.run(["git", "-C", str(fixture), "add", "tracked.txt"], check=True)
     (fixture / "new-public-file.txt").write_text("candidate\n", encoding="utf-8")
+    assert boundary.repository_root(fixture) == fixture.resolve()
     assert boundary.untracked_files(fixture) == ["new-public-file.txt"]
     assert boundary.has_tracked_changes(fixture, staged=True)
+    missing_ignore = subprocess.run(
+        [sys.executable, str(boundary_path)],
+        cwd=fixture, capture_output=True, text=True, check=False,
+    )
+    assert missing_ignore.returncode == 1, missing_ignore
+    assert "- missing repository .gitignore" in missing_ignore.stdout, missing_ignore
 assert boundary.is_private_path(".env")
 assert boundary.is_private_path("config/.env.production")
 assert not boundary.is_private_path("docs/environment.md")

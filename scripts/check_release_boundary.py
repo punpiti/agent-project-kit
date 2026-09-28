@@ -9,20 +9,32 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+from typing import Optional
 
-ROOT = Path(__file__).resolve().parent.parent
-CONFIG = json.loads((ROOT / "config" / "release-boundary.json").read_text(encoding="utf-8"))
+KIT_ROOT = Path(__file__).resolve().parent.parent
+CONFIG = json.loads(
+    (KIT_ROOT / "config" / "release-boundary.json").read_text(encoding="utf-8")
+)
 
 
-def public_candidate_files() -> list[str]:
+def repository_root(start: Optional[Path] = None) -> Path:
+    """Return the Git worktree being checked, independent of the APK location."""
+    result = subprocess.run(
+        ["git", "rev-parse", "--show-toplevel"],
+        cwd=start or Path.cwd(), check=True, capture_output=True, text=True,
+    )
+    return Path(result.stdout.strip()).resolve()
+
+
+def public_candidate_files(root: Path) -> list[str]:
     result = subprocess.run(
         ["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z"],
-        cwd=ROOT, check=True, capture_output=True
+        cwd=root, check=True, capture_output=True
     )
     return [part.decode("utf-8") for part in result.stdout.split(b"\0") if part]
 
 
-def untracked_files(root: Path = ROOT) -> list[str]:
+def untracked_files(root: Path) -> list[str]:
     """Return untracked, non-ignored files that a release could omit."""
     result = subprocess.run(
         ["git", "ls-files", "--others", "--exclude-standard", "-z"],
@@ -31,7 +43,7 @@ def untracked_files(root: Path = ROOT) -> list[str]:
     return [part.decode("utf-8") for part in result.stdout.split(b"\0") if part]
 
 
-def has_tracked_changes(root: Path = ROOT, *, staged: bool = False) -> bool:
+def has_tracked_changes(root: Path, *, staged: bool = False) -> bool:
     command = ["git", "diff", "--quiet"]
     if staged:
         command.insert(2, "--cached")
@@ -40,7 +52,7 @@ def has_tracked_changes(root: Path = ROOT, *, staged: bool = False) -> bool:
 
 def runtime_items() -> tuple[str, ...]:
     sys.dont_write_bytecode = True  # importing a sibling must not add __pycache__ to the tree
-    path = ROOT / "scripts" / "install-shared.py"
+    path = KIT_ROOT / "scripts" / "install-shared.py"
     spec = importlib.util.spec_from_file_location("apk_install_shared", path)
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
@@ -58,18 +70,20 @@ def is_private_path(name: str) -> bool:
     )
 
 
-def history_findings(patterns: list[tuple[str, re.Pattern[str]]]) -> list[str]:
+def history_findings(
+    root: Path, patterns: list[tuple[str, re.Pattern[str]]]
+) -> list[str]:
     """Inspect reachable Git history without ever printing matching content."""
     findings: list[str] = []
     names = subprocess.run(
         ["git", "log", "--all", "--name-only", "--pretty=format:"],
-        cwd=ROOT, check=True, capture_output=True, text=True
+        cwd=root, check=True, capture_output=True, text=True
     ).stdout.splitlines()
     for name in {line for line in names if line}:
         if is_private_path(name):
             findings.append(f"historical private path: {name}")
     revisions = subprocess.run(
-        ["git", "rev-list", "--all"], cwd=ROOT, check=True,
+        ["git", "rev-list", "--all"], cwd=root, check=True,
         capture_output=True, text=True
     ).stdout.splitlines()
     if revisions:
@@ -77,7 +91,7 @@ def history_findings(patterns: list[tuple[str, re.Pattern[str]]]) -> list[str]:
         for _, pattern in patterns:
             command.extend(["-e", pattern.pattern])
         scan = subprocess.run(
-            [*command, *revisions, "--"], cwd=ROOT, capture_output=True, text=True
+            [*command, *revisions, "--"], cwd=root, capture_output=True, text=True
         )
         if scan.returncode not in (0, 1):
             raise subprocess.CalledProcessError(
@@ -100,24 +114,29 @@ def main() -> int:
     )
     args = parser.parse_args()
     errors: list[str] = []
-    files = public_candidate_files()
+    root = repository_root()
+    files = public_candidate_files(root)
     if args.release:
-        for name in untracked_files():
+        for name in untracked_files(root):
             errors.append(f"untracked release candidate: {name}")
-        if has_tracked_changes():
+        if has_tracked_changes(root):
             errors.append("tracked working-tree changes remain")
-        if has_tracked_changes(staged=True):
+        if has_tracked_changes(root, staged=True):
             errors.append("staged but uncommitted changes remain")
     for name in files:
         if is_private_path(name):
             errors.append(f"blocked private path: {name}")
-    ignore_rules = {
-        line.strip() for line in (ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()
-        if line.strip() and not line.lstrip().startswith("#")
-    }
-    for rule in CONFIG["required_ignore_rules"]:
-        if rule not in ignore_rules:
-            errors.append(f"missing ignore rule: {rule}")
+    ignore_path = root / ".gitignore"
+    if not ignore_path.is_file():
+        errors.append("missing repository .gitignore")
+    else:
+        ignore_rules = {
+            line.strip() for line in ignore_path.read_text(encoding="utf-8").splitlines()
+            if line.strip() and not line.lstrip().startswith("#")
+        }
+        for rule in CONFIG["required_ignore_rules"]:
+            if rule not in ignore_rules:
+                errors.append(f"missing ignore rule: {rule}")
     actual_runtime = set(runtime_items())
     expected_runtime = set(CONFIG["shared_runtime_items"])
     if actual_runtime != expected_runtime:
@@ -132,7 +151,7 @@ def main() -> int:
         for item in CONFIG.get("public_content_patterns", [])
     ]
     for name in files:
-        path = ROOT / name
+        path = root / name
         if not path.is_file():
             continue
         if path.stat().st_size > 2_000_000:
@@ -149,7 +168,7 @@ def main() -> int:
             if pattern.search(text):
                 errors.append(f"{finding_type} {rule_id}: {name}")
     if args.history:
-        errors.extend(history_findings(secret_patterns))
+        errors.extend(history_findings(root, secret_patterns))
     if errors:
         print("release boundary: FAIL")
         for error in sorted(set(errors)):

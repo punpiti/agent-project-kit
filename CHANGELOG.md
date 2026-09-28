@@ -4,6 +4,14 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Fixed the installed `check_release_boundary.py` crashing because an APK
+  snapshot does not contain the source repository's `.gitignore`. The checker
+  now keeps APK config/runtime lookup anchored to its installed location while
+  resolving file candidates, ignore rules, dirty state, and history from the
+  Git worktree in which it is invoked. A downstream-install regression test
+  covers the snapshot layout. A repository with no `.gitignore` now receives
+  a fail-closed diagnostic instead of a Python traceback.
+
 - Added a thesis review stage. `prompts/25_THESIS_REVIEW.md` carries the review
   process from the thesis-review-prompt-pack: an intake gate, L1-L4 calibration,
   a section maturity gate, the ordered review sequence from title down to

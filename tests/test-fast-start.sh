@@ -54,6 +54,13 @@ test -f "$PROJECT/.ai/agent-project-kit/scripts/check-update-notice.py"
 test -f "$PROJECT/.ai/agent-project-kit/scripts/repair_thai_wordbreak_docx.py"
 grep -q 'Mandatory Thai DOCX gate' "$PROJECT/.ai/agent-project-kit/AGENTS.md"
 grep -q 'repair_thai_wordbreak_docx.py' "$PROJECT/.ai/agent-project-kit/prompts/10_DOCUMENT_PRODUCTION.md"
+# The installed checker must inspect the downstream repository, even though the
+# APK snapshot intentionally does not carry the APK source repository's .gitignore.
+printf '%s\n' '.ai/' 'local-profiles/' 'private/' 'internal/' '*.private.md' \
+  '*.private.json' '.env' '.env.*' '*.p12' '*.pfx' '*.pem' '*.key' '*.kdbx' \
+  > "$PROJECT/.gitignore"
+git init -q "$PROJECT"
+(cd "$PROJECT" && python3 .ai/agent-project-kit/scripts/check_release_boundary.py) >/dev/null
 python3 "$SOURCE_PATH/tests/test-v7-context.py" >/dev/null
 python3 "$SOURCE_PATH/tests/test-workflow-architecture.py" >/dev/null
 python3 "$SOURCE_PATH/scripts/context.py" --project "$SOURCE_PATH" "resume package release" --output "$TEST_ROOT/root-context.json" || test "$?" -eq 2
