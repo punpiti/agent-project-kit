@@ -4,6 +4,22 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+## 8.2.0-reader-readiness-canary — 2026-09-29
+
+- Added a checkpoint state action for saving objective, completed work,
+  blockers, next steps, files, checks, decisions, and local resources before a
+  pause or handoff. Requests to save state no longer route as resume work.
+
+- Corrected software-document routing: a technical report for a software
+  project is now owned by the software workflow, a lone mention of release no
+  longer implies publication, and one declared project domain can act as a
+  conservative prior when request vocabulary is otherwise inconclusive.
+  Multiple declared domains remain explicit ambiguity rather than a guess.
+
+- The doctor now reports stale installed snapshots and shared-runtime bindings
+  inside the kit's own source checkout, closing a gap found during the
+  self-host audit.
+
 - Strengthened prose and book-writing guidance with a reader-readiness gate.
   Authors must identify a concrete reader, inventory prerequisites as confirmed,
   uncertain, or missing, check uncertain readiness, and provide a bridge plan.

@@ -8,7 +8,7 @@ session ก่อนได้ เลือกวิธีทำงานให�
 code และเอกสารยังเป็นของคุณ ตัว kit อยู่ใน `.ai/agent-project-kit/` และอัปเดตได้
 โดยบันทึกของคุณไม่ถูกแตะ
 
-release ปัจจุบัน: `8.1.0-workflow-architecture-canary`
+release ปัจจุบัน: `8.2.0-reader-readiness-canary`
 
 ## ช่วยอะไรคุณได้
 

@@ -98,6 +98,12 @@
       "cadence": "when state is insufficient",
       "kind": "state-actions"
     },
+    "checkpoint": {
+      "prompt": null,
+      "instruction": "Persist the current objective, completed work, blockers, next action, files touched, checks run, open decisions, and local-resource notes before pausing.",
+      "cadence": "before pausing or handing off active work",
+      "kind": "state-actions"
+    },
     "new-project-bootstrap": {
       "prompt": "prompts/01_NEW_PROJECT_BOOTSTRAP.md",
       "instruction": "Initialize missing project state once.",

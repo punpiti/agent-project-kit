@@ -68,6 +68,7 @@ adversarial_cases = [
  ("add a GitHub Actions CI matrix for Linux and Windows running release_check.py","software","code","software-development-automation"),
  ("release 7.8.0 canary: bump version, tag, push, publish GitHub Release and Pages","software","code","software-development-automation"),
  ("prepare a course on python for first-year students","education","course-material","course-material-development"),
+ ("เขียน technical report สำหรับ software project","software","document","software-development-automation"),
 ]
 for request,domain,deliverable,primary in adversarial_cases:
     data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],encoding="utf-8"))
@@ -111,6 +112,28 @@ data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_
 assert "release-boundary" in data["workflow"]["gates"],data
 data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"วิเคราะห์ผลสำรวจความคิดเห็นอาจารย์เพื่อประกอบข้อเสนอนโยบาย"],encoding="utf-8"))
 assert data["primary_pipeline"]=="educational-policy-development" and "data-analytics" in data["workflow"]["methods"],data
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"update the release report with current findings"],encoding="utf-8"))
+assert data["lifecycle"]!="publish" and "package-release" not in data["workflow"]["stages"],data
+data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"save status/session log before pausing"],encoding="utf-8"))
+assert data["lifecycle"]=="create" and data["workflow"]["state_actions"]==["checkpoint"],data
+assert data["primary_pipeline"]=="general" and not data["needs_clarification"],data
+
+# A single configured project domain is a conservative prior; multiple domains
+# remain explicit ambiguity instead of silently choosing the first one.
+with tempfile.TemporaryDirectory() as tmp:
+    project=Path(tmp).resolve(); (project/".ai").mkdir()
+    state="# PROJECT_STATE\n\n- Project name: Domain fixture\n"
+    (project/".ai/PROJECT_STATE.md").write_text(state,encoding="utf-8")
+    metadata={"schema_version":1,"status":"configured","name":"Fixture","domain":["software"]}
+    (project/".ai/project.json").write_text(json.dumps(metadata),encoding="utf-8")
+    route=lambda: json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"--project",str(project),"prepare a diagnostic note"],encoding="utf-8"))
+    one=route()
+    assert one["domain"]=="software" and one["primary_pipeline"]=="software-development-automation",one
+    metadata["domain"]=["software","governance"]
+    (project/".ai/project.json").write_text(json.dumps(metadata),encoding="utf-8")
+    ambiguous=route()
+    assert ambiguous["domain"]=="general" and ambiguous["needs_clarification"],ambiguous
+    assert any("multiple domains" in reason for reason in ambiguous["clarification_reasons"]),ambiguous
 
 # Onboarding follows the authoritative Markdown state, not a placeholder project.json.
 with tempfile.TemporaryDirectory() as tmp:

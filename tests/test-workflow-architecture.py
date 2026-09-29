@@ -77,6 +77,10 @@ release = route("bump version, tag and release the package")
 assert "package-release" in release["workflow"]["stages"], release
 assert "release-boundary" in release["workflow"]["gates"], release
 
+checkpoint = route("save status/session log before pausing")
+assert checkpoint["workflow"]["state_actions"] == ["checkpoint"], checkpoint
+assert checkpoint["lifecycle"] == "create", checkpoint
+
 crowded = route("implement a responsive web dashboard using data and recommend product strategy")
 assert len(crowded["workflow"]["methods"]) == 2, crowded
 assert crowded["omitted"] and crowded["omitted"][0]["category"] == "method", crowded
@@ -137,6 +141,22 @@ with tempfile.TemporaryDirectory() as tmp:
     (canonical / ".ai" / "agent-project-kit" / "manifest.json").write_text("{}", encoding="utf-8")
     selected, is_canonical = doctor.select_kit_root(canonical)
     assert selected == canonical and is_canonical
+with tempfile.TemporaryDirectory() as tmp:
+    canonical = Path(tmp)
+    (canonical / "scripts").mkdir()
+    (canonical / "scripts" / "apk_install.py").write_text("", encoding="utf-8")
+    (canonical / ".ai" / "agent-project-kit").mkdir(parents=True)
+    (canonical / ".ai" / "agent-project-kit" / "manifest.json").write_text(
+        json.dumps({"name": "agent-project-kit", "version": "0.0.0-stale"}), encoding="utf-8"
+    )
+    (canonical / ".ai" / "apk.json").write_text(
+        json.dumps({"version": "0.0.0-stale"}), encoding="utf-8"
+    )
+    issues = doctor.self_host_issues(
+        canonical, {"name": "agent-project-kit", "version": "8.2.0-test"}
+    )
+    assert any("snapshot is stale" in issue for issue in issues), issues
+    assert any("binding is stale" in issue for issue in issues), issues
 assert "<!-- BEGIN COMPUTING-ENVIRONMENT -->" not in (ROOT / "AGENTS.md").read_text(encoding="utf-8")
 runbook = (ROOT / "templates" / "RUNBOOK.md").read_text(encoding="utf-8")
 assert "python -m venv" not in runbook

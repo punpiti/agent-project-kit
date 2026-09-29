@@ -8,8 +8,8 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "8.1.0-workflow-architecture-canary",
-  "git_ref": "v8.1.0-workflow-architecture-canary",
+  "version": "8.2.0-reader-readiness-canary",
+  "git_ref": "v8.2.0-reader-readiness-canary",
   "updated": "2026-09-29T00:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
@@ -82,6 +82,9 @@
     "private certificate/key material; see SECURITY_EXCLUSIONS.md"
   ],
   "release_notes": [
+    "Added reader-readiness and prerequisite-bridge gates for prose and book writing.",
+    "Corrected software-document, release-report, checkpoint, and project-domain-prior routing.",
+    "Made the doctor report stale self-host snapshots and shared-runtime bindings.",
     "Fixed Python 3.9 file writes, the PowerShell wrappers under pwsh on Linux/macOS, and Windows context output exceeding its byte budget; all found by the first CI run.",
     "Breaking: installing now requires Python 3.9+ on every platform, including Windows (the python.org install manager provides py).",
     "Installer and updater logic now live in one Python core each (apk_install.py, apk_update.py); the Bash and PowerShell scripts are thin wrappers, with byte-level parity against the previous Bash behavior.",

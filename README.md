@@ -9,7 +9,7 @@ that fits the task, and check their output before handing it over. Your code
 and documents stay yours. The kit lives in `.ai/agent-project-kit/` and can be
 refreshed without touching your notes.
 
-Current release: `8.1.0-workflow-architecture-canary`
+Current release: `8.2.0-reader-readiness-canary`
 
 ## What It Does For You
 

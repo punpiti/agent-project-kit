@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "package": "agent-project-kit",
-  "version": "8.1.0-workflow-architecture-canary",
+  "version": "8.2.0-reader-readiness-canary",
   "version_policy": "exact",
   "content_sha256": "",
   "profile": "standard",

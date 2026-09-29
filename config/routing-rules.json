@@ -314,7 +314,8 @@
       ],
       "publish": [
         "publish",
-        "release",
+        "release the app",
+        "release the software",
         "submit",
         "deploy",
         "เผยแพร่",
@@ -878,6 +879,18 @@
       "ความลับ",
       "รหัสผ่าน",
       "ข้อมูลลับ"
+    ],
+    "checkpoint": [
+      "checkpoint",
+      "save status",
+      "save state",
+      "save session log",
+      "session log before pausing",
+      "before pausing",
+      "บันทึกสถานะก่อนพัก",
+      "บันทึก state ก่อนพัก",
+      "บันทึก session log ก่อนพัก",
+      "พักงาน"
     ],
     "machine_needed": [
       "dependency",

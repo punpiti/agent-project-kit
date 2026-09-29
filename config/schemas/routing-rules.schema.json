@@ -253,6 +253,9 @@
         "prose_writing": {
           "$ref": "#/$defs/phrases"
         },
+        "checkpoint": {
+          "$ref": "#/$defs/phrases"
+        },
         "secret_check": {
           "$ref": "#/$defs/phrases"
         },
@@ -279,6 +282,7 @@
         "markdown_topic",
         "markdown_verbs",
         "prose_writing",
+        "checkpoint",
         "secret_check",
         "machine_needed",
         "alternative_markers"

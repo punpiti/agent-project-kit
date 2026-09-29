@@ -26,7 +26,8 @@
       "instruction": "Define behavior, inspect targeted code, make a focused change, and run the smallest relevant test.",
       "selectors": {
         "deliverables": [
-          "code"
+          "code",
+          "document"
         ],
         "domains": [
           "software"
@@ -278,6 +279,11 @@
         "prompt": "prompts/08_PROJECT_RESUME.md",
         "instruction": "Use current state first and read history only if insufficient.",
         "cadence": "when state is insufficient"
+      },
+      "checkpoint": {
+        "prompt": null,
+        "instruction": "Persist the current objective, completed work, blockers, next action, files touched, checks run, open decisions, and local-resource notes before pausing.",
+        "cadence": "before pausing or handing off active work"
       },
       "new-project-bootstrap": {
         "prompt": "prompts/01_NEW_PROJECT_BOOTSTRAP.md",

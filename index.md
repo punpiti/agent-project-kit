@@ -13,7 +13,7 @@ checks its output before handing it over. Your files stay yours.
 
 ## Current Release
 
-- Current package version: `8.1.0-workflow-architecture-canary`
+- Current package version: `8.2.0-reader-readiness-canary`
 - Requires Git and Python 3.9 or newer on every platform
 - Tested on Linux, WSL2, and Windows (canary; macOS hardware not yet tested)
 

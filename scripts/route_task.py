@@ -41,7 +41,7 @@ REQUIRED_PHRASES = (
     "publication_production", "publication_verbs",
     "publication_formats", "presentation_production", "external_feedback",
     "markdown_cleanup", "markdown_topic", "markdown_verbs", "prose_writing",
-    "secret_check", "machine_needed", "alternative_markers",
+    "secret_check", "checkpoint", "machine_needed", "alternative_markers",
 )
 
 
@@ -128,6 +128,28 @@ def markdown_state_initialized(ai_dir: Path) -> bool:
 
 def contains_any(text: str, phrases: list[str]) -> bool:
     return any(matches(text,[phrase]) for phrase in phrases)
+
+
+def read_project_data(project: Path | None) -> dict | None:
+    if project is None:
+        return None
+    try:
+        data = json.loads((project / ".ai" / "project.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def declared_project_domains(project_data: dict | None) -> list[str]:
+    if not project_data or project_data.get("status") == "placeholder":
+        return []
+    domains = project_data.get("domain", [])
+    if isinstance(domains, str):
+        domains = [domains]
+    if not isinstance(domains, list):
+        return []
+    known = RULES["domain"]
+    return list(dict.fromkeys(item for item in domains if isinstance(item, str) and item in known))
 
 
 def select_primary(domain: str, deliverable: str, methods: list[str]) -> tuple[str, list[dict]]:
@@ -225,12 +247,23 @@ def inspect_document(path: Path) -> dict:
 def classify(request: str, project: Path | None = None, files: list[Path] | None = None) -> dict:
     documents=[inspect_document(path) for path in files or []]
     supplied_document=any(d["research_document"] for d in documents)
+    project_data=read_project_data(project)
+    project_domains=declared_project_domains(project_data)
+    project_domain_ambiguity=False
     domain,dc=best(request,"domain",DEFAULTS["domain"]); deliverable,oc=best(request,"deliverable",DEFAULTS["deliverable"])
     for candidate,hints in ((item["id"],item["phrases"]) for item in ROUTING["strong_domains"]):
         if contains_any(request,hints): domain,dc=candidate,0.95; break
     package_release=contains_any(request,PHRASES["package_release"])
+    checkpoint=contains_any(request,PHRASES["checkpoint"])
+    if checkpoint:
+        domain,dc="general",0.9
+        deliverable,oc="analysis",0.9
     if domain=="general" and (package_release or SOURCE_FILE.search(request)):
         domain,dc="software",0.8
+    if not checkpoint and domain=="general" and dc<0.5 and len(project_domains)==1:
+        domain,dc=project_domains[0],0.55
+    elif not checkpoint and domain=="general" and dc<0.5 and len(project_domains)>1:
+        project_domain_ambiguity=True
     # Strong output phrases outrank subject-matter mentions. Merely mentioning a
     # thesis, policy, test, or document does not select that output by itself.
     strong_output=False
@@ -250,6 +283,7 @@ def classify(request: str, project: Path | None = None, files: list[Path] | None
     if "data-analytics" in methods and not contains_any(request,bare_data+PHRASES["data_analytics_confirm"]):
         methods.remove("data-analytics")
     lifecycle,lc=best(request,"lifecycle",DEFAULTS["lifecycle"])
+    if checkpoint: lifecycle,lc=DEFAULTS["lifecycle"],0.9
     primary_pipeline, primary_scores = select_primary(domain, deliverable, methods)
     method_candidates=[]
     method_map=ROUTING["method_modules"]
@@ -301,11 +335,10 @@ def classify(request: str, project: Path | None = None, files: list[Path] | None
     if package_release or contains_any(request,PHRASES["secret_check"]):
         gates.append("release-boundary")
     state_actions=[]
-    if lifecycle=="resume": state_actions.append("resume")
+    if checkpoint: state_actions.append("checkpoint")
+    elif lifecycle=="resume": state_actions.append("resume")
     if project is not None:
-        ai_dir=project/".ai"; project_file=ai_dir/"project.json"
-        try: project_data=json.loads(project_file.read_text(encoding="utf-8"))
-        except (OSError,json.JSONDecodeError): project_data=None
+        ai_dir=project/".ai"
         visible_entries=any(item.name != ".ai" for item in project.iterdir()) if project.exists() else False
         # PROJECT_STATE.md is authoritative (config/STATE_MIGRATION.md): an
         # initialized Markdown state means the project is already onboarded
@@ -323,6 +356,10 @@ def classify(request: str, project: Path | None = None, files: list[Path] | None
     # A research document was handed over without a stated intent. It may be
     # finished, already published, or someone else's, so ask before acting.
     clarification_reasons=[]
+    if project_domain_ambiguity and domain=="general" and primary_pipeline=="general":
+        clarification_reasons.append(
+          "project metadata declares multiple domains; ask which domain owns this task "
+          "when the request itself provides no domain signal")
     if supplied_document and not thesis_review:
         clarification_reasons.append(
           "a supplied file looks like a research document; ask what to do with it "

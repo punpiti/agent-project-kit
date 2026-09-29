@@ -33,6 +33,32 @@ def schema_issues(kit: Path, root: Path) -> list[str]:
             issues.extend(f"{name} schema: {error}" for error in module.validate_file(path, schema)[:5])
     return issues
 
+def self_host_issues(root: Path, manifest: dict) -> list[str]:
+    """Report stale installed runtime metadata inside the APK source tree."""
+    if manifest.get("name") != "agent-project-kit" or not (root/"scripts"/"apk_install.py").is_file():
+        return []
+    expected = manifest.get("version")
+    if not expected:
+        return []
+    issues = []
+    snapshot_manifest = root/".ai"/"agent-project-kit"/"manifest.json"
+    if snapshot_manifest.is_file():
+        try:
+            actual = json.loads(snapshot_manifest.read_text(encoding="utf-8")).get("version")
+            if actual and actual != expected:
+                issues.append(f"self-host snapshot is stale: source={expected}, snapshot={actual}")
+        except (OSError,json.JSONDecodeError) as exc:
+            issues.append(f"invalid self-host snapshot manifest: {exc}")
+    binding = root/".ai"/"apk.json"
+    if binding.is_file():
+        try:
+            actual = json.loads(binding.read_text(encoding="utf-8")).get("version")
+            if actual and actual != expected:
+                issues.append(f"self-host shared binding is stale: source={expected}, binding={actual}")
+        except (OSError,json.JSONDecodeError) as exc:
+            issues.append(f"invalid self-host binding: {exc}")
+    return issues
+
 def main() -> int:
     p=argparse.ArgumentParser(description=__doc__); p.add_argument("project",nargs="?",default="."); p.add_argument("--quick",action="store_true"); a=p.parse_args()
     root=Path(a.project).resolve(); issues=[]
@@ -72,6 +98,8 @@ def main() -> int:
         try: manifest=json.loads((kit/"manifest.json").read_text(encoding="utf-8"))
         except (OSError,json.JSONDecodeError) as exc: issues.append(f"invalid manifest: {exc}"); manifest={}
         issues.extend(schema_issues(kit, root))
+        if canonical:
+            issues.extend(self_host_issues(root, manifest))
         vf=root/".ai"/"COMPUTING_ENVIRONMENT_VERSION.md"
         if canonical:
             pass  # Source checkout is authoritative; installed-version metadata is downstream-only.
