@@ -5,7 +5,10 @@ Use this for Markdown -> PDF/DOCX/HTML/document workflows.
 ## Content First
 
 - [ ] Markdown source exists and is the source of truth.
-- [ ] Audience is clear.
+- [ ] Audience is concrete enough to guide explanation depth: relevant education/domain, experience, reading goal, and use context are known or explicitly unresolved.
+- [ ] Required prerequisite topics are listed as confirmed, uncertain, or missing; degree/title alone is not treated as proof of readiness.
+- [ ] Uncertain readiness is checked with the author/learners or a short diagnostic, and each gap has an inline recap, appendix, or named pre-reading path.
+- [ ] Books/textbooks include reader-facing pre-reading guidance and a prerequisite outline that states why each foundation matters and where it will be used.
 - [ ] Purpose is clear: formal submission, public distribution, teaching handout, internal note, report, etc.
 - [ ] Structure is logical before layout work starts.
 - [ ] Claims are supported by evidence or marked as judgment/assumption.

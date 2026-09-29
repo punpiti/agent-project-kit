@@ -11,6 +11,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CHECKER = ROOT / "scripts" / "check_prose_style.py"
+PROSE_PROMPT = ROOT / "prompts" / "24_PROSE_STYLE.md"
+BOOK_PROMPT = ROOT / "prompts" / "22_BOOK_WRITING.md"
+BOOK_PROFILE = ROOT / "templates" / "BOOK_WRITING_PROFILE.md"
+BOOK_GUIDE = ROOT / "templates" / "NEW_BOOK_START_GUIDE.md"
 
 
 def run_checker(text: str, *args: str) -> subprocess.CompletedProcess[str]:
@@ -39,6 +43,19 @@ def expect_exit(expected: int, text: str, *args: str) -> str:
 
 expect_exit(0, "The measurements support the stated conclusion.\n")
 expect_exit(1, "This is not a defect, but a feature.\n")
+
+# The prose gate must retain the reader-readiness contract even though the
+# executable checker only measures sentence-level style signals.
+for path in (PROSE_PROMPT, BOOK_PROMPT, BOOK_PROFILE, BOOK_GUIDE):
+    content = path.read_text(encoding="utf-8")
+    assert "prerequisite" in content, path
+    assert "คำแนะนำก่อนอ่าน" in content, path
+prose_contract = PROSE_PROMPT.read_text(encoding="utf-8")
+for status in ("confirmed", "uncertain", "missing"):
+    assert status in prose_contract, status
+book_contract = BOOK_PROMPT.read_text(encoding="utf-8")
+for column in ("สำคัญเพราะอะไร", "ใช้ในบท/แนวคิดใด", "วิธีตรวจความพร้อม", "ทางปรับพื้นหรือ pre-reading"):
+    assert column in book_contract, column
 
 # Contrast framing that the first release missed (found in real reader copy).
 for framing in (

@@ -37,6 +37,9 @@
 - ชื่อชั่วคราวและชื่อทางการถ้ามี
 - เป้าหมายของหนังสือและสิ่งที่ผู้อ่านทำได้หลังอ่านจบ
 - ผู้อ่านเป้าหมาย ความรู้ตั้งต้น ระดับความลึก ภาษา และน้ำเสียง
+- prerequisite รายหัวข้อที่เนื้อหาจะใช้ แยก `confirmed`, `uncertain` และ `missing`
+- คำถามหรือ self-check ที่จะใช้ตรวจความเข้าใจจริง โดยไม่อนุมานจากวุฒิหรือตำแหน่ง
+- แผนปรับพื้นที่ระบุว่าจะทบทวนในเล่ม ใช้ภาคผนวก หรือให้อ่านอะไรก่อน พร้อมเหตุผลและจุดนำไปใช้
 - ขอบเขต สิ่งที่ไม่ครอบคลุม และความยาวโดยประมาณ
 - ความสัมพันธ์กับรายวิชา syllabus, slides, course outcomes หรือมาตรฐานใด
 - เงื่อนไขทางวิชาการ เช่น การขอตำแหน่งวิชาการ การใช้ self-citation หรือการเปิดเผยที่มา
@@ -73,12 +76,14 @@
 
 ทำเอกสารตามลำดับนี้:
 
-1. **Book Master Outline** — ภาพรวมทั้งเล่ม บท และลำดับเหตุผล
-2. **Chapter Plan / Detailed Chapter Outline** — จุดประสงค์ ขอบเขต หัวข้อย่อย
+1. **Prerequisite Outline** — พื้นฐานที่ต้องใช้ ความสำคัญ จุดนำไปใช้ วิธีตรวจความพร้อม และทางปรับพื้น
+2. **คำแนะนำก่อนอ่าน** — ฉบับ reader-facing ที่บอกกลุ่มผู้อ่าน พื้นฐานที่คาดหวัง self-check, pre-reading และเส้นทางอ่าน
+3. **Book Master Outline** — ภาพรวมทั้งเล่ม บท และลำดับเหตุผล โดยชี้ว่าแต่ละ prerequisite ถูกใช้ที่ใด
+4. **Chapter Plan / Detailed Chapter Outline** — จุดประสงค์ ขอบเขต หัวข้อย่อย
    หลักฐาน ตัวอย่าง สมการ รูป ตาราง และผลลัพธ์ที่ต้องการในแต่ละบท
-3. **Evidence ledger** — mapping ระหว่าง claim/หัวข้อกับแหล่งหลักฐานและ locator
-4. **`chapter.md`** — working file ที่ผ่าน evidence/depth/structure QA
-5. **`prose.md`** — ร้อยแก้วสำหรับผู้อ่านที่เขียนจาก `chapter.md`
+5. **Evidence ledger** — mapping ระหว่าง claim/หัวข้อกับแหล่งหลักฐานและ locator
+6. **`chapter.md`** — working file ที่ผ่าน evidence/depth/structure/reader-readiness QA
+7. **`prose.md`** — ร้อยแก้วสำหรับผู้อ่านที่เขียนจาก `chapter.md`
 
 ถ้า outline หรือชื่อไฟล์เหล่านี้ยังไม่มี ให้สร้าง template และหยุดถามเฉพาะ
 การตัดสินใจที่มีผลต่อโครงหนังสือ อย่าเดาจากหนังสือเล่มอื่น
@@ -129,6 +134,7 @@
 ## Definition of ready ก่อนขยายทั้งเล่ม
 
 - profile ถูก resolve หรือมีคำถามค้างที่ผู้เขียนเห็นแล้ว
+- reader portrait, prerequisite inventory, readiness check, bridge plan, prerequisite outline และคำแนะนำก่อนอ่านสอดคล้องกัน
 - master outline และ detailed outline ได้รับการยืนยัน
 - reference corpus มี manifest และ locator ที่ย้อนกลับได้
 - ระบบ variables, glossary, citation และ graphics ถูกกำหนด

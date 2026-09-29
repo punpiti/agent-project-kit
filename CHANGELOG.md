@@ -4,6 +4,13 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Strengthened prose and book-writing guidance with a reader-readiness gate.
+  Authors must identify a concrete reader, inventory prerequisites as confirmed,
+  uncertain, or missing, check uncertain readiness, and provide a bridge plan.
+  Books now require reader-facing pre-reading guidance and a prerequisite
+  outline explaining why each foundation matters and where it will be used;
+  degrees and instructor expertise cannot stand in for learner readiness.
+
 ## 8.1.0-workflow-architecture-canary — 2026-09-29
 
 - Fixed the installed `check_release_boundary.py` crashing because an APK

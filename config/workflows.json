@@ -82,7 +82,7 @@
     },
     "prose-style": {
       "prompt": "prompts/24_PROSE_STYLE.md",
-      "instruction": "Check reader-facing prose after content is stable; never alter facts or claim strength merely to satisfy style counts.",
+      "instruction": "Check that reader-facing prose matches a concrete reader model and prerequisite bridge, then check style after content is stable; never alter facts or claim strength merely to satisfy style counts.",
       "cadence": "per prose draft or revision",
       "kind": "gates"
     },
