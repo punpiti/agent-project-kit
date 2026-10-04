@@ -67,13 +67,17 @@ Keep the Git clone in a WSL-local cache and install only the snapshot into the
 project. Git metadata inside a synced folder is slow and can break.
 
 ```bash
+(
+set -e
+
 KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
 if [ -d "$KIT/.git" ]; then
-  git -C "$KIT" pull --ff-only
+  git -C "$KIT" pull --ff-only origin main
 else
   git clone https://github.com/punpiti/agent-project-kit.git "$KIT"
 fi
 bash "$KIT/scripts/install-to-project.sh" . "$KIT"
+)
 ```
 
 ### Windows PowerShell

@@ -4,6 +4,11 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Made documented Git cache updates work from a detached release-tag checkout
+  by pulling `origin main` explicitly. POSIX examples now stop before running
+  the installer when the Git update fails, and the PowerShell example checks
+  Git's exit code before continuing.
+
 ## 8.2.0-reader-readiness-canary — 2026-09-29
 
 - Added a checkpoint state action for saving objective, completed work,

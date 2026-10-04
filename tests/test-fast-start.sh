@@ -118,4 +118,36 @@ for target in "$KIT_COPY" "$TEST_ROOT/kit-link"; do
   test -f "$KIT_COPY/.ai/agent-project-kit/STARTUP.md"
 done
 
+# A Pages-driven update checks out an exact release tag, leaving the reusable
+# Git cache detached. The documented explicit upstream must still fast-forward
+# that cache, and every install example must stop if this Git step fails.
+CACHE_REMOTE="$TEST_ROOT/cache-remote.git"
+CACHE_SEED="$TEST_ROOT/cache-seed"
+CACHE_CLONE="$TEST_ROOT/cache-clone"
+git init -q --bare "$CACHE_REMOTE"
+git init -q -b main "$CACHE_SEED"
+git -C "$CACHE_SEED" config user.name "Agent Project Kit Tests"
+git -C "$CACHE_SEED" config user.email "tests@example.invalid"
+printf '%s\n' v1 > "$CACHE_SEED/version.txt"
+git -C "$CACHE_SEED" add version.txt
+git -C "$CACHE_SEED" commit -q -m v1
+git -C "$CACHE_SEED" tag v1
+git -C "$CACHE_SEED" remote add origin "$CACHE_REMOTE"
+git -C "$CACHE_SEED" push -q -u origin main --tags
+git -C "$CACHE_REMOTE" symbolic-ref HEAD refs/heads/main
+git clone -q "$CACHE_REMOTE" "$CACHE_CLONE"
+git -C "$CACHE_CLONE" checkout -q tags/v1
+printf '%s\n' v2 > "$CACHE_SEED/version.txt"
+git -C "$CACHE_SEED" commit -q -am v2
+git -C "$CACHE_SEED" push -q origin main
+git -C "$CACHE_CLONE" pull -q --ff-only origin main
+grep -qx v2 "$CACHE_CLONE/version.txt"
+test -z "$(git -C "$CACHE_CLONE" symbolic-ref -q --short HEAD || true)"
+for doc in README.md README.th.md index.md OPEN_WITH_AGENT.md; do
+  ! grep -Eq 'git .*pull --ff-only[[:space:]]*$' "$SOURCE_PATH/$doc"
+done
+grep -q '^set -e$' "$SOURCE_PATH/README.md"
+grep -q '^($' "$SOURCE_PATH/README.md"
+grep -q 'LASTEXITCODE -ne 0' "$SOURCE_PATH/OPEN_WITH_AGENT.md"
+
 echo "fast-start acceptance tests: PASS"

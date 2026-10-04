@@ -85,14 +85,18 @@ state before working.
 ## Update Later
 
 ```bash
-git -C .ai/agent-project-kit-source pull --ff-only
+(
+set -e
+git -C .ai/agent-project-kit-source pull --ff-only origin main
 bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-project-kit-source
+)
 ```
 
 Windows:
 
 ```powershell
-git -C ".ai\agent-project-kit-source" pull --ff-only
+git -C ".ai\agent-project-kit-source" pull --ff-only origin main
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
 ```
 
