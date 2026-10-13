@@ -59,7 +59,8 @@
 
 สำหรับ PDF ให้ extract text/Markdown ก่อนใช้เป็น reference และเก็บ locator เช่น
 เลขหน้า หัวข้อ สมการ ตาราง และรูป หากมี figure ให้เก็บ caption และข้อความรอบรูป
-พร้อมแยก raster หรือ render full page สำหรับ vector/multi-panel figure
+และแกะรูปเป็นรายรูปด้วย `scripts/reference_extract/pdf_figures.py` (ยึด caption,
+รวมทุก panel, cache ตาม hash ของไฟล์) แล้วตรวจ `overview/` ของรูปที่มี flag
 
 ไฟล์ที่ควรมีอย่างน้อย:
 
@@ -67,6 +68,7 @@
 - `references/*.bib`
 - `references/reading-cache/`
 - `references/figures/INDEX.md`
+- `references/pdf-figures/` (cache ของ `pdf_figures.py` แยกตาม source hash)
 - `references/SHA256SUMS` เมื่อมี corpus ที่ต้องควบคุมรุ่น
 
 รูปจากแหล่งอ้างอิงใช้เป็น compositional reference เว้นแต่สิทธิ์อนุญาตให้เผยแพร่

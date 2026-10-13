@@ -197,9 +197,11 @@ final pagination และ publication package ต้องรอ prose ทั�
     วาดด้วย vector primitives ห้ามสรุปว่า “หน้านี้ไม่มีรูป” จากผล image extraction
     เพียงอย่างเดียว ให้ render เต็มหน้าเมื่อข้อความหรือ evidence ชี้ว่ามีองค์ประกอบ
     ภาพอยู่จริง
-  - ใช้ full-page rendering เป็นค่าเริ่มต้นสำหรับ vector diagram และเอกสารที่มี
-    caption หรือหลาย panel การ auto-crop ใช้ได้เฉพาะ preview ที่ตรวจภาพทุกไฟล์
-    แล้ว เพราะอาจตัด caption หรือ panel หายโดยไม่รายงานข้อผิดพลาด
+  - แกะรูปเป็นรายรูปด้วย `scripts/reference_extract/pdf_figures.py` ซึ่งยึด
+    caption และรวมทุก panel แล้วเก็บใน cache ที่ผูกกับ hash ของไฟล์ ตรวจ
+    `overview/` ทุกรูปที่มี flag และบันทึกผลด้วย `--review`; ห้ามใช้
+    largest-cluster auto-crop แบบเดิม เพราะอาจตัด caption หรือ panel หายโดย
+    ไม่รายงานข้อผิดพลาด ถ้าครอปผิดให้ใช้ `--manual-crop` หรือ render เต็มหน้า
   - บันทึกไฟล์ที่ render ใน figure index พร้อมแหล่ง ฉบับ เลขหน้าพิมพ์ เลขหน้า PDF,
     เลขรูป/caption และหัวข้อที่จะใช้ เพื่อให้การตรวจสิทธิ์และการสร้างรูปใหม่ติดตามได้
   - อย่าสมมติ offset ระหว่างเลขหน้าพิมพ์กับเลขหน้า PDF ว่าคงที่ตลอดเล่ม ก่อนอ้าง

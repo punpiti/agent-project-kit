@@ -269,14 +269,31 @@ When editing academic, proposal, policy, or technical documents:
   see embedded raster objects and will silently miss vector diagrams even
   though the page clearly contains a figure — do not conclude a page has "no
   images" without checking whether its figures are vector-drawn instead.
-- For vector diagrams, render the full page to an image rather than trying to
-  extract just the figure. Do not use automatic figure-cropping heuristics as
-  a default: they have been observed to silently cut captions (which are
-  often laid out spatially separate from the figure) and to keep only one
-  panel of a multi-panel figure, with no error or warning either time. Full-page
-  rendering is slightly less tidy but never drops content; use auto-crop only
-  for a quick single-figure preview, and always visually check the cropped
-  output before relying on it.
+- When figures are needed, extract each figure rather than the whole page with
+  `scripts/reference_extract/pdf_figures.py` (installed copy:
+  `.ai/agent-project-kit/scripts/reference_extract/pdf_figures.py`), run in the
+  shared `text` environment. Check its cache first: `--list`, or the source's
+  `INDEX.md` under the figure cache (default `references/pdf-figures/`,
+  override with `--cache-dir` or `APK_PDF_FIGURE_CACHE`). The cache is keyed by
+  the PDF's SHA-256, so a moved or renamed file reuses it and an edited file
+  does not. Extract only the pages the task needs; later runs add pages
+  instead of repeating them.
+- The extractor anchors each crop on its caption and merges every panel
+  between the caption and the nearest prose. It covers raster and vector
+  graphics, renders crops at 300 dpi, and saves the unresampled original when
+  a figure is a single embedded image. Older largest-cluster auto-crop silently
+  cut captions and dropped panels, so do not use `pdf_render_pages.py
+  --auto-crop` for figure extraction.
+- Before using a figure, look at `overview/pNNNN.png`, a low-resolution view of
+  the whole page with every crop boxed. Treat any flagged figure as unverified
+  until checked: `no_caption`, `caption_without_graphics`,
+  `crop_overlaps_prose`, `scanned_page`, `near_full_page`,
+  `graphics_maybe_previous_page`, or `caption_maybe_next_page`. Record the
+  check with `--review ID=ok|recrop|reject`. Fix a bad crop with
+  `--manual-crop PAGE:x0,y0,x1,y1[:label]`, which persists across re-runs, or
+  fall back to a full-page render with `pdf_render_pages.py`; never drop a
+  caption or panel to make a crop tidier. Scanned pages are reported, not
+  cropped; OCR or vision reading still needs the user's decision.
 - If a document uses two page-numbering systems (e.g., a printed page number
   distinct from the file's own page index), do not assume a constant offset
   between them across the whole document — the offset can change partway

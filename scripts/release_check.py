@@ -32,6 +32,7 @@ TEST_COMMANDS = (
     ("v7-context", ("python3", "tests/test-v7-context.py")),
     ("prose-style", ("python3", "tests/test-prose-style.py")),
     ("thai-docx-repair", ("python3", "tests/test-thai-docx-repair.py")),
+    ("pdf-figures", ("python3", "tests/test-pdf-figures.py")),
     ("release-check", ("python3", "tests/test-release-check.py")),
     ("routing-rules", ("python3", "tests/test-routing-rules.py")),
     ("schemas", ("python3", "tests/test-schemas.py")),

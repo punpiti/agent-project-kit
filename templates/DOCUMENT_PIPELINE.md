@@ -49,9 +49,11 @@ Record large temporary files, caches, OCR images, exported figures, or external 
 
 Record raster/vector figures pulled from reference PDFs for compositional reference (layout examples), not for direct reuse in the final document unless rights allow it.
 
-| Source PDF | Page (printed/file) | Figure/table ref | Type (raster/vector) | Method (direct extract/full-page render) | File path | Verified by eye? | Notes |
-|---|---|---|---|---|---|---|---|
-|  |  |  | raster / vector | direct extract / full-page render (+ auto-crop if used) |  | yes/no |  |
+Prefer per-figure crops from `scripts/reference_extract/pdf_figures.py`. Its hash-keyed cache (`manifest.json`, `INDEX.md`, `overview/`) is the record of crops, flags, and review status, so a row here can point to a figure id instead of repeating it.
+
+| Source PDF | Page (printed/file) | Figure/table ref | Type (raster/vector) | Method | Cache figure id / file path | Flags | Verified by eye? | Notes |
+|---|---|---|---|---|---|---|---|---|
+|  |  |  | raster / vector / mixed | pdf_figures auto / manual crop / full-page render |  |  | yes/no |  |
 
 ## Final QA Status
 

@@ -5,6 +5,9 @@
 (เส้น/สมการวาดด้วย PDF drawing primitives) ซึ่ง pdf_text_extract.py --images ดึงไม่ได้
 (--images ดึงได้เฉพาะ raster image ที่ฝังเป็นไฟล์ JPEG/PNG ในหน้า)
 
+สำหรับแกะรูปเป็นรายรูปให้ใช้ pdf_figures.py (ยึด caption, รวมทุก panel, cache ตาม hash)
+สคริปต์นี้เป็น fallback แบบทั้งหน้า และ --auto-crop ด้านล่างเป็นของเดิมที่ไม่ควรใช้แกะรูปแล้ว
+
 ค่าเริ่มต้นคือเก็บทั้งหน้า (--no-crop) เพราะปลอดภัยสุด ยัง caption ครบเสมอ
 แต่มี --auto-crop ให้ลองครอปเฉพาะบริเวณรูปอัตโนมัติด้วย heuristic นี้:
   1. ดึง vector drawing paths ทั้งหมดด้วย page.get_drawings()

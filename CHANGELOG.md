@@ -4,6 +4,19 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Added `scripts/reference_extract/pdf_figures.py`, which extracts each figure
+  from a reference PDF instead of the whole page. Crops are anchored on the
+  caption (English and Thai labels, tables included), merge every panel, and
+  are rendered at 300 dpi. A single embedded raster is also saved unresampled.
+  Results go into a SHA-256-keyed cache with `manifest.json`, `INDEX.md`, and
+  per-page overview images, so later sessions reuse crops. The cache also keeps
+  review status and manual crops. Uncertain crops are flagged instead of
+  silently trusted: missing caption, no graphics, prose overlap, scanned page,
+  or a figure split across a page break. `AGENTS.md`, the
+  document-production prompt, the book profile, and the pipeline templates now
+  route figure extraction through it, and `tests/test-pdf-figures.py` covers the
+  caption, panel, separator-rule, contents-page, rotation, and cache cases.
+
 - Expanded the packaged reviewer-response workflow with a traceable rebuttal
   contract: complete verbatim comments, point-level dispositions, exact revision
   locators, evidence or reasoned justification, concise cross-references, and

@@ -105,6 +105,7 @@
 - `scripts/organize-project-markdown.py`
 - `scripts/register_project_run.sh`
 - `scripts/repair_thai_wordbreak_docx.py`
+- `scripts/reference_extract/` (`pdf_text_extract.py`, `pdf_figures.py`, `pdf_render_pages.py`, `README.md`)
 - `scripts/route_task.py`
 - `scripts/run-once.py`
 - `scripts/validate_prompt_catalog.py`
