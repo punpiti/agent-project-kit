@@ -51,8 +51,18 @@ for path in (PROSE_PROMPT, BOOK_PROMPT, BOOK_PROFILE, BOOK_GUIDE):
     assert "prerequisite" in content, path
     assert "คำแนะนำก่อนอ่าน" in content, path
 prose_contract = PROSE_PROMPT.read_text(encoding="utf-8")
+checker_contract = CHECKER.read_text(encoding="utf-8")
+assert "does not determine whether AI generated any text" in checker_contract
 for status in ("confirmed", "uncertain", "missing"):
     assert status in prose_contract, status
+for scientific_contract in (
+    "Scientific-reporting and trust gate",
+    "provenance เป็น justification",
+    "แยก reproducibility ออกจาก validity",
+    "แยก AI disclosure จาก Methods",
+    "ตรวจ lineage ก่อนเกลาภาษา",
+):
+    assert scientific_contract in prose_contract, scientific_contract
 book_contract = BOOK_PROMPT.read_text(encoding="utf-8")
 for column in ("สำคัญเพราะอะไร", "ใช้ในบท/แนวคิดใด", "วิธีตรวจความพร้อม", "ทางปรับพื้นหรือ pre-reading"):
     assert column in book_contract, column
@@ -102,5 +112,16 @@ expect_exit(0, "|" + "-" * 100_000 + "x\n")
 dense_semicolons = "One clause; another clause; a third clause.\n"
 expect_exit(0, dense_semicolons)
 expect_exit(1, dense_semicolons, "--strict")
+
+# Internal process language is a semantic-review signal, not an AI verdict and
+# not an automatic failure, even in strict mode.
+process_output = expect_exit(
+    0,
+    "The archived workflow produced values in the analysis cache. "
+    "Its caption summarizes the sequence.\n",
+    "--strict",
+)
+assert "[review] internal artifact named instead of research object: 2" in process_output
+assert "[review] method deferred to notebook or caption: 1" in process_output
 
 print("prose style checker tests: PASS")

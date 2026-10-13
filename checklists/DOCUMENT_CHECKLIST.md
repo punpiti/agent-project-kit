@@ -14,6 +14,19 @@ Use this for Markdown -> PDF/DOCX/HTML/document workflows.
 - [ ] Claims are supported by evidence or marked as judgment/assumption.
 - [ ] The document has been critiqued once before final formatting.
 
+## Scientific Prose / Trust (when applicable)
+
+- [ ] Methods states the actual data, processing, parameters/criteria, justification, and outputs needed to understand the analysis.
+- [ ] Internal artifacts such as notebooks, caches, archives, file layout, or workflow history do not substitute for research objects or method descriptions.
+- [ ] Parameter provenance is not presented as scientific justification; operational or uncalibrated values are labeled accurately.
+- [ ] Captions describe figures/tables while the necessary method remains self-contained in Methods.
+- [ ] Reproducibility, methodological validity, and independent validation are evaluated separately.
+- [ ] Any method/parameter change has a documented lineage and downstream impact/recomputation check before prose polishing.
+- [ ] The same research object keeps the same term throughout the document.
+- [ ] Operational grouping/definitions are distinguished from externally validated physical or predictive claims.
+- [ ] AI disclosure names tool, purpose, scope, author review, and responsibility without serving as evidence that the method is valid.
+- [ ] Editor statements, public reviewer comments, confidential comments, and author/agent inferences remain distinguishable; no source is credited with an AI-use claim it did not make.
+
 ## PDF References
 
 - [ ] Reference PDFs were converted to reusable text/Markdown before in-depth reading.

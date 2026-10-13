@@ -4,6 +4,22 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+## 8.3.0-scientific-prose-trust-canary — 2026-10-13
+
+- Added an additive scientific-prose trust gate without removing or changing
+  the established prose rules or numeric thresholds. Academic Methods must now
+  distinguish research objects from internal artifacts, parameter provenance
+  from scientific justification, reproducibility from validity, operational
+  grouping from independent validation, and AI disclosure from methodological
+  evidence. Reviewer-response and document checklists carry the same source and
+  evidence boundaries.
+
+- The prose checker now reports exact internal-process and method-deferral
+  phrases such as `analysis cache`, `stored metrics`, and “its caption
+  summarizes” as review-only candidates. These signals never affect the exit
+  status and are explicitly not an AI-authorship detector. Regression coverage
+  preserves the old gate and verifies the new non-failing behavior.
+
 - Made documented Git cache updates work from a detached release-tag checkout
   by pulling `origin main` explicitly. POSIX examples now stop before running
   the installer when the Git update fails, and the PowerShell example checks

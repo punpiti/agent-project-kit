@@ -3,6 +3,7 @@
 
 See prompts/24_PROSE_STYLE.md. The counts are review signals, not verdicts:
 every flagged line must be read in context before it is changed.
+This tool does not determine whether AI generated any text.
 
 Usage:
     check_prose_style.py FILE [FILE ...] [--strict]
@@ -38,6 +39,21 @@ RATES = {
     "em dash": (r"—|(?<!-)---(?!-)", 0, 1.5),
     "colon introducing a clause": (r"[a-z)\]}]:\s+[a-z]", 0, 2.5),
     "emphatic adverb": (r"\b(precisely|exactly|genuinely|crucially|importantly)\b", re.I, 0.5),
+}
+
+# Exact phrases from observed scientific-writing failures. These are review
+# candidates, not evidence of AI use and never affect the exit status. The
+# semantic gate in prompts/24_PROSE_STYLE.md must catch equivalent wording.
+REVIEW_ONLY = {
+    "internal artifact named instead of research object": (
+        r"\b(cleaning notebooks?|archived workflow|analysis cache|stored metrics)\b",
+        re.I,
+    ),
+    "method deferred to notebook or caption": (
+        r"\b(?:the\s+)?notebooks?\s+(?:document|describe|show)|"
+        r"\b(?:the\s+|its\s+)?caption\s+summarizes\b",
+        re.I,
+    ),
 }
 
 
@@ -110,6 +126,10 @@ def check(path: Path, strict: bool) -> bool:
     bl = bold_lines(raw, path.suffix.lower())
     ok &= not bl
     print(f"  [{'ok ' if not bl else 'FIX'}] bold inside running text: {len(bl)}" + (f"  lines {bl[:15]}" if bl else ""))
+    for name, (pat, fl) in REVIEW_ONLY.items():
+        lines = [text.count("\n", 0, m.start()) + 1 for m in re.finditer(pat, text, fl)]
+        mark = "review" if lines else "ok "
+        print(f"  [{mark}] {name}: {len(lines)}" + (f"  lines {sorted(set(lines))[:15]}" if lines else ""))
     for name, (pat, fl, thr) in RATES.items():
         c = len(re.findall(pat, text, fl))
         rate = 1000 * c / n

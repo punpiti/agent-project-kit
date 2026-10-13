@@ -31,6 +31,13 @@
    - where to change
    - evidence needed
    - risk if not addressed
+   แยก source boundary ทุกครั้ง:
+   - editor statement
+   - public reviewer comment
+   - confidential comment ที่มีข้อความให้ตรวจจริง
+   - author/agent inference
+   ห้ามรวมข้อความจากคนละแหล่งเป็นข้อสรุปว่า reviewer ตรวจพบ AI หรือเจตนาของผู้เขียน
+   ถ้า source ไม่ได้กล่าวเช่นนั้นโดยตรง
 
 3. Revision Strategy
    ระบุว่าควรแก้ manuscript, response letter, experiment, figure, table หรือ framing
@@ -41,6 +48,11 @@
    - contribution ชัด
    - limitation ซื่อสัตย์แต่ไม่ทำลายงานตัวเอง
    - tone สุภาพแต่ไม่ยอมรับผิดเกินจริง
+   - Methods รายงาน data → processing → parameter/justification → output โดยไม่ใช้
+     notebook/cache/archive/workflow provenance แทน scientific justification
+   - แยก reproducibility, methodological validity และ independent validation
+   - ถ้าวิธีเปลี่ยน ให้ตรวจ lineage และ recompute/assess ผลปลายน้ำก่อนเกลาภาษา
+   - AI disclosure ระบุเครื่องมือ/วัตถุประสงค์/ความรับผิดชอบแยกจากเหตุผลรองรับวิธี
 
 5. Self-Critique
    critique ร่างตัวเองหนึ่งรอบ:
