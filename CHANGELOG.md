@@ -4,6 +4,13 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Expanded the packaged reviewer-response workflow with a traceable rebuttal
+  contract: complete verbatim comments, point-level dispositions, exact revision
+  locators, evidence or reasoned justification, concise cross-references, and
+  confidentiality/copyright checks. The bilingual router now recognizes common
+  response-letter, rebuttal-letter, and Thai reviewer-response requests, with
+  installed-payload and routing regressions.
+
 ## 8.3.0-scientific-prose-trust-canary — 2026-10-13
 
 - Added an additive scientific-prose trust gate without removing or changing

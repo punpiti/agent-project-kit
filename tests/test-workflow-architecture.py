@@ -91,6 +91,11 @@ prompts = [research["primary"].get("prompt")] + [item.get("prompt") for item in 
 prompts = [prompt for prompt in prompts if prompt]
 assert len(prompts) == len(set(prompts)), research
 
+rebuttal = bundle("ตอบ reviewer ทีละประเด็นและระบุตำแหน่งที่แก้")
+assert rebuttal["primary"]["id"] == "research-activities", rebuttal
+assert [item["id"] for item in rebuttal["stages"]] == ["reviewer-response"], rebuttal
+assert rebuttal["stages"][0]["prompt"] == "prompts/04_PAPER_REVIEWER_RESPONSE.md", rebuttal
+
 subprocess.run(
     [sys.executable, str(ROOT / "scripts" / "sync_workflow_registry.py")], check=True
 )

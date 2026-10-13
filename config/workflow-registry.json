@@ -228,7 +228,7 @@
       },
       "reviewer-response": {
         "prompt": "prompts/04_PAPER_REVIEWER_RESPONSE.md",
-        "instruction": "Map concern to actual problem, change, location, and evidence.",
+        "instruction": "Preserve every editor/reviewer comment verbatim, map it to the actual problem and disposition, and make each response traceable to action, evidence, and an exact revision locator or reasoned justification.",
         "cadence": "per review round"
       },
       "thesis-review": {
@@ -389,7 +389,7 @@
       "legacy_type": "secondary",
       "role": "lifecycle-stage",
       "cadence": "per-review-round",
-      "trigger": "paper, proposal, thesis, or reviewer response"
+      "trigger": "answering editor or reviewer comments, drafting a response/rebuttal letter, or revising a paper from peer review"
     },
     {
       "path": "05_SLIDES_TEACHING.md",

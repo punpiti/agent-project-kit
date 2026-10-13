@@ -40,7 +40,7 @@
     },
     "reviewer-response": {
       "prompt": "prompts/04_PAPER_REVIEWER_RESPONSE.md",
-      "instruction": "Map concern to actual problem, change, location, and evidence.",
+      "instruction": "Preserve every editor/reviewer comment verbatim, map it to the actual problem and disposition, and make each response traceable to action, evidence, and an exact revision locator or reasoned justification.",
       "cadence": "per review round",
       "kind": "stages"
     },

@@ -99,6 +99,15 @@ assert data["workflow"]["stages"]==[],data
 # Answering a journal reviewer stays on the reviewer-response stage.
 data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"review the manuscript and answer reviewer concerns"],encoding="utf-8"))
 assert data["workflow"]["stages"]==["reviewer-response"],data
+for request in (
+    "draft a rebuttal letter responding point-by-point to the reviewers",
+    "prepare the author response to editor comments",
+    "ตอบ reviewer ทีละประเด็นและระบุตำแหน่งที่แก้",
+    "ตอบข้อคิดเห็นผู้ประเมินสำหรับบทความฉบับแก้ไข",
+):
+    data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],encoding="utf-8"))
+    assert data["primary_pipeline"]=="research-activities",(request,data)
+    assert data["deliverable"]=="paper" and data["workflow"]["stages"]==["reviewer-response"],(request,data)
 data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"fix the bug using user feedback then bump version"],encoding="utf-8"))
 assert "package-release" in data["workflow"]["stages"],data
 assert not any(item["id"]=="package-release" for item in data["omitted"]),data
