@@ -4,6 +4,8 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+## 8.4.0-figure-extraction-canary — 2026-10-13
+
 - Added `scripts/reference_extract/pdf_figures.py`, which extracts each figure
   from a reference PDF instead of the whole page. Crops are anchored on the
   caption (English and Thai labels, tables included), merge every panel, and

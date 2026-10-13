@@ -13,7 +13,7 @@ checks its output before handing it over. Your files stay yours.
 
 ## Current Release
 
-- Current package version: `8.3.0-scientific-prose-trust-canary`
+- Current package version: `8.4.0-figure-extraction-canary`
 - Requires Git and Python 3.9 or newer on every platform
 - Tested on Linux, WSL2, and Windows (canary; macOS hardware not yet tested)
 

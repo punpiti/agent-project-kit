@@ -9,7 +9,7 @@ that fits the task, and check their output before handing it over. Your code
 and documents stay yours. The kit lives in `.ai/agent-project-kit/` and can be
 refreshed without touching your notes.
 
-Current release: `8.3.0-scientific-prose-trust-canary`
+Current release: `8.4.0-figure-extraction-canary`
 
 ## What It Does For You
 
