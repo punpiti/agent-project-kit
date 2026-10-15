@@ -37,7 +37,7 @@ SOURCE_FILE=re.compile(ROUTING["source_file_pattern"], re.IGNORECASE)
 
 REQUIRED_PHRASES = (
     "package_release", "data_analytics_confirm", "data_analytics_bare_terms",
-    "reviewer_response", "thesis_documents", "thesis_review_verbs",
+    "reviewer_response", "paper_review_role", "paper_documents", "thesis_documents", "thesis_review_verbs",
     "publication_production", "publication_verbs",
     "publication_formats", "presentation_production", "external_feedback",
     "markdown_cleanup", "markdown_topic", "markdown_verbs", "prose_writing",
@@ -295,15 +295,20 @@ def classify(request: str, project: Path | None = None, files: list[Path] | None
       method_candidates,REGISTRY["composition"]["method_max"],"method")
     stages=[]
     if deliverable=="code": stages.append("implementation")
-    # Examining a thesis is a different stage from answering a journal reviewer,
-    # so a thesis under review outranks the reviewer-response phrasing it shares.
+    # Examining a thesis, reviewing a paper before submission, and answering
+    # journal reviewers are distinct stages. Explicit thesis scope wins first;
+    # a real response/rebuttal action wins over a general paper-review request.
     review_verb = contains_any(request,PHRASES["thesis_review_verbs"])
-    # Naming the document in the request, or naming it with --file, both count
-    # as asking for a review. Someone else's paper needs that explicit ask.
-    thesis_review = review_verb and (contains_any(request,PHRASES["thesis_documents"])
-                                     or supplied_document)
+    explicit_thesis = contains_any(request,PHRASES["thesis_documents"])
+    thesis_review = review_verb and explicit_thesis
+    paper_review = contains_any(request,PHRASES["paper_review_role"]) or (
+      review_verb and (contains_any(request,PHRASES["paper_documents"])
+                       or supplied_document)
+    )
+    reviewer_response = contains_any(request,PHRASES["reviewer_response"])
     if deliverable=="paper" and thesis_review: stages.append("thesis-review")
-    elif deliverable=="paper" and contains_any(request,PHRASES["reviewer_response"]): stages.append("reviewer-response")
+    elif deliverable=="paper" and reviewer_response: stages.append("reviewer-response")
+    elif deliverable=="paper" and paper_review: stages.append("paper-review")
     publication_production=contains_any(request,PHRASES["publication_production"])
     publication_production = publication_production or (
       contains_any(request,PHRASES["publication_verbs"])
@@ -330,7 +335,8 @@ def classify(request: str, project: Path | None = None, files: list[Path] | None
     omitted.extend(stage_omitted)
     prose_writing=contains_any(request,PHRASES["prose_writing"])
     gates=[]
-    if deliverable in {"paper","book","document","course-material","policy"} and prose_writing:
+    if (deliverable in {"paper","book","document","course-material","policy"} and prose_writing) \
+       or "paper-review" in lifecycle_stages:
         gates.append("prose-style")
     if package_release or contains_any(request,PHRASES["secret_check"]):
         gates.append("release-boundary")
@@ -360,7 +366,7 @@ def classify(request: str, project: Path | None = None, files: list[Path] | None
         clarification_reasons.append(
           "project metadata declares multiple domains; ask which domain owns this task "
           "when the request itself provides no domain signal")
-    if supplied_document and not thesis_review:
+    if supplied_document and not (thesis_review or paper_review or reviewer_response):
         clarification_reasons.append(
           "a supplied file looks like a research document; ask what to do with it "
           "before reviewing, because it may be finished, already published, or someone else's")

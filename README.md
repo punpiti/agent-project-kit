@@ -9,7 +9,7 @@ that fits the task, and check their output before handing it over. Your code
 and documents stay yours. The kit lives in `.ai/agent-project-kit/` and can be
 refreshed without touching your notes.
 
-Current release: `8.4.0-figure-extraction-canary`
+Current release: `8.5.0-paper-peer-review-canary`
 
 ## What It Does For You
 

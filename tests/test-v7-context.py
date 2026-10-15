@@ -96,6 +96,16 @@ for request in ("ตรวจรายงานวิจัยวิชา machi
 # Writing one is not reviewing one.
 data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"เขียนรายงานวิจัยส่งอาจารย์"],encoding="utf-8"))
 assert data["workflow"]["stages"]==[],data
+# Acting as a paper reviewer is distinct from thesis examination and from the
+# author's task of answering comments after peer review.
+for request in (
+    "peer review this research article",
+    "act as reviewer for this manuscript",
+    "ช่วยเป็นผู้ประเมินบทความนี้และเช็ก citation",
+):
+    data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),request],encoding="utf-8"))
+    assert data["primary_pipeline"]=="research-activities",(request,data)
+    assert data["deliverable"]=="paper" and data["workflow"]["stages"]==["paper-review"],(request,data)
 # Answering a journal reviewer stays on the reviewer-response stage.
 data=json.loads(subprocess.check_output([sys.executable,str(ROOT/"scripts/route_task.py"),"review the manuscript and answer reviewer concerns"],encoding="utf-8"))
 assert data["workflow"]["stages"]==["reviewer-response"],data

@@ -220,6 +220,12 @@
         "reviewer_response": {
           "$ref": "#/$defs/phrases"
         },
+        "paper_review_role": {
+          "$ref": "#/$defs/phrases"
+        },
+        "paper_documents": {
+          "$ref": "#/$defs/phrases"
+        },
         "thesis_documents": {
           "$ref": "#/$defs/phrases"
         },
@@ -271,6 +277,8 @@
         "data_analytics_confirm",
         "data_analytics_bare_terms",
         "reviewer_response",
+        "paper_review_role",
+        "paper_documents",
         "thesis_documents",
         "thesis_review_verbs",
         "publication_production",

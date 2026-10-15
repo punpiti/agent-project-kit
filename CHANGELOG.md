@@ -4,6 +4,32 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+## 8.5.0-paper-peer-review-canary — 2026-10-16
+
+- Added a peer-review stage for when the user is the paper's reviewer, distinct
+  from thesis examination and the author's reviewer response. It protects
+  manuscript confidentiality, checks venue AI policy, verifies citation/reference existence and claim support,
+  title-problem-contribution alignment, current official venue requirements,
+  article-type length limits, rendered figure readability and cross-references,
+  variable/notation consistency, conclusion readability, and concise prose. The
+  established prose-pattern gate may flag overly generic/AI-like language without
+  claiming AI authorship. One large blocker that invalidates the central work and
+  cannot be repaired through ordinary revision leads to a reject recommendation.
+  Reviewer reports themselves now always load the existing prose-style quality
+  gate and must state each major comment as a concise, evidence-located finding
+  with its consequence and required action or author question.
+  Working reviews remain in Thai until the user confirms they are ready to send;
+  only then is the final report written in the venue-required language and form,
+  with a second prose-style pass in the destination language.
+  The technical gate now also checks definition clarity, mathematical correctness
+  and assumptions, algorithm inputs/outputs/edge cases/complexity, numerical
+  consistency across graphs and tables, and the provenance, tuning boundary, and
+  sensitivity of experimental magic numbers.
+  Engineering diagrams are now checked against the notation or standard actually
+  used by the field, including symbols, connectors, flow direction, interfaces,
+  legends, deviations, and traceability to definitions, equations, algorithms,
+  experiment setup, and system components.
+
 ## 8.4.0-figure-extraction-canary — 2026-10-13
 
 - Added `scripts/reference_extract/pdf_figures.py`, which extracts each figure

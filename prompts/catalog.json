@@ -199,6 +199,13 @@
       "role": "lifecycle-stage",
       "cadence": "per-thesis-review-round",
       "trigger": "thesis, dissertation, proposal, or defense draft under examination"
+    },
+    {
+      "path": "26_PAPER_REVIEW.md",
+      "type": "secondary",
+      "role": "lifecycle-stage",
+      "cadence": "per-paper-review-round",
+      "trigger": "acting as peer reviewer or external evaluator for a paper, article, manuscript, preprint, or submission draft"
     }
   ]
 }

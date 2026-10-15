@@ -236,6 +236,11 @@
         "instruction": "Gate intake and section maturity first, then review problem, literature, objectives, method, evidence, and references before language.",
         "cadence": "per thesis review round"
       },
+      "paper-review": {
+        "prompt": "prompts/26_PAPER_REVIEW.md",
+        "instruction": "Act as the paper's peer reviewer: protect confidentiality, verify citation/reference evidence, assess title-problem-contribution alignment and venue compliance, then produce traceable author comments, confidential editor comments, and a venue-defined recommendation.",
+        "cadence": "per paper review round"
+      },
       "external-feedback": {
         "prompt": "prompts/07_EXTERNAL_FEEDBACK.md",
         "instruction": "Define hypothesis, source, method, and decision rule for real feedback.",
@@ -546,6 +551,13 @@
       "role": "lifecycle-stage",
       "cadence": "per-thesis-review-round",
       "trigger": "thesis, dissertation, proposal, or defense draft under examination"
+    },
+    {
+      "path": "26_PAPER_REVIEW.md",
+      "legacy_type": "secondary",
+      "role": "lifecycle-stage",
+      "cadence": "per-paper-review-round",
+      "trigger": "acting as peer reviewer or external evaluator for a paper, article, manuscript, preprint, or submission draft"
     }
   ]
 }

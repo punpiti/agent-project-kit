@@ -96,6 +96,12 @@ assert rebuttal["primary"]["id"] == "research-activities", rebuttal
 assert [item["id"] for item in rebuttal["stages"]] == ["reviewer-response"], rebuttal
 assert rebuttal["stages"][0]["prompt"] == "prompts/04_PAPER_REVIEWER_RESPONSE.md", rebuttal
 
+paper_review = bundle("ช่วยเป็น reviewer ประเมินบทความและเช็ก reference กับเกณฑ์ของวารสาร")
+assert paper_review["primary"]["id"] == "research-activities", paper_review
+assert [item["id"] for item in paper_review["stages"]] == ["paper-review"], paper_review
+assert paper_review["stages"][0]["prompt"] == "prompts/26_PAPER_REVIEW.md", paper_review
+assert [item["id"] for item in paper_review["gates"]] == ["prose-style"], paper_review
+
 subprocess.run(
     [sys.executable, str(ROOT / "scripts" / "sync_workflow_registry.py")], check=True
 )

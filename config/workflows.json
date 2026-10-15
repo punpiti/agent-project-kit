@@ -50,6 +50,12 @@
       "cadence": "per thesis review round",
       "kind": "stages"
     },
+    "paper-review": {
+      "prompt": "prompts/26_PAPER_REVIEW.md",
+      "instruction": "Act as the paper's peer reviewer: protect confidentiality, verify citation/reference evidence, assess title-problem-contribution alignment and venue compliance, then produce traceable author comments, confidential editor comments, and a venue-defined recommendation.",
+      "cadence": "per paper review round",
+      "kind": "stages"
+    },
     "external-feedback": {
       "prompt": "prompts/07_EXTERNAL_FEEDBACK.md",
       "instruction": "Define hypothesis, source, method, and decision rule for real feedback.",

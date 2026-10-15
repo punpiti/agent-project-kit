@@ -79,7 +79,7 @@ def check_documents() -> None:
             assert route["clarification_reasons"], (path, route)
             # Naming the file as the thing to review is the deliberate ask.
             asked = route_task.classify(ask, None, [path])
-            assert asked["workflow"]["stages"] == ["thesis-review"], (path, asked)
+            assert asked["workflow"]["stages"] == ["paper-review"], (path, asked)
             assert asked["clarification_reasons"] == [], (path, asked)
 
         # A numbered folder is still that folder, and publication marks travel

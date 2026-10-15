@@ -13,7 +13,7 @@ checks its output before handing it over. Your files stay yours.
 
 ## Current Release
 
-- Current package version: `8.4.0-figure-extraction-canary`
+- Current package version: `8.5.0-paper-peer-review-canary`
 - Requires Git and Python 3.9 or newer on every platform
 - Tested on Linux, WSL2, and Windows (canary; macOS hardware not yet tested)
 
