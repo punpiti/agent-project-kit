@@ -63,6 +63,25 @@ Toolchain-specific Thai font routing:
 - If a required font is missing, download/install it only when the task needs
   that output and follow the metered-network warning and approval policy.
 
+Symbols, Greek letters and math in Thai XeLaTeX output:
+
+- Sarabun lacks most Greek letters (it has only μ π Δ Ω) and lacks ↔ ⇒ ⇔ ∈ ≡.
+  XeLaTeX does not fail on a missing glyph: it writes `Missing character` to the
+  log and silently drops the character or prints a box, so a number such as
+  `β ≈ 0.81` or a label such as `PC ↔ trust` loses meaning without any error.
+- Write statistical and mathematical symbols as TeX math in Markdown source:
+  `$\beta \approx 0.81$`, `$\lambda_1/\lambda_2 \geq 3$`, `$\phi \geq 0.97$`.
+  Use plain words or an en dash for relations in tables (`PC – trust`) unless
+  the arrow carries meaning, then use `$\leftrightarrow$`.
+- Keep the `newunicodechar` math fallbacks in
+  `templates/pandoc-thai-a4/thai-a4-header.tex` (or the project's own header)
+  as a safety net, not as permission to paste Unicode symbols.
+- Before choosing a new symbol, check that the body font has it, for example
+  with fontTools: `TTFont(path).getBestCmap()`. Glyphs that render in the
+  editor or in matplotlib figures may still be absent from the PDF body font.
+- After every build, run `grep -i "Missing character" <build>.log`. A non-zero
+  count blocks delivery until each character is mapped to math or replaced.
+
 Suggested English fallback family, in order:
 
 ```text

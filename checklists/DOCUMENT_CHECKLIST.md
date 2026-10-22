@@ -59,6 +59,7 @@ Use this for Markdown -> PDF/DOCX/HTML/document workflows.
 - [ ] Captions stay close to figures/tables.
 - [ ] Page numbers/header/footer consistent where used.
 - [ ] PDF opens correctly.
+- [ ] XeLaTeX log has zero `Missing character` lines; Greek letters and symbols the body font lacks (e.g. Sarabun: β λ φ ↔ ⇒ ∈) are written as TeX math (`$\beta$`) rather than pasted Unicode. See `DOCUMENT_PRODUCTION_POLICY.md`.
 - [ ] Final output path recorded in `.ai/DOCUMENT_PIPELINE.md`.
 
 ## Editable Thai DOCX QA
