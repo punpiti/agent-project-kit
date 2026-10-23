@@ -51,7 +51,7 @@
         "write a book",
         "write the book",
         "ตำรา",
-        "เขียนหนังสือ",
+        "หนังสือเรียน",
         "เขียนตำรา",
         "ต้นฉบับหนังสือ",
         "ต้นฉบับตำรา"
@@ -168,7 +168,17 @@
         "ต้นฉบับบทความ",
         "ร่างบทความ",
         "วิทยานิพนธ์",
-        "ผู้ทรงคุณวุฒิ"
+        "ผู้ทรงคุณวุฒิ",
+        "related work",
+        "related-work",
+        "discussion section",
+        "results section",
+        "methods section",
+        "บทคัดย่อ",
+        "แก้ abstract",
+        "เขียน abstract",
+        "เกลา abstract",
+        "ร่าง abstract"
       ],
       "book": [
         "book",
@@ -177,7 +187,7 @@
         "write a book",
         "write the book",
         "ตำรา",
-        "เขียนหนังสือ",
+        "หนังสือเรียน",
         "เขียนตำรา",
         "ต้นฉบับหนังสือ",
         "ต้นฉบับตำรา"
@@ -220,7 +230,12 @@
         "แบบฝึก",
         "เอกสารสอน",
         "เอกสารคำสอน",
-        "กิจกรรมการเรียน"
+        "กิจกรรมการเรียน",
+        "exam",
+        "quiz",
+        "test items",
+        "ข้อสอบ",
+        "แบบทดสอบ"
       ],
       "document": [
         "document",
@@ -303,6 +318,18 @@
         "กลยุทธ์",
         "ทางเลือก",
         "คำแนะนำ"
+      ],
+      "evidence-scaffold": [
+        "evidence map",
+        "evidence scaffold",
+        "evidence gaps",
+        "coverage gaps",
+        "gap analysis",
+        "what evidence is missing",
+        "แผนที่หลักฐาน",
+        "โครงหลักฐาน",
+        "ช่องว่างหลักฐาน",
+        "หลักฐานที่ยังขาด"
       ]
     },
     "lifecycle": {
@@ -424,14 +451,15 @@
         "textbook",
         "build the book",
         "export the book",
-        "เขียนหนังสือ",
+        "หนังสือเรียน",
         "เขียนตำรา",
         "ต้นฉบับหนังสือ",
         "ต้นฉบับตำรา",
         "build หนังสือ",
         "export หนังสือ",
         "จัดรูปเล่มหนังสือ",
-        "ผลิตหนังสือ"
+        "ผลิตหนังสือ",
+        "ตำรา"
       ]
     },
     {
@@ -531,7 +559,7 @@
         "textbook",
         "build the book",
         "export the book",
-        "เขียนหนังสือ",
+        "หนังสือเรียน",
         "เขียนตำรา",
         "ต้นฉบับหนังสือ",
         "ต้นฉบับตำรา",
@@ -593,7 +621,8 @@
     "strategy-advisory": "strategy",
     "data-analytics": "data-analytics",
     "content-analysis": "content-analysis",
-    "research-synthesis": "research-synthesis"
+    "research-synthesis": "research-synthesis",
+    "evidence-scaffold": "evidence-scaffold"
   },
   "source_file_pattern": "(?<![\\w.])[\\w-]+\\.(?:py|sh|ps1|js|ts)(?![\\w.])",
   "document_signals": {
@@ -928,7 +957,8 @@
       "เกลา",
       "ร้อยแก้ว",
       "ปรับภาษา",
-      "สำนวน"
+      "สำนวน",
+      "กระชับ"
     ],
     "secret_check": [
       "secret",
@@ -974,6 +1004,86 @@
       "or",
       "either",
       "หรือ"
+    ],
+    "genre_social": [
+      "facebook post",
+      "fb post",
+      "social media post",
+      "social post",
+      "โพสต์เฟซบุ๊ก",
+      "โพสต์เฟสบุ๊ค",
+      "โพสต์ fb",
+      "โพสต์ facebook",
+      "โพสต์โซเชียล",
+      "เขียนโพสต์",
+      "ร่างโพสต์",
+      "เกลาโพสต์"
+    ],
+    "genre_exam": [
+      "exam question",
+      "exam questions",
+      "quiz",
+      "test item",
+      "test items",
+      "multiple-choice",
+      "multiple choice",
+      "answer key",
+      "ข้อสอบ",
+      "แบบทดสอบ",
+      "ข้อปรนัย",
+      "ข้ออัตนัย"
+    ],
+    "genre_web": [
+      "website copy",
+      "web copy",
+      "homepage copy",
+      "landing page copy",
+      "page copy",
+      "web content",
+      "website content",
+      "microcopy",
+      "เนื้อหาเว็บ",
+      "ข้อความบนเว็บ",
+      "ข้อความหน้าเว็บ",
+      "เขียนหน้าเว็บ"
+    ],
+    "book_nouns": [
+      "หนังสือ"
+    ],
+    "book_parts": [
+      "บทนำ",
+      "คำนำ",
+      "สารบัญ",
+      "ภาคผนวก",
+      "เล่ม"
+    ],
+    "book_chapter": [
+      "บทที่"
+    ],
+    "output_verbs": [
+      "write",
+      "draft",
+      "create",
+      "make",
+      "prepare",
+      "generate",
+      "compose",
+      "produce",
+      "revise",
+      "polish",
+      "edit",
+      "rewrite",
+      "เขียน",
+      "ร่าง",
+      "ออก",
+      "สร้าง",
+      "ทำ",
+      "จัดทำ",
+      "เตรียม",
+      "เกลา",
+      "แก้",
+      "ปรับ",
+      "เรียบเรียง"
     ]
   }
 }

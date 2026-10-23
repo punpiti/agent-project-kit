@@ -123,6 +123,138 @@ def main() -> None:
     expect("source_file_pattern", lambda r: r.update(source_file_pattern="(unclosed"))
     expect("defaults.deliverable", lambda r: r["defaults"].update(deliverable="poem"))
 
+    # Prose genres: registry entries must point at real overlays, router phrase
+    # lists, and deliverables, and a deliverable belongs to one genre only.
+    def registry_errors(mutate) -> list[str]:
+        registry = copy.deepcopy(route_task.REGISTRY)
+        mutate(registry["prose_genres"])
+        return route_task.validate_rules(route_task.ROUTING, registry)
+
+    for fragment, mutate in (
+        ("does not exist", lambda g: g["social"].update(overlay="prompts/prose-genres/missing.md")),
+        ("not a router phrase list", lambda g: g["exam"].update(phrases="genre_poetry")),
+        ("routes_to needs a phrase list", lambda g: g["academic"].update(routes_to="paper")),
+        ("unknown deliverable", lambda g: g["academic"]["deliverables"].append("poem")),
+        ("in both", lambda g: g["general"]["deliverables"].append("paper")),
+    ):
+        errors = registry_errors(mutate)
+        assert any(fragment in error for error in errors), (fragment, errors)
+
+    # A named genre selects its overlay and the prose gate; ordinary requests that
+    # merely mention the web, tests, or a document do not.
+    genre_cases = (
+        ("ช่วยเกลาโพสต์เฟซบุ๊กนี้ให้หน่อย", "social"),
+        ("draft a facebook post about water safety", "social"),
+        ("ออกข้อสอบปรนัยเรื่องความหนืด 10 ข้อ", "exam"),
+        ("write 5 exam questions on Bernoulli", "exam"),
+        ("write website copy for the lab homepage", "web"),
+        ("เขียนเนื้อหาเว็บไซต์ของภาควิชา", "web"),
+        ("draft chapter 3 prose of the book", None),
+        ("เกลาร้อยแก้วบทที่ 2 ของตำรา", None),
+        ("revise the paper introduction", "academic"),
+        ("เขียนจดหมายถึงคณบดี", "general"),
+        ("fix the website login bug", None),
+        ("run the unit tests", None),
+        ("test the login page", None),
+        ("สรุปผลวิเคราะห์ข้อมูลยอดขาย", None),
+    )
+    for request, genre in genre_cases:
+        routed = route_task.classify(request)
+        assert routed["prose_genre"] == genre, (request, routed["prose_genre"], routed["workflow"]["gates"])
+        assert ("prose-style" in routed["workflow"]["gates"]) == (genre is not None), (request, routed)
+
+    # A named genre is the output, so it also decides the deliverable and the
+    # pipeline. When another output is named too, the one named first is what
+    # to produce and the later one is its topic (review findings, two rounds).
+    for request, deliverable, pipeline, genre in (
+        ("draft a facebook post about water safety", "social-post", "general", "social"),
+        ("draft a facebook post promoting my textbook", "social-post", "general", "social"),
+        ("write website copy for the lab homepage", "web-copy", "general", "web"),
+        ("write website copy explaining our privacy policy", "web-copy", "general", "web"),
+        # Round 3: the verb's object is the output, wherever the source sits.
+        ("Using this research paper, create exam questions", "course-material", "course-material-development", "exam"),
+        ("จากบทความวิจัยนี้ ช่วยออกข้อสอบ 5 ข้อ", "course-material", "course-material-development", "exam"),
+        ("About our privacy policy, write website copy", "web-copy", "general", "web"),
+        ("write website copy about a facebook post", "web-copy", "general", "web"),
+        ("ช่วยออกข้อสอบสำหรับโพสต์เฟซบุ๊ก", "course-material", "course-material-development", "exam"),
+        ("write website copy for the textbook", "web-copy", "general", "web"),
+        ("เขียนบทที่ 3 เรื่องข้อสอบ", "book", "book-writing", None),
+        ("เขียนบทที่ 3 เรื่องแบบทดสอบ", "book", "book-writing", None),
+        ("ออกข้อสอบบทที่ 3", "course-material", "course-material-development", "exam"),
+        ("create exam questions for a research paper", "course-material", "course-material-development", "exam"),
+        ("เกลาตำราที่มีข้อสอบ", "book", "book-writing", None),
+        ("write a textbook about website copy", "book", "book-writing", None),
+        ("implement a quiz API", "code", "software-development-automation", None),
+        ("fix the quiz scoring bug", "code", "software-development-automation", None),
+        ("write a formal letter about exam questions", "document", "administrative-professional-operations", "general"),
+    ):
+        routed = route_task.classify(request)
+        got = (routed["deliverable"], routed["primary_pipeline"], routed["prose_genre"], routed["needs_clarification"])
+        assert got == (deliverable, pipeline, genre, False), (request, got)
+        assert ("implementation" in routed["workflow"]["stages"]) == (deliverable == "code"), (request, routed)
+    # Two verb-led outputs in one request are a real choice: ask.
+    both = route_task.classify("write a textbook and create exam questions")
+    assert both["needs_clarification"] and "both" in both["clarification_reasons"][-1], both
+    assert route_task.classify("ออกข้อสอบปรนัยเรื่องความหนืด")["primary_pipeline"] == "course-material-development"
+
+    # Textbooks belong to Book Writing, which owns its prose method; academic
+    # articles get the prose gate with the academic overlay. Owner rules for
+    # Thai: "หนังสือเรียน"/"ตำรา" is a textbook, "หนังสือ" alone is a document,
+    # "บทที่" always means the textbook unless a paper, thesis, slides, or course
+    # material is named, and any other book part with a bare "หนังสือ" asks.
+    for request, pipeline, genre, ask in (
+        ("เขียนหนังสือเรียนวิชากลศาสตร์ของไหล", "book-writing", None, False),
+        ("เกลาร้อยแก้วบทที่ 2 ของตำรา", "book-writing", None, False),
+        ("เขียนบทที่ 3 ของหนังสือกลศาสตร์ของไหล", "book-writing", None, False),
+        ("เกลาบทที่ 2", "book-writing", None, False),
+        ("polish the preface of my textbook", "book-writing", None, False),
+        ("แก้ภาษาในบทนำของหนังสือ", "administrative-professional-operations", "general", True),
+        ("เขียนคำนำหนังสือ", "administrative-professional-operations", "general", True),
+        ("เขียนหนังสือถึงคณบดีขอใช้ห้อง", "administrative-professional-operations", "general", False),
+        ("เขียนหนังสือราชการขอใช้ห้อง", "administrative-professional-operations", "general", False),
+        ("ร่างหนังสือภายในถึงภาควิชา", "administrative-professional-operations", "general", False),
+        ("ทำสไลด์บทที่ 4", "presentation", None, False),
+        ("เขียนบทที่ 3 เรื่องนโยบาย", "book-writing", None, False),
+        ("fix the bug in chapter 3 demo code", "software-development-automation", None, False),
+        ("เขียนบทที่ 3 พร้อมโค้ด Python", "book-writing", None, False),
+        ("แบบฝึกหัดบทที่ 2", "course-material-development", None, False),
+        ("เขียนบทที่ 2 ของวิทยานิพนธ์", "research-activities", "academic", False),
+        ("เขียนบทความวิชาการลงวารสาร", "research-activities", "academic", False),
+        ("แก้ abstract ให้กระชับ", "research-activities", "academic", False),
+        ("write the related work section", "research-activities", "academic", False),
+        ("fix the abstract class in the parser", "software-development-automation", None, False),
+    ):
+        routed = route_task.classify(request)
+        assert routed["needs_clarification"] == ask, (request, routed)
+        assert (routed["primary_pipeline"], routed["prose_genre"]) == (pipeline, genre), (request, routed)
+
+    # Inside the kit's own source, requests name kit files to change: they route
+    # to software development, never to the policy, paper, book, or post they
+    # mention. The same request in an ordinary project routes by its words.
+    assert route_task.kit_source(ROOT)
+    for request in ("update the data flow policy for cloud drive caching",
+                    "review the paper review prompt", "เขียนบทที่ 3 ของหนังสือ",
+                    "write a facebook post prompt overlay"):
+        routed = route_task.classify(request, ROOT)
+        assert routed["primary_pipeline"] == "software-development-automation", (request, routed)
+        assert routed["workflow"]["gates"] == [] and routed["selection_trace"]["self_hosted_kit"], (request, routed)
+    released = route_task.classify("release the package", ROOT)["workflow"]
+    assert "package-release" in released["stages"] and "release-boundary" in released["gates"], released
+    with tempfile.TemporaryDirectory() as tmp:
+        downstream = Path(tmp)
+        (downstream / "START_HERE.md").write_text("# project\n", encoding="utf-8")
+        (downstream / "manifest.json").write_text('{"name": "my-thesis"}', encoding="utf-8")
+        assert not route_task.kit_source(downstream)
+        routed = route_task.classify("update the data flow policy for cloud drive caching", downstream)
+        assert routed["primary_pipeline"] == "educational-policy-development", routed
+        assert routed["selection_trace"]["self_hosted_kit"] is False
+
+    # The evidence-scaffold method attaches only when evidence gaps are the task.
+    assert "evidence-scaffold" in route_task.classify(
+        "build an evidence map for the related work section")["workflow"]["methods"]
+    assert "evidence-scaffold" in route_task.classify("หาช่องว่างหลักฐานก่อนสรุปข้อเสนอ")["methods"]
+    assert "evidence-scaffold" not in route_task.classify("summarize this paper")["methods"]
+
     # Editing only the JSON changes routing: no Python edit is needed.
     with tempfile.TemporaryDirectory() as tmp:
         kit = Path(tmp)

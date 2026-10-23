@@ -9,7 +9,7 @@ Quality gate ใช้ทุกครั้งที่ร่างหรือ�
 ถือว่ายังไม่ผ่าน quality gate แม้ประโยคจะสวย ลีลาที่คนจับได้ว่าเป็น AI ส่วนใหญ่คือ
 ประโยคที่มีรูปแต่ไม่มีเนื้อ
 
-สำหรับงานวิชาการ ให้เพิ่มชั้นตรวจว่าเนื้อหารายงานวัตถุ วิธี เหตุผล และหลักฐาน
+สำหรับงานวิชาการ ให้เพิ่มชั้นตรวจใน `prompts/prose-genres/academic.md` ว่าเนื้อหารายงานวัตถุ วิธี เหตุผล และหลักฐาน
 แทนประวัติการสร้างคำตอบหรือโครงสร้างไฟล์ภายใน รูปแบบภาษาเป็นจุดเริ่มตรวจเนื้อหา
 และเหตุผล ไม่ใช่หลักฐานระบุว่าใครหรือเครื่องมือใดเขียน
 
@@ -44,50 +44,32 @@ Quality gate ใช้ทุกครั้งที่ร่างหรือ�
 7. **ความแรงของคำต้องเท่ากับความแรงของหลักฐาน** ผลเชิงสัมพันธ์ใช้ "consistent with" ไม่ใช้ภาษาเชิงเหตุ
 8. **สลับประโยคสั้นยาว** ประโยคยาวที่ต่อด้วย semicolon หรือ colon หลายท่อนให้แตกเป็นประโยคสั้น
 
-## 1A. Scientific-reporting and trust gate สำหรับงานวิชาการ
+## 1A. Genre overlay และ voice profile
 
-ใช้ส่วนนี้กับ paper, thesis, proposal, technical report และข้อความที่รายงานวิธีหรือผล
-เป้าหมายไม่ใช่การซ่อนว่าใช้ AI แต่คือทำให้ต้นฉบับ self-contained, ตรวจสอบได้ และไม่ใช้
-provenance ของไฟล์หรือโค้ดแทนเหตุผลทางวิทยาศาสตร์
+ส่วนนี้ (§0–§5) เป็นแกนกลางที่ใช้กับร้อยแก้วทุกประเภท กฎเฉพาะประเภทงานอยู่ใน overlay
+แยกไฟล์ โหลดเพียงไฟล์เดียวตาม `prose_genre` ใน context bundle (หรือเลือกจากตารางนี้เมื่อไม่มี bundle)
 
-1. **Methods ทุกประโยคต้องมีหน้าที่ทางวิทยาศาสตร์** อย่างน้อยหนึ่งอย่าง: ระบุข้อมูลเข้า,
-   การแปลง/การคำนวณ, พารามิเตอร์หรือเกณฑ์, เหตุผลรองรับ, หรือผลผลิตที่นำไปวิเคราะห์ต่อ
-2. **ใช้ชื่อวัตถุจริงแทนชื่อ artifact ภายใน** เช่น `reconstructed rainfall fields` หรือ
-   `storm-level indicators` แทน `analysis cache`, `stored metrics` หรือชื่อ notebook
-   เว้นแต่ artifact นั้นเป็นส่วนของ reproducibility contract ที่ผู้อ่านต้องเข้าถึงจริง
-3. **อย่าใช้ provenance เป็น justification** การพบค่า threshold ใน workflow, archive,
-   notebook หรือโค้ดเดิมบอกเพียงที่มา ถ้ายังไม่มี calibration หรือหลักฐานทางวิทยาศาสตร์
-   ให้เรียกค่าตามหน้าที่จริง เช่น `historical input-error screen` และบอกข้อจำกัดครั้งเดียว
-4. **ต้นฉบับต้องอธิบายวิธีที่จำเป็นได้เอง** ห้ามฝากสาระไว้กับ notebook, repository,
-   caption หรือ supplement โดยไม่บอกขั้นตอนและพารามิเตอร์ขั้นต่ำใน Methods
-5. **caption อธิบายรูป; Methods อธิบายวิธี** ตัดประโยคชี้ทาง เช่น “its caption
-   summarizes the sequence” แล้ววางสาระไว้ในส่วนที่ผู้อ่านคาดว่าจะพบ
-6. **แยก reproducibility ออกจาก validity** การรันซ้ำได้, มี cache ครบ หรือมี lineage
-   ไม่ได้พิสูจน์ว่า reconstruction, anchoring, optical flow, threshold หรือการตีความเหมาะสม
-7. **ตรวจ lineage ก่อนเกลาภาษา** ถ้าวิธีหรือพารามิเตอร์เปลี่ยน ให้เชื่อม input → setting →
-   derived field/metric → figure/table/claim และคำนวณผลกระทบปลายน้ำใหม่ก่อน rewrite
-8. **ใช้คำเรียกคงที่ตาม data model** ทำ terminology map สำหรับข้อมูลดิบ, ข้อมูลหลัง QC,
-   reconstructed fields, analysis windows, indicators, classes และ validation evidence
-9. **แยก operational definition จาก independent validation** การจัดกลุ่มด้วยกฎภายใน
-   บอกผลของกฎนั้น ส่วนความถูกต้องทางกายภาพหรือ meteorological skill ต้องใช้หลักฐานอิสระ
-10. **แยก AI disclosure จาก Methods** disclosure ระบุชื่อเครื่องมือ วัตถุประสงค์ ขอบเขต
-    และความรับผิดชอบของผู้เขียน ส่วน Methods ต้องยืนได้ด้วยข้อมูล เหตุผล และหลักฐานของวิธีเอง
+| Genre | ใช้กับ | Overlay | Checker profile |
+|---|---|---|---|
+| `general` | จดหมาย เอกสาร นโยบาย เอกสารสอน | — (แกนกลางอย่างเดียว) | `general` |
+| `academic` | paper, thesis, proposal, technical report | `prompts/prose-genres/academic.md` | `academic` |
+| `social` | โพสต์ Facebook/โซเชียล บทความสั้นสาธารณะ | `prompts/prose-genres/social.md` | `social` |
+| `exam` | ข้อสอบ แบบทดสอบ เฉลย rubric | `prompts/prose-genres/exam.md` | `exam` |
+| `web` | เนื้อหาเว็บไซต์ landing page FAQ microcopy | `prompts/prose-genres/web.md` | `web` |
 
-ก่อนผ่าน gate ให้ตอบคำถามต่อไปนี้จากข้อความในต้นฉบับได้โดยไม่เปิดไฟล์ทำงานภายใน:
+หนังสือเรียน/ตำราไม่ใช้ gate นี้ผ่าน router: pipeline `book-writing`
+(`prompts/22_BOOK_WRITING.md`) มีกระบวนการและกฎร้อยแก้วของตัวเอง และอ้างไฟล์นี้เองในขั้นที่ต้องใช้
 
-| คำถาม | หลักฐานที่ควรอยู่ในต้นฉบับ |
-|---|---|
-| ใช้ข้อมูลอะไร | ชนิด แหล่ง ช่วงเวลา หน่วย ขอบเขต และข้อจำกัดที่มีผลต่อการตีความ |
-| ทำอะไรกับข้อมูล | ลำดับการประมวลผลที่เปลี่ยนข้อมูลหรือสร้างตัวชี้วัด |
-| ใช้ค่าใดและเพราะอะไร | ค่า พิสัย/หน่วย บทบาท และฐานสนับสนุนหรือสถานะว่าไม่ได้ calibrate |
-| ได้ผลผลิตอะไร | ชื่อวัตถุจริงที่เชื่อมต่อกับผล รูป ตาราง หรือ claim |
-| วิธีเปลี่ยนแล้วผลใดต้องคำนวณใหม่ | lineage และ impact/sensitivity check ของผลปลายน้ำ |
-| อะไรเป็นเพียง operational grouping | ขอบเขต claim และ independent evidence ที่ยังขาด |
+ลำดับความสำคัญเมื่อกฎขัดกัน (ข้อหลังชนะข้อหน้า): แกนกลาง → genre overlay →
+style ของ project (`.ai/DOCUMENT_STYLE.md`, book profile) → voice profile ส่วนตัว →
+คำสั่งชัดเจนของผู้ใช้ในงานนั้น ยกเว้นสองเรื่องที่ไม่มีชั้นใด override ได้: ห้ามเปลี่ยน
+ข้อเท็จจริงหรือความแรงของข้ออ้าง และด่านความเสี่ยงต่อบุคคล/กฎหมายของ overlay
 
-บทเรียนด้านหลักฐาน: editor อาจตั้งข้อกังวลเรื่อง methodology และการใช้ AI ขณะที่ public
-review วิจารณ์ภาษาและวิธีโดยไม่ระบุว่าประโยคใดสร้างด้วย AI ได้ ห้ามรวมหลักฐานสองชุดนี้
-เป็นคำกล่าวว่า reviewer “ตรวจพบ AI จากสำนวน” ถ้าไม่มีข้อความนั้นโดยตรง รูปแบบภาษาและ
-คำศัพท์ภายในเป็นสัญญาณให้ตรวจความชัดเจนและความน่าเชื่อถือ ไม่ใช่เครื่องพิสูจน์ผู้เขียนหรือเครื่องมือ
+**Voice profile ส่วนตัว** คือรสนิยมและสำนวนของผู้เขียนคนหนึ่ง ไม่อยู่ใน package สาธารณะ
+หาไฟล์ตามลำดับ: `$APK_VOICE_PROFILE_DIR` แล้ว `~/.config/agent-project-kit/voice/`
+อ่าน `common.md` และ `<genre>.md` ถ้ามี (context bundle บอก path ที่พบใน
+`prose_genre.voice_profiles`) ใช้เฉพาะเมื่อผู้ใช้เป็นผู้เขียนงานนั้นเอง เริ่มไฟล์จาก
+`templates/VOICE_PROFILE.md` ถ้าไม่มี voice profile ให้ใช้ overlay ตามค่ากลาง
 
 ## 2. รูปแบบที่ต้องหลีกเลี่ยง
 
@@ -139,21 +121,14 @@ review วิจารณ์ภาษาและวิธีโดยไม่�
 | ประโยคที่มี colon อธิบายต่อ | | 2.5 |
 | คำเน้น (precisely, exactly, genuinely, crucially, importantly) | | 0.5 |
 
-สคริปต์ช่วยนับ: `python3 .ai/agent-project-kit/scripts/check_prose_style.py <file.tex|.md|.txt>`
+สคริปต์ช่วยนับ: `python3 .ai/agent-project-kit/scripts/check_prose_style.py <file.tex|.md|.txt> --profile <genre>`
 รองรับ LaTeX (ตัดคอมเมนต์และคำสั่งพื้นฐานก่อนนับ) และ Markdown สคริปต์รายงานจำนวน อัตรา และบรรทัดของจุดที่ต้องเป็นศูนย์
 การตัดสินสุดท้ายต้องอ่านบริบทเสมอ
 
 สคริปต์ยังแจ้งวลี artifact/meta-writing จากเคสที่เคยพบเป็น `review` โดยไม่ทำให้คำสั่ง fail
 คำอื่นที่มีความหมายเดียวกันต้องตรวจเชิง semantic เพิ่มเติม
 
-### Scientific pre-pass สำหรับงานวิชาการ
-
-1. **ตรึง evidence boundary** แยกสิ่งที่ source กล่าวโดยตรง ข้ออนุมาน และสิ่งที่ยังไม่ทราบ
-2. **ทำ method/lineage pass ก่อน style pass** ตรวจ input → processing → parameter → output → claim;
-   ถ้ามีวิธีเปลี่ยน ให้ตรวจผลปลายน้ำก่อนล็อกเนื้อหา
-3. **ทำ artifact/provenance pass** แทนคำภายในด้วยวัตถุจริง และเติม scientific justification
-   หรือระบุสถานะ operational/uncalibrated อย่างตรงไปตรงมา
-4. เมื่อ pre-pass พบปัญหา ให้แก้หรือรายงานแยกก่อนล็อกเนื้อหา ห้ามกลบปัญหาด้วย style edit
+สำหรับงานวิชาการ ทำ scientific pre-pass ใน `prompts/prose-genres/academic.md` ก่อนเกลา
 
 ## 4. ขั้นตอนเกลา
 
@@ -166,8 +141,7 @@ review วิจารณ์ภาษาและวิธีโดยไม่�
 7. **รัน QA เดิมของ project ซ้ำ** (build, citation, จำนวนคำ, overflow) เพราะการตัดคำเปลี่ยนการตัดบรรทัดและจำนวนคำได้
 8. **รายงานผู้ใช้** เป็นตาราง รูปแบบ → จำนวนก่อน/หลัง → ตัวอย่างที่แก้ และจุดที่ตั้งใจคงไว้พร้อมเหตุผล
 
-สำหรับงานวิชาการ ให้รายงานผล scientific pre-pass แยกจาก pattern counts และอ่าน `review`
-candidates ทุกจุด ถ้า style pass พบปัญหาเนื้อหา ให้ย้อนกลับไป method/lineage pass
+สำหรับงานวิชาการ ให้รายงานผลตาม §C ของ `prompts/prose-genres/academic.md`
 
 ## 5. เฉพาะภาษาไทย
 

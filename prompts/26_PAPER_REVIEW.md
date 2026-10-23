@@ -117,7 +117,18 @@ A. Internal integrity
 
 B. Existence and metadata verification
 สำหรับทุกรายการ หรืออย่างน้อยทุก core/novelty/method/data/metric citation ตาม scope:
-- ตรวจ DOI resolver/Crossref หรือ official publisher/proceedings/repository page
+- เริ่มตรวจ reference ผ่าน OpenAlex ก่อนค้นเว็บทั่วไปหรือเปิดเว็บต้นทาง:
+  ค้นด้วย DOI ถ้ามี มิฉะนั้นใช้ title ร่วมกับ author/year เพื่อแยกงานชื่อคล้ายกัน
+  ใช้เฉพาะข้อมูลบรรณานุกรมที่เปิดเผยได้ตาม confidentiality/venue policy ข้างต้น
+  ห้ามส่ง manuscript หรือข้อความลับไปยังบริการภายนอก
+- บันทึก query/DOI, วันที่ตรวจ, OpenAlex work ID/URL และผลการจับคู่หรือเหตุที่ไม่พบ
+  แล้วตาม DOI/ลิงก์ที่ได้ไปตรวจ DOI resolver/Crossref หรือ official
+  publisher/proceedings/repository page เพื่อยืนยันกับแหล่งต้นทาง
+- ถ้า OpenAlex ไม่พบข้อมูล จับคู่กำกวม หรือใช้งานไม่ได้ ให้บันทึกข้อจำกัดแล้ว
+  fallback ไป DOI/Crossref/เว็บต้นทางหรือค้นเว็บแบบเจาะจง ห้ามสรุปว่า reference
+  ไม่มีจริงจากการไม่พบใน OpenAlex และห้ามอ้างว่าเรียก OpenAlex แล้วหากยังไม่ได้เรียก
+- ผลจาก OpenAlex เป็นจุดเริ่มค้นและเทียบ metadata ไม่ใช่หลักฐานเพียงพอสำหรับ
+  `VERIFIED_OFFICIAL` หรือการยืนยันว่าเนื้อหารองรับ claim
 - เทียบ title, authors, year, venue, volume/issue, pages/article number, DOI/URL
 - ตรวจ publication status: published, accepted, preprint, retracted/corrected ถ้าเกี่ยวข้อง
 - ใช้สถานะ `VERIFIED_OFFICIAL`, `VERIFIED_CORROBORATED`, `METADATA_CONFLICT`,
@@ -350,6 +361,8 @@ Reviewer-report prose gate:
 
 - venue rules มาจาก official source และผูกกับ article type/date
 - citation audit แยก internal existence, external existence, metadata และ claim support
+- external reference verification เริ่มที่ OpenAlex ก่อนเว็บต้นทาง พร้อม query/date/
+  work ID หรือบันทึกเหตุที่ใช้ไม่ได้และ fallback; ยังตรวจ claim support จากเนื้อหาจริง
 - ไม่มีการเรียก reference ว่า fabricated โดยไม่มี documented verification trail
 - problem statement เชื่อมกับ title และ title สะท้อน contribution ที่มีหลักฐาน
 - actual length เทียบกับ limit ด้วย counting basis เดียวกัน

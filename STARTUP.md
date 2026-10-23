@@ -40,7 +40,9 @@ Quick answers need no route file. For other work, use Workflow Architecture v2:
 
 1. Select exactly one **primary pipeline** that owns the requested outcome.
 2. Add bounded **method modules** such as Web Development, Data Analytics,
-   Content Analysis, Research Synthesis, or Strategy only when needed.
+   Content Analysis, Research Synthesis, Strategy, or Evidence Scaffold
+   (`prompts/27_EVIDENCE_SCAFFOLD.md`, when the task is finding which evidence
+   is still missing) only when needed.
 3. Add the current **lifecycle stage** such as implementation, reviewer
    response, production, external feedback, Markdown cleanup, or package release.
 4. Apply every triggered **quality gate**; gates do not compete with methods.
@@ -56,6 +58,10 @@ the omission.
 Use Prose Style (`prompts/24_PROSE_STYLE.md`) as a quality gate whenever
 reader-facing prose is drafted, revised, edited, or polished. It does not own
 the deliverable and must not replace evidence, publication, or domain checks.
+Load the core plus the one genre overlay named by the bundle's `prose_genre`
+(academic, social, exam, web, or none for general prose), and the author's
+private voice profiles it lists, if any. Book requests route to Book Writing,
+which owns textbook prose through its own method, so the gate is not attached.
 
 Use Publication Production (`prompts/10_DOCUMENT_PRODUCTION.md`) only when a
 written/reflowable artifact must be built, converted, exported, or final-QA'd.
@@ -99,13 +105,14 @@ play and the one-line rule is not enough.
 
 <!-- BEGIN GENERATED: always-on policies from config/workflow-registry.json -->
 <!-- Edit config/workflow-registry.json, then run scripts/sync_workflow_registry.py --write. -->
-- `evidence-boundary`: Do not make claims stronger than available evidence; distinguish observation, inference, judgment, and external validation. Details: `AGENTS.md` › Output Style.
+- `evidence-boundary`: Do not make claims stronger than available evidence; distinguish observation, inference, judgment, and external validation. Keep whether something was found, what it covers, and whether it supports the claim as separate judgments; strength in one never compensates for weakness in another, and not finding something is not evidence it is absent. Details: `AGENTS.md` › Output Style.
 - `loop-boundary`: Do not present L1 execution as resolution of L2 human judgment or L3 external feedback. Details: `AGENTS.md` › Core Loop Model.
 - `context-minimization`: Load only context required by the current deliverable; do not scan files merely because they exist. Details: `STARTUP.md` › Read Only When Triggered; `TOKEN_DISCIPLINE.md` › Default Principle.
 - `idempotent-checks`: Reuse successful valid discovery/check results; rerun only after expiry, relevant change, failure, or explicit request. Details: `STARTUP.md` › Check Cadence.
 - `user-file-safety`: Preserve user-authored files and project-local state; do not overwrite or delete them implicitly. Details: `README.md` › Safety Model.
 - `dependency-remediation`: When a task-required library is missing, select the project-declared environment or the narrowest text/image/ml environment, install and verify the smallest compatible direct dependency, and avoid cross-project conflicts. Honor explicit isolation or pinning contracts outside synced trees when practical. Announce ordinary repairs and proceed only at or below 250 MB without removal, replacement, or downgrade; otherwise inspect a supported dry run and obtain approval. Details: `AGENTS.md` › Conda-Family Environment Routing; `ENVIRONMENT_POLICY.md` › Demand-Driven Installation and Network Cost.
 - `confidentiality-boundary`: Keep project-local state, private product intelligence, credentials, and restricted source material outside public package and trace surfaces unless explicitly approved. Details: `config/SECURITY_BOUNDARY.md` › Classification; `SECURITY_EXCLUSIONS.md` › Private product intelligence.
+- `data-flow`: Extract each source once into a hash-keyed local cache and read the cache, related Markdown, and evidence before the original; keep regenerable caches and builds off cloud sync and Git, persist anything holding human or AI judgment, and ask before bulk traffic on a metered link. Details: `DATA_FLOW_POLICY.md` › Core Rules.
 <!-- END GENERATED: always-on policies -->
 
 ## Read Only When Triggered
@@ -121,6 +128,9 @@ play and the one-line rule is not enough.
 | Commit or package | run `scripts/check_release_boundary.py`; keep private product intelligence outside public paths |
 | Tag or public release | run `scripts/check_release_boundary.py --release --history`; stop on untracked release candidates |
 | Explicit token/cost concern or high-cost work | `.ai/TOKEN_BUDGET.md` |
+| Reading a PDF, image, DOCX, XLSX, or PPTX source; cloud-synced folder; metered link; cache or storage decision | `DATA_FLOW_POLICY.md` |
+| Context bundle lists `reference_maps` | read the map first, then only the files it names for the current need; a reference project is read-only |
+| Context bundle lists `related_markdown` | read those files' matched sections before browsing; an empty list means nothing indexed matched |
 | Document, slide, research, or Markdown-maintenance task | the relevant prompt/checklist only |
 | Last state summary is insufficient | the newest relevant `.ai/SESSION_LOG.md` entry |
 

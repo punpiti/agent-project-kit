@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Compile a minimal, auditable context bundle for one request."""
 from __future__ import annotations
-import argparse, json, sys
+import argparse, json, os, sys
 from pathlib import Path
 # A shared runtime is checksum-verified; importing route_task must not add
 # __pycache__ files to it.
 sys.dont_write_bytecode=True
 from route_task import classify
+from md_index import related as related_markdown
 
 ROOT=Path(__file__).resolve().parent.parent
 def read_json(path: Path) -> dict|None:
@@ -35,6 +36,21 @@ def project_context(project: Path, limit: int=2500) -> tuple[str,list[str]]:
             sources.append(str(legacy_path))
     return "\n".join(parts),sources
 
+def private_files(env: str, folder: str, name: str) -> list[str]:
+    """Personal files live outside the package; report paths only."""
+    base=os.environ.get(env)
+    root=Path(base).expanduser() if base else Path.home()/".config"/"agent-project-kit"/folder
+    return [str(path) for path in (root/"common.md",root/f"{name}.md") if path.is_file()]
+
+def voice_profiles(genre: str) -> list[str]:
+    return private_files("APK_VOICE_PROFILE_DIR","voice",genre)
+
+def reference_maps(pipeline: str) -> list[str]:
+    """The owner's map of which files in an earlier project to reuse for this
+    kind of work (for example a finished book's toolchain), so the agent reads
+    those few files instead of browsing that project."""
+    return private_files("APK_REFERENCE_DIR","references",pipeline)
+
 def refresh_metrics(bundle: dict, counts: dict) -> int:
     metrics={**counts,"bytes":0,"estimated_tokens":1}
     bundle["metrics"]=metrics
@@ -46,7 +62,7 @@ def refresh_metrics(bundle: dict, counts: dict) -> int:
         metrics["bytes"]=size; metrics["estimated_tokens"]=tokens
     return len((json.dumps(bundle,ensure_ascii=False,indent=2)+"\n").encode("utf-8"))
 
-def compile_bundle(request: str, project: Path, max_bytes: int, files: list[Path]|None=None) -> dict:
+def compile_bundle(request: str, project: Path, max_bytes: int, files: list[Path]|None=None, markdown: bool=True) -> dict:
     route=classify(request,project,files)
     registry=read_json(ROOT/"config"/"workflow-registry.json") or {}
     primary={"id":route["primary_pipeline"],**registry["primary_pipelines"][route["primary_pipeline"]]}
@@ -76,9 +92,24 @@ def compile_bundle(request: str, project: Path, max_bytes: int, files: list[Path
       "state_actions":state_actions,
       "secondary":secondary,
       "omitted":route["omitted"],
+      "prose_genre":None,
       "policies":[registry["policies"][key] for key in registry["always_policies"]],
       "project_context":state,
       "sources":sources}
+    if route.get("prose_genre"):
+        genre=route["prose_genre"]; item=registry.get("prose_genres",{}).get(genre,{})
+        bundle["prose_genre"]={"id":genre,"label":item.get("label"),"overlay":item.get("overlay"),
+          "checker_profile":item.get("checker_profile"),"voice_profiles":voice_profiles(genre)}
+    else:
+        del bundle["prose_genre"]
+    maps=reference_maps(primary["id"])
+    if maps:
+        bundle["reference_maps"]=maps
+    # Pointers to Markdown written in earlier sessions (evidence, reading
+    # caches, extraction indexes), so the agent reads those instead of
+    # redoing the work or browsing. Paths only; never file content.
+    if markdown and (project/".ai").is_dir():
+        bundle["related_markdown"]=related_markdown(request,project,files)
     counts={
       "primary_modules":1,
       "method_modules":len(method_modules),
@@ -88,6 +119,10 @@ def compile_bundle(request: str, project: Path, max_bytes: int, files: list[Path
       "secondary_modules":len(secondary),
       "omitted_modules":len(route["omitted"])}
     size=refresh_metrics(bundle,counts)
+    related=bundle.get("related_markdown")
+    while size>max_bytes and related and related["files"]:
+        related["files"].pop(); related["omitted_matches"]+=1
+        size=refresh_metrics(bundle,counts)
     if size>max_bytes:
         marker="\n[truncated to byte budget]"
         low,high,best_fit=0,len(state),None
@@ -111,8 +146,8 @@ def compile_bundle(request: str, project: Path, max_bytes: int, files: list[Path
     return bundle
 
 def main() -> int:
-    p=argparse.ArgumentParser(description=__doc__); p.add_argument("request",nargs="+"); p.add_argument("--project",default="."); p.add_argument("--max-bytes",type=int,default=12000); p.add_argument("--output"); p.add_argument("--file",action="append",default=[],help="a document to inspect; repeatable"); a=p.parse_args()
-    try: bundle=compile_bundle(" ".join(a.request),Path(a.project).resolve(),a.max_bytes,[Path(name).resolve() for name in a.file])
+    p=argparse.ArgumentParser(description=__doc__); p.add_argument("request",nargs="+"); p.add_argument("--project",default="."); p.add_argument("--max-bytes",type=int,default=12000); p.add_argument("--output"); p.add_argument("--file",action="append",default=[],help="a document to inspect; repeatable"); p.add_argument("--no-markdown-index",action="store_true",help="skip the related-Markdown lookup"); a=p.parse_args()
+    try: bundle=compile_bundle(" ".join(a.request),Path(a.project).resolve(),a.max_bytes,[Path(name).resolve() for name in a.file],not a.no_markdown_index)
     except ValueError as error: p.error(str(error))
     text=json.dumps(bundle,ensure_ascii=False,indent=2)+"\n"
     if a.output: Path(a.output).write_text(text,encoding="utf-8")

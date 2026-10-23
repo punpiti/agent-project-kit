@@ -16,6 +16,8 @@ toolchain กลางให้หนังสือทุกเล่ม ค่
 output format, ขนาดหน้า/จอ, font, citation style, anchor syntax, equation/table/
 figure syntax, build command, draft/production separation และเกณฑ์ QA ต้องอ่านจาก
 ข้อกำหนดของโครงการหนังสือเป้าหมายตาม `{{PROFILE:output-production-contract}}`
+เมื่อเล่มมีภาษาไทยปนสัญลักษณ์กรีก สมการ หรือรูป ให้อ่าน
+`templates/pandoc-thai-a4/THAI_TYPESETTING.md` ก่อนเลือก font/math font และก่อน build
 ส่วนระดับผู้อ่าน เป้าหมายการเรียนรู้ ภาษาหลัก และบริบทการนำไปใช้ต้อง resolve จาก
 `{{PROFILE:reader-domain-contract}}` เช่นกัน ห้ามถือว่านักศึกษาปริญญาตรีหรือ
 ผู้อ่านสายวิศวกรรมเป็นค่าเริ่มต้นของหนังสือทุกเล่ม

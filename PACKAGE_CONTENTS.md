@@ -29,6 +29,7 @@
 - `environments/text-observed-20260807.yml`
 - `environments/system-document-tools.txt`
 - `environments/font-requirements.md`
+- `DATA_FLOW_POLICY.md`
 - `ENVIRONMENT_POLICY.md`
 - `GLOBAL_START_PROMPT.md`
 - `GIT_DISTRIBUTION.md`
@@ -80,6 +81,8 @@
 - `prompts/24_PROSE_STYLE.md`
 - `prompts/25_THESIS_REVIEW.md`
 - `prompts/26_PAPER_REVIEW.md`
+- `prompts/27_EVIDENCE_SCAFFOLD.md`
+- `prompts/prose-genres/` (`academic.md`, `social.md`, `exam.md`, `web.md`)
 - `prompts/catalog.json`
 - `scripts/bootstrap_ai_project.py`
 - `scripts/apk_doctor.py`
@@ -92,6 +95,7 @@
 - `scripts/install-from-git.ps1`
 - `scripts/install-shared.py`
 - `scripts/install-thai-fonts.py`
+- `scripts/md_index.py`
 - `scripts/check-update-notice.py`
 - `scripts/check_book_writing_split.py`
 - `scripts/check_prose_style.py`
@@ -122,6 +126,7 @@
 - `templates/NEW_BOOK_START_GUIDE.md`
 - `templates/ENVIRONMENT_VARIABLES.md`
 - `templates/EVALS.md`
+- `templates/EVIDENCE_MAP.md`
 - `templates/FEEDBACK_SYNTHESIS.md`
 - `templates/LOCAL_RESOURCES.md`
 - `templates/MACHINE_COMPATIBILITY.md`
@@ -136,18 +141,21 @@
 - `templates/PRESENTATION_PIPELINE.md`
 - `templates/PRESENTATION_QA.md`
 - `templates/PRESENTATION_STYLE.md`
+- `templates/REFERENCE_MAP.md`
 - `templates/REVIEW_GATE.md`
 - `templates/RUNBOOK.md`
 - `templates/SESSION_LOG.md`
 - `templates/SLIDE_STORYBOARD.md`
 - `templates/TASK_SPEC.md`
 - `templates/TOKEN_BUDGET.md`
+- `templates/VOICE_PROFILE.md`
 - `templates/WORK_HUB_README.md`
 - `templates/project.json`
 - `templates/apk.json`
 - `templates/state.json`
 - `templates/local-resources.json`
 - `templates/pandoc-thai-a4/README.md`
+- `templates/pandoc-thai-a4/THAI_TYPESETTING.md`
 - `templates/pandoc-thai-a4/build-thai-a4-pdf.sh`
 - `templates/pandoc-thai-a4/thai-a4-defaults.yaml`
 - `templates/pandoc-thai-a4/thai-a4-header.tex`

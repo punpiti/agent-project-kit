@@ -4,6 +4,95 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Paper peer review now starts external reference verification with OpenAlex,
+  records the lookup trail, then checks primary sources; unavailable or ambiguous
+  lookups use a documented fallback without treating missing results as fabrication.
+- Added `DATA_FLOW_POLICY.md` as the single rule set for storage and source
+  ingestion: tiers (`git`, `durable` cloud drive, `hot` SSD, `cold` HDD,
+  `scratch`), rebuild classes (R0 cheap, R1 costly, R2 judgment, final) that
+  decide what may sync or commit, an extract-once pipeline with a token ladder,
+  a PDF/image/DOCX/XLSX/PPTX playbook, and cloud-drive, Git, and metered-link
+  rules. `AGENTS.md`, `MACHINE_PROFILES.md`, `ENVIRONMENT_POLICY.md`,
+  `DOCUMENT_PRODUCTION_POLICY.md`, and `TOKEN_DISCIPLINE.md` now point to it
+  instead of repeating rules; a new always-on `data-flow` policy and a STARTUP
+  trigger route agents there. Templates gained tier/rebuild-class columns,
+  `APK_CACHE_ROOT`, and a machine storage/network section.
+- The context bundle now carries `related_markdown`: up to five pointers to
+  project Markdown (evidence, reading caches, extraction indexes) that match
+  the request, ranked by the new `scripts/md_index.py` with bilingual matching.
+  A supplied source file finds its hash-keyed cache first. The index lives in
+  `$APK_CACHE_ROOT` (default `~/.cache/agent-project-kit-cache`) and re-reads
+  only changed files. Covered by `tests/test-md-index.py`.
+- Prose style is now a shared core plus one genre overlay. The academic
+  scientific-reporting gate and pre-pass moved verbatim from
+  `prompts/24_PROSE_STYLE.md` into `prompts/prose-genres/academic.md`, so other
+  prose no longer loads them. New overlays: `social.md` (author-voice edit
+  levels and a risk gate for naming people, defamation, pile-ons, privacy),
+  `exam.md` (stems, distractors, keys, rubrics, exam security), and `web.md`.
+  The registry gains `prose_genres`; the router returns `prose_genre`, and
+  naming a post, exam, or web copy attaches the prose gate. Exam vocabulary now
+  routes to course material.
+- Book Writing owns textbook prose through its own method, so book requests no
+  longer attach the Prose Style gate (`WORKFLOW_ARCHITECTURE.md` updated).
+  Thai routing follows the owner's rules: "หนังสือเรียน"/"ตำรา" is a textbook,
+  "หนังสือ" alone is a document, "บทที่" means the textbook unless a paper,
+  thesis, slides, or course material is named, and another book part beside a
+  bare "หนังสือ" (คำนำ, บทนำ, สารบัญ, เล่ม) asks for clarification. "เขียนหนังสือ"
+  is no longer a book phrase. Ties between pipelines that share a deliverable
+  go to the one that lists it first, so letters route to Administrative
+  Operations instead of Software. Paper-section requests (related work,
+  บทคัดย่อ, "แก้ abstract") now route as papers.
+- Fixes from an independent review: the Markdown index reads at most
+  `$APK_MD_INDEX_READ_BUDGET` files per call (path matches first; `--build-all`
+  on request), skips release-boundary private areas, and finds out-of-project
+  extraction caches by hash. A named post or web copy now routes as its own
+  deliverable (`social-post`, `web-copy`) instead of `analysis`/`code`, an exam
+  routes to course material, and a genre named alongside a book, paper, slides,
+  or policy asks which output is wanted. "บทที่" now outranks topic words such
+  as นโยบาย. The checker flags whole-line bold sentences and, in the exam
+  profile, allows bold only on negation words.
+- Second and third review rounds: when a named genre and another output appear
+  together, the one a production verb takes as its object is produced and the
+  other is its topic or source ("Using this research paper, create exam
+  questions" → exam, "เขียนบทที่ 3 เรื่องข้อสอบ" → book, "implement a quiz API"
+  → code, "a formal letter about exam questions" → letter); if neither is
+  verb-led the explicit output phrase or earlier mention wins, and if both are
+  the router asks. Verbs live in `routing-rules.json` (`output_verbs`).
+  Web copy and social posts belong to the general pipeline. Caches found by
+  hash obey the private rules, and an exam's wholly bold question stem fails. Social posts belong to the
+  general pipeline even when they mention a textbook. "บทที่" also outranks
+  code mentioned in the chapter. The index splits its read budget (relevant
+  files up to 40, others up to 5), keeps cache hashes for unread files, lists
+  a cache once, and judges symlinks by their target. Whole bold lines without
+  ending punctuation (most Thai) are reported for review instead of passing;
+  bold FAQ questions count as titles. `DATA_FLOW_POLICY.md` now forbids
+  symlinks in synced folders.
+- Private reference maps: the context bundle lists `reference_maps`, the
+  owner's map of which files in an earlier project to reuse for the routed
+  pipeline (`$APK_REFERENCE_DIR` or `~/.config/agent-project-kit/references/`,
+  `common.md` plus `<pipeline>.md`; template `templates/REFERENCE_MAP.md`).
+  Paths only; the maps stay outside the package.
+- Inside the kit's own source tree, the router treats every request as kit
+  development (Software Development & Automation, no prose genre), so editing
+  "the data flow policy" or "the paper review prompt" no longer routes to the
+  policy or research pipelines. `selection_trace.self_hosted_kit` records it.
+- Personal writing taste lives outside the package in private voice profiles
+  (`$APK_VOICE_PROFILE_DIR` or `~/.config/agent-project-kit/voice/`, template
+  `templates/VOICE_PROFILE.md`); the context bundle lists the ones it finds.
+- `check_prose_style.py --profile` selects genre rules: social, exam, and web
+  allow questions, exam allows bold negation, web and exam skip the colon rate,
+  and scientific review phrases apply only to general and academic.
+  Fixed false positives found on a real textbook chapter: bold labels in
+  callouts and list items, whole-line bold titles, and image alt text.
+- Added the `evidence-scaffold` method (`prompts/27_EVIDENCE_SCAFFOLD.md`,
+  `templates/EVIDENCE_MAP.md`): evidence roles before search, gaps drive the
+  next round, found/covers/supports judged separately, core and exploratory
+  queues, and a synthesis boundary. The always-on `evidence-boundary` policy now
+  keeps those three judgments separate and treats absence as unknown.
+- Added `templates/pandoc-thai-a4/THAI_TYPESETTING.md`: Thai font coverage,
+  math fonts, Thai inside math, polyglossia line-break hyphens, DOCX equations,
+  figure fonts, and a per-build QA list, each marked verified/observed/check.
+
 ## 8.5.0-paper-peer-review-canary — 2026-10-16
 
 - Added a peer-review stage for when the user is the paper's reviewer, distinct

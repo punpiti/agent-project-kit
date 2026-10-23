@@ -2,14 +2,15 @@
   "schema_version": 2,
   "generated_from": "config/workflow-registry.json",
   "policies": {
-    "evidence-boundary": "Do not make claims stronger than available evidence; distinguish observation, inference, judgment, and external validation.",
+    "evidence-boundary": "Do not make claims stronger than available evidence; distinguish observation, inference, judgment, and external validation. Keep whether something was found, what it covers, and whether it supports the claim as separate judgments; strength in one never compensates for weakness in another, and not finding something is not evidence it is absent.",
     "loop-boundary": "Do not present L1 execution as resolution of L2 human judgment or L3 external feedback.",
     "context-minimization": "Load only context required by the current deliverable; do not scan files merely because they exist.",
     "idempotent-checks": "Reuse successful valid discovery/check results; rerun only after expiry, relevant change, failure, or explicit request.",
     "user-file-safety": "Preserve user-authored files and project-local state; do not overwrite or delete them implicitly.",
     "resource-portability": "Do not assume machine-local data, cache, runtime, or accelerator resources exist on another machine.",
     "dependency-remediation": "When a task-required library is missing, select the project-declared environment or the narrowest text/image/ml environment, install and verify the smallest compatible direct dependency, and avoid cross-project conflicts. Honor explicit isolation or pinning contracts outside synced trees when practical. Announce ordinary repairs and proceed only at or below 250 MB without removal, replacement, or downgrade; otherwise inspect a supported dry run and obtain approval.",
-    "confidentiality-boundary": "Keep project-local state, private product intelligence, credentials, and restricted source material outside public package and trace surfaces unless explicitly approved."
+    "confidentiality-boundary": "Keep project-local state, private product intelligence, credentials, and restricted source material outside public package and trace surfaces unless explicitly approved.",
+    "data-flow": "Extract each source once into a hash-keyed local cache and read the cache, related Markdown, and evidence before the original; keep regenerable caches and builds off cloud sync and Git, persist anything holding human or AI judgment, and ask before bulk traffic on a metered link."
   },
   "always": [
     "evidence-boundary",
@@ -18,6 +19,7 @@
     "idempotent-checks",
     "user-file-safety",
     "dependency-remediation",
-    "confidentiality-boundary"
+    "confidentiality-boundary",
+    "data-flow"
   ]
 }

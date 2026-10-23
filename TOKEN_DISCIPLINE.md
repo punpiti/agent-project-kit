@@ -66,6 +66,20 @@ AI ควรเตือนผู้ใช้เมื่อพบว่า:
 - log ยาวมาก แต่ต้องการเพียง error 30 บรรทัดสุดท้าย
 - งานเริ่มขยายจาก T1/T2 ไปเป็น T3 โดยผู้ใช้ไม่ได้ตั้งใจจ่าย token สำหรับ run ยาว
 
+## Extract Once, Read Small
+
+ไฟล์ต้นทางขนาดใหญ่ (PDF, รูปภาพ, DOCX, XLSX, PPTX) ให้ใช้เครื่องมือ deterministic
+แปลงครั้งเดียวเก็บเป็น cache ตาม hash แล้วให้ AI อ่าน cache แทนไฟล์ต้นฉบับ
+ตาม `DATA_FLOW_POLICY.md`:
+
+- ตรวจ cache `INDEX.md`/manifest และ evidence เดิมก่อนอ่านหรือแปลงใหม่ทุกครั้ง
+- อ่านตาม token ladder: index → grep/query ในเครื่อง → ส่วนที่ extract ไว้ →
+  ภาพย่อหรือ crop → ภาพเต็มหรือไฟล์ต้นฉบับ หยุดที่ขั้นแรกที่ตอบได้
+- ตารางใน XLSX ให้คำนวณในเครื่องแล้วส่งเฉพาะ schema/ผลลัพธ์ ไม่ส่งทั้ง sheet
+- รูปให้ย่อหรือ crop ก่อนส่งให้ vision และลอง Tesseract ก่อน AI OCR
+- ผลที่เสีย token แล้ว (AI OCR, สรุป, evidence unit, ผลตรวจรูป) ต้องบันทึกไว้ใน
+  project พร้อม hash ของต้นทาง เพื่อไม่ต้องจ่ายซ้ำใน session ถัดไป
+
 ## Token-Saving Suggestions AI Should Offer
 
 ใช้คำแนะนำสั้น ๆ เช่น:

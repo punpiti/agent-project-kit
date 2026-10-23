@@ -270,6 +270,27 @@
         },
         "alternative_markers": {
           "$ref": "#/$defs/phrases"
+        },
+        "genre_social": {
+          "$ref": "#/$defs/phrases"
+        },
+        "genre_exam": {
+          "$ref": "#/$defs/phrases"
+        },
+        "genre_web": {
+          "$ref": "#/$defs/phrases"
+        },
+        "book_nouns": {
+          "$ref": "#/$defs/phrases"
+        },
+        "book_parts": {
+          "$ref": "#/$defs/phrases"
+        },
+        "book_chapter": {
+          "$ref": "#/$defs/phrases"
+        },
+        "output_verbs": {
+          "$ref": "#/$defs/phrases"
         }
       },
       "required": [
@@ -293,7 +314,14 @@
         "checkpoint",
         "secret_check",
         "machine_needed",
-        "alternative_markers"
+        "alternative_markers",
+        "genre_social",
+        "genre_exam",
+        "genre_web",
+        "book_nouns",
+        "book_parts",
+        "book_chapter",
+        "output_verbs"
       ],
       "additionalProperties": false
     }

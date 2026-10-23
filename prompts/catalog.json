@@ -206,6 +206,13 @@
       "role": "lifecycle-stage",
       "cadence": "per-paper-review-round",
       "trigger": "acting as peer reviewer or external evaluator for a paper, article, manuscript, preprint, or submission draft"
+    },
+    {
+      "path": "27_EVIDENCE_SCAFFOLD.md",
+      "type": "secondary",
+      "role": "method",
+      "cadence": "per-evidence-gathering-task",
+      "trigger": "evidence map, coverage gaps, or deciding what evidence is still missing before synthesis or a decision"
     }
   ]
 }

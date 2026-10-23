@@ -19,6 +19,11 @@ Do not recurse into `.ai/agent-project-kit/.ai/` or read another
 packaged copy. For normal development of this repository, read root-level
 governance files first, then the root `.ai/` project-state files.
 
+The router applies the same guard: inside the kit's source (a `START_HERE.md`
+plus a `manifest.json` named `agent-project-kit` or `computing-environment`),
+every request is development of the kit, so it routes to Software Development &
+Automation even when it mentions a policy, paper, book, or post.
+
 
 ไฟล์นี้คือไฟล์แรกที่ AI / Codex / coding agent ควรอ่านก่อนเริ่มงาน
 

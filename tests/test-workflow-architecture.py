@@ -62,7 +62,9 @@ assert policy["workflow"]["gates"] == ["prose-style"], policy
 book = bundle("revise and export the book manuscript to PDF")
 assert book["primary"]["id"] == "book-writing", book
 assert [item["id"] for item in book["stages"]] == ["publication-production"], book
-assert [item["id"] for item in book["gates"]] == ["prose-style"], book
+# Book Writing owns textbook prose; the article-oriented prose gate stays off.
+assert book["gates"] == [], book
+assert "prose_genre" not in book, book
 assert book["omitted"] == [], book
 assert any("narrowest text/image/ml environment" in policy for policy in book["policies"]), book
 assert any("250 MB" in policy and "isolation" in policy for policy in book["policies"]), book

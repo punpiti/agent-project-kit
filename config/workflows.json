@@ -32,6 +32,12 @@
       "cadence": "per evidence-synthesis task",
       "kind": "methods"
     },
+    "evidence-scaffold": {
+      "prompt": "prompts/27_EVIDENCE_SCAFFOLD.md",
+      "instruction": "Turn the question into named evidence roles, place partial evidence units, let open gaps drive the next search round, and state what the evidence jointly does and does not establish.",
+      "cadence": "per evidence-gathering task",
+      "kind": "methods"
+    },
     "implementation": {
       "prompt": "prompts/03_CODEX_CODING_AGENT.md",
       "instruction": "Use a spec-test-review implementation loop.",

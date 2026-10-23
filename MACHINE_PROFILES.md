@@ -19,6 +19,23 @@ local profile folder, not in the public package.
   must be recorded in `.ai/LOCAL_RESOURCES.md`.
 - Secrets and credentials must not be stored in project docs or committed files.
 
+## Source-Of-Truth Storage Tiers
+
+The full tier model (`git`, `durable` cloud drive, `hot` SSD, `cold` HDD,
+`scratch`), rebuild classes, and cache placement live in
+`DATA_FLOW_POLICY.md`. In short: the Git remote plus the synced folder are the
+only source of truth; everything on a machine's SSD/HDD must be rebuildable
+from them or be recorded as a backup copy.
+
+Machine-specific steps:
+
+- Record each machine's storage devices (SSD, HDD, external), sync clients,
+  and network-cost status in `.ai/MACHINE_PROFILE.md`.
+- Migrate repos out of synced folders one at a time: confirm everything is
+  pushed, move gitignored durable files into the synced folder, clone fresh on
+  the `hot` tier, verify, then remove the synced copy only after the user
+  confirms.
+
 ## Machine Roles
 
 Projects should define their own machine labels in `.ai/MACHINE_PROFILE.md`.

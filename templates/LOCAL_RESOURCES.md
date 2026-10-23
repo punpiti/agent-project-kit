@@ -8,9 +8,11 @@
 
 ## Resource Table
 
-| Resource | Purpose | Required? | Size | Synced? | Safe to delete? | Regenerate command | Notes |
-|---|---|---:|---:|---:|---:|---|---|
-| | | yes/no | | no | yes/no | | |
+Tier และ rebuild class ใช้ตาม `DATA_FLOW_POLICY.md`: tier = `hot` (SSD) / `cold` (HDD/external) / `scratch` / `durable` (cloud drive); class = `R0` ถูกและสร้างซ้ำได้ / `R1` สร้างซ้ำได้แต่แพง / `R2` มี judgment ของคนหรือ AI (ห้ามลบเอง) / `final`
+
+| Resource | Purpose | Tier | Rebuild class | Required? | Size | Synced? | Safe to delete? | Regenerate command | Notes |
+|---|---|---|---|---:|---:|---:|---:|---|---|
+| | | hot/cold/scratch/durable | R0/R1/R2/final | yes/no | | no | yes/no | | |
 
 ## Machine-Specific Paths
 
@@ -25,6 +27,8 @@
 | `PROJECT_DATA_ROOT` | Root of large input data outside the project/shared source tree | `/mnt/d/datasets/<project>` |
 | `PROJECT_CACHE_ROOT` | Root of generated cache/intermediate files | `/home/<user>/.cache/<project>` |
 | `PROJECT_OUTPUT_ROOT` | Non-portable heavy output path | `/mnt/d/outputs/<project>` |
+| `APK_CACHE_ROOT` | Kit extraction cache (`hot` tier, never synced) | `/home/<user>/.cache/agent-project-kit-cache` |
+| `APK_PDF_FIGURE_CACHE` | PDF figure cache, if moved off the synced project | `/home/<user>/.cache/agent-project-kit-cache/pdf-figures/<project>` |
 
 ## Current Machine Check
 

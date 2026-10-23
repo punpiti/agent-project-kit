@@ -113,6 +113,7 @@ Run tests directly (there is no test-runner wrapper or CI config in-repo):
 ```bash
 # Python unit-style tests (routing + compact context bundle)
 python3 tests/test-v7-context.py
+python3 tests/test-md-index.py   # related-Markdown pointers in the bundle
 
 # Prompt catalog schema/consistency check
 python3 scripts/validate_prompt_catalog.py

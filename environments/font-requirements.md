@@ -20,6 +20,9 @@ Do not silently substitute `TH SarabunPSK` for `TH Sarabun New`, or another font
 for Google Sarabun, when layout fidelity matters. If the preferred font cannot
 be installed, report the fallback and expect page flow and line breaks to change.
 
+Glyph coverage, math fonts, and Thai line-breaking pitfalls are collected in
+`templates/pandoc-thai-a4/THAI_TYPESETTING.md`.
+
 ## Installer
 
 Use the packaged helper after reviewing network conditions:

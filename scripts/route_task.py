@@ -42,6 +42,7 @@ REQUIRED_PHRASES = (
     "publication_formats", "presentation_production", "external_feedback",
     "markdown_cleanup", "markdown_topic", "markdown_verbs", "prose_writing",
     "secret_check", "checkpoint", "machine_needed", "alternative_markers",
+    "genre_social", "genre_exam", "genre_web", "book_nouns", "book_parts", "book_chapter", "output_verbs",
 )
 
 
@@ -107,6 +108,24 @@ def validate_rules(routing: dict = ROUTING, registry: dict = REGISTRY) -> list[s
         check_terms(f"phrases.{name}", routing.get("phrases", {}).get(name))
     for name in sorted(set(routing.get("phrases", {})) - set(REQUIRED_PHRASES)):
         errors.append(f"phrases.{name}: not used by route_task.py")
+    deliverable_owner: dict[str, str] = {}
+    for genre, item in registry.get("prose_genres", {}).items():
+        overlay = item.get("overlay")
+        if overlay and not (ROOT / overlay).is_file():
+            errors.append(f"prose_genres.{genre}: overlay {overlay!r} does not exist")
+        key = item.get("phrases")
+        if key and key not in REQUIRED_PHRASES:
+            errors.append(f"prose_genres.{genre}: phrases {key!r} is not a router phrase list")
+        routes_to = item.get("routes_to")
+        if routes_to and not key:
+            errors.append(f"prose_genres.{genre}: routes_to needs a phrase list that names the genre")
+        for deliverable in item.get("deliverables", []):
+            # A genre may own a deliverable that only its phrases produce.
+            if deliverable not in axes.get("deliverable", {}) and deliverable != routes_to:
+                errors.append(f"prose_genres.{genre}: unknown deliverable {deliverable!r}")
+            other = deliverable_owner.setdefault(deliverable, genre)
+            if other != genre:
+                errors.append(f"prose_genres: deliverable {deliverable!r} in both {other} and {genre}")
     try:
         re.compile(routing.get("source_file_pattern", ""))
     except re.error as error:
@@ -116,6 +135,22 @@ def validate_rules(routing: dict = ROUTING, registry: dict = REGISTRY) -> list[s
 
 # Same markers as apk_doctor.py: both present means the template was never filled in.
 STATE_PLACEHOLDER_MARKERS = ("- Project name:\n", "สรุปเป้าหมายปัจจุบัน 3–7 บรรทัด")
+
+
+KIT_NAMES = {"agent-project-kit", "computing-environment"}
+
+
+def kit_source(project: Path | None) -> bool:
+    """True inside Agent Project Kit's own source tree (START_HERE.md
+    "Self-Hosting / Recursion Guard"), where requests about policies, prompts,
+    or documents are edits to the kit itself."""
+    if project is None or not (project / "START_HERE.md").is_file():
+        return False
+    try:
+        manifest = json.loads((project / "manifest.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return False
+    return isinstance(manifest, dict) and manifest.get("name") in KIT_NAMES
 
 
 def markdown_state_initialized(ai_dir: Path) -> bool:
@@ -163,6 +198,11 @@ def select_primary(domain: str, deliverable: str, methods: list[str]) -> tuple[s
         if specialist_ready and deliverable in selectors["deliverables"]:
             score += 100
             reasons.append(f"deliverable:{deliverable}")
+            # Breaks ties between pipelines sharing a deliverable: Administrative
+            # Operations owns documents; for Software they are secondary output.
+            if deliverable == selectors["deliverables"][0]:
+                score += 10
+                reasons.append("owns-deliverable")
         if matching_methods:
             score += 80
             reasons.extend(f"method:{method}" for method in matching_methods)
@@ -175,6 +215,77 @@ def select_primary(domain: str, deliverable: str, methods: list[str]) -> tuple[s
         scored.append({"id": pipeline_id, "score": score, "reasons": reasons})
     scored.sort(key=lambda item: item["score"], reverse=True)
     return scored[0]["id"], scored
+
+
+def first_position(text: str, terms: list[str]) -> int:
+    """Index of the earliest phrase match, with the same boundaries as matches()."""
+    folded=text.casefold(); best=len(text)+1
+    for term in terms:
+        needle=term.casefold()
+        if needle.isascii():
+            found=re.search(rf"(?<![a-z0-9_.]){re.escape(needle)}(?![a-z0-9_]|\.[a-z0-9])", folded)
+            index=found.start() if found else -1
+        else:
+            index=folded.find(needle)
+        if index>=0: best=min(best,index)
+    return best
+
+
+def output_terms(deliverable: str) -> list[str]:
+    terms=list(RULES["deliverable"].get(deliverable,[]))
+    for item in ROUTING["strong_outputs"]:
+        if item["id"]==deliverable: terms+=item["phrases"]
+    if deliverable=="book": terms+=PHRASES["book_chapter"]
+    return terms
+
+
+FILLER_END = re.compile(r"(?:(?<=\s)|^)(?:a|an|the|some|new|short|few|several|\d+)$|(?:ให้|\d+)$")
+
+
+def verb_led(request: str, position: int) -> bool:
+    """True when the words just before `position` end in a production verb
+    ("write a ...", "create 5 ...", "ออก...", "เขียน..."), skipping articles and
+    numbers. The object of such a verb is the output; other mentions are its
+    topic or source."""
+    if position > len(request):
+        return False
+    before = request[:position].casefold().rstrip()
+    while True:
+        stripped = FILLER_END.sub("", before).rstrip()
+        if stripped == before:
+            break
+        before = stripped
+    for verb in PHRASES["output_verbs"]:
+        needle = verb.casefold()
+        if before.endswith(needle) and (not needle.isascii() or len(before) == len(needle)
+                                        or not before[-len(needle) - 1].isalnum()):
+            return True
+    return False
+
+
+def named_genre(request: str) -> tuple[str | None, int, bool]:
+    """The genre the request asks to produce: a verb-led mention first, then the
+    earliest one. Returns (genre, position, verb_led)."""
+    found = []
+    for genre, item in REGISTRY.get("prose_genres", {}).items():
+        if item.get("phrases"):
+            at = first_position(request, PHRASES[item["phrases"]])
+            if at <= len(request):
+                found.append((not verb_led(request, at), at, genre))
+    if not found:
+        return None, len(request) + 1, False
+    unled, at, genre = min(found)
+    return genre, at, not unled
+
+
+def select_prose_genre(deliverable: str, named: str | None) -> str:
+    """A genre named in the request wins; otherwise the deliverable's genre."""
+    if named:
+        return named
+    for genre, item in REGISTRY.get("prose_genres", {}).items():
+        if deliverable in item.get("deliverables", []):
+            return genre
+    return "general"
 
 
 def bounded(items: list[str], limit: int, category: str) -> tuple[list[str], list[dict]]:
@@ -269,6 +380,22 @@ def classify(request: str, project: Path | None = None, files: list[Path] | None
     strong_output=False
     for candidate,hints in ((item["id"],item["phrases"]) for item in ROUTING["strong_outputs"]):
         if contains_any(request,hints): deliverable,oc,strong_output=candidate,0.95,True; break
+    # Owner rules: "หนังสือเรียน"/"ตำรา" is a textbook (book); "หนังสือ" alone is
+    # a document, often an official letter; "บทที่" (chapter N) always means the
+    # textbook unless the request already names a paper, thesis, slides, or
+    # course material. Another book part (preface, contents, volume) next to a
+    # bare "หนังสือ" leaves it unclear, so ask instead of guessing.
+    if deliverable not in {"paper","presentation","course-material","book"} \
+       and contains_any(request,PHRASES["book_chapter"]):
+        domain,dc,deliverable,oc="book-writing",0.9,"book",0.9
+    # "เขียนบทที่ 3 เรื่องข้อสอบ" writes a chapter about exams; "ออกข้อสอบบทที่ 3"
+    # writes an exam on a chapter: the verb-led mention is the output.
+    if deliverable=="course-material" and contains_any(request,PHRASES["book_chapter"]) \
+       and verb_led(request,first_position(request,PHRASES["book_chapter"])) \
+       and not verb_led(request,first_position(request,output_terms("course-material"))):
+        domain,dc,deliverable,oc="book-writing",0.9,"book",0.9
+    thai_book_unclear = (not strong_output and deliverable != "book"
+      and contains_any(request,PHRASES["book_nouns"]) and contains_any(request,PHRASES["book_parts"]))
     if not strong_output:
         preferred=ROUTING["preferred_deliverable"].get(domain)
         if preferred and matches(request,RULES["deliverable"][preferred]): deliverable,oc=preferred,0.8
@@ -277,6 +404,33 @@ def classify(request: str, project: Path | None = None, files: list[Path] | None
         elif domain=="software" and oc<0.5: deliverable,oc="code",0.8
     # A supplied research document names the deliverable that the request left out.
     if supplied_document and not strong_output: deliverable,oc="paper",0.9
+    # In the kit's own source, "policy", "prompt", or "document" names a kit
+    # file to change, so the work is software development of the kit.
+    self_hosted=kit_source(project)
+    if self_hosted:
+        domain,dc,deliverable,oc="software",0.9,"code",0.9
+        thai_book_unclear=False
+    # A named post, exam, or web copy is the output, so it also decides the
+    # pipeline. When another output is named too, the one a production verb
+    # takes as its object is what to produce and the other is its topic or
+    # source: "using this paper, create exam questions" -> exam, "เกลาตำราที่มี
+    # ข้อสอบ" -> book, "implement a quiz API" -> code. If neither is verb-led an
+    # explicit output phrase wins, then the earlier mention; if both are, ask.
+    # A kit prompt about posts or exams is kit code, not a post or an exam.
+    genre_match,genre_at,genre_verb=(None,0,False) if self_hosted else named_genre(request)
+    genre_conflict=None
+    if genre_match:
+        target=REGISTRY["prose_genres"][genre_match]["routes_to"]
+        if deliverable!=target:
+            other_at=first_position(request,output_terms(deliverable))
+            # Code is named by its verbs ("implement", "fix the", "debug").
+            other_verb=verb_led(request,other_at) or (strong_output and deliverable=="code")
+            if genre_verb and other_verb:
+                genre_conflict=(genre_match,deliverable); genre_match=None
+            elif other_verb or (not genre_verb and (strong_output or other_at<genre_at)):
+                genre_match=None
+        if genre_match:
+            deliverable,oc=target,0.9
     methods=[key for key,terms in RULES["method"].items() if matches(request,terms)]
     # In software work "data" usually means configuration or fixtures.
     bare_data=[] if domain=="software" else PHRASES["data_analytics_bare_terms"]
@@ -334,9 +488,14 @@ def classify(request: str, project: Path | None = None, files: list[Path] | None
       stages,REGISTRY["composition"]["stage_max"],"stage")
     omitted.extend(stage_omitted)
     prose_writing=contains_any(request,PHRASES["prose_writing"])
+    prose_genre=select_prose_genre(deliverable,genre_match)
+    genre_named=genre_match is not None
     gates=[]
-    if (deliverable in {"paper","book","document","course-material","policy"} and prose_writing) \
-       or "paper-review" in lifecycle_stages:
+    # Naming a post, exam, or web copy is already a writing request. Books are
+    # left out: the book-writing pipeline has its own prose method for
+    # textbooks, while this gate targets articles and other reader-facing prose.
+    if (deliverable in {"paper","document","course-material","policy"} and prose_writing) \
+       or "paper-review" in lifecycle_stages or genre_named:
         gates.append("prose-style")
     if package_release or contains_any(request,PHRASES["secret_check"]):
         gates.append("release-boundary")
@@ -370,6 +529,14 @@ def classify(request: str, project: Path | None = None, files: list[Path] | None
         clarification_reasons.append(
           "a supplied file looks like a research document; ask what to do with it "
           "before reviewing, because it may be finished, already published, or someone else's")
+    if genre_conflict:
+        clarification_reasons.append(
+          f"the request asks to produce both a {genre_conflict[0]} output and a "
+          f"{genre_conflict[1]}; ask which one comes first or whether both are wanted")
+    if thai_book_unclear:
+        clarification_reasons.append(
+          "\"หนังสือ\" with a chapter, preface, or volume may be a textbook (หนังสือเรียน) "
+          "or a document; ask which before choosing Book Writing or a document route")
     return {
       "schema_version":2,
       "request":request,
@@ -385,10 +552,11 @@ def classify(request: str, project: Path | None = None, files: list[Path] | None
         "gates":gates,
         "state_actions":state_actions},
       "secondary_workflows":compatibility,
+      "prose_genre":prose_genre if "prose-style" in gates else None,
       "documents":documents,
       "clarification_reasons":clarification_reasons,
       "omitted":omitted,
-      "selection_trace":{"primary_candidates":primary_scores},
+      "selection_trace":{"primary_candidates":primary_scores,"self_hosted_kit":self_hosted},
       "confidence":round(min(dc if domain!="general" else 0.7,oc,0.6 if len(primary_scores)>1 and primary_scores[0]["score"]==primary_scores[1]["score"] else 0.9),2),
       "needs_clarification":bool(clarification_reasons) or oc<0.5 or (len(primary_scores)>1 and primary_scores[0]["score"]==primary_scores[1]["score"] and primary_scores[0]["score"]>1) or (contains_any(request,PHRASES["alternative_markers"]) and sum(bool(matches(request,terms)) for terms in RULES["deliverable"].values())>1)}
 

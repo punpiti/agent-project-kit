@@ -313,6 +313,65 @@
           "pattern": "^[^#\\s][^#]*\\.md#\\S.*$"
         }
       }
+    },
+    "prose_genres": {
+      "description": "Prose genre overlays loaded with the prose-style gate; see prompts/24_PROSE_STYLE.md section 1A.",
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "$ref": "#/$defs/text"
+          },
+          "overlay": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^prompts/prose-genres/[a-z0-9]+(-[a-z0-9]+)*\\.md$"
+          },
+          "checker_profile": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "deliverables": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+            },
+            "uniqueItems": true
+          },
+          "phrases": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-z0-9]+(_[a-z0-9]+)*$"
+          },
+          "routes_to": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          }
+        },
+        "required": [
+          "label",
+          "overlay",
+          "checker_profile",
+          "deliverables",
+          "phrases",
+          "routes_to"
+        ],
+        "additionalProperties": false
+      }
     }
   },
   "required": [

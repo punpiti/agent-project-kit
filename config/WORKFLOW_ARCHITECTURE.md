@@ -36,8 +36,13 @@ python3 scripts/sync_workflow_registry.py --write
   specialist method, and finally from the surrounding domain.
 - A method remains subordinate when another pipeline owns the deliverable. For
   example, survey analysis informs a policy pipeline; it does not replace it.
-- Stages and gates are orthogonal. Exporting a revised book can activate Book
-  Writing, Publication Production, and Prose Style without one hiding another.
+- Stages and gates are orthogonal. Exporting a revised paper can activate
+  Research Activities, Publication Production, and Prose Style without one
+  hiding another.
+- A pipeline with its own prose method owns its prose. Book Writing writes
+  textbooks by its own process (`prompts/22_BOOK_WRITING.md`), so book requests
+  do not attach the Prose Style gate, which targets articles, documents, posts,
+  exams, and web copy.
 - A module may reuse the primary prompt, but the compiled bundle includes each
   prompt once.
 - If a category reaches its configured limit, return the omitted candidate and

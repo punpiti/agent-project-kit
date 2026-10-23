@@ -97,3 +97,16 @@ df -h .
 Check whether the project is under iCloud, shared/synced project storage, Dropbox, a local folder, or
 a network mount. Do not apply WSL2/Windows shared/synced project storage assumptions until recorded
 here.
+
+### Storage And Network (see `DATA_FLOW_POLICY.md`)
+
+| Tier | Device / path on this machine | Free space | Notes |
+|---|---|---|---|
+| `hot` (local SSD) | | | WSL ext4 / `~/.cache` |
+| `cold` (HDD / external / NAS) | | | present always? |
+| `durable` (cloud drive + client) | | | OneDrive / Google Drive / Dropbox / iCloud; on-demand? |
+| `git` clone location | | | must not be inside the synced folder |
+
+- WSL virtual disk (`ext4.vhdx`) host drive and free space:
+- Network cost (`Unrestricted` / `Fixed` / `Variable` / unknown), checked on:
+- Mobile-data hotspot marked as metered? yes/no/n/a

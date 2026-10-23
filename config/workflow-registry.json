@@ -181,7 +181,10 @@
       "prompt": null,
       "instruction": "Clarify the concrete requested outcome and apply only task-relevant constraints.",
       "selectors": {
-        "deliverables": [],
+        "deliverables": [
+          "social-post",
+          "web-copy"
+        ],
         "domains": [
           "general"
         ],
@@ -218,6 +221,11 @@
         "prompt": "prompts/13_RESEARCH_PROJECT_PROMPTS.md",
         "instruction": "Select the narrow research mode and evidence standard needed by the owning pipeline.",
         "cadence": "per evidence-synthesis task"
+      },
+      "evidence-scaffold": {
+        "prompt": "prompts/27_EVIDENCE_SCAFFOLD.md",
+        "instruction": "Turn the question into named evidence roles, place partial evidence units, let open gaps drive the next search round, and state what the evidence jointly does and does not establish.",
+        "cadence": "per evidence-gathering task"
       }
     },
     "stages": {
@@ -313,14 +321,15 @@
     }
   },
   "policies": {
-    "evidence-boundary": "Do not make claims stronger than available evidence; distinguish observation, inference, judgment, and external validation.",
+    "evidence-boundary": "Do not make claims stronger than available evidence; distinguish observation, inference, judgment, and external validation. Keep whether something was found, what it covers, and whether it supports the claim as separate judgments; strength in one never compensates for weakness in another, and not finding something is not evidence it is absent.",
     "loop-boundary": "Do not present L1 execution as resolution of L2 human judgment or L3 external feedback.",
     "context-minimization": "Load only context required by the current deliverable; do not scan files merely because they exist.",
     "idempotent-checks": "Reuse successful valid discovery/check results; rerun only after expiry, relevant change, failure, or explicit request.",
     "user-file-safety": "Preserve user-authored files and project-local state; do not overwrite or delete them implicitly.",
     "resource-portability": "Do not assume machine-local data, cache, runtime, or accelerator resources exist on another machine.",
     "dependency-remediation": "When a task-required library is missing, select the project-declared environment or the narrowest text/image/ml environment, install and verify the smallest compatible direct dependency, and avoid cross-project conflicts. Honor explicit isolation or pinning contracts outside synced trees when practical. Announce ordinary repairs and proceed only at or below 250 MB without removal, replacement, or downgrade; otherwise inspect a supported dry run and obtain approval.",
-    "confidentiality-boundary": "Keep project-local state, private product intelligence, credentials, and restricted source material outside public package and trace surfaces unless explicitly approved."
+    "confidentiality-boundary": "Keep project-local state, private product intelligence, credentials, and restricted source material outside public package and trace surfaces unless explicitly approved.",
+    "data-flow": "Extract each source once into a hash-keyed local cache and read the cache, related Markdown, and evidence before the original; keep regenerable caches and builds off cloud sync and Git, persist anything holding human or AI judgment, and ask before bulk traffic on a metered link."
   },
   "always_policies": [
     "evidence-boundary",
@@ -329,7 +338,8 @@
     "idempotent-checks",
     "user-file-safety",
     "dependency-remediation",
-    "confidentiality-boundary"
+    "confidentiality-boundary",
+    "data-flow"
   ],
   "policy_sources": {
     "evidence-boundary": [
@@ -358,6 +368,9 @@
     "confidentiality-boundary": [
       "config/SECURITY_BOUNDARY.md#Classification",
       "SECURITY_EXCLUSIONS.md#Private product intelligence"
+    ],
+    "data-flow": [
+      "DATA_FLOW_POLICY.md#Core Rules"
     ]
   },
   "prompt_inventory": [
@@ -558,6 +571,65 @@
       "role": "lifecycle-stage",
       "cadence": "per-paper-review-round",
       "trigger": "acting as peer reviewer or external evaluator for a paper, article, manuscript, preprint, or submission draft"
+    },
+    {
+      "path": "27_EVIDENCE_SCAFFOLD.md",
+      "legacy_type": "secondary",
+      "role": "method",
+      "cadence": "per-evidence-gathering-task",
+      "trigger": "evidence map, coverage gaps, or deciding what evidence is still missing before synthesis or a decision"
     }
-  ]
+  ],
+  "prose_genres": {
+    "general": {
+      "label": "General prose",
+      "overlay": null,
+      "checker_profile": "general",
+      "deliverables": [
+        "document",
+        "policy",
+        "course-material"
+      ],
+      "phrases": null,
+      "routes_to": null
+    },
+    "academic": {
+      "label": "Academic paper, thesis, proposal, or report",
+      "overlay": "prompts/prose-genres/academic.md",
+      "checker_profile": "academic",
+      "deliverables": [
+        "paper"
+      ],
+      "phrases": null,
+      "routes_to": null
+    },
+    "social": {
+      "label": "Social media post",
+      "overlay": "prompts/prose-genres/social.md",
+      "checker_profile": "social",
+      "deliverables": [
+        "social-post"
+      ],
+      "phrases": "genre_social",
+      "routes_to": "social-post"
+    },
+    "exam": {
+      "label": "Exam or assessment items",
+      "overlay": "prompts/prose-genres/exam.md",
+      "checker_profile": "exam",
+      "deliverables": [],
+      "phrases": "genre_exam",
+      "routes_to": "course-material"
+    },
+    "web": {
+      "label": "Website copy",
+      "overlay": "prompts/prose-genres/web.md",
+      "checker_profile": "web",
+      "deliverables": [
+        "web-copy"
+      ],
+      "phrases": "genre_web",
+      "routes_to": "web-copy"
+    }
+  }
 }

@@ -34,6 +34,7 @@ ITEMS = [
     "AI_CLIENTS.md",
     "MACHINE_PROFILES.md",
     "TOKEN_DISCIPLINE.md",
+    "DATA_FLOW_POLICY.md",
     "DOCUMENT_PRODUCTION_POLICY.md",
     "MARKDOWN_ORGANIZATION_POLICY.md",
     "SECURITY_EXCLUSIONS.md",
@@ -246,6 +247,7 @@ layer unless explicitly requested.
 - `.ai/agent-project-kit/AGENTS.md`
 - `.ai/agent-project-kit/MACHINE_PROFILES.md`
 - `.ai/agent-project-kit/TOKEN_DISCIPLINE.md`
+- `.ai/agent-project-kit/DATA_FLOW_POLICY.md`
 - `.ai/agent-project-kit/DOCUMENT_PRODUCTION_POLICY.md`
 - `.ai/agent-project-kit/MARKDOWN_ORGANIZATION_POLICY.md`
 - `.ai/agent-project-kit/ENVIRONMENT_POLICY.md`

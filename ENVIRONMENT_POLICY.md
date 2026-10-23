@@ -178,6 +178,10 @@ they are meant to be shared.
 
 ## Document Build And Cache Rules
 
+Cache placement, rebuild classes, and source-ingestion rules for PDF, image,
+DOCX, XLSX, and PPTX are defined in `DATA_FLOW_POLICY.md`; this section only
+lists document-build specifics.
+
 For document projects, keep Markdown source, style sheets, templates,
 bibliography, and small source figures in the project folder or shared/synced
 source tree.

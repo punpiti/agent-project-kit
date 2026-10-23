@@ -24,7 +24,7 @@
     {"request": "maintain the academic promotion evidence and KU forms", "domain": "operations", "deliverable": "document", "required_methods": []},
     {"request": "plan an academic-rank evidence set before filling forms", "domain": "operations", "deliverable": "decision", "required_methods": []},
     {"request": "เขียนหนังสือตำรากลศาสตร์ของไหลจากหลักฐานที่ตรวจแล้ว", "domain": "book-writing", "deliverable": "book", "required_methods": [], "forbidden_workflows": ["publication-production"]},
-    {"request": "เขียนหนังสือวิศวกรรมจาก PDF DOCX และ PPTX ขนาดใหญ่", "domain": "book-writing", "deliverable": "book", "required_methods": [], "forbidden_workflows": ["publication-production"]},
+    {"request": "เขียนหนังสือเรียนวิศวกรรมจาก PDF DOCX และ PPTX ขนาดใหญ่", "domain": "book-writing", "deliverable": "book", "required_methods": [], "forbidden_workflows": ["publication-production"]},
     {"request": "build หนังสือเป็น EPUB และ PDF", "domain": "book-writing", "deliverable": "book", "required_methods": [], "required_workflows": ["publication-production"]},
     {"request": "วาง storyline สำหรับ presentation ผู้บริหาร", "domain": "general", "deliverable": "presentation", "required_methods": [], "forbidden_workflows": ["presentation-production"]},
     {"request": "จัดทำหนังสือราชการถึงคณะ", "domain": "operations", "deliverable": "document", "required_methods": [], "forbidden_workflows": ["publication-production"]},

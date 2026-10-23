@@ -63,7 +63,9 @@ Toolchain-specific Thai font routing:
 - If a required font is missing, download/install it only when the task needs
   that output and follow the metered-network warning and approval policy.
 
-Symbols, Greek letters and math in Thai XeLaTeX output:
+Symbols, Greek letters and math in Thai XeLaTeX output (fuller notes on font
+coverage, math fonts, Thai line breaking, DOCX equations, and figure fonts:
+`templates/pandoc-thai-a4/THAI_TYPESETTING.md`):
 
 - Sarabun lacks most Greek letters (it has only μ π Δ Ω) and lacks ↔ ⇒ ⇔ ∈ ≡.
   XeLaTeX does not fail on a missing glyph: it writes `Missing character` to the
@@ -170,7 +172,10 @@ as a reference rather than merely checked as a final output:
    source-native locator and extracted scope, cache path, structure/media/
    revision handling, known losses, and OCR/conversion status in
    `.ai/DOCUMENT_PIPELINE.md` or `.ai/LOCAL_RESOURCES.md`. Do not imply that a
-   partial cache covers the full source.
+   partial cache covers the full source. Place the cache and read it as
+   `DATA_FLOW_POLICY.md` specifies: check the cache before extracting, keep
+   regenerable extracts off cloud sync, persist judgment (reviews, AI OCR,
+   evidence units) in the project, and follow its token ladder.
 7. For DOCX, explicitly decide whether accepted text, tracked revisions,
    comments, footnotes/endnotes, tables, and images matter. For PPTX/ODP,
    preserve slide order, speaker notes, grouped/DrawingML text, charts/tables,
@@ -269,14 +274,18 @@ Use `.ai/DOCUMENT_PIPELINE.md` and `.ai/DOCUMENT_QA.md` for this.
 
 Source Markdown and styles should live in shared/synced project storage so they move across machines.
 
-Large intermediate build folders, temporary images, OCR outputs, and cache files may live outside shared/synced project storage, but must be recorded in:
+Build intermediates, temporary images, OCR outputs, renders, and extraction
+caches live outside the synced tree, on the local `hot` tier defined in
+`DATA_FLOW_POLICY.md`, and are recorded in:
 
 ```text
 .ai/LOCAL_RESOURCES.md
 .ai/DOCUMENT_PIPELINE.md
 ```
 
-Do not assume those local build/cache files exist on every machine.
+Build in the `hot` tier and copy only the final deliverable into the synced
+folder once, after QA. Do not assume local build/cache files exist on every
+machine.
 
 ## Do not scatter Markdown drafts
 

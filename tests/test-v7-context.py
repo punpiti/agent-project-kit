@@ -31,7 +31,7 @@ cases += [
 cases += [("plan an academic-rank evidence set before filling forms","operations","decision",set())]
 cases += [
  ("เขียนหนังสือตำรากลศาสตร์ของไหลจากหลักฐานที่ตรวจแล้ว","book-writing","book",set()),
- ("เขียนหนังสือวิศวกรรมจาก PDF DOCX และ PPTX ขนาดใหญ่","book-writing","book",set()),
+ ("เขียนหนังสือเรียนวิศวกรรมจาก PDF DOCX และ PPTX ขนาดใหญ่","book-writing","book",set()),
  ("build หนังสือเป็น EPUB และ PDF","book-writing","book",set()),
  ("วาง storyline สำหรับ presentation ผู้บริหาร","general","presentation",set()),
  ("จัดทำหนังสือราชการถึงคณะ","operations","document",set())]

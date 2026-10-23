@@ -12,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CHECKER = ROOT / "scripts" / "check_prose_style.py"
 PROSE_PROMPT = ROOT / "prompts" / "24_PROSE_STYLE.md"
+GENRES = ROOT / "prompts" / "prose-genres"
 BOOK_PROMPT = ROOT / "prompts" / "22_BOOK_WRITING.md"
 BOOK_PROFILE = ROOT / "templates" / "BOOK_WRITING_PROFILE.md"
 BOOK_GUIDE = ROOT / "templates" / "NEW_BOOK_START_GUIDE.md"
@@ -55,6 +56,8 @@ checker_contract = CHECKER.read_text(encoding="utf-8")
 assert "does not determine whether AI generated any text" in checker_contract
 for status in ("confirmed", "uncertain", "missing"):
     assert status in prose_contract, status
+# The academic gate moved to its genre overlay; the core must still route to it.
+academic_contract = (GENRES / "academic.md").read_text(encoding="utf-8")
 for scientific_contract in (
     "Scientific-reporting and trust gate",
     "provenance เป็น justification",
@@ -62,7 +65,17 @@ for scientific_contract in (
     "แยก AI disclosure จาก Methods",
     "ตรวจ lineage ก่อนเกลาภาษา",
 ):
-    assert scientific_contract in prose_contract, scientific_contract
+    assert scientific_contract in academic_contract, scientific_contract
+    assert scientific_contract not in prose_contract, scientific_contract
+for genre in ("academic", "social", "exam", "web"):
+    overlay = f"prompts/prose-genres/{genre}.md"
+    assert overlay in prose_contract, overlay
+    assert f"--profile {genre}" in (ROOT / overlay).read_text(encoding="utf-8"), overlay
+# Personal taste stays out of the public overlays.
+assert "APK_VOICE_PROFILE_DIR" in prose_contract
+social_contract = (GENRES / "social.md").read_text(encoding="utf-8")
+for gate in ("ไม่ชี้ตัวบุคคลในทางลบ", "แยกข้อเท็จจริงกับความเห็น", "ระวังทัวร์ลง"):
+    assert gate in social_contract, gate
 book_contract = BOOK_PROMPT.read_text(encoding="utf-8")
 for column in ("สำคัญเพราะอะไร", "ใช้ในบท/แนวคิดใด", "วิธีตรวจความพร้อม", "ทางปรับพื้นหรือ pre-reading"):
     assert column in book_contract, column
@@ -123,5 +136,50 @@ process_output = expect_exit(
 )
 assert "[review] internal artifact named instead of research object: 2" in process_output
 assert "[review] method deferred to notebook or caption: 1" in process_output
+
+# Labels in callouts and list items, and image alt text, are not running prose
+# (false positives found on a real textbook chapter).
+expect_exit(0, "> **โจทย์:** จงหาน้ำหนักบนดวงจันทร์\n\n- **Given:** mass 454 kg\n")
+expect_exit(0, "![Lecture — Slide 3](slides/Slide3.JPG)\n" * 5, "--strict")
+expect_exit(1, "> The result is **the key finding** here.\n")
+title_out = expect_exit(0, "**Couette Flow — velocity gradient and shear stress**\n")
+assert "[review] whole bold line (title or emphasized sentence?): 1" in title_out, title_out
+# A Thai bold sentence has no period, so it is surfaced for review, never
+# passed silently; a bold FAQ question is a title (review findings).
+thai_out = expect_exit(0, "**ผลการทดลองยืนยันว่าการรักษาช่วยเพิ่มอัตรารอดชีวิต**\n", "--profile", "academic")
+assert "[review] whole bold line" in thai_out, thai_out
+faq_out = expect_exit(0, "**What Is Fluid Mechanics?**\n", "--profile", "web")
+assert "[review] whole bold line" not in faq_out, faq_out
+# A bold sentence is emphasis even when it fills the line (review finding).
+expect_exit(1, "**The treatment significantly improves survival.**\n")
+
+# Genre profiles relax only what the genre needs.
+question = "เคยสงสัยไหมว่าทำไมน้ำถึงไหล?\n"
+expect_exit(1, question)
+expect_exit(1, question, "--profile", "academic")
+for profile in ("social", "exam", "web"):
+    expect_exit(0, question, "--profile", profile)
+negated_stem = "Which of the following is **not** a property of fluids?\n"
+expect_exit(0, negated_stem, "--profile", "exam")
+expect_exit(0, "ข้อใด**ไม่**ใช่สมบัติของของไหล\n", "--profile", "exam")
+expect_exit(1, negated_stem, "--profile", "social")
+# Exam allows bold only on the negation, not on any word (review finding).
+expect_exit(1, "Which result is **correct**?\n", "--profile", "exam")
+# A wholly bold stem is not a FAQ title in an exam (review finding).
+expect_exit(1, "**Which result is correct?**\n", "--profile", "exam")
+expect_exit(0, "**Which result is correct?**\n", "--profile", "web")
+# Formulaic framing stays a failure in every genre.
+for profile in ("general", "academic", "social", "exam", "web"):
+    expect_exit(1, "This is not just a post.\n", "--profile", profile)
+# Scientific review phrases are reported only where they apply.
+artifact = "The archived workflow produced values in the analysis cache.\n"
+assert "[review]" in expect_exit(0, artifact, "--profile", "academic")
+assert "[review]" not in expect_exit(0, artifact, "--profile", "social")
+# Rate thresholds follow the profile in strict mode.
+dashes = "Water flows — fast — when the slope — rises steeply here — in spring.\n" * 3
+expect_exit(1, dashes, "--strict")
+web_labels = "Price: free entry. Hours: nine to five. Venue: main hall.\n"
+expect_exit(1, web_labels, "--strict")
+expect_exit(0, web_labels, "--strict", "--profile", "web")
 
 print("prose style checker tests: PASS")

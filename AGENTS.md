@@ -70,6 +70,32 @@ At the start of non-trivial coding/data sessions:
 10. Do not hardcode machine-specific paths in source code. Use environment variables or config.
 11. Record hierarchy declarations in `.ai/PROJECT_HIERARCHY.md`, machine identity/storage assumptions in `.ai/MACHINE_PROFILE.md`, and non-portable resources in `.ai/LOCAL_RESOURCES.md`.
 
+### Data Flow, Storage, And Cache
+
+`DATA_FLOW_POLICY.md` is the canonical rule set for storage tiers (Git,
+cloud drive, local SSD, HDD, scratch), rebuild classes, the source ingestion
+pipeline, and network cost. The rules every session needs:
+
+- Extract once, read small: before reading a PDF, image, DOCX, XLSX, or PPTX,
+  check its hash-keyed cache and distilled evidence; on a miss, extract only the
+  needed scope with a deterministic tool, then read the extract, not the
+  original. Escalate to images or the original only when layout or fidelity is
+  the question.
+- Place outputs by rebuild cost: regenerable caches, renders, and build
+  intermediates stay on fast local storage and never sync or commit; anything
+  holding human or AI judgment (reviews, manual crops, AI OCR, summaries,
+  evidence units) is persisted compactly in the project so no session pays for
+  it twice.
+- Keep Git clones, environments, caches, and builds outside cloud-synced
+  folders; the synced folder holds durable inputs and finals, published once.
+- In a synced tree, files may be cloud-only placeholders: no recursive content
+  scans, hashing, or bulk copies from the sync root without the user's go-ahead;
+  metadata listing is fine.
+- Check whether the link is metered before heavy downloads, and ask before bulk
+  traffic on a metered or unknown link.
+- Delete from synced storage only regenerable files, after two
+  checksum-verified copies exist, and with user confirmation.
+
 ### Conda-Family Environment Routing
 
 Use shared Conda-family environments. Choose the first available manager in
@@ -237,6 +263,9 @@ When editing academic, proposal, policy, or technical documents:
 - Cache only the relevant scope when practical. Record source path and
   edition/version or hash, format, extraction tool/version, extracted scope,
   cache path, structure/media/revision handling, known losses, and reuse scope.
+  Put the cache where `DATA_FLOW_POLICY.md` says (regenerable extracts in the
+  local `hot` tier; judgment and evidence units in the project), and follow its
+  token ladder and format playbook for images, DOCX, XLSX, and PPTX.
 - For DOCX, decide whether accepted text, tracked revisions, comments,
   footnotes/endnotes, tables, and images matter. For PPTX/ODP, preserve slide
   order, speaker notes, grouped/DrawingML text, tables/charts, and media mapping
