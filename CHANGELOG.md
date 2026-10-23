@@ -4,6 +4,8 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+## 8.6.0-data-flow-canary — 2026-10-23
+
 - Paper peer review now starts external reference verification with OpenAlex,
   records the lookup trail, then checks primary sources; unavailable or ambiguous
   lookups use a documented fallback without treating missing results as fabrication.

@@ -8,9 +8,9 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "8.5.0-paper-peer-review-canary",
-  "git_ref": "v8.5.0-paper-peer-review-canary",
-  "updated": "2026-10-16T00:00:00+07:00",
+  "version": "8.6.0-data-flow-canary",
+  "git_ref": "v8.6.0-data-flow-canary",
+  "updated": "2026-10-23T00:00:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
   "purpose": "Agent Project Kit: a portable starter kit that installs AI-agent instruction files and project-local .ai templates. New installs use .ai/agent-project-kit; computing-environment remains a legacy name/path for migration only.",
@@ -83,6 +83,7 @@
     "private certificate/key material; see SECURITY_EXCLUSIONS.md"
   ],
   "release_notes": [
+    "Added DATA_FLOW_POLICY.md (storage tiers, rebuild classes, extract-once pipeline, token ladder, format playbook, cloud/Git/metered rules), a bounded related-Markdown router and private reference maps in the context bundle, prose genre overlays (academic, social, exam, web) with checker profiles and private voice profiles, an evidence-scaffold method, Thai typesetting notes, and routing for Thai book/document rules, verb-led outputs, and self-hosted kit work.",
     "Added a reviewer-side paper peer-review workflow distinct from thesis review and author rebuttal, with confidentiality and venue-AI-policy gates, verified citation/reference checks, title-problem-contribution alignment, venue and length compliance, technical audits of definitions, mathematics, algorithms, figures, engineering diagrams, tables, numerical results, variables, and magic numbers, Thai working reviews, venue-language final reports, prose quality gates, and large-blocker rejection logic.",
     "Added pdf_figures.py: per-figure PDF extraction anchored on captions, merging all panels, rendered at 300 dpi with unresampled originals, cached by source SHA-256 with manifest, index, overview images, review status, and manual crops; uncertain crops are flagged.",
     "The reviewer-response workflow now carries a traceable rebuttal contract (verbatim comments, dispositions, exact locators, evidence or justification), and the router recognizes response-letter and Thai reviewer-response requests.",
