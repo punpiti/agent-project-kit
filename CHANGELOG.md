@@ -4,6 +4,12 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Documented the OneDrive sync-stall fix from 2026-10-30: WSL2-created
+  symlinks (including virtualenvs) and Thai names over 255 UTF-8 bytes. The fix
+  is to find and remove the links with a saved manifest, then rename the
+  over-long items from PowerShell 7. `MACHINE_PROFILES.md`,
+  `DATA_FLOW_POLICY.md`, and both READMEs now cover it.
+
 ## 8.6.0-data-flow-canary — 2026-10-23
 
 - Paper peer review now starts external reference verification with OpenAlex,

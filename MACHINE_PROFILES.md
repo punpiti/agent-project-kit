@@ -173,6 +173,34 @@ path. Reopen WSL2 and verify the result afterward. Use the `\\?\` extended-path
 prefix only when the normal PowerShell path still fails and the target has been
 resolved exactly.
 
+A single name component is also limited to 255 bytes on the WSL2 side, counted
+in UTF-8, while Windows counts 255 UTF-16 units. Thai takes 3 UTF-8 bytes per
+character, so a Thai name of about 85+ characters is fine in Windows but gives
+`Input/output error` in WSL2 even when the full path is short. Find such names
+from PowerShell with `[Text.Encoding]::UTF8.GetByteCount($_.Name) -gt 255`
+and rename them with `Rename-Item -LiteralPath`. Put Thai names in a `.ps1`
+file and run it with `pwsh -File` instead of passing them inline through the
+WSL2 shell. When naming new files in a synced folder, keep Thai names under
+about 80 characters.
+
+### OneDrive stops syncing
+
+If OneDrive in a WSL2 workspace stops syncing or stays stuck on "processing",
+check for two causes:
+
+1. Symlinks created from WSL2 inside the sync root, including the
+   `bin/python*` links inside a Python virtualenv. OneDrive cannot sync them.
+   List them with `find . -type l` and save each link with its `readlink`
+   target to a manifest outside the sync root. Then remove them with
+   `rm -- <link>` (no trailing slash, so the target is untouched). After that,
+   recreate any virtualenv machine-locally.
+2. Names over 255 UTF-8 bytes (see above). `find` reports their parent folders
+   as `Input/output error`.
+
+Rerun both scans and expect zero results. Folders with attributes
+`Directory, ReparsePoint` and an empty `LinkType` in PowerShell are OneDrive
+cloud placeholders, not symlinks. Leave them alone.
+
 Prefer this split:
 
 | Resource Type | Preferred Location | Portable? | Notes |

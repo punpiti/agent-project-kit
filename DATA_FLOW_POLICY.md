@@ -159,7 +159,9 @@ than hiding them.
   not for the whole drive.
 - Do not create symlinks inside a synced folder or point one into it: the
   sync client can stall on them and leave the folder's sync status stuck. Use
-  a machine-local path variable instead (see [Variables](#variables)).
+  a machine-local path variable instead (see [Variables](#variables)). A
+  virtualenv contains symlinks, so never create one in a synced folder. To
+  clean up existing links, see `MACHINE_PROFILES.md` "OneDrive stops syncing".
 - Never let a build or cache write repeatedly into a synced folder. Sync cost
   grows with file count and churn more than total size; many small files and
   regenerated caches dominate upload.

@@ -238,7 +238,11 @@ before binding many.
 - `Input/output error` from WSL2 inside OneDrive: the file is usually
   online-only. Open it once from Windows, or mark the folder "Always keep on
   this device", then retry. A Windows path longer than 260 characters causes
-  the same error. Shorten or move it from PowerShell with `-LiteralPath`.
+  the same error. So does a single name over 255 UTF-8 bytes (about 85 Thai
+  characters). Shorten or move it from PowerShell with `-LiteralPath`.
+- OneDrive stuck and not syncing: remove symlinks created from WSL2
+  (`find . -type l`, including virtualenvs) and shorten over-long names. See
+  `MACHINE_PROFILES.md` "OneDrive stops syncing".
 - `Refusing to overwrite existing ...`: a folder or file with a kit name holds
   your content. Rename it, then rerun the installer.
 

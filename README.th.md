@@ -229,7 +229,11 @@ python3 "$KIT/scripts/install-shared.py" --source "$KIT" --bind-project "$PROJEC
 - `Input/output error` จาก WSL2 ใน OneDrive ส่วนใหญ่เป็นไฟล์ที่อยู่บน cloud อย่างเดียว
   ให้เปิดไฟล์นั้นจาก Windows หนึ่งครั้ง หรือตั้ง folder เป็น "Always keep on this
   device" แล้วลองใหม่ path ของ Windows ที่ยาวเกิน 260 ตัวอักษรก็ทำให้เกิด error นี้
-  ให้ย่อหรือย้ายจาก PowerShell ด้วย `-LiteralPath`
+  ชื่อไฟล์หรือ folder ชื่อเดียวที่ยาวเกิน 255 ไบต์แบบ UTF-8 (ภาษาไทยประมาณ 85 ตัวอักษร)
+  ก็ทำให้เกิด error นี้เช่นกัน ให้ย่อหรือย้ายจาก PowerShell ด้วย `-LiteralPath`
+- OneDrive ค้างและไม่ sync ให้ลบ symlink ที่สร้างจาก WSL2 (`find . -type l` ซึ่งรวมถึง
+  virtualenv ด้วย) และย่อชื่อที่ยาวเกิน ดูหัวข้อ "OneDrive stops syncing" ใน
+  `MACHINE_PROFILES.md`
 - `Refusing to overwrite existing ...` มี folder หรือไฟล์ชื่อเดียวกับของ kit ที่เก็บ
   เนื้อหาของคุณอยู่ ให้เปลี่ยนชื่อแล้วรันตัวติดตั้งใหม่
 
