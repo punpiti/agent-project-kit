@@ -4,6 +4,18 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Added compute-node monitoring and dispatch: `scripts/compute_nodes.py`
+  (`status [--watch]`, `pick`, `run`) reads a private, machine-local node
+  inventory (`~/.config/agent-project-kit/compute-nodes.json` or
+  `APK_COMPUTE_NODES`; template `templates/compute-nodes.example.json`) with
+  CPU threads, RAM, GPU, and storage tiers per node. It probes nodes over SSH,
+  including nodes reachable only through a hub (`via`, with
+  `direct_from` for machines holding their own key), reports each node's
+  channels to the `git` and `durable` tiers (GitHub access, cloud drives by
+  path or rclone remote, rsync/rclone/gh), filters on them with `--needs`, checks live metered status, and picks the one with
+  the most free threads. `MACHINE_PROFILES.md` "Compute Nodes And Dispatch"
+  sets the rules; `egress` picks the unmetered GitHub node from an ordered
+  list. Tests in `tests/test-compute-nodes.py`.
 - Documented the OneDrive sync-stall fix from 2026-10-30: WSL2-created
   symlinks (including virtualenvs) and Thai names over 255 UTF-8 bytes. The fix
   is to find and remove the links with a saved manifest, then rename the

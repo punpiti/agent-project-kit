@@ -149,6 +149,65 @@ the local paths needed for the current task. Do not rescan hardware, package
 managers, or broad storage unless the identity/path does not match or the task
 needs resources not yet recorded.
 
+## Compute Nodes And Dispatch
+
+When a user has several machines that can run work over SSH, keep a node
+inventory and send heavy jobs to the node with the most free capacity, no
+matter which machine the session runs on.
+
+- Inventory: a machine-local JSON file read by `scripts/compute_nodes.py`
+  (template `templates/compute-nodes.example.json`). It lists each node's role
+  (`hub` main node that steers work, `compute`, `mobile`, `client`), SSH alias, CPU cores/threads (and the threads
+  WSL2 exposes), RAM, GPU, and storage by tier (`hot` SSD, `cold` HDD,
+  `durable` synced) with mount points. Machine names and aliases are private:
+  keep the file in an ignored local profile and point `APK_COMPUTE_NODES` at
+  it. Do not symlink it into a synced folder.
+- Storage is more than SSD and HDD. Each node also declares how it reaches
+  the two sources of truth in `DATA_FLOW_POLICY.md`: `git` (GitHub access:
+  `ssh`, `gh+ssh`, or `null`) and `cloud_drives` (tier `durable`: a synced
+  folder `path` or an `rclone_remote`, with the provider). The same drive can
+  sit at a different path on each machine, so record the path per node.
+- A node whose key is authorized only on one machine sets `via` to that
+  machine; other machines reach it as `ssh <via> ssh <alias>`. Machines that
+  later get their own key go in the node's `direct_from` list and connect
+  directly.
+- `python3 scripts/compute_nodes.py status` shows which nodes are up with
+  load, free threads, free memory, GPU use, and free space per listed mount.
+  Add `--watch 30` to monitor. Probes are read-only.
+- `pick --min-threads N [--min-mem-gb G] [--gpu]` returns the reachable node
+  with the most free threads (`threads - load1`, times `thread_weight`), so a
+  large node at half load beats a small idle one. Nodes with
+  `"dispatch": false` are never picked. Exit code 3 means none fits: say so and
+  propose waiting, a smaller run, or a lower requirement instead of
+  overloading a node.
+- Each node records its `network`: `type` (`infra`, `home`, `mobile`) and
+  `metered` (`false`, `true`, or `"sometimes"`). Unless it is `false`, the
+  probe reads the live Windows connection cost, and an unknown cost counts as
+  metered. The inventory's `egress` list orders the nodes to use for GitHub
+  pushes, clones, and large downloads; `compute_nodes.py egress` returns the
+  first one that is up, unmetered, and has `github`. If none qualifies, ask
+  before downloading on a metered link (`DATA_FLOW_POLICY.md` "Metered
+  links").
+- `status` shows each node's channels: installed `git`, `rsync`, `rclone`,
+  `gh`, plus `github` and one slug per reachable cloud drive (`onedrive`,
+  `googledrive`). `--check-github` verifies GitHub SSH auth instead of trusting
+  the inventory. `pick --needs git,onedrive` keeps only nodes with those
+  channels.
+- Moving work to a node follows the tiers. Code: `git pull` on the target when
+  it has `github`, otherwise `rsync` from a node that has the clone; never copy
+  a working tree out of a synced folder. Inputs: read `durable` files on a node
+  that has that cloud drive, or copy the needed subset to the target's `hot` or
+  `cold` tier first. Results: final deliverables go back to `durable` or are
+  committed to `git`; intermediates stay on the target and are recorded in
+  `.ai/LOCAL_RESOURCES.md` with the node name.
+- Before `run`, confirm the target has the code, data paths
+  (`.ai/LOCAL_RESOURCES.md`), and environment. Put job data on the target's
+  `hot` tier and large inputs or outputs on its `cold` tier, not on a synced
+  folder. Use `nohup`, `tmux`, or a scheduler for long jobs, and record the
+  node, path, and command in the session report.
+- Shared nodes carry other users' load. Respect it: never kill or renice
+  processes you did not start.
+
 ## Package Update Check
 
 When `.ai/agent-project-kit/` is updated in an existing project, read

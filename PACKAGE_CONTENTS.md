@@ -91,6 +91,7 @@
 - `scripts/apk_update.py`
 - `scripts/apk-python.sh`
 - `scripts/apk-python.ps1`
+- `scripts/compute_nodes.py`
 - `scripts/context.py`
 - `scripts/install-from-git.ps1`
 - `scripts/install-shared.py`
@@ -154,6 +155,7 @@
 - `templates/apk.json`
 - `templates/state.json`
 - `templates/local-resources.json`
+- `templates/compute-nodes.example.json`
 - `templates/pandoc-thai-a4/README.md`
 - `templates/pandoc-thai-a4/THAI_TYPESETTING.md`
 - `templates/pandoc-thai-a4/build-thai-a4-pdf.sh`

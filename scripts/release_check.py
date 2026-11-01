@@ -31,6 +31,7 @@ TEST_COMMANDS = (
     ("workflow-architecture", ("python3", "tests/test-workflow-architecture.py")),
     ("v7-context", ("python3", "tests/test-v7-context.py")),
     ("md-index", ("python3", "tests/test-md-index.py")),
+    ("compute-nodes", ("python3", "tests/test-compute-nodes.py")),
     ("prose-style", ("python3", "tests/test-prose-style.py")),
     ("thai-docx-repair", ("python3", "tests/test-thai-docx-repair.py")),
     ("pdf-figures", ("python3", "tests/test-pdf-figures.py")),

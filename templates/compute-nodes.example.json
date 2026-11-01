@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "_comment": "Copy to ~/.config/agent-project-kit/compute-nodes.json or point APK_COMPUTE_NODES at it. Machine names and SSH aliases are private: keep this file out of the package and out of Git. Read by scripts/compute_nodes.py. storage = local SSD/HDD (tiers hot/cold); git and cloud_drives = how the node reaches the two sources of truth (tiers git/durable in DATA_FLOW_POLICY.md). hubs = main nodes that hold keys and steer work; egress = nodes in the order to use for GitHub and large downloads.",
+  "hubs": [
+    "office-desktop"
+  ],
+  "egress": [
+    "office-desktop"
+  ],
+  "nodes": [
+    {
+      "name": "office-desktop",
+      "hostnames": [
+        "office-desktop"
+      ],
+      "ssh": "office-desktop-wsl",
+      "role": "hub",
+      "priority": 1,
+      "cpu": {
+        "model": "",
+        "cores": 8,
+        "threads": 16,
+        "usable_threads": 8
+      },
+      "ram_gb": 32,
+      "gpu": null,
+      "storage": [
+        {
+          "mount": "/",
+          "tier": "hot",
+          "media": "NVMe SSD",
+          "size_gb": 256
+        },
+        {
+          "mount": "/mnt/h",
+          "tier": "cold",
+          "media": "SATA HDD",
+          "size_gb": 3700
+        }
+      ],
+      "notes": "usable_threads is what WSL2 exposes (.wslconfig processors=).",
+      "git": {
+        "github": "ssh",
+        "clone_root": "~/repos"
+      },
+      "cloud_drives": [
+        {
+          "provider": "OneDrive",
+          "path": "/mnt/c/Users/<user>/OneDrive",
+          "mode": "Windows client, Files On-Demand"
+        },
+        {
+          "provider": "Google Drive",
+          "rclone_remote": "gdrive:",
+          "mode": "rclone, on demand"
+        }
+      ],
+      "network": {
+        "type": "infra",
+        "metered": false
+      }
+    },
+    {
+      "name": "compute-server",
+      "hostnames": [
+        "compute-server"
+      ],
+      "ssh": "compute-server",
+      "via": "office-desktop",
+      "direct_from": [
+        "portable-laptop"
+      ],
+      "role": "compute",
+      "priority": 3,
+      "thread_weight": 1.0,
+      "cpu": {
+        "model": "",
+        "cores": 16,
+        "threads": 32
+      },
+      "ram_gb": 128,
+      "gpu": {
+        "model": "",
+        "vram_gb": 4
+      },
+      "storage": [
+        {
+          "mount": "/",
+          "tier": "hot",
+          "media": "NVMe SSD",
+          "size_gb": 688
+        },
+        {
+          "mount": "/data",
+          "tier": "cold",
+          "media": "SATA HDD",
+          "size_gb": 3600
+        }
+      ],
+      "notes": "Machines in direct_from hold their own authorized key; every other machine goes through `via`. No GitHub access or cloud drive: push code and data with rsync from a node that has them.",
+      "git": {
+        "github": null
+      },
+      "cloud_drives": [],
+      "network": {
+        "type": "infra",
+        "metered": false
+      }
+    },
+    {
+      "name": "portable-laptop",
+      "hostnames": [
+        "portable-laptop"
+      ],
+      "ssh": "portable-laptop-wsl",
+      "role": "mobile",
+      "dispatch": false,
+      "cpu": {
+        "model": "",
+        "cores": 10,
+        "threads": 12,
+        "usable_threads": 6
+      },
+      "ram_gb": 16,
+      "storage": [
+        {
+          "mount": "/",
+          "tier": "hot",
+          "media": "NVMe SSD",
+          "size_gb": 1000
+        }
+      ],
+      "git": {
+        "github": "ssh",
+        "clone_root": "~/repos"
+      },
+      "cloud_drives": [
+        {
+          "provider": "OneDrive",
+          "path": "/mnt/c/Users/<user>/OneDrive",
+          "mode": "Windows client, Files On-Demand"
+        }
+      ],
+      "network": {
+        "type": "mobile",
+        "metered": "sometimes"
+      }
+    }
+  ]
+}
