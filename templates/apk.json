@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "package": "agent-project-kit",
-  "version": "8.6.0-data-flow-canary",
+  "version": "8.7.0-compute-nodes-canary",
   "version_policy": "exact",
   "content_sha256": "",
   "profile": "standard",

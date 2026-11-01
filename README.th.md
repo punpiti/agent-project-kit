@@ -8,7 +8,7 @@ session ก่อนได้ เลือกวิธีทำงานให�
 code และเอกสารยังเป็นของคุณ ตัว kit อยู่ใน `.ai/agent-project-kit/` และอัปเดตได้
 โดยบันทึกของคุณไม่ถูกแตะ
 
-release ปัจจุบัน: `8.6.0-data-flow-canary`
+release ปัจจุบัน: `8.7.0-compute-nodes-canary`
 
 ## ช่วยอะไรคุณได้
 

@@ -4,6 +4,8 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+## 8.7.0-compute-nodes-canary — 2026-11-01
+
 - Added compute-node monitoring and dispatch: `scripts/compute_nodes.py`
   (`status [--watch]`, `pick`, `run`) reads a private, machine-local node
   inventory (`~/.config/agent-project-kit/compute-nodes.json` or
