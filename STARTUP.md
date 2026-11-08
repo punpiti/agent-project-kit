@@ -125,6 +125,7 @@ play and the one-line rule is not enough.
 | A command, setup step, or failure needs project knowledge | `.ai/RUNBOOK.md` |
 | Package install, update, release, or schema work | `.ai/COMPUTING_ENVIRONMENT_VERSION.md` |
 | Workflow architecture or routing changes | `config/WORKFLOW_ARCHITECTURE.md`, then the registry and scenario tests |
+| Software distribution, rename, release, or experimental code behind CLI/UI/API | `checklists/SOFTWARE_DELIVERY_CHECKLIST.md`; trace the installed engine, outputs, help, and visible remote metadata |
 | Commit or package | run `scripts/check_release_boundary.py`; keep private product intelligence outside public paths |
 | Tag or public release | run `scripts/check_release_boundary.py --release --history`; stop on untracked release candidates |
 | Explicit token/cost concern or high-cost work | `.ai/TOKEN_BUDGET.md` |

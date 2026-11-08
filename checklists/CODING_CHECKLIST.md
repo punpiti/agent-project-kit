@@ -52,3 +52,10 @@
 - [ ] อัปเดตหรือเสนอ patch สำหรับ `.ai/PROJECT_STATE.md` และ `.ai/SESSION_LOG.md`
 - [ ] ถ้าเจอ path/cache/data นอก project/shared source tree ใหม่ ให้ update `.ai/LOCAL_RESOURCES.md`
 - [ ] ใส่ token note ว่ารอบหน้าควรอ่าน/ส่ง context อะไรเพื่อประหยัด token
+
+## Distribution, Renaming, Or Experimental Software
+
+- [ ] เมื่อส่งมอบซอฟต์แวร์ เปลี่ยนชื่อ เตรียม release หรือเพิ่ม CLI/UI/API ให้โค้ดทดลอง ใช้ `SOFTWARE_DELIVERY_CHECKLIST.md`
+- [ ] ตรวจไส้ในจาก entry point ที่ติดตั้งจริง เทียบ source pins, inputs, defaults และผลกับ implementation ที่ยอมรับ
+- [ ] ใช้ฟอร์แมตผลมาตรฐานและตรวจด้วย downstream reader พร้อมทดสอบ `--help` / `--version`
+- [ ] ตรวจชื่อและ metadata บนหน้า repository จริง และบันทึกขอบเขตหลักฐานโดยไม่เหมารวมจาก subset

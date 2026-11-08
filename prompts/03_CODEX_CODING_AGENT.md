@@ -79,3 +79,11 @@ Do not pretend L2 or L3 has been resolved by L1 alone.
 Do not pretend a non-portable cache exists on every machine.
 Do not declare the project broken just because the current machine lacks a local resource.
 ```
+
+## Shipping a CLI, UI or packaged experimental method
+
+For distribution, renaming, release or experiment-to-interface work, apply
+`checklists/SOFTWARE_DELIVERY_CHECKLIST.md`. Completion requires evidence
+from the installed user entry point, not only tests of a source checkout.
+Preserve the accepted source lineage, exercise standard output readers and
+help, and state the scope of parity actually checked.

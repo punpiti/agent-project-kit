@@ -4,6 +4,24 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+## 8.7.1-software-delivery-canary — 2026-11-08
+
+- Add a conditional software delivery checklist and evidence-record template.
+  Distributed tools and experimental CLI/UI/API wrappers must trace the
+  installed entry point to the accepted engine, verify defaults and bounded
+  output parity, and retain immutable experimental snapshots.
+- Require established output formats with actual downstream-reader checks,
+  separate progress diagnostics, and installed `--help`/`--version` checks
+  without inputs, network, downloads, computation or result-file side effects.
+- Include user-visible README, About, links and release titles/descriptions in
+  software renaming checks, plus post-publication verification and explicit
+  current/historical source records. Link the checklist from startup, software,
+  implementation, research-delivery and coding-checklist paths.
+- Resolve the native-Windows test source as a filesystem provider path when
+  launched from a WSL UNC checkout.
+- Keep project and machine state schemas unchanged.
+
+
 ## 8.7.0-compute-nodes-canary — 2026-11-01
 
 - Added compute-node monitoring and dispatch: `scripts/compute_nodes.py`

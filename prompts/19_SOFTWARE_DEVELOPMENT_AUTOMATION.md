@@ -20,3 +20,15 @@ data-pipeline, and general software work.
 
 Load `14_WEB_DEVELOPMENT.md` for browser/UI/accessibility concerns. Load
 `03_CODEX_CODING_AGENT.md` only for a substantial implementation/debug loop.
+
+## Distributed software and experimental code
+
+When creating/changing a distributed tool, renaming software, preparing a
+release, or exposing an experimental implementation through a CLI/GUI/API,
+load `checklists/SOFTWARE_DELIVERY_CHECKLIST.md`. Trace the installed entry
+point to the accepted engine, compare defaults and behavior, validate standard
+output compatibility with a downstream reader, and exercise installed
+`--help`/`--version`. Verify user-visible remote metadata after an authorized
+update. Use `templates/SOFTWARE_DELIVERY.md` only when the project has no
+existing evidence-record format. Ordinary edits unrelated to distribution
+need no additional delivery workflow.

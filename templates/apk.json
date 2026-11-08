@@ -1,10 +1,12 @@
 {
   "schema_version": 2,
   "package": "agent-project-kit",
-  "version": "8.7.0-compute-nodes-canary",
+  "version": "8.7.1-software-delivery-canary",
   "version_policy": "exact",
   "content_sha256": "",
   "profile": "standard",
-  "local_prompt_dirs": [".ai/prompts"],
+  "local_prompt_dirs": [
+    ".ai/prompts"
+  ],
   "runtime_mode": "shared-with-snapshot-fallback"
 }

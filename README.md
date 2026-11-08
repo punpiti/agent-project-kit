@@ -9,7 +9,7 @@ that fits the task, and check their output before handing it over. Your code
 and documents stay yours. The kit lives in `.ai/agent-project-kit/` and can be
 refreshed without touching your notes.
 
-Current release: `8.7.0-compute-nodes-canary`
+Current release: `8.7.1-software-delivery-canary`
 
 ## What It Does For You
 

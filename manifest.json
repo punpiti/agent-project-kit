@@ -8,9 +8,9 @@
     "computing-environment",
     ".ai/computing-environment"
   ],
-  "version": "8.7.0-compute-nodes-canary",
-  "git_ref": "v8.7.0-compute-nodes-canary",
-  "updated": "2026-11-01T00:00:00+07:00",
+  "version": "8.7.1-software-delivery-canary",
+  "git_ref": "v8.7.1-software-delivery-canary",
+  "updated": "2026-11-08T23:30:00+07:00",
   "state_schema_version": "1",
   "machine_profile_schema_version": "1",
   "purpose": "Agent Project Kit: a portable starter kit that installs AI-agent instruction files and project-local .ai templates. New installs use .ai/agent-project-kit; computing-environment remains a legacy name/path for migration only.",
@@ -83,6 +83,7 @@
     "private certificate/key material; see SECURITY_EXCLUSIONS.md"
   ],
   "release_notes": [
+    "Added software delivery checks for accepted-engine identity through installed CLI/UI/API paths, outcome-independent saved-result replays, standard output compatibility with downstream readers, --help/--version without computation or network side effects, and complete renaming across visible repository/release metadata.",
     "Added compute_nodes.py: monitors compute nodes over SSH from a private machine-local inventory (CPU threads, RAM, GPU, SSD/HDD tiers, GitHub access, cloud drives, network metering), reaches nodes through a hub when only it holds the key, picks the node with the most free threads for a job, and picks an unmetered GitHub egress node. Documented OneDrive sync stalls caused by WSL2 symlinks and over-long Thai names.",
     "Added DATA_FLOW_POLICY.md (storage tiers, rebuild classes, extract-once pipeline, token ladder, format playbook, cloud/Git/metered rules), a bounded related-Markdown router and private reference maps in the context bundle, prose genre overlays (academic, social, exam, web) with checker profiles and private voice profiles, an evidence-scaffold method, Thai typesetting notes, and routing for Thai book/document rules, verb-led outputs, and self-hosted kit work.",
     "Added a reviewer-side paper peer-review workflow distinct from thesis review and author rebuttal, with confidentiality and venue-AI-policy gates, verified citation/reference checks, title-problem-contribution alignment, venue and length compliance, technical audits of definitions, mathematics, algorithms, figures, engineering diagrams, tables, numerical results, variables, and magic numbers, Thai working reviews, venue-language final reports, prose quality gates, and large-blocker rejection logic.",
