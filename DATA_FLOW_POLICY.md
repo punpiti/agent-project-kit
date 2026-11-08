@@ -170,8 +170,30 @@ than hiding them.
 
 ### Git and GitHub
 
-- Keep clones in the `hot` tier, not in synced folders. If a repo must stay in
-  a synced folder, run `git gc` occasionally.
+- Git data must live in the `hot` tier, never in a synced folder. This includes
+  working clones, `.git/`, bare repositories, worktrees and their administrative
+  directories, submodule metadata, Git LFS object stores, and tool-created Git
+  mirrors/caches. `git gc` does not make a cloud-drive location acceptable:
+  object churn and many small metadata files still trigger sync traffic.
+- Before `git init`, `git clone`, `git worktree add`, or creating a bare/mirror
+  repository, resolve the destination and check the machine profile's cloud
+  roots. If the intended project is in cloud storage, create the working clone
+  outside it and publish only durable inputs/finals back to the cloud folder.
+  Use `APK_GIT_ROOT` for the kit clone and record other non-portable clone paths
+  in `.ai/LOCAL_RESOURCES.md`.
+- On update, APK detects the legacy `.ai/agent-project-kit-source/.git` layout
+  when it is under a cloud drive. It first copies and checksum-verifies that
+  metadata beside the new local clone, then removes only the old `.git` and
+  leaves a migration marker. The old working files remain as a reviewable
+  non-Git snapshot; no automatic migration deletes user project content.
+- For an existing project-root `.git`, run the installed
+  `python3 .ai/agent-project-kit/scripts/migrate_git_out_of_cloud.py .` (or
+  `python3 scripts/migrate_git_out_of_cloud.py .` in the APK source checkout)
+  to preview the target and network implications, then rerun with `--apply`.
+  Apply copies the complete working
+  tree (including uncommitted/untracked state and Git history), verifies the
+  copy by SHA-256 and `git status`, and only then removes the cloud copy's
+  `.git`. The project must subsequently be opened from the reported local path.
 - Commit source, distilled evidence, and R2 manifests; ignore R0/R1 caches and
   build output. Large binaries go in `durable`, not in Git history.
 - To read another repository, prefer `git clone --depth 1` or
@@ -205,6 +227,8 @@ than hiding them.
 | Variable | Meaning | Default |
 |---|---|---|
 | `APK_CACHE_ROOT` | root of the kit's extraction cache (`hot` tier) | `${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit-cache` (not the kit clone directory `.../agent-project-kit`) |
+| `APK_GIT_ROOT` | APK Git clone on the machine-local `hot` tier | `${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit` |
+| `PROJECT_GIT_ROOT` | parent for migrated project working trees on the `hot` tier | `${XDG_CACHE_HOME:-$HOME/.cache}/git-worktrees` |
 | `APK_PDF_FIGURE_CACHE` | PDF figure cache used by `pdf_figures.py` | `references/pdf-figures` in the project |
 | `PROJECT_DATA_ROOT` | raw inputs (`durable` or `cold`) | project-specific |
 | `PROJECT_CACHE_ROOT` | project-specific cache and intermediates (`hot`) | `$APK_CACHE_ROOT/projects/<project>` |

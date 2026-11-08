@@ -8,7 +8,7 @@ session ก่อนได้ เลือกวิธีทำงานให�
 code และเอกสารยังเป็นของคุณ ตัว kit อยู่ใน `.ai/agent-project-kit/` และอัปเดตได้
 โดยบันทึกของคุณไม่ถูกแตะ
 
-release ปัจจุบัน: `8.7.0-compute-nodes-canary`
+release ปัจจุบัน: `8.8.0-git-storage-canary`
 
 ## ช่วยอะไรคุณได้
 
@@ -53,10 +53,13 @@ cd my-project
 ### macOS / Linux
 
 ```bash
-mkdir -p .ai
-git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit-source
-bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-project-kit-source
+KIT="${APK_GIT_ROOT:-${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit}"
+git clone https://github.com/punpiti/agent-project-kit.git "$KIT"
+bash "$KIT/scripts/install-to-project.sh" . "$KIT"
 ```
+
+จงใจเก็บ clone ไว้นอกโปรเจกต์เสมอ แม้ตอนนี้โปรเจกต์จะอยู่บน local disk เพื่อไม่ให้
+การย้ายโปรเจกต์เข้า Cloud Drive ภายหลังพา Git metadata ที่เปลี่ยนถี่เข้าไป sync ด้วย
 
 ### WSL2 กับ folder ที่ sync กับ Windows (OneDrive)
 
@@ -67,7 +70,7 @@ bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-proj
 (
 set -e
 
-KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
+KIT="${APK_GIT_ROOT:-${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit}"
 if [ -d "$KIT/.git" ]; then
   git -C "$KIT" pull --ff-only origin main
 else
@@ -80,12 +83,17 @@ bash "$KIT/scripts/install-to-project.sh" . "$KIT"
 ### Windows PowerShell
 
 ```powershell
-New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
-git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit-source"
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
+$kit = if ($env:APK_GIT_ROOT) { $env:APK_GIT_ROOT } else { Join-Path $env:LOCALAPPDATA "agent-project-kit" }
+git clone https://github.com/punpiti/agent-project-kit.git $kit
+powershell -ExecutionPolicy Bypass -File (Join-Path $kit "scripts\install-to-project.ps1") -ProjectPath . -SourcePath $kit
 ```
 
 PowerShell 7 ใช้ได้เหมือนกัน โดยเปลี่ยน `powershell` เป็น `pwsh`
+
+ถ้าการติดตั้งเก่ายังมี `.ai/agent-project-kit-source/.git` อยู่ใต้ Cloud Drive
+ตัว updater จะย้าย Git metadata อัตโนมัติหลังตรวจ clone ใหม่และ backup ฝั่ง local
+เรียบร้อยแล้ว โดยจะคงไฟล์ source เก่าไว้เป็น snapshot ที่ไม่ใช่ Git พร้อม marker
+บอก path ใหม่และ backup จึงไม่ลบเนื้อหาโปรเจกต์ของผู้ใช้โดยพลการ
 
 ## เริ่มงานกับ agent
 

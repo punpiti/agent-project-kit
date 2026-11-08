@@ -5,6 +5,11 @@ import argparse, importlib.util, json, platform, re, sys
 from pathlib import Path
 import datetime as dt
 
+def cloud_git_path(path: Path) -> bool:
+    folded=[part.casefold() for part in path.resolve(strict=False).parts]
+    markers={"onedrive","dropbox","google drive","googledrive","icloud drive","cloudstorage","mobile documents"}
+    return any(part in markers or part.startswith("onedrive - ") for part in folded)
+
 def field(text: str, name: str) -> str | None:
     # [ \t]* keeps an empty field from capturing the next line's value.
     m = re.search(rf"^- {re.escape(name)}:[ \t]*(\S.*)$", text, re.MULTILINE); return m.group(1).strip() if m else None
@@ -62,6 +67,8 @@ def self_host_issues(root: Path, manifest: dict) -> list[str]:
 def main() -> int:
     p=argparse.ArgumentParser(description=__doc__); p.add_argument("project",nargs="?",default="."); p.add_argument("--quick",action="store_true"); a=p.parse_args()
     root=Path(a.project).resolve(); issues=[]
+    if (root/".git").exists() and cloud_git_path(root):
+        issues.append("Git metadata is inside a cloud-synced folder; preview migration with python3 .ai/agent-project-kit/scripts/migrate_git_out_of_cloud.py . (or python3 scripts/... in the APK source checkout)")
     for path in (root/"AGENTS.md",root/".ai"/"PROJECT_STATE.md"):
         if not path.is_file(): issues.append(f"missing required file: {path.relative_to(root)}")
     project_state=root/".ai"/"PROJECT_STATE.md"

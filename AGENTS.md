@@ -86,8 +86,16 @@ pipeline, and network cost. The rules every session needs:
   holding human or AI judgment (reviews, manual crops, AI OCR, summaries,
   evidence units) is persisted compactly in the project so no session pays for
   it twice.
-- Keep Git clones, environments, caches, and builds outside cloud-synced
+- Keep all Git data, environments, caches, and builds outside cloud-synced
   folders; the synced folder holds durable inputs and finals, published once.
+  Before creating a clone, repository, worktree, bare repo, submodule metadata,
+  LFS object store, or Git cache/mirror, resolve its destination and place it on
+  the local `hot` tier. For APK itself use `APK_GIT_ROOT`; never create `.git/`
+  inside OneDrive, Dropbox, Google Drive, or iCloud Drive.
+  If an existing project-root `.git` is already in cloud storage, preview the
+  installed `python3 .ai/agent-project-kit/scripts/migrate_git_out_of_cloud.py .`
+  (or the source checkout's `python3 scripts/...`); apply it only after the user
+  reviews the bulk-read/network cost because migration changes the working path.
 - In a synced tree, files may be cloud-only placeholders: no recursive content
   scans, hashing, or bulk copies from the sync root without the user's go-ahead;
   metadata listing is fine.

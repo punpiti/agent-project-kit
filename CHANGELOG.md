@@ -4,6 +4,17 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+## 8.8.0-git-storage-canary — 2026-11-08
+
+- Git metadata is now forbidden in cloud-synced folders across every platform,
+  not only WSL `/mnt/*` projects. APK updates default to `APK_GIT_ROOT` or a
+  machine-local cache, reject explicit OneDrive/Dropbox/Google Drive/iCloud
+  clone paths, and migrate the legacy `.ai/agent-project-kit-source/.git`
+  layout only after a checksum-verified local metadata backup. The doctor flags
+  an existing project-root `.git` under cloud storage; the new
+  `migrate_git_out_of_cloud.py` previews by default and, with `--apply`, copies
+  and verifies the full working tree before retiring only the cloud `.git`.
+
 ## 8.7.0-compute-nodes-canary — 2026-11-01
 
 - Added compute-node monitoring and dispatch: `scripts/compute_nodes.py`

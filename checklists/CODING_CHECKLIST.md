@@ -20,6 +20,7 @@
 
 - [ ] Project source/docs/spec อยู่ใน project folder, repo, หรือ shared/synced source tree ที่ตั้งใจไว้
 - [ ] Cache/intermediate/data ใหญ่ไม่ได้ถูกใส่ repo/shared/synced folder โดยไม่ตั้งใจ
+- [ ] ก่อนสร้าง `git init` / clone / worktree / bare repo / submodule / LFS หรือ Git cache ได้ resolve path แล้ว และ Git data ทั้งหมดอยู่นอก Cloud Drive
 - [ ] Non-portable resources ถูกจดใน `.ai/LOCAL_RESOURCES.md`
 - [ ] Path เฉพาะเครื่องถูกอ่านผ่าน env/config ไม่ใช่ hardcode
 - [ ] มี smoke test ที่ไม่ต้องใช้ full cache/data ถ้าเป็นไปได้

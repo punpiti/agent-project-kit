@@ -28,6 +28,9 @@ Storage / portability rules:
 3. Do not hardcode machine-specific absolute paths into source code.
 4. Prefer environment variables: PROJECT_DATA_ROOT, PROJECT_CACHE_ROOT, PROJECT_OUTPUT_ROOT.
 5. Keep small portable smoke tests when feasible.
+6. Before any git init/clone/worktree/bare-repo/submodule/LFS/cache creation,
+   resolve the destination. Put all Git data on the machine-local hot tier,
+   never in a cloud-synced folder; use APK_GIT_ROOT for the kit clone.
 
 During implementation:
 1. Make small, focused changes.

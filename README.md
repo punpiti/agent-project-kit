@@ -9,7 +9,7 @@ that fits the task, and check their output before handing it over. Your code
 and documents stay yours. The kit lives in `.ai/agent-project-kit/` and can be
 refreshed without touching your notes.
 
-Current release: `8.7.0-compute-nodes-canary`
+Current release: `8.8.0-git-storage-canary`
 
 ## What It Does For You
 
@@ -56,10 +56,14 @@ cd my-project
 ### macOS / Linux
 
 ```bash
-mkdir -p .ai
-git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit-source
-bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-project-kit-source
+KIT="${APK_GIT_ROOT:-${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit}"
+git clone https://github.com/punpiti/agent-project-kit.git "$KIT"
+bash "$KIT/scripts/install-to-project.sh" . "$KIT"
 ```
+
+The clone is deliberately outside the project. This remains required when the
+project itself is on a local disk, so moving it into a cloud drive later cannot
+silently put high-churn Git metadata under sync.
 
 ### WSL2 with a Windows-synced project folder (OneDrive)
 
@@ -70,7 +74,7 @@ project. Git metadata inside a synced folder is slow and can break.
 (
 set -e
 
-KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
+KIT="${APK_GIT_ROOT:-${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit}"
 if [ -d "$KIT/.git" ]; then
   git -C "$KIT" pull --ff-only origin main
 else
@@ -83,12 +87,18 @@ bash "$KIT/scripts/install-to-project.sh" . "$KIT"
 ### Windows PowerShell
 
 ```powershell
-New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
-git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit-source"
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
+$kit = if ($env:APK_GIT_ROOT) { $env:APK_GIT_ROOT } else { Join-Path $env:LOCALAPPDATA "agent-project-kit" }
+git clone https://github.com/punpiti/agent-project-kit.git $kit
+powershell -ExecutionPolicy Bypass -File (Join-Path $kit "scripts\install-to-project.ps1") -ProjectPath . -SourcePath $kit
 ```
 
 PowerShell 7 works the same way with `pwsh` in place of `powershell`.
+
+When an older installation still has
+`.ai/agent-project-kit-source/.git` under a detected cloud drive, the updater
+migrates that metadata automatically after the new local clone and backup have
+been verified. It leaves the old source files as a non-Git snapshot with a
+marker showing the new clone and metadata-backup paths.
 
 ## Start Working With An Agent
 

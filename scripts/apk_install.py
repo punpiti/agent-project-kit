@@ -316,7 +316,7 @@ class Installer:
         self.ai.mkdir(parents=True, exist_ok=True)
         if self.source.resolve() == self.target.resolve():
             raise InstallError(f"Source path equals install target: {self.target}\n"
-                               "Clone Agent Project Kit into .ai/agent-project-kit-source or use a cache path, then rerun.")
+                               "Clone Agent Project Kit to APK_GIT_ROOT on machine-local storage, then rerun.")
         for path, purpose in ((self.target, ".ai/agent-project-kit snapshot"),
                               (self.previous, ".ai/agent-project-kit.previous snapshot")):
             if not is_managed_snapshot(path):

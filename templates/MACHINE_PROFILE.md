@@ -105,7 +105,7 @@ here.
 | `hot` (local SSD) | | | WSL ext4 / `~/.cache` |
 | `cold` (HDD / external / NAS) | | | present always? |
 | `durable` (cloud drive + client) | | | OneDrive / Google Drive / Dropbox / iCloud; on-demand? |
-| `git` clone location | | | must not be inside the synced folder |
+| `git` clone location | | | all `.git`, worktree, bare/mirror, submodule, and LFS data must be outside synced folders |
 
 - WSL virtual disk (`ext4.vhdx`) host drive and free space:
 - Network cost (`Unrestricted` / `Fixed` / `Variable` / unknown), checked on:

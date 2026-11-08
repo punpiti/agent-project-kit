@@ -19,9 +19,9 @@ For an existing project, `cd` into that project folder first.
 Then run:
 
 ```bash
-mkdir -p .ai
-git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit-source
-bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-project-kit-source
+KIT="${APK_GIT_ROOT:-${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit}"
+git clone https://github.com/punpiti/agent-project-kit.git "$KIT"
+bash "$KIT/scripts/install-to-project.sh" . "$KIT"
 ```
 
 Windows PowerShell (requires Python 3.9+; the python.org install manager provides `py`):
@@ -29,15 +29,14 @@ Windows PowerShell (requires Python 3.9+; the python.org install manager provide
 ```powershell
 New-Item -ItemType Directory -Force -Path "my-project" | Out-Null
 Set-Location "my-project"
-New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
-git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit-source"
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
+$kit = if ($env:APK_GIT_ROOT) { $env:APK_GIT_ROOT } else { Join-Path $env:LOCALAPPDATA "agent-project-kit" }
+git clone https://github.com/punpiti/agent-project-kit.git $kit
+powershell -ExecutionPolicy Bypass -File (Join-Path $kit "scripts\install-to-project.ps1") -ProjectPath . -SourcePath $kit
 ```
 
 The project will have:
 
 ```text
-.ai/agent-project-kit-source/ # git clone/source copy of the kit
 .ai/agent-project-kit/        # installed snapshot read by agents
 .ai/PROJECT_STATE.md         # project-local state, preserved on updates
 ```
@@ -113,8 +112,9 @@ Then apply:
 bash .ai/agent-project-kit/scripts/install-from-git.sh . https://github.com/punpiti/agent-project-kit.git main
 ```
 
-For WSL2 projects under a Windows-synced folder, use the WSL-local clone path
-shown in the README and pass the same `--dry-run` flag before applying.
+The updater always defaults to a machine-local clone path. It refuses an
+explicit clone path detected inside a cloud-synced folder. Set `APK_GIT_ROOT`
+when the platform default is not the desired local SSD location.
 
 ## Use With Claude / Antigravity / Other Agents
 

@@ -10,22 +10,25 @@ project/
     MACHINE_PROFILE.md
     LOCAL_RESOURCES.md
     ...
-    agent-project-kit-source/ # git clone/source cache of the kit
     agent-project-kit/        # installed snapshot used by agents
+
+machine-local hot tier/
+  agent-project-kit/          # git clone/source cache; never cloud-synced
 ```
 
 Project-local state stays directly under `.ai/`. The Git clone is only the
-package source. The installed snapshot is `.ai/agent-project-kit/`. The old
-`.ai/computing-environment/` path is legacy-only.
+package source and must stay outside every cloud-synced tree. The installed
+snapshot is `.ai/agent-project-kit/`. The old `.ai/computing-environment/` path
+is legacy-only.
 
 ## Install From Git
 
 Agent-first flow from the target project:
 
 ```bash
-mkdir -p .ai
-git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit-source
-bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-project-kit-source
+KIT="${APK_GIT_ROOT:-${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit}"
+git clone https://github.com/punpiti/agent-project-kit.git "$KIT"
+bash "$KIT/scripts/install-to-project.sh" . "$KIT"
 code .
 ```
 
@@ -38,8 +41,9 @@ From the target project:
 bash /path/to/agent-project-kit/scripts/install-from-git.sh . https://github.com/punpiti/agent-project-kit.git v6.16.0
 ```
 
-If the project already has `.ai/agent-project-kit-source`, the script fetches
-and checks out the requested ref. If not, it clones first.
+The updater reuses `APK_GIT_ROOT` (or the platform's machine-local default),
+fetches and checks out the requested ref, and refuses a clone path detected
+inside OneDrive, Dropbox, Google Drive, or iCloud Drive.
 
 ## Update
 
@@ -64,9 +68,9 @@ friends who want the latest behavior.
 ## Windows PowerShell
 
 ```powershell
-New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
-git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit-source"
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
+$kit = if ($env:APK_GIT_ROOT) { $env:APK_GIT_ROOT } else { Join-Path $env:LOCALAPPDATA "agent-project-kit" }
+git clone https://github.com/punpiti/agent-project-kit.git $kit
+powershell -ExecutionPolicy Bypass -File (Join-Path $kit "scripts\install-to-project.ps1") -ProjectPath . -SourcePath $kit
 ```
 
 ## Rules
@@ -75,3 +79,5 @@ powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\i
 - Do not commit `.ai/` project state into the Agent Project Kit repository.
 - Keep project state in the target project root `.ai/`.
 - Record the installed ref/commit in `.ai/COMPUTING_ENVIRONMENT_VERSION.md`.
+- Never create or update Git metadata in a cloud-synced folder. This covers
+  clones, worktrees, bare/mirror repos, submodules, LFS objects, and Git caches.

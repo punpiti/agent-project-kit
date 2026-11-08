@@ -13,7 +13,7 @@ checks its output before handing it over. Your files stay yours.
 
 ## Current Release
 
-- Current package version: `8.7.0-compute-nodes-canary`
+- Current package version: `8.8.0-git-storage-canary`
 - Requires Git and Python 3.9 or newer on every platform
 - Tested on Linux, WSL2, and Windows (canary; macOS hardware not yet tested)
 
@@ -49,9 +49,9 @@ from <https://www.python.org/downloads/> (it provides `py`).
 macOS / Linux:
 
 ```bash
-mkdir -p .ai
-git clone https://github.com/punpiti/agent-project-kit.git .ai/agent-project-kit-source
-bash .ai/agent-project-kit-source/scripts/install-to-project.sh . .ai/agent-project-kit-source
+KIT="${APK_GIT_ROOT:-${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit}"
+git clone https://github.com/punpiti/agent-project-kit.git "$KIT"
+bash "$KIT/scripts/install-to-project.sh" . "$KIT"
 ```
 
 WSL2 with a Windows-synced project folder:
@@ -60,7 +60,7 @@ WSL2 with a Windows-synced project folder:
 (
 set -e
 
-KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
+KIT="${APK_GIT_ROOT:-${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit}"
 if [ -d "$KIT/.git" ]; then
   git -C "$KIT" pull --ff-only origin main
 else
@@ -73,9 +73,9 @@ bash "$KIT/scripts/install-to-project.sh" . "$KIT"
 Windows PowerShell:
 
 ```powershell
-New-Item -ItemType Directory -Force -Path ".ai" | Out-Null
-git clone https://github.com/punpiti/agent-project-kit.git ".ai\agent-project-kit-source"
-powershell -ExecutionPolicy Bypass -File ".ai\agent-project-kit-source\scripts\install-to-project.ps1" -ProjectPath . -SourcePath ".ai\agent-project-kit-source"
+$kit = if ($env:APK_GIT_ROOT) { $env:APK_GIT_ROOT } else { Join-Path $env:LOCALAPPDATA "agent-project-kit" }
+git clone https://github.com/punpiti/agent-project-kit.git $kit
+powershell -ExecutionPolicy Bypass -File (Join-Path $kit "scripts\install-to-project.ps1") -ProjectPath . -SourcePath $kit
 ```
 
 Then open the folder in your agent and say:

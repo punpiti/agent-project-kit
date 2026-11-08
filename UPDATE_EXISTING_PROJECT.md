@@ -55,10 +55,11 @@ the installer. A full dry run remains an explicit user/agent action.
 bash .ai/agent-project-kit/scripts/update-from-pages.sh --dry-run .
 ```
 
-For WSL2 projects under a Windows-synced folder, use a WSL-local kit cache:
+The updater uses a machine-local kit clone on every platform. To select its
+local SSD location explicitly:
 
 ```bash
-KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
+KIT="${APK_GIT_ROOT:-${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit}"
 bash "$KIT/scripts/update-from-pages.sh" --dry-run .
 ```
 
@@ -68,10 +69,10 @@ bash "$KIT/scripts/update-from-pages.sh" --dry-run .
 bash .ai/agent-project-kit/scripts/update-from-pages.sh .
 ```
 
-For WSL2 with a Windows-synced project folder:
+With an explicit machine-local clone location:
 
 ```bash
-KIT="${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit"
+KIT="${APK_GIT_ROOT:-${XDG_CACHE_HOME:-$HOME/.cache}/agent-project-kit}"
 bash "$KIT/scripts/update-from-pages.sh" .
 ```
 

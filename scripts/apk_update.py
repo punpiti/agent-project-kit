@@ -14,6 +14,7 @@ closed; a dry run never writes project files.
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import json
 import os
 import re
@@ -66,12 +67,103 @@ def is_wsl2() -> bool:
     return "microsoft" in text or "wsl" in text
 
 
+def cloud_sync_roots() -> list[Path]:
+    """Return cloud-drive roots advertised by the current OS/user session."""
+    names = ("OneDrive", "OneDriveCommercial", "OneDriveConsumer", "Dropbox",
+             "GoogleDrive", "GoogleDriveFS", "iCloudDrive")
+    roots: list[Path] = []
+    for name in names:
+        value = os.environ.get(name)
+        if value:
+            roots.append(Path(value).expanduser().resolve(strict=False))
+    return roots
+
+
+def is_cloud_synced_path(path: Path) -> bool:
+    """Conservatively identify common cloud-drive paths without reading them."""
+    candidate = path.expanduser().resolve(strict=False)
+    folded = [part.casefold() for part in candidate.parts]
+    markers = {"onedrive", "dropbox", "google drive", "googledrive", "icloud drive",
+               "icloud drive (archive)", "cloudstorage", "mobile documents"}
+    if any(part in markers or part.startswith("onedrive - ") for part in folded):
+        return True
+    for root in cloud_sync_roots():
+        try:
+            candidate.relative_to(root)
+            return True
+        except ValueError:
+            pass
+    return False
+
+
 def default_clone_dir(project: Path) -> Path:
-    # A Git clone inside a Windows-synced folder is slow and fragile; WSL2
-    # projects on /mnt/<drive> use a machine-local cache instead.
-    if os.name != "nt" and is_wsl2() and re.match(r"^/mnt/[a-zA-Z]/", str(project)):
-        return Path(os.environ.get("XDG_CACHE_HOME") or Path.home() / ".cache") / "agent-project-kit"
-    return project / ".ai" / "agent-project-kit-source"
+    """Choose a machine-local Git clone location on every platform."""
+    configured = os.environ.get("APK_GIT_ROOT")
+    if configured:
+        return Path(configured).expanduser().resolve(strict=False)
+    if os.name == "nt":
+        local = os.environ.get("LOCALAPPDATA")
+        base = Path(local) if local else Path.home() / "AppData" / "Local"
+    else:
+        base = Path(os.environ.get("XDG_CACHE_HOME") or Path.home() / ".cache")
+    return (base / "agent-project-kit").resolve(strict=False)
+
+
+def require_local_git_path(path: Path) -> None:
+    if is_cloud_synced_path(path):
+        raise UpdateError(
+            f"Refusing to create or update Git data inside a cloud-synced folder: {path}\n"
+            "Choose a machine-local path with APK_GIT_ROOT or pass a clone-dir outside "
+            "OneDrive, Dropbox, Google Drive, and iCloud Drive."
+        )
+
+
+def tree_digest(root: Path) -> str:
+    """Hash a metadata tree so legacy Git data can be moved safely."""
+    digest = hashlib.sha256()
+    for path in sorted(root.rglob("*"), key=lambda item: item.as_posix()):
+        relative = path.relative_to(root).as_posix().encode("utf-8", errors="surrogateescape")
+        digest.update(relative + b"\0")
+        if path.is_symlink():
+            digest.update(b"L" + os.readlink(path).encode("utf-8", errors="surrogateescape"))
+        elif path.is_file():
+            digest.update(b"F")
+            with path.open("rb") as handle:
+                for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                    digest.update(chunk)
+        elif path.is_dir():
+            digest.update(b"D")
+    return digest.hexdigest()
+
+
+def retire_legacy_cloud_clone(project: Path, clone: Path) -> Path | None:
+    """Remove old APK Git metadata from cloud only after a verified local backup."""
+    legacy = (project / ".ai" / "agent-project-kit-source").resolve(strict=False)
+    metadata = legacy / ".git"
+    if legacy == clone or not metadata.exists() or not metadata.is_dir() or not is_cloud_synced_path(legacy):
+        return None
+    project_key = hashlib.sha256(str(project).encode("utf-8", errors="surrogateescape")).hexdigest()[:12]
+    backup = clone.parent / f"{clone.name}-legacy-git-metadata-{project_key}"
+    if backup.exists():
+        if not backup.is_dir() or tree_digest(backup) != tree_digest(metadata):
+            raise UpdateError(
+                f"Cannot retire legacy cloud Git metadata because backup path differs: {backup}"
+            )
+    else:
+        shutil.copytree(metadata, backup, symlinks=True)
+        if tree_digest(backup) != tree_digest(metadata):
+            shutil.rmtree(backup, ignore_errors=True)
+            raise UpdateError("Legacy Git metadata backup verification failed; cloud copy was preserved.")
+    shutil.rmtree(metadata)
+    marker = legacy / "GIT_METADATA_MIGRATED.txt"
+    marker.write_text(
+        "Agent Project Kit moved active Git operations outside cloud storage.\n"
+        f"Active clone: {clone}\n"
+        f"Preserved legacy Git metadata: {backup}\n"
+        "This directory is now a non-Git snapshot and may be removed after review.\n",
+        encoding="utf-8",
+    )
+    return backup
 
 
 def run_clone_installer(clone: Path, project: Path) -> None:
@@ -98,7 +190,9 @@ def from_git(project_arg: str, repo_url: str, ref: str = "", clone_arg: str = ""
     project = Path(project_arg).resolve()
     ai = project / ".ai"
     ref = ref or "main"
-    clone = Path(clone_arg) if clone_arg else default_clone_dir(project)
+    clone = (Path(clone_arg).expanduser().resolve(strict=False)
+             if clone_arg else default_clone_dir(project))
+    require_local_git_path(clone)
     dry_root: Path | None = None
     try:
         if dry_run:
@@ -148,6 +242,7 @@ def from_git(project_arg: str, repo_url: str, ref: str = "", clone_arg: str = ""
             return 0
         sys.stdout.flush()
         run_clone_installer(clone, project)
+        legacy_backup = retire_legacy_cloud_clone(project, clone)
         if version_file.is_file():
             with version_file.open("ab") as handle:
                 handle.write(f"""
@@ -163,6 +258,8 @@ def from_git(project_arg: str, repo_url: str, ref: str = "", clone_arg: str = ""
         print(f"Installed into project: {project}")
         print(f"Ref: {ref}")
         print(f"Commit: {commit}")
+        if legacy_backup:
+            print(f"Migrated legacy cloud Git metadata to: {legacy_backup}")
         return 0
     finally:
         if dry_root and dry_root.exists():

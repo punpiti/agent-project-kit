@@ -10,6 +10,8 @@
 | `PROJECT_CACHE_ROOT` | no/yes | Cache/intermediate outside the project/shared source tree | `/home/<user>/.cache/<project>` | yes |
 | `PROJECT_OUTPUT_ROOT` | no/yes | Heavy outputs outside the project/shared source tree | `/mnt/d/outputs/<project>` | yes |
 | `APK_CACHE_ROOT` | no | Kit extraction cache on the local `hot` tier (see `DATA_FLOW_POLICY.md`) | `/home/<user>/.cache/agent-project-kit-cache` | yes |
+| `APK_GIT_ROOT` | no | APK Git clone location on the local `hot` tier; must never be cloud-synced | `/home/<user>/.cache/agent-project-kit` | yes |
+| `PROJECT_GIT_ROOT` | no | Parent for migrated project working trees on the local `hot` tier | `/home/<user>/.cache/git-worktrees` | yes |
 | `APK_PDF_FIGURE_CACHE` | no | PDF figure cache location when kept off the synced project | `/home/<user>/.cache/agent-project-kit-cache/pdf-figures/<project>` | yes |
 
 ## Secret Variables
@@ -27,4 +29,6 @@ PROJECT_DATA_ROOT=/path/to/data
 PROJECT_CACHE_ROOT=/path/to/cache
 PROJECT_OUTPUT_ROOT=/path/to/output
 # APK_CACHE_ROOT=/path/to/local-ssd/cache/agent-project-kit-cache
+# APK_GIT_ROOT=/path/to/local-ssd/git/agent-project-kit
+# PROJECT_GIT_ROOT=/path/to/local-ssd/git-worktrees
 ```

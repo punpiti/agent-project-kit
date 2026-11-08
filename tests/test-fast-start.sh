@@ -64,6 +64,7 @@ test -f "$PROJECT/.ai/agent-project-kit/scripts/check_release_boundary.py"
 test -f "$PROJECT/.ai/agent-project-kit/scripts/sync_workflow_registry.py"
 test -f "$PROJECT/.ai/agent-project-kit/scripts/check-update-notice.py"
 test -f "$PROJECT/.ai/agent-project-kit/scripts/repair_thai_wordbreak_docx.py"
+test -f "$PROJECT/.ai/agent-project-kit/scripts/migrate_git_out_of_cloud.py"
 grep -q 'Mandatory Thai DOCX gate' "$PROJECT/.ai/agent-project-kit/AGENTS.md"
 grep -q 'repair_thai_wordbreak_docx.py' "$PROJECT/.ai/agent-project-kit/prompts/10_DOCUMENT_PRODUCTION.md"
 # The installed checker must inspect the downstream repository, even though the
@@ -75,6 +76,7 @@ git init -q "$PROJECT"
 (cd "$PROJECT" && python3 .ai/agent-project-kit/scripts/check_release_boundary.py) >/dev/null
 python3 "$SOURCE_PATH/tests/test-v7-context.py" >/dev/null
 python3 "$SOURCE_PATH/tests/test-workflow-architecture.py" >/dev/null
+python3 "$SOURCE_PATH/tests/test-git-storage.py" >/dev/null
 python3 "$SOURCE_PATH/scripts/context.py" --project "$SOURCE_PATH" "resume package release" --output "$TEST_ROOT/root-context.json" || test "$?" -eq 2
 python3 - "$TEST_ROOT/root-context.json" "$SOURCE_PATH" <<'PY'
 import json,sys

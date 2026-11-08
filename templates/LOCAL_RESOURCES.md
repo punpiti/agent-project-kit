@@ -28,6 +28,8 @@ Tier และ rebuild class ใช้ตาม `DATA_FLOW_POLICY.md`: tier = `h
 | `PROJECT_CACHE_ROOT` | Root of generated cache/intermediate files | `/home/<user>/.cache/<project>` |
 | `PROJECT_OUTPUT_ROOT` | Non-portable heavy output path | `/mnt/d/outputs/<project>` |
 | `APK_CACHE_ROOT` | Kit extraction cache (`hot` tier, never synced) | `/home/<user>/.cache/agent-project-kit-cache` |
+| `APK_GIT_ROOT` | Kit Git clone (`hot` tier, never synced) | `/home/<user>/.cache/agent-project-kit` |
+| `PROJECT_GIT_ROOT` | Parent for project Git working trees (`hot` tier, never synced) | `/home/<user>/.cache/git-worktrees` |
 | `APK_PDF_FIGURE_CACHE` | PDF figure cache, if moved off the synced project | `/home/<user>/.cache/agent-project-kit-cache/pdf-figures/<project>` |
 
 ## Current Machine Check

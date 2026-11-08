@@ -117,6 +117,7 @@
 - `scripts/validate_prompt_catalog.py`
 - `scripts/validate_schemas.py`
 - `scripts/migrate_state.py`
+- `scripts/migrate_git_out_of_cloud.py`
 - `scripts/scan_machine_resources.sh`
 - `scripts/update-from-pages.ps1`
 - `scripts/update-from-pages.sh`
