@@ -4,6 +4,14 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Added `scripts/projects_sync.py` (`start`, `end`, `status`): session sync for
+  clones kept outside synced folders. Fast-forwards or pushes only when safe,
+  mirrors to a backup remote on the hub, copies non-Git files (`.ai/`,
+  `.env.local`) to and from the hub, and reports uncommitted or diverged work.
+  Settings come from the private node inventory (`projects_sync`). Documented
+  in `MACHINE_PROFILES.md` "Session Sync Across Machines". Tests in
+  `tests/test-projects-sync.py`.
+
 ## 8.7.1-software-delivery-canary — 2026-11-08
 
 - Add a conditional software delivery checklist and evidence-record template.
