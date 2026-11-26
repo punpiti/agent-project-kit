@@ -36,6 +36,7 @@ TEST_COMMANDS = (
     ("prose-style", ("python3", "tests/test-prose-style.py")),
     ("thai-docx-repair", ("python3", "tests/test-thai-docx-repair.py")),
     ("pdf-figures", ("python3", "tests/test-pdf-figures.py")),
+    ("apk-extract", ("python3", "tests/test-apk-extract.py")),
     ("release-check", ("python3", "tests/test-release-check.py")),
     ("routing-rules", ("python3", "tests/test-routing-rules.py")),
     ("schemas", ("python3", "tests/test-schemas.py")),

@@ -186,6 +186,16 @@ privilege escalation silently during later task execution.
 
 ---
 
+### Before Declaring a Tool Missing
+
+`which TOOL` failing does not mean the tool is absent: pandoc, tesseract,
+PyMuPDF and similar tools often live only inside a Conda-family environment.
+Check `.ai/LOCAL_RESOURCES.md`, then run `python3 scripts/discover_tools.py`
+(it probes PATH and every conda/mamba/micromamba environment's `bin/`) and use
+the absolute path or `<manager> run -n <env>` it reports. Record the result with
+`discover_tools.py --write .ai/LOCAL_RESOURCES.md` instead of listing env-only
+tools as "system tools". Do not run a filesystem-wide `find /`.
+
 ## Required Workflow for Non-Trivial Tasks
 
 1. **Loop Diagnosis**
@@ -284,12 +294,18 @@ When editing academic, proposal, policy, or technical documents:
 
 #### PDF-specific rules
 
-- When a PDF is first needed as a reference for the current task, use a
-  deterministic extractor such as `pdftotext` or
-  `scripts/reference_extract/pdf_text_extract.py` before asking AI to read it.
-  First check existing extracted text/Markdown and evidence for a matching
-  source SHA-256 and sufficient page coverage; reuse a valid result instead
-  of extracting or reading the original again.
+- When a PDF is first needed as a reference for the current task, run
+  `python3 scripts/apk.py extract FILE.pdf [--pages A-B]` before asking AI to
+  read it. It reuses a hash-matched cache or creates one (PyMuPDF, else poppler
+  `pdftotext`) and prints the directory; grep its `text.md`. Do not pipe
+  `pdftotext` directly or invent another cache location: the contract is in
+  `DATA_FLOW_POLICY.md` "Extraction cache contract". Also check project
+  evidence (for example `evidence/citation-audit-*.md`) before re-verifying.
+- **Delegation carries the rules.** Subagents see only their brief, not this
+  file. When a brief touches PDFs, DOCX, PPTX or citations, paste
+  `prompts/snippets/EXTRACT_FIRST_BRIEF.md` into it. The Claude Code hook in
+  `templates/claude/extract-first-hook.settings.json` enforces the cache for
+  subagents too.
 - Extraction is demand-driven. Organizing, indexing, or deduplicating a
   reference library is not a reason to convert every PDF in advance. Extract
   only sources and page ranges needed for the current task unless the user

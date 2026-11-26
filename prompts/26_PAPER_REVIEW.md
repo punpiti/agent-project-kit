@@ -20,6 +20,10 @@ citation/reference integrity, title–problem–contribution alignment, หล�
 - ห้ามเรียก reference ว่า “ไม่มีจริง” เพียงเพราะค้นครั้งแรกไม่พบ
 - ห้ามสรุปว่า citation รองรับ claim จาก title หรือ abstract อย่างเดียว เมื่อ claim
   ต้องอาศัย method, result, limitation หรือข้อความเฉพาะใน full text
+- ผลตรวจ citation ระดับ claim เป็น evidence ไม่ใช่ข้อความในแชต บันทึกลง
+  `evidence/citation-audit-<date>.md` ตาม `templates/citation-audit.md` อ่านไฟล์เดิมก่อน
+  และตรวจซ้ำเฉพาะ key ที่ PDF hash หรือประโยคที่อ้างเปลี่ยน อ่าน full text จาก cache ผ่าน
+  `scripts/apk.py extract` และแนบ `prompts/snippets/EXTRACT_FIRST_BRIEF.md` เมื่อแบ่งงานให้ subagent
 - แยกหลักฐานจาก manuscript, หลักฐานจากแหล่งอ้างอิง, กฎจาก venue และการตีความ
   ของผู้ตรวจออกจากกัน
 - ทุกข้อวิจารณ์สำคัญต้องมี locator: หน้า/section/ย่อหน้า/บรรทัด/figure/table/

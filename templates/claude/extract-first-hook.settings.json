@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"$CLAUDE_PROJECT_DIR/.ai/agent-project-kit/scripts/hooks/extract_first_hook.py\"; [ ! -f \"$f\" ] || python3 \"$f\" || true",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

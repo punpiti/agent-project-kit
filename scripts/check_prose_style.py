@@ -60,6 +60,22 @@ REVIEW_ONLY = {
     ),
 }
 
+# Academic-only review candidates from the owner's manuscript rules
+# (prompts/prose-genres/academic.md). Read each hit in context: "only" can be a
+# factual restriction, and a defined symbol inside an equation is fine.
+ACADEMIC_REVIEW = {
+    "self-diminishing wording (เพียง/แค่/ยังไม่ได้, merely, only a few)": (
+        r"เพียง(?!พอ)|แค่|ยังไม่ได้|\b(?:merely|simply)\b|"
+        r"\b(?:we|this (?:study|work|paper))\s+(?:only|just)\b|"
+        r"\bonly\s+(?:a\s+)?(?:small|limited|few|preliminary|simple)\b|"
+        r"\bno\s+\w+(?:\s+\w+){0,3}\s+(?:is|are)\s+claimed\b",
+        re.I,
+    ),
+    "floating code label (RQ1, R1, T1, C2, E03, CFG-A)": (
+        r"\b(?:RQ|CFG|EXP|R|T|C|E|H|S)-?\d{1,2}[a-z]?\b|\bCFG-[A-Z]\b",
+        0,
+    ),
+}
 
 QUESTION = "question mark in running text"
 BOLD = "bold inside running text"
@@ -70,7 +86,7 @@ BOLD = "bold inside running text"
 #   bold_negation: bold is allowed only on a negation word ("**not**", "**ไม่**")
 PROFILES = {
     "general": {"allow": set(), "rates": {}, "review": True},
-    "academic": {"allow": set(), "rates": {}, "review": True},
+    "academic": {"allow": set(), "rates": {}, "review": True, "academic_review": True},
     # Posts ask readers questions and use looser punctuation.
     "social": {"allow": {QUESTION}, "rates": {"em dash": 3.0, "colon introducing a clause": 4.0}, "review": False},
     # Items are questions; bold marks a negation in a stem ("which is **not**").
@@ -187,6 +203,10 @@ def check(path: Path, strict: bool, profile: str = "general") -> bool:
     print(f"  [{'review' if unclear else 'ok '}] whole bold line (title or emphasized sentence?): {len(unclear)}"
           + (f"  lines {unclear[:15]}" if unclear else ""))
     for name, (pat, fl) in (REVIEW_ONLY.items() if rules["review"] else ()):
+        lines = [text.count("\n", 0, m.start()) + 1 for m in re.finditer(pat, text, fl)]
+        mark = "review" if lines else "ok "
+        print(f"  [{mark}] {name}: {len(lines)}" + (f"  lines {sorted(set(lines))[:15]}" if lines else ""))
+    for name, (pat, fl) in (ACADEMIC_REVIEW.items() if rules.get("academic_review") else ()):
         lines = [text.count("\n", 0, m.start()) + 1 for m in re.finditer(pat, text, fl)]
         mark = "review" if lines else "ok "
         print(f"  [{mark}] {name}: {len(lines)}" + (f"  lines {sorted(set(lines))[:15]}" if lines else ""))

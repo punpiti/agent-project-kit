@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Read-only consistency checks for an Agent Project Kit installation."""
 from __future__ import annotations
-import argparse, importlib.util, json, platform, re, sys
+import argparse, importlib.util, json, os, platform, re, sys
 from pathlib import Path
 import datetime as dt
 
@@ -64,6 +64,20 @@ def self_host_issues(root: Path, manifest: dict) -> list[str]:
             issues.append(f"invalid self-host binding: {exc}")
     return issues
 
+def cache_report() -> list[str]:
+    """Extraction cache contract (DATA_FLOW_POLICY.md): informational, never fails."""
+    env=os.environ.get("APK_CACHE_ROOT"); xdg=os.environ.get("XDG_CACHE_HOME")
+    base=Path(xdg) if xdg else Path.home()/".cache"
+    root=Path(env).expanduser() if env else base/"agent-project-kit-cache"
+    extract=root/"extract"; dirs=[d for d in extract.iterdir() if d.is_dir()] if extract.is_dir() else []
+    noindex=[d.name for d in dirs if not (d/"INDEX.md").is_file()]
+    lines=[f"extraction cache root: {root} ({'APK_CACHE_ROOT' if env else 'default'}); {len(dirs)} cache(s)"]
+    if noindex: lines.append(f"{len(noindex)} cache dir(s) without INDEX.md are invisible to cache lookups, e.g. {noindex[0]}")
+    stray=[d for d in (base/"apk"/"extract", base/"apk-extract", base/"pdf-extract") if d.is_dir() and d.resolve()!=extract.resolve()]
+    for d in stray: lines.append(f"stray extraction root outside the contract: {d}; move its caches under {extract} with INDEX.md")
+    return lines
+
+
 def main() -> int:
     p=argparse.ArgumentParser(description=__doc__); p.add_argument("project",nargs="?",default="."); p.add_argument("--quick",action="store_true"); a=p.parse_args()
     root=Path(a.project).resolve(); issues=[]
@@ -122,5 +136,8 @@ def main() -> int:
         except (OSError,json.JSONDecodeError) as exc: issues.append(f"invalid state ledger: {exc}")
     print("Agent Project Kit doctor: "+("WARN" if issues else "OK"))
     for issue in issues: print(f"- {issue}")
+    try:
+        for line in cache_report(): print(f"  info: {line}")
+    except OSError: pass
     return 1 if issues else 0
 if __name__ == "__main__": raise SystemExit(main())

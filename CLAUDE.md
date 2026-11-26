@@ -158,6 +158,12 @@ python3 scripts/route_task.py "fix the responsive website login bug"
 # may be finished, already published, or someone else's.
 python3 scripts/route_task.py "ดูไฟล์นี้ให้หน่อย" --file path/to/report.md
 
+# Extract a reference PDF once into the shared cache (prints the cache dir)
+python3 scripts/apk.py extract path/to/source.pdf --pages 1-5
+
+# Locate env-only tools (pandoc, tesseract, PyMuPDF) before calling one missing
+python3 scripts/discover_tools.py
+
 # Doctor check on an installed project (staleness/placeholder detection)
 python3 scripts/apk_doctor.py --project <path>
 

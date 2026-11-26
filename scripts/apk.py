@@ -65,7 +65,12 @@ def rollback(project: Path) -> Path:
 
 def main() -> int:
     p=argparse.ArgumentParser(description=__doc__);p.add_argument("--project",default=".");sub=p.add_subparsers(dest="command",required=True)
-    sub.add_parser("resolve");c=sub.add_parser("context");c.add_argument("request",nargs="+");c.add_argument("--output");sub.add_parser("doctor");sub.add_parser("rollback");a=p.parse_args();project=Path(a.project).resolve()
+    sub.add_parser("resolve");c=sub.add_parser("context");c.add_argument("request",nargs="+");c.add_argument("--output");sub.add_parser("doctor");sub.add_parser("rollback")
+    if len(sys.argv)>1 and sys.argv[1]=="extract":
+        # Extraction needs no runtime binding: it only reads a PDF and the shared cache.
+        sys.path.insert(0,str(Path(__file__).resolve().parent));import apk_extract;return apk_extract.main(sys.argv[2:])
+    sub.add_parser("extract",help="extract a PDF once into the shared cache (see apk_extract.py)",add_help=False)
+    a=p.parse_args();project=Path(a.project).resolve()
     if a.command=="rollback": print(rollback(project));return 0
     runtime,data=resolve(project)
     if a.command=="resolve": print(json.dumps({"runtime":str(runtime),"binding":data},indent=2));return 0

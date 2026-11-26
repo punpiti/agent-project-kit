@@ -56,7 +56,10 @@ try:
 except ImportError:
     sys.exit(
         "pymupdf not importable. Run this script with the 'text' env's python, e.g.\n"
-        "  micromamba run -n text python scripts/reference_extract/pdf_text_extract.py ..."
+        "  micromamba run -n text python scripts/reference_extract/pdf_text_extract.py ...\n"
+        "For plain text without OCR or images, use the cache-aware command that also\n"
+        "works under system Python (poppler fallback):\n"
+        "  python3 scripts/apk.py extract FILE.pdf --pages A-B"
     )
 
 SCANNED_TEXT_THRESHOLD = 20  # chars; below this + has images => treat as scanned

@@ -4,6 +4,28 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Extract-first is now a command and a hook, not only prose (field note
+  2026-11-26: a TVCG citation check bypassed the cache through subagent briefs).
+  `scripts/apk.py extract FILE.pdf [--pages]` (`apk_extract.py`) reuses a
+  hash-matched cache or writes `<root>/extract/<stem>-<sha12>/` with `INDEX.md`
+  and page-marked `text.md`, extends partial caches, and falls back to poppler
+  `pdftotext` when PyMuPDF is absent. A Claude Code PreToolUse hook
+  (`scripts/hooks/extract_first_hook.py`, settings in
+  `templates/claude/extract-first-hook.settings.json`) denies raw PDF reads and
+  text extraction for cached PDFs, including from subagents, and hints the
+  command on a miss; page rendering is never blocked; opt out per project.
+- `DATA_FLOW_POLICY.md` documents the extraction cache contract; `apk_doctor.py`
+  reports the cache root, caches without `INDEX.md`, and stray roots.
+- Delegation rule: subagent briefs that touch PDFs or citations include
+  `prompts/snippets/EXTRACT_FIRST_BRIEF.md`.
+- `scripts/discover_tools.py` records tool paths per Conda-family environment
+  (`--write .ai/LOCAL_RESOURCES.md`); `AGENTS.md` requires it before declaring a
+  tool missing.
+- Claim-level citation audits are saved as evidence in the
+  `templates/citation-audit.md` format and re-checked only where the source hash
+  or citing sentence changed (academic overlay, paper review prompt).
+- `check_prose_style.py --profile academic` reports self-diminishing wording and
+  floating code labels as review candidates.
 - Academic writing gains a Thai review draft workflow: translate the latest English
   manuscript fully into Thai to expose strengths, weaknesses, and drift hidden by
   the language barrier. The draft uses punch-line topic sentences (the opening

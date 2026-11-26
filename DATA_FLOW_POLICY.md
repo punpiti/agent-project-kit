@@ -133,8 +133,8 @@ It does not require extraction merely to list, move, hash or deduplicate files.
 1. **Reuse before extracting.** Check an existing text/Markdown cache and its
    manifest for the PDF's SHA-256, extraction settings and needed page coverage.
    A renamed or moved PDF with the same hash can reuse the same extraction.
-2. **Extract on demand.** On a cache miss, use `pdftotext` or
-   `scripts/reference_extract/pdf_text_extract.py` for the needed pages before
+2. **Extract on demand.** On a cache miss, run `scripts/apk.py extract FILE.pdf
+   --pages A-B` (or `pdf_text_extract.py` when images or OCR are needed) before
    asking AI to read PDF content. If the needed text is scanned, empty or
    unusable, try local Tesseract OCR on just the needed pages/regions next.
    Use AI OCR only as the last resort after native extraction and Tesseract
@@ -156,6 +156,38 @@ It does not require extraction merely to list, move, hash or deduplicate files.
    extraction; it is not Markdown. Do not infer that extraction never happened
    from an absent `.md`, or repeat extraction just to change output format.
    Check that the saved output exists and state whether coverage is partial.
+
+## Extraction Cache Contract
+
+One layout, so every agent, subagent, hook and `md_index.cache_hits()` finds
+the same cache. `scripts/apk_extract.py` (`apk.py extract`) writes it; do not
+create caches elsewhere by hand.
+
+| Item | Contract |
+|---|---|
+| Root | `${APK_CACHE_ROOT:-${XDG_CACHE_HOME:-~/.cache}/agent-project-kit-cache}` (machine-local, never a cloud folder) |
+| Directory | `<root>/extract/<stem>-<sha12>/`, `sha12` = first 12 hex of the source SHA-256 |
+| Index | `INDEX.md` with front matter `source`, `source_sha256`, `extractor`, `pages`, `page_count`, `no_text_layer_pages`, `created` |
+| Text | `text.md`, one `<!-- page N -->` marker before each page |
+| Hit | any `*-<sha12>/INDEX.md`; a renamed or moved PDF reuses it. Missing pages extend it in place |
+
+Older caches with `manifest.json` and `content.md`/`text.txt` remain valid
+hits. `apk_doctor.py` reports the resolved root, cache count, directories
+without `INDEX.md`, and stray extraction roots outside the contract.
+
+**Enforcement.** Claude Code projects can install the PreToolUse hook in
+`templates/claude/extract-first-hook.settings.json` (merge into
+`.claude/settings.json`, or `~/.claude/settings.json` for every project). It
+denies reading a PDF or piping it through a text extractor when the cache
+covers it, names the cached `text.md`, and hints `apk.py extract` on a miss.
+Rendering pages for figures is never blocked. Opt out per project with
+`.ai/extract-first-hook.off` or `APK_EXTRACT_FIRST=off`. Agents without hooks
+(Codex, Antigravity) follow the same rule from `AGENTS.md`.
+
+**Verification records.** Expensive verdicts are evidence, not chat. A
+claim-level citation audit goes to the project's `evidence/citation-audit-<date>.md`
+in the format of `templates/citation-audit.md`; later sessions re-check only
+keys whose PDF hash or citing sentence changed.
 
 ## Format Playbook
 
