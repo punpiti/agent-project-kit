@@ -4,6 +4,8 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+## 8.9.0-extract-first-canary — 2026-11-26
+
 - Extract-first is now a command and a hook, not only prose (field note
   2026-11-26: a TVCG citation check bypassed the cache through subagent briefs).
   `scripts/apk.py extract FILE.pdf [--pages]` (`apk_extract.py`) reuses a
