@@ -64,6 +64,9 @@ for scientific_contract in (
     "แยก reproducibility ออกจาก validity",
     "แยก AI disclosure จาก Methods",
     "ตรวจ lineage ก่อนเกลาภาษา",
+    "ร่างภาษาไทยเพื่อ review",
+    "ทุกการ cite ต้องมีเนื้อความจริง",
+    "ไม่สร้างตัวแปรลอย",
 ):
     assert scientific_contract in academic_contract, scientific_contract
     assert scientific_contract not in prose_contract, scientific_contract

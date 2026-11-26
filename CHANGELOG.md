@@ -4,6 +4,28 @@ All notable changes to Agent Project Kit are summarized here.
 
 ## Unreleased
 
+- Academic writing gains a Thai review draft workflow: translate the latest English
+  manuscript fully into Thai to expose strengths, weaknesses, and drift hidden by
+  the language barrier. The draft uses punch-line topic sentences (the opening
+  paragraph leads to the problem statement), factual non-disparaging reporting with
+  scope concerns kept in a separate review note, no undefined terms or ad hoc
+  variables, accessible and content-verified citations, figure callouts, and English
+  technical terms in parentheses at first use. Translating the reviewed draft back
+  to English preserves its sentence structure, word choice, and logical order.
+- Extended the chat-driven emphasis check to all academic topics: repeated local
+  discussion or repair must not inflate minor details into central contributions,
+  findings, or limitations, including in titles, abstracts, and conclusions.
+- Iterative academic edits must not infer comparator priority from chat recency or
+  frequency; dedicated sections require a substantive rationale or explicit author
+  direction and must retain fair treatment of all comparators.
+- Academic prose now checks for self-disparagement and biased comparator emphasis:
+  report scope, limitations, and results factually, using consistent criteria and
+  tone across methods while preserving evidence-supported differences.
+- Academic prose now requires immediately meaningful experiment names and
+  references to research questions by their substance. Configuration codes and
+  research-question codes such as RQ1/RQ2 are forbidden in reader-facing articles,
+  figures, tables, captions, and supplements; the document checklist checks this.
+
 ## 8.8.0-git-storage-canary — 2026-11-08
 
 - Git metadata is now forbidden in cloud-synced folders across every platform,
