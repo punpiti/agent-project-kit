@@ -7,6 +7,15 @@
   "egress": [
     "office-desktop"
   ],
+  "projects_sync": {
+    "root": "~/repos",
+    "hub": "office-desktop",
+    "backup_remote": "backup",
+    "extra_paths": [
+      ".ai",
+      ".env.local"
+    ]
+  },
   "nodes": [
     {
       "name": "office-desktop",

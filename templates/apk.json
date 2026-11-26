@@ -5,6 +5,8 @@
   "version_policy": "exact",
   "content_sha256": "",
   "profile": "standard",
-  "local_prompt_dirs": [".ai/prompts"],
+  "local_prompt_dirs": [
+    ".ai/prompts"
+  ],
   "runtime_mode": "shared-with-snapshot-fallback"
 }

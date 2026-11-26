@@ -208,6 +208,26 @@ matter which machine the session runs on.
 - Shared nodes carry other users' load. Respect it: never kill or renice
   processes you did not start.
 
+## Session Sync Across Machines
+
+Clones live outside synced folders, so work reaches other machines only when
+it is pushed. `scripts/projects_sync.py` does the routine part for every clone
+under one root (inventory key `projects_sync`: `root`, `hub`, `backup_remote`,
+`extra_paths`; see the template):
+
+- `start`: fetch, fast-forward branches that are only behind, and pull newer
+  non-Git files (`.ai/`, `.env.local`) from the hub with `rsync --update`.
+- `end`: push branches that are only ahead, mirror all branches and tags to the
+  backup remote (bare repos on the hub), push newer non-Git files to the hub,
+  and list uncommitted work, which is not backed up anywhere.
+- `status`: ahead/behind/uncommitted counts only.
+
+It detects the machine by hostname, skips the non-Git copy on the hub itself,
+and never commits, merges diverged branches, rebases, stashes, or deletes.
+Exit code 1 means something needs a person; report those lines. Run `start`
+before work and `end` before leaving a machine; an agent client may run them
+from session start/end hooks.
+
 ## Package Update Check
 
 When `.ai/agent-project-kit/` is updated in an existing project, read

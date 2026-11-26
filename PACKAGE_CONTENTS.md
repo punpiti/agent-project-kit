@@ -92,6 +92,7 @@
 - `scripts/apk-python.sh`
 - `scripts/apk-python.ps1`
 - `scripts/compute_nodes.py`
+- `scripts/projects_sync.py`
 - `scripts/context.py`
 - `scripts/install-from-git.ps1`
 - `scripts/install-shared.py`

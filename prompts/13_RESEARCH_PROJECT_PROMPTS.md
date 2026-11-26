@@ -21,6 +21,16 @@ example reviewer response or data analytics).
 ห้าม claim เกินหลักฐาน และต้องแยก `established`, `debated`, `uncertain`,
 `outdated`, และ `needs verification` ให้ชัด
 
+## Research software delivery
+
+When the deliverable includes software distribution or a user-facing wrapper
+around experimental code, attach the Software Development & Automation
+workflow and `checklists/SOFTWARE_DELIVERY_CHECKLIST.md`. Trace the shipped
+engine to the frozen experimental source and verify the installed interface,
+resolved defaults, interoperable outputs and help. Keep immutable experiment
+records intact and distinguish source identity, bounded output parity and
+scientific validity. Literature-only work does not trigger this checklist.
+
 ## 1. Deep Dive
 
 ```text

@@ -25,6 +25,13 @@ All notable changes to Agent Project Kit are summarized here.
   references to research questions by their substance. Configuration codes and
   research-question codes such as RQ1/RQ2 are forbidden in reader-facing articles,
   figures, tables, captions, and supplements; the document checklist checks this.
+- Added `scripts/projects_sync.py` (`start`, `end`, `status`): session sync for
+  clones kept outside synced folders. Fast-forwards or pushes only when safe,
+  mirrors to a backup remote on the hub, copies non-Git files (`.ai/`,
+  `.env.local`) to and from the hub, and reports uncommitted or diverged work.
+  Settings come from the private node inventory (`projects_sync`). Documented
+  in `MACHINE_PROFILES.md` "Session Sync Across Machines". Tests in
+  `tests/test-projects-sync.py`.
 
 ## 8.8.0-git-storage-canary — 2026-11-08
 
@@ -36,6 +43,24 @@ All notable changes to Agent Project Kit are summarized here.
   an existing project-root `.git` under cloud storage; the new
   `migrate_git_out_of_cloud.py` previews by default and, with `--apply`, copies
   and verifies the full working tree before retiring only the cloud `.git`.
+
+## 8.7.1-software-delivery-canary — 2026-11-08
+
+- Add a conditional software delivery checklist and evidence-record template.
+  Distributed tools and experimental CLI/UI/API wrappers must trace the
+  installed entry point to the accepted engine, verify defaults and bounded
+  output parity, and retain immutable experimental snapshots.
+- Require established output formats with actual downstream-reader checks,
+  separate progress diagnostics, and installed `--help`/`--version` checks
+  without inputs, network, downloads, computation or result-file side effects.
+- Include user-visible README, About, links and release titles/descriptions in
+  software renaming checks, plus post-publication verification and explicit
+  current/historical source records. Link the checklist from startup, software,
+  implementation, research-delivery and coding-checklist paths.
+- Resolve the native-Windows test source as a filesystem provider path when
+  launched from a WSL UNC checkout.
+- Keep project and machine state schemas unchanged.
+
 
 ## 8.7.0-compute-nodes-canary — 2026-11-01
 
