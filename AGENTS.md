@@ -284,18 +284,43 @@ When editing academic, proposal, policy, or technical documents:
 
 #### PDF-specific rules
 
-- Whenever a PDF will be used as a reference, run a PDF-to-text extraction first
-  and keep the extracted text or Markdown as a reusable cache for later sessions.
+- When a PDF is first needed as a reference for the current task, use a
+  deterministic extractor such as `pdftotext` or
+  `scripts/reference_extract/pdf_text_extract.py` before asking AI to read it.
+  First check existing extracted text/Markdown and evidence for a matching
+  source SHA-256 and sufficient page coverage; reuse a valid result instead
+  of extracting or reading the original again.
+- Extraction is demand-driven. Organizing, indexing, or deduplicating a
+  reference library is not a reason to convert every PDF in advance. Extract
+  only sources and page ranges needed for the current task unless the user
+  explicitly requests a batch conversion.
+- Keep the extracted text or Markdown as a reusable cache, recording source
+  path, SHA-256, tool/version, page scope, output format and cache location in
+  the manifest and project document pipeline. Search/query it locally, then
+  give AI only the passages needed for the task. Inspect PDF pages when text
+  is insufficient or layout, figures, equations or page numbering matter.
+- A hash-matched TXT cache counts as an existing extraction. Do not call it
+  Markdown, claim no extraction occurred solely because there is no `.md`,
+  or rerun PDF extraction merely to obtain a different filename/format.
+  Check the saved output and recorded coverage before reporting completion.
 - For two-column PDFs, normalize the extracted content into a single-column
   reading order so that headings, paragraphs, footnotes, and references remain
   convenient to search and reuse.
-- If the PDF is scanned or has no usable text layer, tell the user before doing
-  OCR and let the user decide how to proceed. Explain that OCR may be worthwhile
-  for an important source, but it is often slow and may produce incomplete or
-  inaccurate text even when token cost is low.
-- After the user approves OCR, try Tesseract first. Use AI-based OCR only as a
-  fallback when Tesseract is unavailable or its output is inadequate for the
-  task, and tell the user why escalation is needed.
+- Use this order for reference-PDF text recognition to minimize AI cost:
+  native PDF-to-text first; local Tesseract OCR second; AI-based OCR last.
+  If the native extraction is scanned, empty, garbled or inadequate for the
+  needed passage, render and OCR only the required pages or regions with
+  Tesseract in the shared `image` environment. Reuse valid OCR caches and
+  retain page locators and OCR limitations; do not OCR an entire library.
+- AI-based OCR is a last resort after checking native extraction and local
+  Tesseract. Use it only when Tesseract output is inadequate or the local tool
+  cannot be made available within the task's installation/network constraints.
+  Tell the user what failed and why AI OCR is needed, limit it to unresolved
+  pages/regions, and save the result so later work does not pay again.
+  Existing permission, bulk-traffic and costly-install rules still apply.
+- This escalation order concerns text recognition. Inspecting a figure's
+  meaning or a document's layout follows the separate visual-review rules;
+  OCR text alone does not validate diagrams, equations or page geometry.
 - For large PDFs, extraction may be incremental: convert only the pages or
   sections needed for the current task and retain them as a clearly identified
   partial cache. Record the source PDF, extracted page range or section, tool,

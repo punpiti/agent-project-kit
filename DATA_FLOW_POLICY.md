@@ -15,10 +15,12 @@ Goal, in priority order:
 
 ## Core Rules
 
-1. **Extract once, read small.** Convert each source once with a deterministic,
-   format-native tool into a content-addressed cache. Agents read the cache's
-   index and distilled evidence, not the original file, unless layout or
-   fidelity requires it.
+1. **Extract once, read small.** When a source is needed for the current task,
+   check its existing extraction before converting it with a deterministic,
+   format-native tool into a content-addressed cache. Do not pre-convert an
+   entire library merely because it is being organized or indexed. Agents
+   read the cache's index and distilled evidence, not the original file,
+   unless layout or fidelity requires it.
 2. **Place by rebuild cost.** Regenerable outputs stay on fast local storage
    and never sync. Outputs that contain human or AI judgment are small, durable,
    and synced or committed. See [Rebuild Classes](#rebuild-classes).
@@ -123,6 +125,38 @@ durable source ──(1) locate & fingerprint──▶ (2) cache lookup ──hi
    after QA (including the Thai DOCX gate when it applies). Repeated rebuilds
    do not touch the synced folder.
 
+## Reference PDFs: First Actual Use
+
+This rule applies when a PDF supplies reference evidence for the current task.
+It does not require extraction merely to list, move, hash or deduplicate files.
+
+1. **Reuse before extracting.** Check an existing text/Markdown cache and its
+   manifest for the PDF's SHA-256, extraction settings and needed page coverage.
+   A renamed or moved PDF with the same hash can reuse the same extraction.
+2. **Extract on demand.** On a cache miss, use `pdftotext` or
+   `scripts/reference_extract/pdf_text_extract.py` for the needed pages before
+   asking AI to read PDF content. If the needed text is scanned, empty or
+   unusable, try local Tesseract OCR on just the needed pages/regions next.
+   Use AI OCR only as the last resort after native extraction and Tesseract
+   prove inadequate or Tesseract cannot be made available within existing
+   installation/network constraints. Explain the reason and cache the result.
+   Do not batch-convert unused references unless
+   the user explicitly requests that work. Extend partial caches only when
+   additional pages are needed.
+3. **Keep reusable output.** Record source path, SHA-256, tool/version, page
+   scope, actual output format, known losses and cache location in the
+   manifest and `.ai/DOCUMENT_PIPELINE.md`. Follow the existing storage tiers;
+   do not create a duplicate cache beside every PDF merely for organization.
+4. **Use text before vision.** Search/query the extraction locally and read
+   only relevant passages with AI. Inspect PDF pages when extracted text is
+   insufficient or layout, figures, equations or page-number checks require
+   the original. Text-recognition order is native extraction, then local
+   Tesseract, then AI OCR; apply existing permission and bulk-work boundaries.
+5. **Report the actual format and scope.** A valid TXT cache is already an
+   extraction; it is not Markdown. Do not infer that extraction never happened
+   from an absent `.md`, or repeat extraction just to change output format.
+   Check that the saved output exists and state whether coverage is partial.
+
 ## Format Playbook
 
 All extraction runs in the shared Conda-family environment named in `AGENTS.md`
@@ -142,7 +176,9 @@ than hiding them.
 - Images: downscale and crop before sending to a vision model; prefer
   Tesseract over AI OCR, and escalate only with a recorded reason. Persist any
   AI transcription as R2.
-- OCR on scans requires the user's decision first (see `AGENTS.md` PDF rules).
+- Reference-PDF text recognition follows native PDF-to-text → local Tesseract
+  OCR → AI OCR as the last resort (see `AGENTS.md` PDF rules). Cache each used
+  result; explain any AI escalation and follow existing permission/bulk rules.
 - DOCX/PPTX/XLSX are ZIP containers: unzip in `scratch`, not next to the
   source in a synced folder.
 
